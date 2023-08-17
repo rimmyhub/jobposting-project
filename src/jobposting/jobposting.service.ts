@@ -3,13 +3,13 @@ import { CreateJobpostingDto } from './dto/create-jobposting.dto';
 import { UpdateJobpostingDto } from './dto/update-jobposting.dto';
 
 @Injectable()
-export class JobpostingsService {
+export class JobpostingService {
   create(createJobpostingDto: CreateJobpostingDto) {
     return 'This action adds a new jobposting';
   }
 
   findAll() {
-    return `This action returns all jobpostings`;
+    return `This action returns all jobposting`;
   }
 
   findOne(id: number) {

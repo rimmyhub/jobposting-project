@@ -6,15 +6,14 @@ import { ormConfig } from './orm.config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { AdminsModule } from './admins/admins.module';
-import { JobpostingsModule } from './jobpostings/jobpostings.module';
+import { CompanyModule } from './company/company.module';
+import { JobpostingModule } from './jobposting/jobposting.module';
 import { AboutmeModule } from './aboutme/aboutme.module';
 import { EducationModule } from './education/education.module';
 import { PortfolioModule } from './portfolio/portfolio.module';
 import { CareerModule } from './career/career.module';
 import { ResumeModule } from './resume/resume.module';
 import { ApplyModule } from './apply/apply.module';
-import { CompanyModule } from './company/company.module';
-
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({ useFactory: ormConfig }),
@@ -23,14 +22,14 @@ import { CompanyModule } from './company/company.module';
     }),
     UsersModule,
     AdminsModule,
-    JobpostingsModule,
+    CompanyModule,
+    JobpostingModule,
     AboutmeModule,
     EducationModule,
     PortfolioModule,
     CareerModule,
     ResumeModule,
     ApplyModule,
-    CompanyModule,
   ],
   controllers: [AppController],
   providers: [AppService],
