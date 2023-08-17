@@ -1,9 +1,17 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { AboutmeService } from './aboutme.service';
 import { CreateAboutmeDto } from './dto/create-aboutme.dto';
 import { UpdateAboutmeDto } from './dto/update-aboutme.dto';
 
-@Controller('aboutme')
+@Controller('aboutmes')
 export class AboutmeController {
   constructor(private readonly aboutmeService: AboutmeService) {}
 

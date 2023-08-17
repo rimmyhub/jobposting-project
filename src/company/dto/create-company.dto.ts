@@ -9,5 +9,7 @@ export class CreateCompanyDto {
   @IsString()
   password: string;
 
+  @IsNotEmpty()
+  @IsString()
   confirmPassword: string;
 }
