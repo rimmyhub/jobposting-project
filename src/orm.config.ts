@@ -1,5 +1,6 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 async function ormConfig(): Promise<TypeOrmModuleOptions> {
   const configService = new ConfigService();
@@ -18,6 +19,7 @@ async function ormConfig(): Promise<TypeOrmModuleOptions> {
     username: configService.get<string>('DB_USERNAME'),
     password: configService.get<string>('DB_PASSWORD'),
     logging: true,
+    namingStrategy: new SnakeNamingStrategy(), // createAt, updateAt 스네이크 케이스로 전환
     synchronize: commonConf.SYNCRONIZE,
     entities: commonConf.ENTITIES,
     migrations: commonConf.MIGRATIONS,
