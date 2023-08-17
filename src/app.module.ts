@@ -4,7 +4,7 @@ import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { ormConfig } from './orm.config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UsersModule } from './users/users.module';
+import { UserModule } from './user/user.module';
 import { AdminsModule } from './admins/admins.module';
 import { CompanyModule } from './company/company.module';
 import { JobpostingModule } from './jobposting/jobposting.module';
@@ -20,7 +20,7 @@ import { ApplyModule } from './apply/apply.module';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    UsersModule,
+    UserModule,
     AdminsModule,
     CompanyModule,
     JobpostingModule,
