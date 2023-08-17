@@ -15,7 +15,6 @@ export class CreateUserDto {
 
   @IsNotEmpty()
   @IsString()
-  s;
   @MinLength(5)
   @Matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{4,25}$/) // <= Matches 안에 정규표현식을 쓸 수 있다.
   password: string;
