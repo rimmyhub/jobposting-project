@@ -15,7 +15,7 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { UserGuard } from '../auth/auth.guard';
+import { UserGuard } from '../auth/user.guard';
 
 @Controller('users')
 export class UserController {
@@ -39,9 +39,10 @@ export class UserController {
 
   // 유저정보 수정
   // 얘는 일단 auth기능을 추가해야함
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
+  @UseGuards(UserGuard)
+  @Patch()
+  update(@Request() req, @Body() updateUserDto: UpdateUserDto) {
+    return this.userService.update(req.user.id, updateUserDto);
   }
 
   // 회원탈퇴 (softDelete)
