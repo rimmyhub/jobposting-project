@@ -1,19 +1,23 @@
+// TypeORM 엔티티 정의
+
 import {
   Column,
   Entity,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn, // 자동으로 증가되는 ID
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
   ManyToOne,
 } from 'typeorm';
-// import { Resume } from './resume.entity';
+import { Resume } from './resume.entity';
 
+// Career 클래스는 DB의 'career' 테이블을 의미한다.
 @Entity()
 export class Career {
   @PrimaryGeneratedColumn()
   id: number;
 
+  // @Column을 통해 career의 각 항목의 속성을 정의.
   @Column({ type: 'varchar', comment: '회사이름' })
   companyTitle: string;
 
