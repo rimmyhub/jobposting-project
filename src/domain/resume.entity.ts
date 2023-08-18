@@ -10,7 +10,7 @@ import {
 @Entity()
 export class Resume {
   @PrimaryGeneratedColumn()
-  resumeId: number;
+  id: number;
 
   @Column({ type: 'varchar', length: 100, comment: '이력서제목' })
   resumeTitle: string;

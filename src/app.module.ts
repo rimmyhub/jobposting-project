@@ -13,6 +13,8 @@ import { PortfolioModule } from './portfolio/portfolio.module';
 import { CareerModule } from './career/career.module';
 import { ResumeModule } from './resume/resume.module';
 import { ApplicantModule } from './applicant/applicant.module';
+import { AuthModule } from './auth/auth.module';
+import { CommentModule } from './comment/comment.module';
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({ useFactory: ormConfig }),
@@ -28,6 +30,8 @@ import { ApplicantModule } from './applicant/applicant.module';
     CareerModule,
     ResumeModule,
     ApplicantModule,
+    AuthModule,
+    CommentModule,
   ],
   controllers: [AppController],
   providers: [AppService],

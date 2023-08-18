@@ -11,7 +11,7 @@ import { Education } from '../domain/education.entity';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
-  userId: number;
+  id: number;
 
   @Column({ type: 'varchar', length: 50, comment: '유저아이디' })
   email: string;
