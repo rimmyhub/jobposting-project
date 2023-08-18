@@ -18,6 +18,8 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
+  async tokenValidateUser(payload: any): Promise<any> | undefined {}
+
   // 로그인
   async login(loginDto: LoginDto, role: string) {
     const { email, password } = loginDto;
@@ -29,23 +31,22 @@ export class AuthService {
     } else if (role === 'company') {
       // 해당 이메일의 회사관리자정보가 있는지 확인
       result = await this.companyService.findEmail(email);
+      // 패스워드 확인
     }
 
-    // 패스워드 확인
     if (!bcrypt.compare(password, result.password)) {
       throw new HttpException(
         '패스워드가 일치하지 않습니다.',
         HttpStatus.BAD_REQUEST,
       );
     }
-
     // jwt발급받고 내보내기
     const payload = {
+      id: result.id,
       email: result.email,
-      id: result.userId,
-      role: 'user',
+      role: role,
     };
-
+    console.log('payload = ', payload);
     return {
       // 하... 개빡치네 여기에도 payload 다음 인수로 아래처럼 secret키를 넣어줘야함
       // 공식문서에도 안적혀있네 ㅅ

@@ -6,11 +6,13 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { CompanyService } from './company.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { Company } from 'src/domain/company.entity';
 import { UpdateCompanyDto } from './dto/update-company.dto';
+import { CompanyGuard } from 'src/auth/company.guard';
 
 @Controller('companys')
 export class CompanyController {
@@ -36,6 +38,7 @@ export class CompanyController {
   }
 
   // 회사 수정
+  @UseGuards(CompanyGuard)
   @Patch(':id')
   updateCompany(
     @Param('id') id: string,

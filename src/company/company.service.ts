@@ -55,7 +55,7 @@ export class CompanyService {
   // 가입된 이메일이 있는지 확인
   async findEmail(email: string) {
     const isEmail = await this.companyRepository.findOne({
-      select: { email: true, password: true },
+      select: { id: true, email: true, password: true },
       where: { email },
     });
     // 이메일이 없을 경우
@@ -74,6 +74,7 @@ export class CompanyService {
   }
 
   // 회사 수정
+
   async updateCompany(id: number, updateCompanyDto: UpdateCompanyDto) {
     const company = await this.companyRepository.findOne({
       where: { id },
