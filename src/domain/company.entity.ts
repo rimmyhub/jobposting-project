@@ -5,7 +5,9 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
+  ManyToOne,
 } from 'typeorm';
+import { Jobposting } from './jobposting.entity';
 
 @Entity()
 export class Company {
@@ -44,4 +46,8 @@ export class Company {
 
   @DeleteDateColumn({ name: 'delete_at', comment: '삭제일' })
   deletedAt?: Date | null;
+
+  //1:N 관계 설정
+  @ManyToOne(() => Jobposting, (jobposting) => jobposting.company)
+  jobposting: Jobposting[];
 }
