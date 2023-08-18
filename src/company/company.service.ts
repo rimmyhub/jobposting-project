@@ -52,6 +52,14 @@ export class CompanyService {
     return await this.companyRepository.find();
   }
 
+  // 가입된 이메일이 있는지 확인
+  async findEmail(email: string) {
+    return await this.companyRepository.findOne({
+      select: { email: true, password: true },
+      where: { email },
+    });
+  }
+
   // 회사 1개 조회
   async finOneCompany(id: number) {
     return await this.companyRepository.findOne({ where: { id } });

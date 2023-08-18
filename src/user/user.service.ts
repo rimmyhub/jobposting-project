@@ -1,9 +1,4 @@
-import {
-  Injectable,
-  ExceptionFilter,
-  HttpException,
-  HttpStatus,
-} from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 // 데이터베이스와 레포지토리를 쓰려면
@@ -52,7 +47,18 @@ export class UserService {
 
   // 유저의 이메일을 찾아주는 함수
   async findEmail(email: string) {
-    const isEmail = await this.userRepository.findOne({ where: { email } });
+    const isEmail = await this.userRepository.findOne({
+      select: { email: true, password: true },
+      where: { email },
+    });
+    // 이메일이 없을 경우
+    if (!isEmail) {
+      throw new HttpException(
+        '가입되지 않은 이메일입니다.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
     return isEmail;
   }
 
