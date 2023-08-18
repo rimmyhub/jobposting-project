@@ -18,7 +18,7 @@ export class UserService {
   // 유저정보상세조회
   async findOne(id: number) {
     const userInfo = await this.userRepository.findOne({
-      where: { userId: id },
+      where: { id: id },
     });
 
     if (!userInfo) {

@@ -13,7 +13,7 @@ import { User } from './user.entity';
 @Entity()
 export class Education {
   @PrimaryGeneratedColumn()
-  educationId: number;
+  id: number;
 
   @Column({ type: 'varchar', length: 100, comment: '학교이름' })
   schoolTitle: string;

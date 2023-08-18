@@ -5,7 +5,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
-  ManyToOne,
+  OneToMany,
 } from 'typeorm';
 import { Jobposting } from './jobposting.entity';
 
@@ -48,6 +48,6 @@ export class Company {
   deletedAt?: Date | null;
 
   //1:N 관계 설정
-  @ManyToOne(() => Jobposting, (jobposting) => jobposting.company)
+  @OneToMany(() => Jobposting, (jobposting) => jobposting.company)
   jobposting: Jobposting[];
 }
