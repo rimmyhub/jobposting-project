@@ -18,6 +18,15 @@ export class UserService {
   // 유저정보상세조회
   async findOne(id: number) {
     const userInfo = await this.userRepository.findOne({
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        phone: true,
+        gender: true,
+        address: true,
+        birth: true,
+      },
       where: { id: id },
     });
 
@@ -60,7 +69,7 @@ export class UserService {
   // 유저의 이메일을 찾아주는 함수
   async findEmail(email: string) {
     const isEmail = await this.userRepository.findOne({
-      select: { email: true, password: true },
+      select: { id: true, email: true, password: true },
       where: { email },
     });
     // 이메일이 없을 경우

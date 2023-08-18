@@ -27,7 +27,7 @@ export class AuthController {
     const role: string = 'user';
     const jwt = await this.authService.login(loginDto, role);
     console.log(jwt.token);
-    res.cookie('Autholization', `Bearer ${jwt.token}`);
+    res.cookie('authorization', `Bearer ${jwt.token}`);
     return '로그인되었습니다'; // 네스트기본적인 응답값은 JSON값으로 반환이 된다.
   }
 
@@ -38,7 +38,7 @@ export class AuthController {
   ): Promise<any> {
     const role: string = 'company';
     const jwt = await this.authService.login(loginDto, role);
-    res.cookie('Autholization', `Bearer ${jwt.token}`);
+    res.cookie('authorization', `Bearer ${jwt.token}`);
     return '로그인되었습니다'; // 네스트기본적인 응답값은 JSON값으로 반환이 된다.
   }
 
