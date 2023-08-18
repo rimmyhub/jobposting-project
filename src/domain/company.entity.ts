@@ -5,7 +5,9 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
+  ManyToOne,
 } from 'typeorm';
+import { Jobposting } from './jobposting.entity';
 
 @Entity()
 export class Company {
@@ -18,7 +20,7 @@ export class Company {
   @Column({ type: 'varchar', length: 150, comment: '패스워드' })
   password: string;
 
-  @Column({ type: 'varchar', length: 30, comment: '상호명' })
+  @Column({ type: 'varchar', length: 30, comment: '회사명' })
   companyTitle: string;
 
   @Column({ type: 'varchar', length: 255, comment: '소개' })
@@ -44,4 +46,8 @@ export class Company {
 
   @DeleteDateColumn({ name: 'delete_at', comment: '삭제일' })
   deletedAt?: Date | null;
+
+  //1:N 관계 설정
+  @ManyToOne(() => Jobposting, (jobposting) => jobposting.company)
+  jobposting: Jobposting[];
 }

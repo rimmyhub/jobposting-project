@@ -1,26 +1,85 @@
-import { Injectable } from '@nestjs/common';
 import { CreateJobpostingDto } from './dto/create-jobposting.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Jobposting } from 'src/domain/jobposting.entity';
+import { Repository } from 'typeorm';
 import { UpdateJobpostingDto } from './dto/update-jobposting.dto';
+import { HttpException, HttpStatus } from '@nestjs/common';
 
-@Injectable()
 export class JobpostingService {
-  create(createJobpostingDto: CreateJobpostingDto) {
-    return 'This action adds a new jobposting';
+  constructor(
+    @InjectRepository(Jobposting)
+    private readonly jobpostingRepository: Repository<Jobposting>,
+  ) {}
+
+  // 채용 공고 생성
+  async createJobposting(
+    createJobpostingDto: CreateJobpostingDto,
+  ): Promise<Jobposting> {
+    const {
+      title,
+      career,
+      salary,
+      education,
+      job,
+      workType,
+      workArea,
+      content,
+      Deadline,
+    } = createJobpostingDto;
+
+    const jobposting = this.jobpostingRepository.create({
+      title,
+      career,
+      salary,
+      education,
+      job,
+      workType,
+      workArea,
+      content,
+      Deadline,
+    });
+
+    await this.jobpostingRepository.save(jobposting);
+    return jobposting;
   }
 
-  findAll() {
-    return `This action returns all jobposting`;
+  // 채용공고 전체 조회
+  async findAllJobposting() {
+    return await this.jobpostingRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} jobposting`;
+  // 채용공고 1개 조회
+  async findOneJobposting(id: number) {
+    return await this.jobpostingRepository.findOne({ where: { id } });
   }
 
-  update(id: number, updateJobpostingDto: UpdateJobpostingDto) {
-    return `This action updates a #${id} jobposting`;
+  // 채용공고 수정
+  async updateJobposting(id: number, updateJobpostingDto: UpdateJobpostingDto) {
+    const jobposting = await this.jobpostingRepository.findOne({
+      where: { id },
+    });
+
+    if (!jobposting) {
+      throw new HttpException(
+        '채용 공고를 찾을 수 없습니다.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    Object.assign(jobposting, updateJobpostingDto);
+    return await this.jobpostingRepository.save(jobposting);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} jobposting`;
+  // 채용공고 삭제
+  async removeJobposting(id: number) {
+    const jobposting = await this.jobpostingRepository.findOne({
+      where: { id },
+    });
+    if (!jobposting) {
+      throw new HttpException(
+        '채용 공고를 찾을 수 없습니다.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    return await this.jobpostingRepository.remove(jobposting);
   }
 }
