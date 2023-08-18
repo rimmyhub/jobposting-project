@@ -13,6 +13,7 @@ import { PortfolioModule } from './portfolio/portfolio.module';
 import { CareerModule } from './career/career.module';
 import { ResumeModule } from './resume/resume.module';
 import { ApplyModule } from './apply/apply.module';
+import { AuthModule } from './auth/auth.module';
 import { CommentModule } from './comment/comment.module';
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { CommentModule } from './comment/comment.module';
     CareerModule,
     ResumeModule,
     ApplyModule,
+    AuthModule,
     CommentModule,
   ],
   controllers: [AppController],
