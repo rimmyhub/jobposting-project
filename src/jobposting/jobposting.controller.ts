@@ -16,7 +16,7 @@ import { Jobposting } from 'src/domain/jobposting.entity';
 export class JobpostingController {
   constructor(private readonly jobpostingService: JobpostingService) {}
 
-  // 채용공고 생성
+  // 회사별 채용공고 생성
   @Post()
   createJobposting(
     @Body() createJobpostingDto: CreateJobpostingDto,
@@ -24,10 +24,10 @@ export class JobpostingController {
     return this.jobpostingService.createJobposting(createJobpostingDto);
   }
 
-  // 채용공고 전체 조회
-  @Get()
-  findAllJobposting() {
-    return this.jobpostingService.findAllJobposting();
+  // 회사별 채용공고 전체 조회
+  @Get(':companyId')
+  findAllJobposting(@Param('companyId') companyId: string) {
+    return this.jobpostingService.findAllJobposting(companyId);
   }
 
   // 채용공고 1개 조회

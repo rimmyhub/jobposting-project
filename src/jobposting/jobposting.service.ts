@@ -4,6 +4,7 @@ import { Jobposting } from 'src/domain/jobposting.entity';
 import { Repository } from 'typeorm';
 import { UpdateJobpostingDto } from './dto/update-jobposting.dto';
 import { HttpException, HttpStatus } from '@nestjs/common';
+import { Company } from 'src/domain/company.entity';
 
 export class JobpostingService {
   constructor(
@@ -44,13 +45,15 @@ export class JobpostingService {
   }
 
   // 채용공고 전체 조회
-  async findAllJobposting() {
-    return await this.jobpostingRepository.find();
+  async findAllJobposting(companyId: string): Promise<Jobposting[]> {
+    return await this.jobpostingRepository.find({ where: { companyId } });
   }
 
   // 채용공고 1개 조회
   async findOneJobposting(id: number) {
-    return await this.jobpostingRepository.findOne({ where: { id } });
+    return await this.jobpostingRepository.findOne({
+      where: { id },
+    });
   }
 
   // 채용공고 수정

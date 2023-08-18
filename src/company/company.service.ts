@@ -75,7 +75,9 @@ export class CompanyService {
 
   // 회사 수정
   async updateCompany(id: number, updateCompanyDto: UpdateCompanyDto) {
-    const company = await this.companyRepository.findOne({ where: { id } });
+    const company = await this.companyRepository.findOne({
+      where: { id },
+    });
     if (!company) {
       throw new HttpException(
         '회사를 찾을 수 없습니다.',
@@ -88,7 +90,9 @@ export class CompanyService {
 
   // 회사 삭제
   async removeCompany(id: number) {
-    const company = await this.companyRepository.findOne({ where: { id } });
+    const company = await this.companyRepository.findOne({
+      where: { id },
+    });
     if (!company) {
       throw new HttpException(
         '회사를 찾을 수 없습니다.',

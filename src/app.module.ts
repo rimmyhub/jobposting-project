@@ -12,7 +12,7 @@ import { EducationModule } from './education/education.module';
 import { PortfolioModule } from './portfolio/portfolio.module';
 import { CareerModule } from './career/career.module';
 import { ResumeModule } from './resume/resume.module';
-import { ApplyModule } from './apply/apply.module';
+import { ApplicantModule } from './applicant/applicant.module';
 import { AuthModule } from './auth/auth.module';
 import { CommentModule } from './comment/comment.module';
 @Module({
@@ -29,7 +29,7 @@ import { CommentModule } from './comment/comment.module';
     PortfolioModule,
     CareerModule,
     ResumeModule,
-    ApplyModule,
+    ApplicantModule,
     AuthModule,
     CommentModule,
   ],
