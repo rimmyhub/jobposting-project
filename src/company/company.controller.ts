@@ -18,34 +18,35 @@ export class CompanyController {
 
   // 회사 생성 + 회사 회원가입
   @Post()
-  public async createCompany(
-    @Body() createCompanyDto: CreateCompanyDto,
-  ): Promise<Company> {
-    const company = this.companyService.createCompany({ createCompanyDto });
+  createCompany(@Body() createCompanyDto: CreateCompanyDto): Promise<Company> {
+    const company = this.companyService.createCompany(createCompanyDto);
     return company;
   }
 
   // 회사 전체 조회
   @Get()
-  findAll() {
-    return this.companyService.findAll();
+  findAllCompany() {
+    return this.companyService.findAllCompany();
   }
 
   // 회사 1개 조회
   @Get(':id')
-  finOne(@Param('id') id: string) {
-    return this.companyService.findOne(+id); //string 으로 가져와서 숫자로 변환
+  finOneCompany(@Param('id') id: string) {
+    return this.companyService.finOneCompany(+id); //string 으로 가져와서 숫자로 변환
   }
 
   // 회사 수정
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCompanyDto: UpdateCompanyDto) {
-    return this.companyService.update(+id, updateCompanyDto);
+  updateCompany(
+    @Param('id') id: string,
+    @Body() updateCompanyDto: UpdateCompanyDto,
+  ) {
+    return this.companyService.updateCompany(+id, updateCompanyDto);
   }
 
   // 회사 삭제
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.companyService.remove(+id);
+  removeCompany(@Param('id') id: string) {
+    return this.companyService.removeCompany(+id);
   }
 }

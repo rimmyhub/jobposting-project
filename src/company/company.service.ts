@@ -1,4 +1,9 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Company } from 'src/domain/company.entity';
 import { Repository } from 'typeorm';
@@ -14,9 +19,7 @@ export class CompanyService {
   ) {}
 
   // 회사 생성 + 회사 회원가입
-  async createCompany({
-    createCompanyDto,
-  }: ICompanyServiceCreateCompany): Promise<Company> {
+  async createCompany(createCompanyDto: CreateCompanyDto): Promise<Company> {
     const {
       email,
       companyTitle,
@@ -45,34 +48,37 @@ export class CompanyService {
   }
 
   // 회사 전체 조회
-  async findAll() {
+  async findAllCompany() {
     return await this.companyRepository.find();
   }
 
   // 회사 1개 조회
-  async findOne(id: number) {
+  async finOneCompany(id: number) {
     return await this.companyRepository.findOne({ where: { id } });
   }
 
   // 회사 수정
-  async update(id: number, updateCompanyDto: UpdateCompanyDto) {
+  async updateCompany(id: number, updateCompanyDto: UpdateCompanyDto) {
     const company = await this.companyRepository.findOne({ where: { id } });
     if (!company) {
-      throw new Error('회사를 찾을 수 없습니다.');
+      throw new HttpException(
+        '회사를 찾을 수 없습니다.',
+        HttpStatus.BAD_REQUEST,
+      );
     }
     Object.assign(company, updateCompanyDto);
     return await this.companyRepository.save(company);
   }
 
-  async remove(id: number) {
+  // 회사 삭제
+  async removeCompany(id: number) {
     const company = await this.companyRepository.findOne({ where: { id } });
     if (!company) {
-      throw new Error('회사를 찾을 수 없습니다.');
+      throw new HttpException(
+        '회사를 찾을 수 없습니다.',
+        HttpStatus.BAD_REQUEST,
+      );
     }
     return await this.companyRepository.remove(company);
   }
-}
-
-interface ICompanyServiceCreateCompany {
-  createCompanyDto: CreateCompanyDto;
 }
