@@ -5,7 +5,6 @@ import { ConfigModule } from '@nestjs/config';
 import { ormConfig } from './orm.config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
-import { AdminsModule } from './admins/admins.module';
 import { CompanyModule } from './company/company.module';
 import { JobpostingModule } from './jobposting/jobposting.module';
 import { AboutmeModule } from './aboutme/aboutme.module';
@@ -21,7 +20,6 @@ import { ApplyModule } from './apply/apply.module';
       isGlobal: true,
     }),
     UserModule,
-    AdminsModule,
     CompanyModule,
     JobpostingModule,
     AboutmeModule,

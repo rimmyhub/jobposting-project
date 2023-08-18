@@ -12,12 +12,12 @@ export class CreateCompanyDto {
   @IsNotEmpty()
   @IsString()
   @IsEmail()
-  @MinLength(4) //최솟값
+  @MinLength(5) //최솟값
   email: string;
 
   @IsNotEmpty()
   @IsString()
-  @MinLength(4) //최솟값
+  @MinLength(5) //최솟값
   @Matches(/^[a-zA-Z0-9]*$/, {
     message: '비밀번호는 영어와 숫자만 사용할 수 있습니다.',
   })
