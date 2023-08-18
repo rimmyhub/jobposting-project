@@ -5,6 +5,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../domain/user.entity';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -31,9 +32,11 @@ export class UserService {
 
   // 유저생성
   async create(createUserDto: CreateUserDto) {
+    const { email, address, birth, gender, name, password, phone } =
+      createUserDto;
+
     // 유저의 이메일이 중복되는지 확인
-    const isEmail = await this.findEmail(createUserDto.email);
-    console.log('isEmail = ', isEmail);
+    const isEmail = await this.findEmail(email);
 
     // 중복 에러처리하기
     if (isEmail) {
@@ -42,7 +45,16 @@ export class UserService {
         HttpStatus.BAD_REQUEST,
       );
     }
-    await this.userRepository.save(createUserDto);
+    const hashedPassword = await bcrypt.hash(password, 10);
+    await this.userRepository.save({
+      email,
+      address,
+      birth,
+      gender,
+      name,
+      password: hashedPassword,
+      phone,
+    });
   }
 
   // 유저의 이메일을 찾아주는 함수

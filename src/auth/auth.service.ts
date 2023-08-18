@@ -6,6 +6,7 @@ import { UserService } from 'src/user/user.service';
 import { CompanyService } from 'src/company/company.service';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -31,7 +32,7 @@ export class AuthService {
     }
 
     // 패스워드 확인
-    if (password !== result.password) {
+    if (!bcrypt.compare(password, result.password)) {
       throw new HttpException(
         '패스워드가 일치하지 않습니다.',
         HttpStatus.BAD_REQUEST,

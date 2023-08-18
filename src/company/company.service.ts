@@ -54,10 +54,18 @@ export class CompanyService {
 
   // 가입된 이메일이 있는지 확인
   async findEmail(email: string) {
-    return await this.companyRepository.findOne({
+    const isEmail = await this.companyRepository.findOne({
       select: { email: true, password: true },
       where: { email },
     });
+    // 이메일이 없을 경우
+    if (!isEmail) {
+      throw new HttpException(
+        '가입되지 않은 이메일입니다.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    return isEmail;
   }
 
   // 회사 1개 조회
