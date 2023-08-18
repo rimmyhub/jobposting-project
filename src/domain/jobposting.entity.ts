@@ -14,6 +14,9 @@ export class Jobposting {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column()
+  companyId: string;
+
   @Column({ type: 'varchar', length: 255, comment: '제목' })
   title: string;
 
@@ -52,5 +55,5 @@ export class Jobposting {
 
   //1:N 관계 설정
   @ManyToOne(() => Company, (company) => company.jobposting)
-  company: Company;
+  company: Company[];
 }
