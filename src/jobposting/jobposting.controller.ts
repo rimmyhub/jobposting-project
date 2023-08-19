@@ -17,23 +17,30 @@ export class JobpostingController {
   constructor(private readonly jobpostingService: JobpostingService) {}
 
   // 회사별 채용공고 생성
-  @Post()
+  @Post(':companyId')
   createJobposting(
+    @Param('companyId') companyId: string,
     @Body() createJobpostingDto: CreateJobpostingDto,
   ): Promise<Jobposting> {
-    return this.jobpostingService.createJobposting(createJobpostingDto);
+    return this.jobpostingService.createJobposting(
+      +companyId,
+      createJobpostingDto,
+    );
   }
 
   // 회사별 채용공고 전체 조회
   @Get(':companyId')
   findAllJobposting(@Param('companyId') companyId: string) {
-    return this.jobpostingService.findAllJobposting(companyId);
+    return this.jobpostingService.findAllJobposting(+companyId);
   }
 
-  // 채용공고 1개 조회
-  @Get(':id')
-  findOneJobposting(@Param('id') id: string) {
-    return this.jobpostingService.findOneJobposting(+id);
+  // 회사별 채용공고 1개 조회
+  @Get(':companyId/:id')
+  findOneJobposting(
+    @Param('companyId') companyId: string,
+    @Param('id') id: string,
+  ) {
+    return this.jobpostingService.findOneJobposting(+companyId, +id);
   }
 
   // 채용공고 수정

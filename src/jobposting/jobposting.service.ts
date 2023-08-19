@@ -14,6 +14,7 @@ export class JobpostingService {
 
   // 채용 공고 생성
   async createJobposting(
+    companyId: number,
     createJobpostingDto: CreateJobpostingDto,
   ): Promise<Jobposting> {
     const {
@@ -29,6 +30,7 @@ export class JobpostingService {
     } = createJobpostingDto;
 
     const jobposting = this.jobpostingRepository.create({
+      companyId,
       title,
       career,
       salary,
@@ -45,14 +47,14 @@ export class JobpostingService {
   }
 
   // 채용공고 전체 조회
-  async findAllJobposting(companyId: string): Promise<Jobposting[]> {
+  async findAllJobposting(companyId: number): Promise<Jobposting[]> {
     return await this.jobpostingRepository.find({ where: { companyId } });
   }
 
   // 채용공고 1개 조회
-  async findOneJobposting(id: number) {
+  async findOneJobposting(companyId: number, id: number): Promise<Jobposting> {
     return await this.jobpostingRepository.findOne({
-      where: { id },
+      where: { companyId, id },
     });
   }
 

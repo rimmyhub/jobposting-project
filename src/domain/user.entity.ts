@@ -8,6 +8,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { Education } from '../domain/education.entity';
+import { Chat } from './chat.entity';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
@@ -50,4 +51,8 @@ export class User {
 
   @OneToMany(() => Education, (education) => education.user)
   educations: Education[];
+
+  // 채팅과 연결
+  @OneToMany(() => Chat, (chat) => chat.user)
+  chat: Chat[];
 }

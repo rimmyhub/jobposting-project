@@ -30,7 +30,7 @@ export class Education {
   @CreateDateColumn({ name: 'create_at', comment: '생성일' })
   createdAt: Date;
 
-  @UpdateDateColumn({ name: 'update_at', comment: '수정일' }) 학;
+  @UpdateDateColumn({ name: 'update_at', comment: '수정일' })
   updatedAt: Date;
 
   @DeleteDateColumn({ name: 'delete_at', comment: '삭제일' })

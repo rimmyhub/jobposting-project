@@ -15,6 +15,7 @@ import { ResumeModule } from './resume/resume.module';
 import { ApplicantModule } from './applicant/applicant.module';
 import { AuthModule } from './auth/auth.module';
 import { CommentModule } from './comment/comment.module';
+import { ChatModule } from './chat/chat.module';
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({ useFactory: ormConfig }),
@@ -32,6 +33,7 @@ import { CommentModule } from './comment/comment.module';
     ApplicantModule,
     AuthModule,
     CommentModule,
+    ChatModule,
   ],
   controllers: [AppController],
   providers: [AppService],
