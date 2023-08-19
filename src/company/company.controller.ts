@@ -20,7 +20,7 @@ import { ParamDto } from 'src/utils/param.dto';
 export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
 
-  // 회사 생성 + 회사 회원가입
+  // 회사 회원가입
   @Post('/signup')
   createCompany(@Body() createCompanyDto: CreateCompanyDto): Promise<Company> {
     return this.companyService.createCompany(createCompanyDto);
@@ -38,17 +38,17 @@ export class CompanyController {
     return this.companyService.finOneCompany(id); //string 으로 가져와서 숫자로 변환
   }
 
-  // 회사 수정
-  // 유저 연결 물어보기
+  // 회사 수정 (회사 연결)
   @UseGuards(CompanyGuard)
   @Patch()
   updateCompany(@Request() req, @Body() updateCompanyDto: UpdateCompanyDto) {
     return this.companyService.updateCompany(req.company.id, updateCompanyDto);
   }
 
-  // 회사 삭제
-  @Delete(':id')
-  removeCompany(@Param('id') id: string) {
-    return this.companyService.removeCompany(+id);
+  // 회사 회원 탈퇴 (회사 연결)
+  @UseGuards(CompanyGuard)
+  @Delete()
+  removeCompany(@Request() req) {
+    return this.companyService.removeCompany(req.company.id);
   }
 }

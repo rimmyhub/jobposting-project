@@ -12,6 +12,7 @@ import {
 } from 'typeorm';
 import { Jobposting } from './jobposting.entity';
 import { User } from './user.entity';
+import { Company } from './company.entity';
 
 @Entity()
 export class Chat {
@@ -39,6 +40,11 @@ export class Chat {
   @DeleteDateColumn({ name: 'delete_at', comment: '삭제일' })
   deletedAt?: Date | null;
 
+  // 유저 연결
   @ManyToOne(() => User, (user) => user.chat)
   user: User;
+
+  // 회사 연결
+  @ManyToOne(() => Company, (company) => company.chat)
+  company: Company;
 }

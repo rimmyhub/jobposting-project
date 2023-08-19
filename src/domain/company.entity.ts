@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 import { Jobposting } from './jobposting.entity';
 import { Comment } from './comment.entity';
+import { Chat } from './chat.entity';
 
 @Entity()
 export class Company {
@@ -45,8 +46,14 @@ export class Company {
   @UpdateDateColumn({ name: 'update_at', comment: '수정일' })
   updatedAt: Date;
 
-  @DeleteDateColumn({ name: 'delete_at', comment: '삭제일' })
-  deletedAt?: Date | null;
+  @Column({ default: false })
+  deleted: boolean;
+
+  @Column({ type: 'timestamp', nullable: true })
+  deletedAt: Date;
+
+  // @DeleteDateColumn({ name: 'delete_at', comment: '삭제일' })
+  // deletedAt?: Date | null;
 
   //1:N 관계 설정
   @OneToMany(() => Jobposting, (jobposting) => jobposting.company)
@@ -55,4 +62,8 @@ export class Company {
   // 1:N관계 설정
   @OneToMany(() => Comment, (comment) => comment.company)
   comment: Comment;
+
+  //1:N 관계 설정 - 채팅
+  @OneToMany(() => Chat, (chat) => chat.company)
+  chat: Chat[];
 }
