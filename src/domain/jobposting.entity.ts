@@ -4,18 +4,20 @@ import {
   DeleteDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Company } from './company.entity';
+import { Applicant } from './applicant.entity';
 
 @Entity()
 export class Jobposting {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  companyId: string;
+  @Column({ name: 'company_id' })
+  companyId: number;
 
   @Column({ type: 'varchar', length: 255, comment: '제목' })
   title: string;
@@ -53,7 +55,11 @@ export class Jobposting {
   @DeleteDateColumn({ name: 'delete_at', comment: '삭제일' })
   deletedAt?: Date | null;
 
-  //1:N 관계 설정
+  // 1:N 관계 설정
   @ManyToOne(() => Company, (company) => company.jobposting)
   company: Company[];
+
+  // 1:N 관계 설정
+  @OneToMany(() => Applicant, (applicant) => applicant.jobposting)
+  applicant: Applicant[];
 }

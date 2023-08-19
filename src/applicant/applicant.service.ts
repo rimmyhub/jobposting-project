@@ -10,12 +10,11 @@ export class ApplicantService {
     private readonly applicantRepository: Repository<Applicant>,
   ) {}
 
-  async createApply(
-    createApplicantDto: CreateApplicantDto,
-  ): Promise<Applicant> {
-    const { userId, jobpostingId } = createApplicantDto;
-    const apply = this.applicantRepository.create({ userId, jobpostingId });
-
-    return await this.applicantRepository.save(apply);
-  }
+  // async createApply(id: number, jobpostingId: number): Promise<Applicant> {
+  //   const apply = await this.applicantRepository.save({
+  //     user: { id: userId },
+  //     jobposting: { id: jobpostingId },
+  //   });
+  //   return apply;
+  // }
 }

@@ -7,22 +7,23 @@ import {
   Patch,
   Post,
   UseGuards,
+  Request,
 } from '@nestjs/common';
 import { CompanyService } from './company.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { Company } from 'src/domain/company.entity';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 import { CompanyGuard } from 'src/auth/company.guard';
+import { ParamDto } from 'src/utils/param.dto';
 
 @Controller('companys')
 export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
 
   // 회사 생성 + 회사 회원가입
-  @Post()
+  @Post('/signup')
   createCompany(@Body() createCompanyDto: CreateCompanyDto): Promise<Company> {
-    const company = this.companyService.createCompany(createCompanyDto);
-    return company;
+    return this.companyService.createCompany(createCompanyDto);
   }
 
   // 회사 전체 조회
@@ -33,18 +34,16 @@ export class CompanyController {
 
   // 회사 1개 조회
   @Get(':id')
-  finOneCompany(@Param('id') id: string) {
-    return this.companyService.finOneCompany(+id); //string 으로 가져와서 숫자로 변환
+  finOneCompany(@Param() { id }: ParamDto) {
+    return this.companyService.finOneCompany(id); //string 으로 가져와서 숫자로 변환
   }
 
   // 회사 수정
+  // 유저 연결 물어보기
   @UseGuards(CompanyGuard)
-  @Patch(':id')
-  updateCompany(
-    @Param('id') id: string,
-    @Body() updateCompanyDto: UpdateCompanyDto,
-  ) {
-    return this.companyService.updateCompany(+id, updateCompanyDto);
+  @Patch()
+  updateCompany(@Request() req, @Body() updateCompanyDto: UpdateCompanyDto) {
+    return this.companyService.updateCompany(req.company.id, updateCompanyDto);
   }
 
   // 회사 삭제

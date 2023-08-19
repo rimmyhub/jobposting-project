@@ -5,7 +5,7 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 async function ormConfig(): Promise<TypeOrmModuleOptions> {
   const configService = new ConfigService();
   const commonConf = {
-    SYNCRONIZE: true, // 엔티티에 있는대로 테이블을 생성을 할건지 정한다.
+    SYNCHRONIZE: true, // 엔티티에 있는대로 테이블을 생성을 할건지 정한다.
     ENTITIES: [__dirname + '/domain/*{.ts,.js}'],
     MIGRATIONS: [__dirname + '/migrations/**/*{.ts,.js}'],
     MIGRATIONS_RUN: false,
@@ -20,7 +20,7 @@ async function ormConfig(): Promise<TypeOrmModuleOptions> {
     password: configService.get<string>('DB_PASSWORD'),
     logging: true,
     namingStrategy: new SnakeNamingStrategy(), // createAt, updateAt 스네이크 케이스로 전환
-    synchronize: commonConf.SYNCRONIZE,
+    synchronize: commonConf.SYNCHRONIZE,
     entities: commonConf.ENTITIES,
     migrations: commonConf.MIGRATIONS,
     migrationsRun: commonConf.MIGRATIONS_RUN,
