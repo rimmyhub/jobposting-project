@@ -8,8 +8,10 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   ManyToOne,
+  OneToMany,
 } from 'typeorm';
 import { Resume } from './resume.entity';
+import { Comment } from './comment.entity';
 
 // Career 클래스는 DB의 'career' 테이블을 의미한다.
 @Entity()
@@ -47,4 +49,7 @@ export class Career {
 
   @ManyToOne(() => Resume, (resume) => resume.career)
   resume: Resume;
+
+  @OneToMany(() => Comment, (comment) => comment.career)
+  comment: Comment;
 }

@@ -8,6 +8,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { Jobposting } from './jobposting.entity';
+import { Comment } from './comment.entity';
 
 @Entity()
 export class Company {
@@ -50,4 +51,8 @@ export class Company {
   //1:N 관계 설정
   @OneToMany(() => Jobposting, (jobposting) => jobposting.company)
   jobposting: Jobposting[];
+
+  // 1:N관계 설정
+  @OneToMany(() => Comment, (comment) => comment.company)
+  comment: Comment;
 }
