@@ -38,12 +38,12 @@ export class Comment {
   @DeleteDateColumn({ name: 'delete_at', comment: '삭제일' })
   deletedAt?: Date | null;
 
-  // @ManyToOne(() => Company, (company) => company.comments)
-  // company: Company;
+  @ManyToOne(() => Company, (company) => company.comment)
+  company: Company;
 
-  // @ManyToOne(() => Career, (career) => career.comments)
-  // career: Career;
+  @ManyToOne(() => Career, (career) => career.comment)
+  career: Career;
 
-  // @ManyToOne(() => User, (user) => user.comments)
-  // user: User;
+  @ManyToOne(() => User, (user) => user.comment)
+  user: User;
 }

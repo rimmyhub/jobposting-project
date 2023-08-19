@@ -6,10 +6,13 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   OneToMany,
+  OneToOne,
 } from 'typeorm';
 import { Education } from '../domain/education.entity';
 import { Chat } from './chat.entity';
 import { Applicant } from './applicant.entity';
+import { Resume } from './resume.entity';
+import { Comment } from './comment.entity';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
@@ -60,4 +63,11 @@ export class User {
   //1:N 관계 설정 - 지원내역
   @OneToMany(() => Applicant, (applicant) => applicant.user)
   applicant: Applicant[];
+
+  // 1대1관계 이력서 -- 유저
+  @OneToOne(() => Resume, (resume) => resume.user)
+  resume: Resume;
+
+  @OneToMany(() => Comment, (comment) => comment.user)
+  comment: Comment[];
 }
