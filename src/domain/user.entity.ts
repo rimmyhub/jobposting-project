@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 import { Education } from '../domain/education.entity';
 import { Chat } from './chat.entity';
+import { Applicant } from './applicant.entity';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
@@ -52,7 +53,11 @@ export class User {
   @OneToMany(() => Education, (education) => education.user)
   educations: Education[];
 
-  // 채팅과 연결
+  //1:N 관계 설정 - 채팅
   @OneToMany(() => Chat, (chat) => chat.user)
   chat: Chat[];
+
+  //1:N 관계 설정 - 지원내역
+  @OneToMany(() => Applicant, (applicant) => applicant.user)
+  applicant: Applicant[];
 }

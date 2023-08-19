@@ -44,4 +44,7 @@ export class Career {
 
   //   @ManyToOne(() => Resume, (resume) => resume.careers)
   //   resume: Resume;
+
+  @ManyToOne(() => Resume, (resume) => resume.career)
+  resume: Resume;
 }
