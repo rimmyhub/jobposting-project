@@ -75,7 +75,7 @@ export class JobpostingService {
 
     if (!existingCompany) {
       throw new HttpException(
-        '회사를 찾을 수 없습니다.',
+        '채용공고를 찾을 수 없습니다.',
         HttpStatus.BAD_REQUEST,
       );
     }
@@ -128,8 +128,8 @@ export class JobpostingService {
       );
     }
 
-    console.log(jobposting.companyId);
-    console.log(id);
+    // console.log(jobposting.companyId);
+    // console.log(id);
     // 로그인된 회사 ID와 채용공고의 회사 ID 비교
     if (jobposting.companyId !== id) {
       throw new HttpException('권한이 없습니다.', HttpStatus.FORBIDDEN);
