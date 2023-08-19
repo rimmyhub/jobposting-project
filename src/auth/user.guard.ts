@@ -11,7 +11,6 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { Request } from 'express';
 // 토큰값안에 포함된 유저의 이메일로 id값을 담아서 보내주자
-
 @Injectable()
 // 유저가드
 export class UserGuard implements CanActivate {

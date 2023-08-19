@@ -1,6 +1,4 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
 import { LoginDto } from './dto/login.dto';
 import { UserService } from 'src/user/user.service';
 import { CompanyService } from 'src/company/company.service';
@@ -33,7 +31,7 @@ export class AuthService {
       result = await this.companyService.findEmail(email);
       // 패스워드 확인
     }
-
+    console.log(bcrypt.compare(password, result.password));
     if (!bcrypt.compare(password, result.password)) {
       throw new HttpException(
         '패스워드가 일치하지 않습니다.',
@@ -54,25 +52,5 @@ export class AuthService {
         secret: this.configService.get<string>('ACCESS_TOKEN_KEY'),
       }),
     };
-  }
-
-  create(createAuthDto: CreateAuthDto) {
-    return 'This action adds a new auth';
-  }
-
-  findAll() {
-    return `This action returns all auth`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
-  }
-
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
   }
 }
