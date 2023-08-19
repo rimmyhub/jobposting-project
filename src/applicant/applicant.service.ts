@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateApplicantDto } from './dto/create-applicant.dto';
 import { Applicant } from 'src/domain/applicant.entity';
-import { User } from 'src/domain/user.entity';
+import { User } from '../domain/user.entity';
 import { Jobposting } from 'src/domain/jobposting.entity';
 import { HttpException, HttpStatus } from '@nestjs/common';
 
