@@ -15,6 +15,8 @@ export class UserService {
     private userRepository: Repository<User>,
   ) {}
 
+  // 유저 refeshToken 저장
+
   // 유저정보상세조회
   async findOne(id: number) {
     const userInfo = await this.userRepository.findOne({
@@ -102,6 +104,7 @@ export class UserService {
     // 정해야하는것
     // 완전탈퇴까지 며칠을 둬야하나
     // node-scheduler를 어떻게 짜야하나
+    // softDelete라는 메서드를 이용하면 delete_at에 값이 들어감
     await this.userRepository.softDelete(id);
     return `탈퇴 되었습니다.`;
   }
@@ -114,5 +117,27 @@ export class UserService {
     });
 
     return isEmail;
+  }
+
+  // getUserRefTokenMatch
+  async getUserRefTokenMatch(refreToken: string, id: number): Promise<User> {
+    const user: User = await this.userRepository.findOne({
+      select: {
+        email: true,
+        currentRefreshToken: true,
+        currentRefreshTokenExp: true,
+      },
+      where: { id },
+    });
+
+    // 유저 테이블 내에 정의된 암호화된 refresh_token값과
+    // 요청 시 body에 담아준 refresh_token값 비교
+    const isRefTokenMatch = await bcrypt.compare(
+      refreToken,
+      user.currentRefreshToken,
+    );
+    if (isRefTokenMatch) {
+      return user;
+    }
   }
 }

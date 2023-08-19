@@ -52,6 +52,13 @@ export class Company {
   @Column({ type: 'timestamp', nullable: true })
   deletedAt: Date;
 
+  // refreshToken저장하기
+  @Column({ nullable: true })
+  currentRefreshToken: string;
+
+  @Column({ type: 'datetime', nullable: true })
+  currentRefreshTokenExp: Date;
+
   // @DeleteDateColumn({ name: 'delete_at', comment: '삭제일' })
   // deletedAt?: Date | null;
 
