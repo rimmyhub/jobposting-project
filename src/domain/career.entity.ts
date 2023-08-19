@@ -44,9 +44,6 @@ export class Career {
   @DeleteDateColumn({ name: 'delete_at', comment: '삭제일' })
   deletedAt?: Date | null;
 
-  //   @ManyToOne(() => Resume, (resume) => resume.careers)
-  //   resume: Resume;
-
   @ManyToOne(() => Resume, (resume) => resume.career)
   resume: Resume;
 
