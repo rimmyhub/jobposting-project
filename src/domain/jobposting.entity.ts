@@ -55,11 +55,11 @@ export class Jobposting {
   @DeleteDateColumn({ name: 'delete_at', comment: '삭제일' })
   deletedAt?: Date | null;
 
-  // 1:N 관계 설정
+  // 1:N 관계 설정 - 회사
   @ManyToOne(() => Company, (company) => company.jobposting)
-  company: Company[];
+  company: Company;
 
-  // 1:N 관계 설정
+  // 1:N 관계 설정 - 지원하기
   @OneToMany(() => Applicant, (applicant) => applicant.jobposting)
   applicant: Applicant[];
 }

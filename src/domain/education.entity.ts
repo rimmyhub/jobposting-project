@@ -9,6 +9,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { User } from './user.entity';
+import { Resume } from './resume.entity';
 
 @Entity()
 export class Education {
@@ -44,4 +45,8 @@ export class Education {
 
   @ManyToOne(() => User, (user) => user.educations)
   user: User;
+
+  // 이력서 연결
+  @ManyToOne(() => Resume, (resume) => resume.education)
+  resume: Resume;
 }

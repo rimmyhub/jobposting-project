@@ -8,6 +8,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Jobposting } from './jobposting.entity';
+import { User } from './user.entity';
 
 @Entity()
 export class Applicant {
@@ -30,6 +31,9 @@ export class Applicant {
   deletedAt?: Date | null;
 
   // 1:N 관계 설정
-  @ManyToOne(() => Jobposting, (jobposting) => jobposting)
-  jobposting: Jobposting[];
+  @ManyToOne(() => Jobposting, (jobposting) => jobposting.applicant)
+  jobposting: Jobposting;
+
+  @ManyToOne(() => User, (user) => user.applicant)
+  user: User;
 }

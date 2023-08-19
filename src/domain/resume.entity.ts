@@ -5,7 +5,12 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
+  OneToMany,
 } from 'typeorm';
+import { Aboutme } from './aboutme.entity';
+import { Portfolio } from './portfolio.entity';
+import { Career } from './career.entity';
+import { Education } from './education.entity';
 
 @Entity()
 export class Resume {
@@ -26,4 +31,20 @@ export class Resume {
 
   @DeleteDateColumn({ name: 'delete_at', comment: '삭제일' })
   deletedAt?: Date | null;
+
+  // 1:N관계설정 - 자기소개
+  @OneToMany(() => Aboutme, (aboutme) => aboutme.resume)
+  aboutme: Aboutme[];
+
+  // 1:N관계설정 - 포트 폴리오
+  @OneToMany(() => Portfolio, (portfolio) => portfolio.resume)
+  portfolio: Portfolio[];
+
+  // 1:N관계설정 - 경력
+  @OneToMany(() => Career, (career) => career.resume)
+  career: Career[];
+
+  // 1:N관계설정 - 학력
+  @OneToMany(() => Education, (education) => education.resume)
+  education: Education[];
 }
