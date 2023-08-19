@@ -21,6 +21,7 @@ export class Aboutme {
   @Column({ type: 'text', comment: '내용' }) //longtext
   content: string;
 
+  // 1:N 관계설정 - 이력서
   @ManyToOne(() => Resume, (resume) => resume.aboutme)
   resume: Resume;
 }
