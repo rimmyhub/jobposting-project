@@ -29,7 +29,6 @@ export class UserController {
   }
 
   // 유저정보 상세조회
-  // 얘는 일단 auth기능을 추가해야함
   @UseGuards(UserGuard)
   @Get('/user-page')
   findOne(@Request() req) {
@@ -38,7 +37,6 @@ export class UserController {
   }
 
   // 유저정보 수정
-  // 얘는 일단 auth기능을 추가해야함
   @UseGuards(UserGuard)
   @Patch()
   update(@Request() req, @Body() updateUserDto: UpdateUserDto) {
@@ -46,14 +44,10 @@ export class UserController {
   }
 
   // 회원탈퇴 (softDelete)
-  // 얘는 일단 auth기능을 추가해야함
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
-  }
-
-  @Get()
-  findAll() {
-    return this.userService.findAll();
+  // 유저정보 수정
+  @UseGuards(UserGuard)
+  @Delete()
+  remove(@Request() req) {
+    return this.userService.remove(req.user.id);
   }
 }

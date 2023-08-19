@@ -3,7 +3,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 // 데이터베이스와 레포지토리를 쓰려면
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, Not, IsNull } from 'typeorm';
 import { User } from '../domain/user.entity';
 import * as bcrypt from 'bcrypt';
 
@@ -27,7 +27,7 @@ export class UserService {
         address: true,
         birth: true,
       },
-      where: { id: id },
+      where: { id: id }, // deleteAt값이 null인값만 찾는다
     });
 
     if (!userInfo) {
@@ -64,6 +64,46 @@ export class UserService {
       password: hashedPassword,
       phone,
     });
+    return '회원가입이 완료되었습니다.';
+  }
+
+  // 유저정보 수정
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    // 먼저 유저가 있는지 확인한다.
+    await this.findOne(id);
+    this.userRepository.update(id, updateUserDto);
+    return `수정이 완료되었습니다.`;
+  }
+
+  // 유저 탈퇴 deleteAt에 삭제시간 넣기
+  async remove(id: number) {
+    // 유저가 있는지 확인
+    const isUser = await this.userRepository.findOne({
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        phone: true,
+        gender: true,
+        address: true,
+        birth: true,
+      },
+      where: { id, deletedAt: Not(IsNull()) },
+    });
+    if (!isUser) {
+      throw new HttpException(
+        '유저를 찾을 수 없습니다.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    // 먼저 소프트delete로 탈퇴를 한 날짜를 DB에 저장 후
+    // 추후에 node-scheduler로 delete_at이 null이 아닌 컬럼들을 삭제하지
+    // 정해야하는것
+    // 완전탈퇴까지 며칠을 둬야하나
+    // node-scheduler를 어떻게 짜야하나
+    await this.userRepository.softDelete(id);
+    return `탈퇴 되었습니다.`;
   }
 
   // 유저의 이메일을 찾아주는 함수
@@ -72,32 +112,7 @@ export class UserService {
       select: { id: true, email: true, password: true },
       where: { email },
     });
-    // 이메일이 없을 경우
-    if (!isEmail) {
-      throw new HttpException(
-        '가입되지 않은 이메일입니다.',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
 
     return isEmail;
-  }
-
-  // 유저정보 수정
-  async update(id: number, updateUserDto: UpdateUserDto) {
-    // 먼저 유저가 있는지 확인한다.
-    await this.findOne(id);
-    this.userRepository.update(id, updateUserDto);
-
-    return `수정이 완료되었습니다.`;
-  }
-
-  // 유저 탈퇴 deleteAt에 삭제시간 넣기
-  remove(id: number) {
-    return `This action removes a #${id} user`;
-  }
-
-  findAll() {
-    return `This action returns all users`;
   }
 }
