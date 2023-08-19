@@ -6,11 +6,13 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   OneToMany,
+  OneToOne,
 } from 'typeorm';
 import { Aboutme } from './aboutme.entity';
 import { Portfolio } from './portfolio.entity';
 import { Career } from './career.entity';
 import { Education } from './education.entity';
+import { User } from './user.entity';
 
 @Entity()
 export class Resume {
@@ -47,4 +49,7 @@ export class Resume {
   // 1:N관계설정 - 학력
   @OneToMany(() => Education, (education) => education.resume)
   education: Education[];
+  // 1대1 유저 -- 이력서
+  @OneToOne(() => User, (user) => user.resume)
+  user: User;
 }
