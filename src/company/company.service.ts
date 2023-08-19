@@ -47,6 +47,7 @@ export class CompanyService {
       business,
       employees,
     });
+    this.logger.log('회원가입이 성공적으로 완료되었습니다');
     return newCompany;
   }
 
@@ -101,7 +102,7 @@ export class CompanyService {
     return await this.companyRepository.save(company);
   }
 
-  //   // 회사 삭제
+  //   // 회사 삭제 (바로 삭제되는 API)
   //   async removeCompany(id: number) {
   //     const company = await this.companyRepository.findOne({
   //       where: { id, deletedAt: Not(IsNull()) },
@@ -117,7 +118,7 @@ export class CompanyService {
   // }
 
   // 회사 삭제 소프트 딜리트
-  // 근데 안됨;; 왜 안될까..
+  // !!!! 근데 안됨;; 왜 안될까..
   async removeCompany(id: number) {
     const company = await this.companyRepository.findOne({
       where: { id, deleted: false }, // 삭제되지 않은 회사만 조회
