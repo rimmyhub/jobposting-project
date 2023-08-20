@@ -6,7 +6,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Company } from 'src/domain/company.entity';
+import { Company } from '../domain/company.entity';
 import { IsNull, LessThanOrEqual, Not, Repository } from 'typeorm';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import * as bcrypt from 'bcrypt';
@@ -21,6 +21,30 @@ export class CompanyService {
     private readonly companyRepository: Repository<Company>,
   ) {}
 
+  // getUserRefTokenMatch
+  async getCompanyRefTokenMatch(
+    refreToken: string,
+    id: number,
+  ): Promise<Company> {
+    const company: Company = await this.companyRepository.findOne({
+      select: {
+        email: true,
+        currentRefreshToken: true,
+        currentRefreshTokenExp: true,
+      },
+      where: { id },
+    });
+
+    // 유저 테이블 내에 정의된 암호화된 refresh_token값과
+    // 요청 시 body에 담아준 refresh_token값 비교
+    const isRefTokenMatch = await bcrypt.compare(
+      refreToken,
+      company.currentRefreshToken,
+    );
+    if (isRefTokenMatch) {
+      return company;
+    }
+  }
   // 회사 생성 + 회사 회원가입
   async createCompany(createCompanyDto: CreateCompanyDto): Promise<Company> {
     const {
@@ -47,7 +71,6 @@ export class CompanyService {
       business,
       employees,
     });
-    this.logger.log('회원가입이 성공적으로 완료되었습니다');
     return newCompany;
   }
 
@@ -102,23 +125,8 @@ export class CompanyService {
     return await this.companyRepository.save(company);
   }
 
-  //   // 회사 삭제 (바로 삭제되는 API)
-  //   async removeCompany(id: number) {
-  //     const company = await this.companyRepository.findOne({
-  //       where: { id, deletedAt: Not(IsNull()) },
-  //     });
-  //     if (!company) {
-  //       throw new HttpException(
-  //         '회사를 찾을 수 없습니다.',
-  //         HttpStatus.BAD_REQUEST,
-  //       );
-  //     }
-  //     return await this.companyRepository.softDelete(company);
-  //   }
-  // }
-
   // 회사 삭제 소프트 딜리트
-  // !!!! 근데 안됨;; 왜 안될까..
+  // 근데 안됨;; 왜 안될까..
   async removeCompany(id: number) {
     const company = await this.companyRepository.findOne({
       where: { id, deleted: false }, // 삭제되지 않은 회사만 조회

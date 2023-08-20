@@ -48,6 +48,13 @@ export class User {
   @DeleteDateColumn({ name: 'delete_at', comment: '삭제일' })
   deletedAt?: Date | null;
 
+  // refreshToken저장하기
+  @Column({ nullable: true })
+  currentRefreshToken: string;
+
+  @Column({ type: 'datetime', nullable: true })
+  currentRefreshTokenExp: Date;
+
   /**
    * 1 : M 관계 설정
    * @OneToMany -> 해당 엔티티(Education) To 대상 엔티티 (User)
