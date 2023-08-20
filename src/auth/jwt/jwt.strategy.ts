@@ -16,7 +16,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  // 키가 맞다면
+  // 토큰키가 맞는 지 확인
   async validate(payload: any, done: VerifyCallback): Promise<any> {
     const user = await this.authService.tokenValidateUser(payload);
   }
