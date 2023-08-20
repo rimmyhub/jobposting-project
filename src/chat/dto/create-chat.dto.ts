@@ -3,9 +3,13 @@ import { IsNotEmpty, IsString } from 'class-validator';
 export class CreateChatDto {
   @IsNotEmpty()
   @IsString()
-  userMessage: string | null;
+  companyId: string;
 
   @IsNotEmpty()
   @IsString()
-  companyMessage: string | null;
+  userMessage: string;
+
+  @IsNotEmpty()
+  @IsString()
+  companyMessage: string;
 }

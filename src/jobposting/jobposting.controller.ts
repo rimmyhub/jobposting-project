@@ -14,7 +14,6 @@ import { CreateJobpostingDto } from './dto/create-jobposting.dto';
 import { UpdateJobpostingDto } from './dto/update-jobposting.dto';
 import { Jobposting } from 'src/domain/jobposting.entity';
 import { CompanyGuard } from 'src/auth/company.guard';
-import { UserGuard } from 'src/auth/user.guard';
 
 @Controller('jobpostings')
 export class JobpostingController {

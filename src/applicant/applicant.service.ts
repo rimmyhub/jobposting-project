@@ -58,7 +58,7 @@ export class ApplicantService {
       jobposting: { id: jobpostingId },
     });
 
-    return this.applicantRepository.save(apply);
+    return apply;
   }
 
   // 채용별 회사 지원 전체 조회 - 회사만

@@ -10,7 +10,6 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Jobposting } from './jobposting.entity';
 import { User } from './user.entity';
 import { Company } from './company.entity';
 
@@ -26,10 +25,10 @@ export class Chat {
   companyId: number;
 
   @Column({ type: 'text', comment: '유저 메세지' }) //longtext
-  userMessage: string | null;
+  userMessage: string;
 
   @Column({ type: 'text', comment: '회사 메세지' }) //longtext
-  companyMessage: string | null;
+  companyMessage: string;
 
   @CreateDateColumn({ name: 'create_at', comment: '생성일' })
   createdAt: Date;
