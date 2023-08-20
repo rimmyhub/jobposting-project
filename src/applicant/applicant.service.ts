@@ -63,14 +63,27 @@ export class ApplicantService {
 
   // 채용별 회사 지원 전체 조회 - 회사만
   async findAllApply(id: number, jobpostingId: number): Promise<Applicant[]> {
-    const existingJobposting = await this.applicantRepository.findOne({
+    const existingApplicant = await this.applicantRepository.findOne({
       where: { jobpostingId },
     });
 
-    if (!existingJobposting) {
+    if (!existingApplicant) {
       throw new HttpException(
         '채용공고를 찾을 수 없습니다.',
         HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    // 채용 공고를 생성한 회사id 찾기
+    // 현재 로그인한 회사가 해당 채용공고를 만든 회사가 아니면 오류 반환
+    const existingJobposting = await this.jobpostingRepository.findOne({
+      where: { id: jobpostingId },
+    });
+
+    if (existingJobposting.companyId !== id) {
+      throw new HttpException(
+        '해당 지원내역에 접근할 수 있는 권한이 없습니다.',
+        HttpStatus.FORBIDDEN,
       );
     }
 

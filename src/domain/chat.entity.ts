@@ -25,11 +25,11 @@ export class Chat {
   @Column({ name: 'company_id' })
   companyId: number;
 
-  @Column({ type: 'text' }) //longtext
-  userMessage: string;
+  @Column({ type: 'text', comment: '유저 메세지' }) //longtext
+  userMessage: string | null;
 
-  @Column({ type: 'text' }) //longtext
-  companyMessage: string;
+  @Column({ type: 'text', comment: '회사 메세지' }) //longtext
+  companyMessage: string | null;
 
   @CreateDateColumn({ name: 'create_at', comment: '생성일' })
   createdAt: Date;
