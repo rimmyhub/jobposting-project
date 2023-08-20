@@ -16,19 +16,17 @@ import { PassportStrategy } from '@nestjs/passport';
 // 토큰값안에 포함된 유저의 이메일로 id값을 담아서 보내주자
 @Injectable()
 // 유저가드
-export class UserGuard
-  extends PassportStrategy(Strategy)
-  implements CanActivate
-{
+// extends PassportStrategy(Strategy)
+export class UserGuard implements CanActivate {
   constructor(
     private jwtService: JwtService,
     private configService: ConfigService,
   ) {
-    super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(), // 헤더로부터 토큰 추출하는 함수
-      ignoreExpiration: false,
-      secretOrKey: configService.get<string>('ACCESS_TOKEN_KEY'),
-    }); // auth.module의 JwtModule.register의 secret키와 같은 키값을 넣어줘야한다.;
+    // super({
+    //   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(), // 헤더로부터 토큰 추출하는 함수
+    //   ignoreExpiration: false,
+    //   secretOrKey: configService.get<string>('ACCESS_TOKEN_KEY'),
+    // }); // auth.module의 JwtModule.register의 secret키와 같은 키값을 넣어줘야한다.;
   }
   // 가드를 따로 만들어서?
   // 파라미터를 넘김
