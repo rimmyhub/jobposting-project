@@ -12,8 +12,8 @@ import {
 import { ChatService } from './chat.service';
 import { CreateChatDto } from './dto/create-chat.dto';
 import { Chat } from 'src/domain/chat.entity';
-import { UserGuard } from 'src/auth/user.guard';
-import { CompanyGuard } from 'src/auth/company.guard';
+import { UserGuard } from '../auth/jwt/jwt.user.guard';
+import { CompanyGuard } from '../auth/jwt/jwt.company.guard';
 
 @Controller('chats')
 export class ChatController {

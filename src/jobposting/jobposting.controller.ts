@@ -13,7 +13,7 @@ import { JobpostingService } from './jobposting.service';
 import { CreateJobpostingDto } from './dto/create-jobposting.dto';
 import { UpdateJobpostingDto } from './dto/update-jobposting.dto';
 import { Jobposting } from 'src/domain/jobposting.entity';
-import { CompanyGuard } from 'src/auth/company.guard';
+import { CompanyGuard } from '../auth/jwt/jwt.company.guard';
 
 @Controller('jobpostings')
 export class JobpostingController {

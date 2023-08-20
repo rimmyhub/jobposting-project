@@ -9,7 +9,7 @@ import { UserService } from '../user/user.service';
 import { PassportModule } from '@nestjs/passport';
 import { ConfigService } from '@nestjs/config';
 import { JwtService, JwtModule } from '@nestjs/jwt';
-import { JwtStrategy } from './jwt/jwt.strategy';
+// import { JwtStrategy } from './jwt/jwt.strategy';
 import { CompanyService } from '../company/company.service';
 import { CompanyModule } from 'src/company/company.module';
 import { GenerateToken } from './jwt/generate.token';
@@ -43,7 +43,7 @@ const configService = new ConfigService();
     UserService,
     CompanyService,
     JwtService,
-    JwtStrategy,
+    // JwtStrategy,
     GenerateToken,
     RefreshToken,
   ],

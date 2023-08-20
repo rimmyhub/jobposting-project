@@ -12,10 +12,8 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LoginDto } from './dto/login.dto';
 import { Response } from 'express';
-import { LocalGuard } from './strategies/local.strategy';
-// import { LocalGuard } from './strategies/local-auth.guard';
+import { LocalGuard } from './login.strategies/auth.strategy';
 
 @Controller('auth')
 export class AuthController {
@@ -25,12 +23,9 @@ export class AuthController {
   @Post('/user')
   async login(
     @Request() req,
-    @Body() loginDto: LoginDto,
     @Res({ passthrough: true }) res: Response,
   ): Promise<any> {
-    console.log('req.body = ', req.body);
-    const role: string = 'user';
-    const payload = await this.authService.login(req, role);
+    const payload = await this.authService.login(req.id, req.email, req.role);
 
     // access token
     res.cookie('authorization', `Bearer ${payload['accessToken']}`, {
@@ -45,18 +40,17 @@ export class AuthController {
   }
 
   // 회사로그인
+  @UseGuards(LocalGuard)
   @Post('company')
   async companyLogin(
-    @Body() loginDto: LoginDto,
+    @Request() req,
     @Res({ passthrough: true }) res: Response,
   ): Promise<any> {
-    const role: string = 'company';
-    const payload = await this.authService.login(loginDto, role);
+    const payload = await this.authService.login(req.id, req.email, req.role);
     // access token
     res.cookie('authorization', `Bearer ${payload['accessToken']}`, {
       httpOnly: true,
     });
-
     // refresh token
     res.cookie('refresh_token', payload['refreshToken'], {
       httpOnly: true,
@@ -69,7 +63,6 @@ export class AuthController {
   async refresh(@Req() req, @Res({ passthrough: true }) res: Response) {
     try {
       const tokens = await this.authService.refresh(req.cookies.refresh_token);
-      console.log('tokens = ', tokens);
       res.cookie('authorization', `Bearer ${tokens.accessToken}`, {
         httpOnly: true,
       });
@@ -85,6 +78,7 @@ export class AuthController {
   // 로그아웃
   @Delete('logout')
   async logout(@Request() req, @Res({ passthrough: true }) res: Response) {
+    console.log('authorization = ', req);
     // 먼저 로그아웃이 되어있는지 확인하기
     const authorization = await req.cookies['authorization'];
     if (!authorization) {

@@ -78,8 +78,7 @@ export class AuthService {
   }
 
   // validate
-  async valitateClient(email: string, password: string, role: string) {
-    console.log('valitateClient', email, password, role);
+  async validateClient(email: string, password: string, role: string) {
     let clientInfo: any;
     // 유저인지 회사인지 사판단한다.
     if (role === 'user') {
@@ -94,14 +93,17 @@ export class AuthService {
     // 패스워드일치 확인
     await this.validatePassword(password, clientInfo.password);
 
+    const payload = {
+      id: clientInfo.id,
+      email: clientInfo.email,
+      role: role,
+    };
     // 클라이언트의 정보를 보낸다
-    return clientInfo;
+    return payload;
   }
 
   // 로그인
-  async login(loginDto: LoginDto, role: string) {
-    // const { email, password } = loginDto;
-    console.log('loginDto');
+  async login(id: number, email: string, role: string) {
     let payload: object;
     let result: any;
     // 유저인지 회사인지 사판단한다.
@@ -119,18 +121,18 @@ export class AuthService {
 
     // accessToken 생성
     const accessToken = await this.generateToken.generateAccessToken(
-      result.id,
-      result.email,
+      id,
+      email,
       role,
     );
 
     // refreshToken생성
     const refreshToken = await this.generateToken.generateRefreshToken(
-      result.id,
+      id,
       role,
     );
 
-    this.setRefreshToken(refreshToken, role, result.id);
+    this.setRefreshToken(refreshToken, role, id);
 
     // 뭉탱이로 보내자
     payload = {

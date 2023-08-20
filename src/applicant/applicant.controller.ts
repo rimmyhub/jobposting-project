@@ -11,8 +11,8 @@ import {
 } from '@nestjs/common';
 import { ApplicantService } from './applicant.service';
 import { Applicant } from 'src/domain/applicant.entity';
-import { UserGuard } from 'src/auth/user.guard';
-import { CompanyGuard } from 'src/auth/company.guard';
+import { UserGuard } from '../auth/jwt/jwt.user.guard';
+import { CompanyGuard } from '../auth/jwt/jwt.company.guard';
 
 @Controller('applications')
 export class ApplicantController {
