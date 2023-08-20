@@ -30,6 +30,39 @@
 
 ```bash
 $ npm install
+
+```
+
+## Dependencies
+```
+ "@fastify/cookie": "^9.0.4",
+ "@nestjs/common": "^10.0.0",
+ "@nestjs/config": "^3.0.0",
+ "@nestjs/core": "^10.0.0",
+ "@nestjs/jwt": "^10.1.0",
+ "@nestjs/mapped-types": "*",
+ "@nestjs/passport": "^10.0.0",
+ "@nestjs/platform-express": "^10.0.0",
+ "@nestjs/platform-fastify": "^10.1.3",
+ "@nestjs/schedule": "^3.0.2",
+ "@nestjs/swagger": "^7.1.8",
+ "@nestjs/typeorm": "^10.0.0",
+ "@types/bcrypt": "^5.0.0",
+ "bcrypt": "^5.1.1",
+ "bcryptjs": "^2.4.3",
+ "class-transformer": "^0.5.1",
+ "class-validator": "^0.14.0",
+ "cookie-parser": "^1.4.6",
+ "dotenv": "^16.3.1",
+ "express": "^4.18.2",
+ "mysql2": "^3.6.0",
+ "passport": "^0.6.0",
+ "passport-jwt": "^4.0.1",
+ "passport-local": "^1.0.0",
+ "reflect-metadata": "^0.1.13",
+ "rxjs": "^7.8.1",
+ "typeorm": "^0.3.17",
+ "typeorm-naming-strategies": "^4.1.0"
 ```
 
 ## Running the app
