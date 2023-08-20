@@ -1,34 +1,65 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 import { ChatService } from './chat.service';
 import { CreateChatDto } from './dto/create-chat.dto';
-import { UpdateChatDto } from './dto/update-chat.dto';
+import { Chat } from 'src/domain/chat.entity';
+import { UserGuard } from 'src/auth/user.guard';
+import { CompanyGuard } from 'src/auth/company.guard';
 
-@Controller('chat')
+@Controller('chats')
 export class ChatController {
   constructor(private readonly chatService: ChatService) {}
 
-  @Post()
-  create(@Body() createChatDto: CreateChatDto) {
-    return this.chatService.create(createChatDto);
+  // 유저가 -> 회사에게 채팅 신청
+  @UseGuards(UserGuard)
+  @Post(':companyId/company')
+  createUserChat(
+    @Request() req,
+    @Param('companyId') companyId: string,
+    @Body() createChatDto: CreateChatDto,
+  ): Promise<Chat> {
+    return this.chatService.createUserChat(
+      req.user.id,
+      +companyId,
+      createChatDto,
+    );
   }
 
-  @Get()
-  findAll() {
-    return this.chatService.findAll();
+  // 회사가 -> 유저에게 채팅 신청
+  @UseGuards(CompanyGuard)
+  @Post(':userId/user')
+  createCompanyChat(
+    @Request() req,
+    @Param('userId') userId: string,
+    @Body() createChatDto: CreateChatDto,
+  ): Promise<Chat> {
+    return this.chatService.createCompanyChat(
+      req.company.id,
+      +userId,
+      createChatDto,
+    );
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.chatService.findOne(+id);
+  // 유저가 - 회사 채팅 삭제
+  @UseGuards(UserGuard)
+  @Delete(':chatId/company')
+  removeUserChat(@Request() req, @Param('chatId') chatId: string) {
+    return this.chatService.removeUserChat(req.user.id, +chatId);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateChatDto: UpdateChatDto) {
-    return this.chatService.update(+id, updateChatDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.chatService.remove(+id);
+  // 회사가 - 유저 채팅 삭제
+  @UseGuards(CompanyGuard)
+  @Delete(':chatId/user')
+  removeCompanyChat(@Request() req, @Param('chatId') chatId: string) {
+    return this.chatService.removeCompanyChat(req.company.id, +chatId);
   }
 }
