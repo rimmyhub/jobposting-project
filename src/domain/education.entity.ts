@@ -10,11 +10,15 @@ import {
 } from 'typeorm';
 import { User } from './user.entity';
 import { Resume } from './resume.entity';
+import { educationType } from 'commons/education.enums';
 
 @Entity()
 export class Education {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column({ name: 'resume_id' })
+  resumeId: number;
 
   @Column({ type: 'varchar', length: 100, comment: '학교이름' })
   schoolTitle: string;
@@ -27,6 +31,13 @@ export class Education {
 
   @Column({ type: 'varchar', length: 50, comment: '전공/계열' })
   major: string;
+
+  @Column({
+    type: 'enum',
+    enum: educationType,
+    comment: '학력구분',
+  })
+  education: educationType;
 
   @CreateDateColumn({ name: 'create_at', comment: '생성일' })
   createdAt: Date;
