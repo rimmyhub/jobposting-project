@@ -33,6 +33,7 @@ export class CreateUserDto {
   @MaxLength(1)
   gender: string;
 
+  @IsNotEmpty()
   address: string;
 
   // 생년월일 정규표현식 예) 20000525

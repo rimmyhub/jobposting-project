@@ -21,6 +21,13 @@ export class EducationService {
     // Body
     const { schoolTitle, admissionYear, graduationYear, major, education } =
       createEducationDto;
+    // 연도 예외 처리
+    if (admissionYear > graduationYear) {
+      throw new HttpException(
+        'Please set an appropriate year.',
+        HttpStatus.PRECONDITION_FAILED,
+      );
+    }
     // 일치한 타입이 없는경우 예외 처리
     if (!Object.keys(educationType).includes(education)) {
       throw new HttpException(
@@ -64,6 +71,13 @@ export class EducationService {
     // Body
     const { schoolTitle, admissionYear, graduationYear, major, education } =
       updateEducationDto;
+    // 연도 예외 처리
+    if (admissionYear > graduationYear) {
+      throw new HttpException(
+        'Please set an appropriate year.',
+        HttpStatus.PRECONDITION_FAILED,
+      );
+    }
     // 학력 예외처리
     if (!Object.keys(educationType).includes(education)) {
       throw new HttpException('Conflict Education Type', HttpStatus.CONFLICT);

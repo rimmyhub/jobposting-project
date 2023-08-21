@@ -25,6 +25,7 @@ export class UserController {
   @UsePipes(ValidationPipe)
   @Post('/signup')
   create(@Body() createUserDto: CreateUserDto) {
+    console.log('회원강비');
     return this.userService.create(createUserDto);
   }
 

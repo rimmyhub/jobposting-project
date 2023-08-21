@@ -20,8 +20,8 @@ async function bootstrap() {
   );
   app.useGlobalFilters(new HttpExceptionFilter()); //ExceptionFilter
 
-  app.useStaticAssets(resolve('./views/public'));
   app.setBaseViewsDir(resolve('./views'));
+  app.useStaticAssets(resolve('./views/public'));
   app.setViewEngine('ejs');
   await app.listen(3000);
 }
