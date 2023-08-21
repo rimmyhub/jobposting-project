@@ -15,7 +15,7 @@ import { UpdateResumeDto } from './dto/update-resume.dto';
 import { UserGuard } from 'src/auth/jwt/jwt.user.guard';
 import { Resume } from 'src/domain/resume.entity';
 
-@Controller('/resumes')
+@Controller('api/resumes')
 export class ResumeController {
   constructor(private readonly resumeService: ResumeService) {}
 

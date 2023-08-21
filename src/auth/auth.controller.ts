@@ -16,7 +16,7 @@ import { Response } from 'express';
 import { LocalGuard } from './login.strategies/auth.strategy';
 import { GenerateToken } from './jwt/generate.token';
 
-@Controller('auth')
+@Controller('api/auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,

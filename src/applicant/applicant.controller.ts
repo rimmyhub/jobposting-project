@@ -14,7 +14,7 @@ import { Applicant } from 'src/domain/applicant.entity';
 import { UserGuard } from '../auth/jwt/jwt.user.guard';
 import { CompanyGuard } from '../auth/jwt/jwt.company.guard';
 
-@Controller('applications')
+@Controller('api/applications')
 export class ApplicantController {
   constructor(private readonly applicantService: ApplicantService) {}
 

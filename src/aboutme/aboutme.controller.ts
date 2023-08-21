@@ -11,7 +11,7 @@ import { AboutmeService } from './aboutme.service';
 import { CreateAboutmeDto } from './dto/create-aboutme.dto';
 import { UpdateAboutmeDto } from './dto/update-aboutme.dto';
 
-@Controller('aboutmes')
+@Controller('api/aboutmes')
 export class AboutmeController {
   constructor(private readonly aboutmeService: AboutmeService) {}
 

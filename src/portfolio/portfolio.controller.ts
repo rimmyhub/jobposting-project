@@ -11,7 +11,7 @@ import { PortfolioService } from './portfolio.service';
 import { CreatePortfolioDto } from './dto/create-portfolio.dto';
 import { UpdatePortfolioDto } from './dto/update-portfolio.dto';
 
-@Controller('portfolio')
+@Controller('api/portfolio')
 export class PortfolioController {
   constructor(private readonly portfolioService: PortfolioService) {}
 
