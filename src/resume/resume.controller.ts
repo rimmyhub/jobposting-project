@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  Request,
 } from '@nestjs/common';
 import { ResumeService } from './resume.service';
 import { CreateResumeDto } from './dto/create-resume.dto';
@@ -22,6 +23,7 @@ export class ResumeController {
   @UseGuards(UserGuard)
   @Post()
   async createResume(
+    @Request() req,
     @Body() createResumeDto: CreateResumeDto,
   ): Promise<Resume> {
     return await this.resumeService.createResume(createResumeDto);

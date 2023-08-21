@@ -49,7 +49,11 @@ export class Resume {
   // 1:N관계설정 - 학력
   @OneToMany(() => Education, (education) => education.resume)
   education: Education[];
+
   // 1대1 유저 -- 이력서
-  @OneToOne(() => User, (user) => user.resume)
+  @OneToOne(() => User, (user) => user.resume, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   user: User;
 }
