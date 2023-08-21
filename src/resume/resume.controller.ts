@@ -6,37 +6,53 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { ResumeService } from './resume.service';
 import { CreateResumeDto } from './dto/create-resume.dto';
 import { UpdateResumeDto } from './dto/update-resume.dto';
+import { UserGuard } from 'src/auth/jwt/jwt.user.guard';
+import { Resume } from 'src/domain/resume.entity';
 
-@Controller('resumes')
+@Controller('/resumes')
 export class ResumeController {
   constructor(private readonly resumeService: ResumeService) {}
 
+  // 이력서 - 작성
+  @UseGuards(UserGuard)
   @Post()
-  create(@Body() createResumeDto: CreateResumeDto) {
-    return this.resumeService.create(createResumeDto);
+  async createResume(
+    @Body() createResumeDto: CreateResumeDto,
+  ): Promise<Resume> {
+    return await this.resumeService.createResume(createResumeDto);
   }
 
+  // 이력서 - 전체 조회
   @Get()
-  findAll() {
-    return this.resumeService.findAll();
+  async findAllResume(): Promise<Resume[]> {
+    return await this.resumeService.findAllResume();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.resumeService.findOne(+id);
+  // 이력서 - 상세 조회
+  @Get('/:resumeId')
+  async findOneResume(@Param('resumeId') resumeId: number) {
+    return await this.resumeService.findOneResume(+resumeId);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateResumeDto: UpdateResumeDto) {
-    return this.resumeService.update(+id, updateResumeDto);
+  // 이력서 - 수정
+  @UseGuards(UserGuard)
+  @Patch(':resumeId')
+  updateResume(
+    @Param('resumeId') resumeId: number,
+    @Body() updateResumeDto: UpdateResumeDto,
+  ) {
+    return this.resumeService.updateResume(+resumeId, updateResumeDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.resumeService.remove(+id);
+  // 이력서 - 삭제
+  @UseGuards(UserGuard)
+  @Delete(':resumeId')
+  removeResume(@Param('resumeId') resumeId: number) {
+    return this.resumeService.removeResume(+resumeId);
   }
 }
