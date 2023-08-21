@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <!-- 메세지를 보여주기위한 요소 -->
+    <div>
+      <ul id="messages"></ul>
+    </div>
+
+    <!-- 새로운 메세지 입력을 위한 인풋버튼 -->
+    <div>
+      <input id="message" type="text" />
+      <!-- 클릭 이벤트가 발생했을 때 handleSubmitNewMessage() 함수를 호출하도록 설정 -->
+      <button onclick="handleSubmitNewMessage()">Submit</button>
+    </div>
+
+    <!-- 웹소켓 라이브러리와 채팅 관련 자바스크립트 파일을 로드 -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/chat.js"></script>
+  </body>
+</html>
