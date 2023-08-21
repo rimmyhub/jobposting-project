@@ -15,7 +15,7 @@ import { UpdateJobpostingDto } from './dto/update-jobposting.dto';
 import { Jobposting } from 'src/domain/jobposting.entity';
 import { CompanyGuard } from '../auth/jwt/jwt.company.guard';
 
-@Controller('jobpostings')
+@Controller('api/jobpostings')
 export class JobpostingController {
   constructor(private readonly jobpostingService: JobpostingService) {}
 

@@ -15,7 +15,7 @@ import { UpdateCareerDto } from './dto/update-career.dto';
 
 // CareerController 클래스는 각 API의 엔드포인트를 정의한다.
 // 즉, 경로를 설정한다고 보면 됨
-@Controller('careers')
+@Controller('api/careers')
 export class CareerController {
   constructor(private readonly careerService: CareerService) {}
 
