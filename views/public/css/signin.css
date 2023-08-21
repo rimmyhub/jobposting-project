@@ -1,0 +1,65 @@
+.signin-box > h1 {
+  margin-top: 1.2em;
+  margin-bottom: 1em;
+}
+
+.signin-container {
+  height: 100vh;
+  /* border: 1px solid black; */
+  position: relative;
+}
+
+.signin-box {
+  width: 659px;
+  height: 455px;
+  border-radius: 10px;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  left: 50%;
+  top: 40%;
+  text-align: center;
+  box-shadow: 0 0 10px 5px;
+  color: rgba(151, 149, 149, 0.719);
+}
+.signin-box > h1 {
+  color: black;
+}
+
+.email-input-box {
+  /* display: flex; */
+  position: relative;
+  margin-bottom: 3em;
+  color: black;
+}
+
+.password-box {
+  margin-bottom: 2em;
+}
+
+.icon {
+  font-size: 30px;
+  position: absolute;
+  transform: translate(-150%, -50%);
+  top: 50%;
+}
+
+.email-input-box > input {
+  width: 387px;
+  height: 45px;
+  border-radius: 8px;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.signin-btn {
+  border: none;
+  background-color: #396cf9;
+  font-size: 20px;
+  color: white;
+  font-weight: 700;
+}
+
+.signup-btn {
+  color: black;
+  cursor: pointer;
+}

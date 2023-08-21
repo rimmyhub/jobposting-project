@@ -16,9 +16,11 @@ body {
   position: relative;
 }
 
-.container > h3 {
+.logo {
   margin: 0;
   cursor: pointer;
+  /* position: absolute; */
+  transform: translate(0%, +15%);
 }
 
 .nav-list {
@@ -33,10 +35,32 @@ li {
   cursor: pointer;
 }
 
-.search-input {
+.search-box {
   width: 275px;
   border: 1px solid #396cf9;
   border-radius: 10px;
-  height: 25px;
+  height: 35px;
   margin-left: 10px;
+  padding: 0 5px 0 5px;
+  box-sizing: border-box;
+  display: flex;
+  padding: 0;
+  padding-left: 10px;
+}
+.search-input {
+  width: 100%;
+  border: none;
+  border-radius: 10px;
+  padding: 10px;
+  margin-left: 10px;
+}
+.search-input:focus {
+  outline: none;
+}
+
+.search-font {
+  font-size: 1.3em;
+  margin-left: 3px;
+  cursor: pointer;
+  transform: translate(0%, +20%);
 }
