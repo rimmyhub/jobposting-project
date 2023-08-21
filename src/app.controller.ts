@@ -16,4 +16,10 @@ export class AppController {
   getChat() {
     return { title: 'Title' };
   }
+
+  @Get('main')
+  @Render('main')
+  getMain() {
+    return { title: 'Title' };
+  }
 }
