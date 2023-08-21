@@ -9,12 +9,14 @@ import { UserService } from '../user/user.service';
 import { PassportModule } from '@nestjs/passport';
 import { ConfigService } from '@nestjs/config';
 import { JwtService, JwtModule } from '@nestjs/jwt';
-import { JwtStrategy } from './jwt/jwt.strategy';
+// import { JwtStrategy } from './jwt/jwt.strategy';
 import { CompanyService } from '../company/company.service';
 import { CompanyModule } from 'src/company/company.module';
 import { GenerateToken } from './jwt/generate.token';
 import { RefreshToken } from './jwt/refresh.token';
 import { Repository } from 'typeorm';
+// import { e } from './strategies/local.strategy';
+import { LoginDto } from './dto/login.dto';
 
 const configService = new ConfigService();
 
@@ -25,21 +27,23 @@ const configService = new ConfigService();
     CompanyModule,
     TypeOrmModule.forFeature([Auth]),
     // jwt설정
-    PassportModule.register({ defaultStrategy: 'jwt', session: false }),
+    // PassportModule,
+    PassportModule.register({ defaultStrategy: 'jwt', session: true }),
     JwtModule.register({
       global: true,
-      signOptions: { expiresIn: '1h' }, // access토큰의 수명
+      signOptions: { expiresIn: '500' }, // access토큰의 수명
       secret: configService.get<string>('ACCESS_TOKEN_KEY'),
     }),
   ],
   controllers: [AuthController],
   providers: [
+    LoginDto,
     Repository,
     AuthService,
     UserService,
     CompanyService,
     JwtService,
-    JwtStrategy,
+    // JwtStrategy,
     GenerateToken,
     RefreshToken,
   ],

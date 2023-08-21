@@ -21,6 +21,7 @@ export class GenerateToken {
 
     return this.jwtService.signAsync(payload, {
       secret: this.configService.get<string>('ACCESS_TOKEN_KEY'),
+      expiresIn: '1h', // 만료시간을 적는다.
     });
   }
 
