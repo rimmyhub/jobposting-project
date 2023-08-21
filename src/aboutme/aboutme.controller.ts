@@ -1,42 +1,47 @@
 import {
   Controller,
-  Get,
-  Post,
   Body,
-  Patch,
   Param,
-  Delete,
+  UseGuards,
+  Post,
+  Request,
 } from '@nestjs/common';
+import { UserGuard } from 'src/auth/jwt/jwt.user.guard';
 import { AboutmeService } from './aboutme.service';
 import { CreateAboutmeDto } from './dto/create-aboutme.dto';
-import { UpdateAboutmeDto } from './dto/update-aboutme.dto';
+import { Aboutme } from 'src/domain/aboutme.entity';
 
 @Controller('aboutmes')
 export class AboutmeController {
   constructor(private readonly aboutmeService: AboutmeService) {}
 
-  @Post()
-  create(@Body() createAboutmeDto: CreateAboutmeDto) {
-    return this.aboutmeService.create(createAboutmeDto);
+  // 자기소개서 생성
+  @UseGuards(UserGuard)
+  @Post(':resumeId')
+  createAboutme(
+    @Request() req,
+    @Param('resumeId') resumeId: string,
+    @Body() createAboutmeDto: CreateAboutmeDto,
+  ): Promise<Aboutme> {
+    return this.aboutmeService.createAboutme(
+      req.user.id,
+      +resumeId,
+      createAboutmeDto,
+    );
   }
 
-  @Get()
-  findAll() {
-    return this.aboutmeService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.aboutmeService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAboutmeDto: UpdateAboutmeDto) {
-    return this.aboutmeService.update(+id, updateAboutmeDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.aboutmeService.remove(+id);
-  }
+  // // 자기소개서 조회
+  // @UseGuards(UserGuard)
+  // @Post(':resumeId')
+  // createAboutme(
+  //   @Request() req,
+  //   @Param('resumeId') resumeId: string,
+  //   @Body() createAboutmeDto: CreateAboutmeDto,
+  // ): Promise<Aboutme> {
+  //   return this.aboutmeService.createAboutme(
+  //     req.user.id,
+  //     +resumeId,
+  //     createAboutmeDto,
+  //   );
+  // }
 }

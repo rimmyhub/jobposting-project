@@ -1,26 +1,29 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Aboutme } from 'src/domain/aboutme.entity';
+import { Repository } from 'typeorm';
 import { CreateAboutmeDto } from './dto/create-aboutme.dto';
-import { UpdateAboutmeDto } from './dto/update-aboutme.dto';
 
 @Injectable()
 export class AboutmeService {
-  create(createAboutmeDto: CreateAboutmeDto) {
-    return 'This action adds a new aboutme';
-  }
+  constructor(
+    @InjectRepository(Aboutme)
+    private readonly aboutmeRepository: Repository<Aboutme>,
+  ) {}
 
-  findAll() {
-    return `This action returns all aboutme`;
-  }
+  async createAboutme(
+    id: number,
+    resumeId: number,
+    createAboutmeDto: CreateAboutmeDto,
+  ): Promise<Aboutme> {
+    const { title, content } = createAboutmeDto;
 
-  findOne(id: number) {
-    return `This action returns a #${id} aboutme`;
-  }
-
-  update(id: number, updateAboutmeDto: UpdateAboutmeDto) {
-    return `This action updates a #${id} aboutme`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} aboutme`;
+    const newAboutme = await this.aboutmeRepository.save({
+      id,
+      resumeId,
+      title,
+      content,
+    });
+    return newAboutme;
   }
 }

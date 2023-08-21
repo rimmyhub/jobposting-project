@@ -15,7 +15,7 @@ import { UpdateResumeDto } from './dto/update-resume.dto';
 import { UserGuard } from 'src/auth/jwt/jwt.user.guard';
 import { Resume } from 'src/domain/resume.entity';
 
-@Controller('/resumes')
+@Controller('resumes')
 export class ResumeController {
   constructor(private readonly resumeService: ResumeService) {}
 
@@ -36,7 +36,7 @@ export class ResumeController {
   }
 
   // 이력서 - 상세 조회
-  @Get('/:resumeId')
+  @Get(':resumeId')
   async findOneResume(@Param('resumeId') resumeId: number) {
     return await this.resumeService.findOneResume(+resumeId);
   }
