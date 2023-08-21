@@ -16,14 +16,36 @@ export class ResumeService {
   ) {}
 
   // 이력서 - 작성 로직
-  async createResume(createResumeDto: CreateResumeDto): Promise<Resume> {
+  async createResume(
+    id: number,
+    createResumeDto: CreateResumeDto,
+  ): Promise<Resume> {
     // Body
     const { title, content } = createResumeDto;
+    // 예외처리
+    if (!title || !content) {
+      throw new HttpException(
+        '양식에 알맞은 입력값을 넣어주세요.',
+        HttpStatus.PRECONDITION_FAILED,
+      );
+    }
+    // 유저의 이력서 내역 확인 후 예외처리
+    const existResume = await this.resumeRepository.find({ where: { id } });
+    if (existResume) {
+      throw new HttpException(
+        '이미 본인의 이력서를 보유하고 계십니다.',
+        HttpStatus.CONFLICT,
+      );
+    }
     // 이력서 생성
     const resume = this.resumeRepository.create({
       resumeTitle: title,
       resumeContent: content,
     });
+    // 예외처리
+    if (!resume) {
+      throw new HttpException('이력서 작성 실패', HttpStatus.BAD_REQUEST);
+    }
     // 유저가드 활성화 시 해당 코드 없으면 DB 저장 안됨.
     await this.resumeRepository.save(resume);
     // 반환값
@@ -69,6 +91,13 @@ export class ResumeService {
     }
     // Body 데이터
     const { title, content } = updateResumeDto;
+    // 예외처리
+    if (!title && !content) {
+      throw new HttpException(
+        '수정할 부분의 내용을 입력해주세요.',
+        HttpStatus.PRECONDITION_FAILED,
+      );
+    }
     // 제목 수정
     if (title !== undefined) {
       resume.resumeTitle = title;
@@ -84,7 +113,7 @@ export class ResumeService {
   }
 
   // 이력서 - 삭제
-  async removeResume(resumeId: number): Promise<HttpStatus> {
+  async removeResume(resumeId: number): Promise<object> {
     // 삭제할 이력서 확인
     const resume = await this.resumeRepository.findOne({
       where: { id: resumeId },
@@ -94,7 +123,12 @@ export class ResumeService {
       throw new HttpException('Not found resume', HttpStatus.NOT_FOUND);
     }
     // 삭제
-    this.resumeRepository.remove(resume);
-    return HttpStatus.OK;
+    const deletedResume = await this.resumeRepository.remove(resume);
+    // 예외처리
+    if (!deletedResume) {
+      throw new HttpException('삭제에 실패하였습니다.', HttpStatus.BAD_REQUEST);
+    }
+    // 반환값
+    return { message: `${deletedResume.resumeTitle} 이력서가 삭제되었습니다.` };
   }
 }
