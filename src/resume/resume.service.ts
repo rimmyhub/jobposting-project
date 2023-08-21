@@ -16,7 +16,10 @@ export class ResumeService {
   ) {}
 
   // 이력서 - 작성 로직
-  async createResume(createResumeDto: CreateResumeDto): Promise<Resume> {
+  async createResume(
+    id: number,
+    createResumeDto: CreateResumeDto,
+  ): Promise<Resume> {
     // Body
     const { title, content } = createResumeDto;
     // 예외처리
@@ -26,9 +29,14 @@ export class ResumeService {
         HttpStatus.PRECONDITION_FAILED,
       );
     }
-    // // 유저의 이력서 내역 확인 후 예외처리
-    // const existResume = await this.resumeRepository.find({where : {userId}})
-    // if(existResume){throw new HttpException('이미 본인의 이력서를 보유하고 계십니다.', HttpStatus.CONFLICT)}
+    // 유저의 이력서 내역 확인 후 예외처리
+    const existResume = await this.resumeRepository.find({ where: { id } });
+    if (existResume) {
+      throw new HttpException(
+        '이미 본인의 이력서를 보유하고 계십니다.',
+        HttpStatus.CONFLICT,
+      );
+    }
     // 이력서 생성
     const resume = this.resumeRepository.create({
       resumeTitle: title,

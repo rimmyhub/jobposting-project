@@ -26,7 +26,7 @@ export class ResumeController {
     @Request() req,
     @Body() createResumeDto: CreateResumeDto,
   ): Promise<Resume> {
-    return await this.resumeService.createResume(createResumeDto);
+    return await this.resumeService.createResume(req.user.id, createResumeDto);
   }
 
   // 이력서 - 전체 조회
