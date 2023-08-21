@@ -6,40 +6,50 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { EducationService } from './education.service';
 import { CreateEducationDto } from './dto/create-education.dto';
 import { UpdateEducationDto } from './dto/update-education.dto';
+import { UserGuard } from 'src/auth/jwt/jwt.user.guard';
 
-@Controller('educations')
+@Controller('/educations')
 export class EducationController {
   constructor(private readonly educationService: EducationService) {}
 
-  @Post()
-  create(@Body() createEducationDto: CreateEducationDto) {
-    return this.educationService.create(createEducationDto);
+  // 학력 - 등록
+  @UseGuards(UserGuard)
+  @Post('/:resumeId')
+  createEducation(
+    @Body() createEducationDto: CreateEducationDto,
+    @Param('resumeId') resumeId: number,
+  ) {
+    return this.educationService.createEducation(+resumeId, createEducationDto);
   }
 
-  @Get()
-  findAll() {
-    return this.educationService.findAll();
+  // 학력 - 조회
+  @Get('/:resumeId')
+  findEducation(@Param('resumeId') resumeId: number) {
+    return this.educationService.findEducation(+resumeId);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.educationService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
+  // 학력 - 수정
+  @UseGuards(UserGuard)
+  @Patch('/:educationId')
+  updateEducation(
+    @Param('educationId') educationId: number,
     @Body() updateEducationDto: UpdateEducationDto,
   ) {
-    return this.educationService.update(+id, updateEducationDto);
+    return this.educationService.updateEducation(
+      +educationId,
+      updateEducationDto,
+    );
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.educationService.remove(+id);
+  // 학력 - 삭제
+  @UseGuards(UserGuard)
+  @Delete('/:educationId')
+  removeEducation(@Param('educationId') educationId: number) {
+    return this.educationService.removeEducation(+educationId);
   }
 }
