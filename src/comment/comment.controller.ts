@@ -1,34 +1,56 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
+
+import { Comment } from 'src/domain/comment.entity';
 import { CommentService } from './comment.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
+import { ParamDto } from 'src/utils/param.dto';
 
-@Controller('comment')
+// CommentController 클래스는 각 API의 엔드포인트를 정의한다.
+// 즉, 경로를 설정한다고 보면 됨
+@Controller('comments')
 export class CommentController {
   constructor(private readonly commentService: CommentService) {}
 
-  @Post()
-  create(@Body() createCommentDto: CreateCommentDto) {
-    return this.commentService.create(createCommentDto);
+  // 리뷰 등록
+  @Post(':companyId')
+  createComment(@Body() createCommentDto: CreateCommentDto): Promise<Comment> {
+    const comment = this.commentService.createComment(createCommentDto);
+    return comment;
   }
 
-  @Get()
-  findAll() {
-    return this.commentService.findAll();
+  // 리뷰 전체 조회
+  @Get(':companyId')
+  findAllComment() {
+    return this.commentService.findAllComment();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.commentService.findOne(+id);
+  // 리뷰 상세 조회
+  @Get(':companyId/:commentId')
+  findOneComment(@Param() { id }: ParamDto) {
+    return this.commentService.findOneComment(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCommentDto: UpdateCommentDto) {
-    return this.commentService.update(+id, updateCommentDto);
+  // 리뷰 수정
+  @Patch(':commentId')
+  updateComment(
+    @Param(':commentId') id: string,
+    @Body() updateCommentDto: UpdateCommentDto,
+  ) {
+    return this.commentService.updateComment(+id, updateCommentDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.commentService.remove(+id);
+  // 리뷰 삭제
+  @Delete(':commentId')
+  removeComment(@Param(':commentId') id: string) {
+    return this.commentService.removeComment(+id);
   }
 }

@@ -9,7 +9,7 @@ import { UpdateCareerDto } from './dto/update-career.dto';
 
 // CareerService 클래스는 실제 비즈니스 로직을 처리함과 동시에
 // DB와의 상호작용을 담당한다.
-// @Injectable을 사용하여 'Career' 엔티티에 대한 레포지토리를 주입(?) 받는다.
+// @Injectable을 사용하여 'Career' 엔티티에 대한 레포지토리를 주입받는다.
 @Injectable()
 export class CareerService {
   constructor(
@@ -17,8 +17,8 @@ export class CareerService {
     private readonly careerRepository: Repository<Career>,
   ) {}
 
-  // createCarrer 함수는 새로운 경력에 대한 정보를 생성, 저장한다.
-  async createCarrer(createCareerDto: CreateCareerDto) {
+  // createCareer 함수는 새로운 경력에 대한 정보를 생성, 저장한다.
+  async createCareer(createCareerDto: CreateCareerDto) {
     const { companyTitle, job, joiningDate, resignationDate, position } =
       createCareerDto;
 
@@ -32,13 +32,13 @@ export class CareerService {
     return newCareer;
   }
 
-  // findAllCarrer 함수는 모든 경력 정보를 조회한다.
-  async findAllCarrer() {
+  // findAllCareer 함수는 모든 경력 정보를 조회한다.
+  async findAllCareer() {
     return this.careerRepository.find();
   }
 
-  // updateCarrer 함수는 특정 ID에 해당하는 경력 정보를 업데이트한다.
-  async updateCarrer(id: number, updateCareerDto: UpdateCareerDto) {
+  // updateCareer 함수는 특정 ID에 해당하는 경력 정보를 업데이트한다.
+  async updateCareer(id: number, updateCareerDto: UpdateCareerDto) {
     const career = await this.careerRepository.findOne({ where: { id } });
     if (!career) {
       throw new HttpException(
@@ -52,8 +52,8 @@ export class CareerService {
     return `해당 경력이 수정되었습니다.`;
   }
 
-  // removeCarrer 함수는 특정 ID에 해당하는 경력 정보를 삭제한다.
-  async removeCarrer(id: number) {
+  // removeCareer 함수는 특정 ID에 해당하는 경력 정보를 삭제한다.
+  async removeCareer(id: number) {
     const career = await this.careerRepository.findOne({ where: { id } });
     if (!career) {
       throw new HttpException(

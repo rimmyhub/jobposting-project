@@ -21,29 +21,29 @@ export class CareerController {
 
   // 경력 등록
   @Post(':resumeId')
-  createCarrer(@Body() createCareerDto: CreateCareerDto): Promise<Career> {
-    const career = this.careerService.createCarrer(createCareerDto);
+  createCareer(@Body() createCareerDto: CreateCareerDto): Promise<Career> {
+    const career = this.careerService.createCareer(createCareerDto);
     return career;
   }
 
   // 경력 전체 조회
   @Get(':resumeId')
-  findAllCarrer() {
-    return this.careerService.findAllCarrer();
+  findAllCareer() {
+    return this.careerService.findAllCareer();
   }
 
   // 경력 수정
   @Patch(':careerId')
-  updateCarrer(
+  updateCareer(
     @Param(':careerId') id: string,
     @Body() updateCareerDto: UpdateCareerDto,
   ) {
-    return this.careerService.updateCarrer(+id, updateCareerDto);
+    return this.careerService.updateCareer(+id, updateCareerDto);
   }
 
   // 경력 삭제
   @Delete(':careerId')
-  removeCarrer(@Param(':careerId') id: string) {
-    return this.careerService.removeCarrer(+id);
+  removeCareer(@Param(':careerId') id: string) {
+    return this.careerService.removeCareer(+id);
   }
 }
