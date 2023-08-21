@@ -77,39 +77,49 @@ export class AuthService {
     };
   }
 
-  // 로그인
-  async login(loginDto: LoginDto, role: string) {
-    const { email, password } = loginDto;
-
-    let payload: object;
-    let result: any;
+  // validate
+  async validateClient(email: string, password: string, role: string) {
+    let clientInfo: any;
     // 유저인지 회사인지 사판단한다.
     if (role === 'user') {
       // 해당 이메일의 유저정보가 있는지 확인
-      result = await this.userService.findEmail(email);
+      clientInfo = await this.userService.findEmail(email);
     } else if (role === 'company') {
       // 해당 이메일의 회사관리자정보가 있는지 확인
-      result = await this.companyService.findEmail(email);
+      clientInfo = await this.companyService.findEmail(email);
     }
 
     // 로그인한 회사의 id email password를 result에 담는다.
     // 패스워드일치 확인
-    await this.validatePassword(password, result.password);
+    await this.validatePassword(password, clientInfo.password);
+
+    const payload = {
+      id: clientInfo.id,
+      email: clientInfo.email,
+      role: role,
+    };
+    // 클라이언트의 정보를 보낸다
+    return payload;
+  }
+
+  // 로그인
+  async login(id: number, email: string, role: string) {
+    let payload: object;
 
     // accessToken 생성
     const accessToken = await this.generateToken.generateAccessToken(
-      result.id,
-      result.email,
+      id,
+      email,
       role,
     );
 
     // refreshToken생성
     const refreshToken = await this.generateToken.generateRefreshToken(
-      result.id,
+      id,
       role,
     );
 
-    this.setRefreshToken(refreshToken, role, result.id);
+    this.setRefreshToken(refreshToken, role, id);
 
     // 뭉탱이로 보내자
     payload = {

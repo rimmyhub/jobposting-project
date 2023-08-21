@@ -10,15 +10,25 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { Request } from 'express';
+import { PassportStrategy } from '@nestjs/passport';
+import { ExtractJwt, Strategy } from 'passport-jwt';
 
 @Injectable()
-// 유저가드
-// 유저가 아닌 클라이언트가 접근하면 에러처리
-export class CompanyGuard implements CanActivate {
+// 회사가아닌 클라이언트가 접근하면 에러처리
+export class CompanyGuard
+  extends PassportStrategy(Strategy)
+  implements CanActivate
+{
   constructor(
     private jwtService: JwtService,
     private configService: ConfigService,
-  ) {}
+  ) {
+    super({
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(), // 헤더로부터 토큰 추출하는 함수
+      ignoreExpiration: false,
+      secretOrKey: configService.get<string>('ACCESS_TOKEN_KEY'),
+    });
+  }
   // 가드를 따로 만들어서?
   // 파라미터를 넘김
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -30,7 +40,9 @@ export class CompanyGuard implements CanActivate {
     try {
       const payload = await this.jwtService.verifyAsync(token, {
         secret: this.configService.get<string>('ACCESS_TOKEN_KEY'),
+        ignoreExpiration: true,
       });
+      console.log(' payload = ', payload.role !== 'company');
 
       if (payload.role !== 'company') {
         throw new HttpException(
@@ -41,8 +53,8 @@ export class CompanyGuard implements CanActivate {
       // 💡 We're assigning the payload to the request object here
       // so that we can access it in our route handlers
       request['company'] = payload;
-    } catch {
-      throw new UnauthorizedException();
+    } catch (e) {
+      throw new UnauthorizedException(e.message);
     }
     return true;
   }
