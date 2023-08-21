@@ -11,6 +11,13 @@ export class AppController {
     return { title: 'Title' };
   }
 
+  // 유저회원가입경로
+  @Get('signin-user')
+  @Render('signinUser')
+  getSignupUser() {
+    return { title: 'signinUser' };
+  }
+
   @Get('chat')
   @Render('chat')
   getChat() {
