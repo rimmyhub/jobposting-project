@@ -105,19 +105,6 @@ export class AuthService {
   // 로그인
   async login(id: number, email: string, role: string) {
     let payload: object;
-    let result: any;
-    // 유저인지 회사인지 사판단한다.
-    // if (role === 'user') {
-    //   // 해당 이메일의 유저정보가 있는지 확인
-    //   result = await this.userService.findEmail(email);
-    // } else if (role === 'company') {
-    //   // 해당 이메일의 회사관리자정보가 있는지 확인
-    //   result = await this.companyService.findEmail(email);
-    // }
-
-    // 로그인한 회사의 id email password를 result에 담는다.
-    // 패스워드일치 확인
-    // await this.validatePassword(password, result.password);
 
     // accessToken 생성
     const accessToken = await this.generateToken.generateAccessToken(

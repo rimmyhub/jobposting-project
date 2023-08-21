@@ -31,7 +31,7 @@ const configService = new ConfigService();
     PassportModule.register({ defaultStrategy: 'jwt', session: true }),
     JwtModule.register({
       global: true,
-      signOptions: { expiresIn: '5s' }, // access토큰의 수명
+      signOptions: { expiresIn: '500' }, // access토큰의 수명
       secret: configService.get<string>('ACCESS_TOKEN_KEY'),
     }),
   ],

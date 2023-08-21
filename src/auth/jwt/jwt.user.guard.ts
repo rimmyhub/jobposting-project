@@ -10,23 +10,25 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { Request } from 'express';
-import { Strategy, ExtractJwt } from 'passport-jwt';
+import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 
 // 토큰값안에 포함된 유저의 이메일로 id값을 담아서 보내주자
 @Injectable()
 // 유저가드
-// extends PassportStrategy(Strategy)
-export class UserGuard implements CanActivate {
+export class UserGuard
+  extends PassportStrategy(Strategy)
+  implements CanActivate
+{
   constructor(
     private jwtService: JwtService,
     private configService: ConfigService,
   ) {
-    // super({
-    //   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(), // 헤더로부터 토큰 추출하는 함수
-    //   ignoreExpiration: false,
-    //   secretOrKey: configService.get<string>('ACCESS_TOKEN_KEY'),
-    // }); // auth.module의 JwtModule.register의 secret키와 같은 키값을 넣어줘야한다.;
+    super({
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(), // 헤더로부터 토큰 추출하는 함수
+      ignoreExpiration: false,
+      secretOrKey: configService.get<string>('ACCESS_TOKEN_KEY'),
+    }); // auth.module의 JwtModule.register의 secret키와 같은 키값을 넣어줘야한다.;
   }
   // 가드를 따로 만들어서?
   // 파라미터를 넘김
@@ -39,10 +41,10 @@ export class UserGuard implements CanActivate {
       throw new UnauthorizedException();
     }
     try {
-      const payload = await this.jwtService.verifyAsync(token, {
+      const payload = await this.jwtService.verify(token, {
         secret: this.configService.get<string>('ACCESS_TOKEN_KEY'),
       });
-
+      console.log('payload = ', payload);
       if (payload.role !== 'user') {
         throw new HttpException(
           '일반 유저만 사용할 수 있습니다.',
@@ -53,15 +55,13 @@ export class UserGuard implements CanActivate {
       // 💡 We're assigning the payload to the request object here
       // so that we can access it in our route handlers
       request['user'] = payload;
-      console.log('request[user] = ', request['user']);
-    } catch {
-      throw new UnauthorizedException();
+    } catch (e) {
+      throw new UnauthorizedException(e.message);
     }
     return true;
   }
 
   private extractTokenFromHeader(request: Request): string | undefined {
-    console.log('request.cookies = ', request);
     const [type, token] = request.cookies.authorization.split(' ') ?? [];
 
     return type === 'Bearer' ? token : undefined;
