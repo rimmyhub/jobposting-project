@@ -3,16 +3,65 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="/css/jobposting.css" />
     <title>Document</title>
   </head>
   <body>
-    <div class="main-container">
-      <%- include('includes/header') %>
-      <h1>Cloud Support Associate</h1>
-      <h2>아마존</h2>
-      <button>지원하기</button>
-      <button>메세지 보내기</button>
-      <button>가입정보 보기</button>
+    <%- include('includes/header') %>
+    <div class="container">
+      <div class="company-info-box">
+        <div class="col-md-6">
+          <h1>Cloud Support Associate</h1>
+          <h2>아마존</h2>
+        </div>
+        <div class="col-md-6 text-start">
+          <button type="button" class="btn btn-primary me-2">지원하기</button>
+          <button type="button" class="btn btn-outline-primary me-2">
+            메세지 보내기
+          </button>
+          <button type="button" class="btn btn-outline-primary">
+            기업정보 보기
+          </button>
+        </div>
+      </div>
+
+      <div class="jobposting-info-box">
+        <ul id="experience" class="list-group list-group-flush">
+          <li class="list-group-item">
+            <strong>경력</strong> 여기에 경력 정보가 들어갑니다.
+          </li>
+          <li class="list-group-item">
+            <strong>급여 </strong> 여기에 급여 정보가 들어갑니다.
+          </li>
+          <li class="list-group-item">
+            <strong>학력 </strong> 여기에 학력 정보가 들어갑니다.
+          </li>
+          <li class="list-group-item">
+            <strong>근무지역 </strong> 여기에 근무지역 정보가 들어갑니다.
+          </li>
+          <li class="list-group-item">
+            <strong>근무형태 </strong> 여기에 근무형태 정보가 들어갑니다.
+          </li>
+        </ul>
+      </div>
+
+      <hr />
+
+      <div class="jobposting-description-box">
+        <h4>채용공고 설명</h4>
+        <p>여기에 채용공고 설명이 들어갑니다.</p>
+      </div>
     </div>
   </body>
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+    crossorigin="anonymous"
+  ></script>
 </html>

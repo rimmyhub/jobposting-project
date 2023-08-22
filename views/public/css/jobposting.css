@@ -1,0 +1,10 @@
+/* 헤더와 간격 띄우기 */
+.container {
+  margin-top: 50px;
+}
+
+/* 채용공고 정보 */
+.jobposting-info-box {
+  /* margin-top: 30px; */
+  padding-top: 30px;
+}
