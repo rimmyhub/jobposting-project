@@ -36,4 +36,11 @@ export class AppController {
   getMain() {
     return { title: 'Title' };
   }
+
+  // 채용공고 서비스
+  @Get('jobposting')
+  @Render('jobposting')
+  getHiyalu() {
+    return { title: 'Title' };
+  }
 }
