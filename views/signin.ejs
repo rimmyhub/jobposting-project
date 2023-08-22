@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/index.css" />
+    <link rel="stylesheet" href="/css/container.css" />
+    <link rel="stylesheet" href="/css/signin.css" />
+    <title>유저회원가입</title>
+  </head>
+  <body>
+    <div class="main-container">
+      <%- include('includes/header') %>
+      <div class="signin-container">
+        <div clas="box-shadow">
+          <div class="signin-box">
+            <% if (type === "user") { %>
+            <h1>사용자 로그인</h1>
+            <% } else if (type === 'company') { %>
+            <h1>회사 로그인</h1>
+            <% } %>사용자 로그인
+
+            <div class="email-input-box">
+              <i class="fa-regular fa-user icon"></i>
+              <input type="text" />
+            </div>
+            <div class="email-input-box password-box">
+              <i class="fa-solid fa-lock icon"></i>
+              <input type="text" />
+            </div>
+            <div class="email-input-box">
+              <input class="signin-btn" value="로그인" type="button" />
+            </div>
+            <div class="signup-box">
+              <div class="signup-btn">
+                <h4>회원가입</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

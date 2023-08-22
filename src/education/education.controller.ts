@@ -13,7 +13,7 @@ import { CreateEducationDto } from './dto/create-education.dto';
 import { UpdateEducationDto } from './dto/update-education.dto';
 import { UserGuard } from 'src/auth/jwt/jwt.user.guard';
 
-@Controller('/educations')
+@Controller('api/educations')
 export class EducationController {
   constructor(private readonly educationService: EducationService) {}
 
