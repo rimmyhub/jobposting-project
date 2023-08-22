@@ -36,7 +36,7 @@ export class ResumeController {
   }
 
   // 이력서 - 상세 조회
-  @Get('/:resumeId')
+  @Get(':resumeId')
   async findOneResume(@Param('resumeId') resumeId: number) {
     return await this.resumeService.findOneResume(+resumeId);
   }

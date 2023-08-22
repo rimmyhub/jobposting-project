@@ -1,10 +1,4 @@
-import {
-  Column,
-  Entity,
-  ManyToOne,
-  PrimaryColumn,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Resume } from './resume.entity';
 
 @Entity()
