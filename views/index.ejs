@@ -4,14 +4,170 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous"
+    />
     <link rel="stylesheet" href="css/index.css" />
     <link rel="stylesheet" href="css/container.css" />
+    <style>
+      .btn-group {
+        margin-right: 10px;
+      }
+
+      /* background-color: aqua; */
+      /* border-radius: 0.375rem;
+        box-shadow: 0 0.125rem 0.25rem rgba(black); */
+    </style>
     <title>Document</title>
   </head>
   <body>
-    <div class="main-container">
-      <%- include('includes/header') %>
-      <h1>안녕</h1>
+    <%- include('includes/header') %>
+
+    <div class="container">
+      <!-- 전체 컨테이너 사이즈 조절 -->
+      <div class="container-fluid">
+        <!-- 컨테이너 플렉스 왼쪽 정렬 -->
+        <div class="d-flex flex-row mb-3 m-3">
+          <!-- 직군 드롭다운 버튼 -->
+          <div class="btn-group">
+            <button
+              class="btn btn-primary btn dropdown-toggle"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              직군 전체
+            </button>
+            <ul class="p-1 dropdown-menu">
+              <li><a class="dropdown-item" href="#">디자이너</a></li>
+              <li><a class="dropdown-item" href="#">개발자</a></li>
+              <li><a class="dropdown-item" href="#">기획자</a></li>
+            </ul>
+          </div>
+
+          <!-- 지역 드롭다운 버튼 -->
+          <div class="btn-group">
+            <button
+              class="btn btn-outline-secondary btn dropdown-toggle"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              지역 전국
+            </button>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">서울</a></li>
+              <li><a class="dropdown-item" href="#">경기</a></li>
+              <li><a class="dropdown-item" href="#">구미</a></li>
+            </ul>
+          </div>
+
+          <!-- 경력 드롭다운 버튼 -->
+          <div class="btn-group">
+            <button
+              class="btn btn-outline-secondary btn dropdown-toggle"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              경력 전체
+            </button>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">인턴</a></li>
+              <li><a class="dropdown-item" href="#">신입</a></li>
+              <li><a class="dropdown-item" href="#">1년차</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
+    <!-- 채용공고 영역 -->
+    <div class="container shadow-sm p-3 mb-3 rounded">
+      <p class="fs-4 fw-semibold text-secondary-emphasis">⭐️ 인기 채용공고</p>
+      <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
+        <!-- 카드영역 -->
+        <div class="col">
+          <div class="p-3">
+            <div class="card" style="width: 18rem">
+              <img
+                src="https://t1.daumcdn.net/thumb/R720x0/?fname=http://t1.daumcdn.net/brunch/service/user/7Nj8/image/LkMCT0sdoAU44RJYQ5VZQlT5lFc.jpg"
+                class="card-img-top"
+                alt="..."
+              />
+              <div class="card-body">
+                <h5 class="card-title">Card title</h5>
+                <p class="card-text">
+                  Some quick example text to build on the card title and make up
+                  the bulk of the card's content.
+                </p>
+                <a href="#" class="btn btn-primary">Go somewhere</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 카드 영역 -->
+        <!-- 카드영역 -->
+        <div class="col">
+          <div class="p-3">
+            <div class="card" style="width: 18rem">
+              <img
+                src="https://t1.daumcdn.net/thumb/R720x0/?fname=http://t1.daumcdn.net/brunch/service/user/7Nj8/image/LkMCT0sdoAU44RJYQ5VZQlT5lFc.jpg"
+                class="card-img-top"
+                alt="..."
+              />
+              <div class="card-body">
+                <h5 class="card-title">Card title</h5>
+                <p class="card-text">
+                  Some quick example text to build on the card title and make up
+                  the bulk of the card's content.
+                </p>
+                <a href="#" class="btn btn-primary">Go somewhere</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 카드 영역 -->
+        <!-- 카드영역 -->
+        <div class="col">
+          <div class="p-3">
+            <div class="card" style="width: 18rem">
+              <img
+                src="https://t1.daumcdn.net/thumb/R720x0/?fname=http://t1.daumcdn.net/brunch/service/user/7Nj8/image/LkMCT0sdoAU44RJYQ5VZQlT5lFc.jpg"
+                class="card-img-top"
+                alt="..."
+              />
+              <div class="card-body">
+                <h5 class="card-title">Card title</h5>
+                <p class="card-text">
+                  Some quick example text to build on the card title and make up
+                  the bulk of the card's content.
+                </p>
+                <a href="#" class="btn btn-primary">Go somewhere</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 카드 영역 -->
+      </div>
+    </div>
+
+    <!-- 회사 영역 -->
+    <div class="container shadow-sm p-3 mb-3 rounded">
+      <p class="fs-4 fw-semibold text-secondary-emphasis">🙆‍♂️ 인재 찾기</p>
+    </div>
+
+    <!-- 내 주변 회사 영역 (카카오 API) -->
+    <div class="container shadow-sm p-3 mb-3 rounded">
+      <p class="fs-4 fw-semibold text-secondary-emphasis">🗺️ 집 주변 회사</p>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+      crossorigin="anonymous"
+    ></script>
   </body>
 </html>
