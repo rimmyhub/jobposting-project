@@ -49,6 +49,19 @@
   /* border: 1px solid black; */
   padding: 30px;
   box-sizing: border-box;
+  position: relative;
+  margin-bottom: 5em;
+}
+
+.add-btn {
+  padding: 10px 20px 10px 20px;
+  border-radius: 8px;
+  position: absolute;
+  transform: translate(-50%, 0%);
+  left: 50%;
+  top: 100%;
+  background-color: white;
+  border: 0.5px solid #396cf9;
 }
 
 .box-title {
@@ -87,20 +100,32 @@
 
 /* 인재 */
 .jobseeker-list {
+  padding: 20px 0 20px 0;
   display: grid;
-  /* grid-template-columns: repeat(10, 1fr); */
+  grid-template-columns: repeat(8, 1fr);
 }
 
 .jobseeker-card {
-  border: 1px solid black;
+  /* border: 1px solid black; */
+  text-align: center;
+  width: 120px;
 }
 
 .jobseeker-img {
   border-radius: 70%;
-  width: 120px;
-  border: 0.5px solid #e1e2e3;
+  width: 100%;
+  border: 0.5px solid #54679d;
+  margin-bottom: 0.4em;
 }
 
 .jobseeker-info {
   text-align: center;
+}
+
+.jobseeker-name {
+  font-size: 20px;
+}
+
+.jobseeker-job {
+  font-size: 18px;
 }
