@@ -15,11 +15,7 @@ import { CreateAboutmeDto } from './dto/create-aboutme.dto';
 import { Aboutme } from 'src/domain/aboutme.entity';
 import { UpdateAboutmeDto } from './dto/update-aboutme.dto';
 
-<<<<<<< HEAD
 @Controller('/api/aboutmes')
-=======
-@Controller('api/aboutmes')
->>>>>>> main
 export class AboutmeController {
   constructor(private readonly aboutmeService: AboutmeService) {}
 

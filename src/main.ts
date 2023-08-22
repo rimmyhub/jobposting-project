@@ -8,7 +8,7 @@ import { HttpExceptionFilter } from './commons/http-exception.filter';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  app.use(cookieParser()); //
+  app.use(cookieParser());
   // app.useGlobalPipes(
   //   new ValidationPipe({
   //     whitelist: true,
