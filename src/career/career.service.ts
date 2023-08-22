@@ -17,12 +17,14 @@ export class CareerService {
     private readonly careerRepository: Repository<Career>,
   ) {}
 
-  // createCareer 함수는 새로운 경력에 대한 정보를 생성, 저장한다.
-  async createCareer(createCareerDto: CreateCareerDto) {
+  // 이력서 ID 사용
+  // createCareer 함수는 특정 이력서에 경력을 등록한다.
+  async createCareer(resumeId: number, createCareerDto: CreateCareerDto) {
     const { companyTitle, job, joiningDate, resignationDate, position } =
       createCareerDto;
 
     const newCareer = await this.careerRepository.save({
+      resumeId, // 전달받은 이력서 ID 사용
       companyTitle,
       job,
       joiningDate,
@@ -33,8 +35,8 @@ export class CareerService {
   }
 
   // findAllCareer 함수는 모든 경력 정보를 조회한다.
-  async findAllCareer() {
-    return this.careerRepository.find();
+  async findAllCareer(resumeId: number): Promise<Career[]> {
+    return this.careerRepository.find({ where: { resumeId } });
   }
 
   // updateCareer 함수는 특정 ID에 해당하는 경력 정보를 업데이트한다.

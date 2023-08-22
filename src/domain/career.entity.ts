@@ -20,6 +20,9 @@ export class Career {
   id: number;
 
   // @Column을 통해 career의 각 항목의 속성을 정의.
+  @Column({ type: 'int', comment: '이력서 ID' })
+  resumeId: number; // 이력서 ID 외래키
+
   @Column({ type: 'varchar', comment: '회사이름' })
   companyTitle: string;
 
@@ -44,7 +47,9 @@ export class Career {
   @DeleteDateColumn({ name: 'delete_at', comment: '삭제일' })
   deletedAt?: Date | null;
 
-  @ManyToOne(() => Resume, (resume) => resume.career)
+  @ManyToOne(() => Resume, (resume) => resume.career, {
+    onDelete: 'CASCADE',
+  })
   resume: Resume;
 
   @OneToMany(() => Comment, (comment) => comment.career)

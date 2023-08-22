@@ -18,10 +18,11 @@ export class CommentService {
   ) {}
 
   // createComment 함수는 새로운 리뷰에 대한 정보를 생성, 저장한다.
-  async createComment(createCommentDto: CreateCommentDto) {
+  async createComment(companyId: number, createCommentDto: CreateCommentDto) {
     const { title, comment, star } = createCommentDto;
 
     const newComment = await this.commentRepository.save({
+      companyId,
       title,
       comment,
       star,
@@ -30,14 +31,14 @@ export class CommentService {
   }
 
   // findAllComment 함수는 모든 리뷰 정보를 조회한다.
-  async findAllComment() {
-    return this.commentRepository.find();
+  async findAllComment(companyId: number): Promise<Comment[]> {
+    return this.commentRepository.find({ where: { companyId } });
   }
 
-  // findOneComment 함수는 특정 ID에 해당하는 리뷰 정보를 조회한다.
-  async findOneComment(id: number) {
+  // findOneComment 함수는 특정 리뷰 정보를 조회한다.
+  async findOneComment(companyId: number, commentId: number) {
     const comment = await this.commentRepository.findOne({
-      where: { id },
+      where: { companyId, id: commentId }, // companyId와 commentId를 조건으로 추가
     });
     if (!comment) {
       throw new HttpException(
