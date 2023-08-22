@@ -1,45 +1,69 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Request,
+  UseGuards,
 } from '@nestjs/common';
-import { PortfolioService } from './portfolio.service';
+import { get } from 'http';
+import { UserGuard } from 'src/auth/jwt/jwt.user.guard';
+import { Portfolio } from 'src/domain/portfolio.entity';
 import { CreatePortfolioDto } from './dto/create-portfolio.dto';
 import { UpdatePortfolioDto } from './dto/update-portfolio.dto';
+import { PortfolioService } from './portfolio.service';
 
+<<<<<<< HEAD
+@Controller('/api/portfolios')
+=======
 @Controller('api/portfolio')
+>>>>>>> main
 export class PortfolioController {
   constructor(private readonly portfolioService: PortfolioService) {}
 
-  @Post()
-  create(@Body() createPortfolioDto: CreatePortfolioDto) {
-    return this.portfolioService.create(createPortfolioDto);
+  // 포트폴리오 생성
+  @UseGuards(UserGuard)
+  @Post(':resumeId')
+  createPortfolio(
+    @Request() req,
+    @Param('resumeId') resumeId: string,
+    @Body() createPortfolioDto: CreatePortfolioDto,
+  ): Promise<Portfolio> {
+    return this.portfolioService.createPortfolio(
+      req.user.id,
+      +resumeId,
+      createPortfolioDto,
+    );
   }
 
-  @Get()
-  findAll() {
-    return this.portfolioService.findAll();
+  // 포트폴리오 조회
+  @UseGuards(UserGuard)
+  @Get(':resumeId')
+  getPortfolio(@Request() req, @Param('resumeId') resumeId: string) {
+    return this.portfolioService.getPortfolio(req.user.id, +resumeId);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.portfolioService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updatePortfolioDto: UpdatePortfolioDto,
+  // 포트폴리오 수정
+  @UseGuards(UserGuard)
+  @Patch(':resumeId')
+  updatePortfolio(
+    @Request() req,
+    @Param('resumeId') resumeId: string,
+    @Body() updatePortfoiloDto: UpdatePortfolioDto,
   ) {
-    return this.portfolioService.update(+id, updatePortfolioDto);
+    return this.portfolioService.updatePortfolio(
+      req.user.id,
+      +resumeId,
+      updatePortfoiloDto,
+    );
   }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.portfolioService.remove(+id);
+  // 포트폴리오 삭제
+  @UseGuards(UserGuard)
+  @Delete(':resumeId')
+  removePortfolio(@Request() req, @Param('resumeId') resumeId: string) {
+    return this.portfolioService.removePortfolio(req.user.id, +resumeId);
   }
 }
