@@ -10,5 +10,6 @@ import { Career } from 'src/domain/career.entity';
   imports: [TypeOrmModule.forFeature([Career])],
   controllers: [CareerController],
   providers: [CareerService],
+  exports: [CareerService, TypeOrmModule],
 })
 export class CareerModule {}

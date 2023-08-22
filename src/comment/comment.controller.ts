@@ -6,37 +6,63 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
+
 import { CommentService } from './comment.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
+import { UserGuard } from 'src/auth/jwt/jwt.user.guard';
 
-@Controller('api/comment')
+// CommentController 클래스는 각 API의 엔드포인트를 정의한다.
+// 즉, 경로를 설정한다고 보면 됨
+@Controller('comments')
 export class CommentController {
   constructor(private readonly commentService: CommentService) {}
 
-  @Post()
-  create(@Body() createCommentDto: CreateCommentDto) {
-    return this.commentService.create(createCommentDto);
+  // 리뷰 등록
+  // @UseGuards(UserGuard)
+  @Post(':companyId')
+  createComment(
+    @Body() createCommentDto: CreateCommentDto,
+    @Param('companyId') companyId: number,
+  ) {
+    const comment = this.commentService.createComment(
+      +companyId,
+      createCommentDto,
+    );
+    return comment;
   }
 
-  @Get()
-  findAll() {
-    return this.commentService.findAll();
+  // 리뷰 전체 조회
+  @Get(':companyId')
+  findAllComment(@Param('companyId') companyId: number) {
+    return this.commentService.findAllComment(+companyId);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.commentService.findOne(+id);
+  // 리뷰 상세 조회
+  @Get(':companyId/:commentId')
+  findOneComment(
+    @Param('companyId') companyId: number, // companyId 파라미터 추가
+    @Param('commentId') commentId: number, // commentId 파라미터 추가
+  ) {
+    return this.commentService.findOneComment(companyId, commentId); // 수정된 파라미터 전달
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCommentDto: UpdateCommentDto) {
-    return this.commentService.update(+id, updateCommentDto);
+  // 리뷰 수정
+  // @UseGuards(UserGuard)
+  @Patch(':commentId')
+  updateComment(
+    @Param('commentId') id: string,
+    @Body() updateCommentDto: UpdateCommentDto,
+  ) {
+    return this.commentService.updateComment(+id, updateCommentDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.commentService.remove(+id);
+  // 리뷰 삭제
+  // @UseGuards(UserGuard)
+  @Delete(':commentId')
+  removeComment(@Param('commentId') id: string) {
+    return this.commentService.removeComment(+id);
   }
 }

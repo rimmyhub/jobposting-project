@@ -6,12 +6,13 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 
-import { Career } from 'src/domain/career.entity';
 import { CareerService } from './career.service';
 import { CreateCareerDto } from './dto/create-career.dto';
 import { UpdateCareerDto } from './dto/update-career.dto';
+import { UserGuard } from 'src/auth/jwt/jwt.user.guard';
 
 // CareerController 클래스는 각 API의 엔드포인트를 정의한다.
 // 즉, 경로를 설정한다고 보면 됨
@@ -20,30 +21,36 @@ export class CareerController {
   constructor(private readonly careerService: CareerService) {}
 
   // 경력 등록
-  @Post(':resumeId')
-  createCarrer(@Body() createCareerDto: CreateCareerDto): Promise<Career> {
-    const career = this.careerService.createCarrer(createCareerDto);
+  @UseGuards(UserGuard)
+  @Post(':resumeId') // 경력 생성 API 엔드포인트에 이력서 ID 파라미터 추가
+  createCareer(
+    @Param('resumeId') resumeId: number, // 이력서 ID 파라미터 받기
+    @Body() createCareerDto: CreateCareerDto,
+  ) {
+    const career = this.careerService.createCareer(+resumeId, createCareerDto);
     return career;
   }
 
   // 경력 전체 조회
   @Get(':resumeId')
-  findAllCarrer() {
-    return this.careerService.findAllCarrer();
+  findAllCareer(@Param('resumeId') resumeId: number) {
+    return this.careerService.findAllCareer(+resumeId);
   }
 
   // 경력 수정
+  @UseGuards(UserGuard)
   @Patch(':careerId')
-  updateCarrer(
-    @Param(':careerId') id: string,
+  updateCareer(
+    @Param('careerId') id: string,
     @Body() updateCareerDto: UpdateCareerDto,
   ) {
-    return this.careerService.updateCarrer(+id, updateCareerDto);
+    return this.careerService.updateCareer(+id, updateCareerDto);
   }
 
   // 경력 삭제
+  @UseGuards(UserGuard)
   @Delete(':careerId')
-  removeCarrer(@Param(':careerId') id: string) {
-    return this.careerService.removeCarrer(+id);
+  removeCareer(@Param('careerId') id: string) {
+    return this.careerService.removeCareer(+id);
   }
 }
