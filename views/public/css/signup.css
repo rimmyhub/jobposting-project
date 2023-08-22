@@ -7,9 +7,10 @@
   width: 659px;
   border-radius: 10px;
   position: absolute;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, 0%);
   left: 50%;
-  top: 47%;
+  top: 13%;
+
   box-shadow: 0 0 10px 5px;
   color: rgba(151, 149, 149, 0.719);
   text-align: center;
