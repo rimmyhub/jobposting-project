@@ -31,9 +31,15 @@ export class AppController {
     return { title: 'Title' };
   }
 
-  @Get('main')
-  @Render('main')
-  getMain() {
+  @Get('subpage/user')
+  @Render('subpage-user')
+  getSubpageUser() {
+    return { title: 'Title' };
+  }
+
+  @Get('subpage/company')
+  @Render('subpage-company')
+  getSubpageCompany() {
     return { title: 'Title' };
   }
 
