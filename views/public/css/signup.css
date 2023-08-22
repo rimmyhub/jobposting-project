@@ -1,0 +1,64 @@
+.signup-box > h1 {
+  margin-top: 1.2em;
+  margin-bottom: 1em;
+}
+
+.signup-box {
+  width: 659px;
+  border-radius: 10px;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  left: 50%;
+  top: 47%;
+  box-shadow: 0 0 10px 5px;
+  color: rgba(151, 149, 149, 0.719);
+  text-align: center;
+}
+
+.box {
+  /* border: 1px solid black; */
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 1em;
+}
+
+.title {
+  color: black;
+  font-size: 30px;
+  font-weight: 700;
+  border-bottom: 0.5px solid gray;
+}
+
+.profile-box {
+  display: block;
+  position: relative;
+  margin-bottom: 1em;
+}
+
+.edit-icon {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 90%;
+  cursor: pointer;
+}
+
+.user-img {
+  width: 100px;
+  border: 0.5px solid gray;
+  border-radius: 70%;
+}
+
+.gender-select {
+  width: 387px;
+  height: 45px;
+  border-radius: 8px;
+  margin-bottom: 3em;
+  padding: 10px;
+  box-sizing: border-box;
+  background-color: white;
+}
+
+.gender-select::-ms-expand {
+  display: none;
+}

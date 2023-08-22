@@ -11,11 +11,18 @@ export class AppController {
     return { title: 'Title' };
   }
 
-  // 유저회원가입경로
-  @Get('signin/:type')
+  // 로그인경로
+  @Get('signin/:type') // 경로뒤에 타입을 user company 중 어느것을 입력하는지에 따라 화면이 바뀜
   @Render('signin')
-  getSignupUser(@Param() param: string) {
+  getSignin(@Param() param: string) {
     return { type: param['type'] }; // 클라이언트에서 받은 params값을 nest에서 ejs로 보내려면
+  }
+
+  // 회원가입 경로
+  @Get('signup/:type') // 경로뒤에 타입을 user company 중 어느것을 입력하는지에 따라 화면이 바뀜
+  @Render('signup')
+  getSignup(@Param() param: string) {
+    return { type: param['type'] };
   }
 
   @Get('chat')
