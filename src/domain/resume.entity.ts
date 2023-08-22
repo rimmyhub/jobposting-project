@@ -19,11 +19,14 @@ export class Resume {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column({ type: 'int', comment: '해당 이력서의 유저 아이디' })
+  userId: number;
+
   @Column({ type: 'varchar', length: 100, comment: '이력서제목' })
-  resumeTitle: string;
+  title: string;
 
   @Column({ type: 'varchar', length: 100, comment: '이력서내용' })
-  resumeContent: string;
+  content: string;
 
   @CreateDateColumn({ name: 'create_at', comment: '생성일' })
   createdAt: Date;
@@ -49,7 +52,11 @@ export class Resume {
   // 1:N관계설정 - 학력
   @OneToMany(() => Education, (education) => education.resume)
   education: Education[];
+
   // 1대1 유저 -- 이력서
-  @OneToOne(() => User, (user) => user.resume)
+  @OneToOne(() => User, (user) => user.resume, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   user: User;
 }

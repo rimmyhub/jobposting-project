@@ -17,7 +17,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserGuard } from '../auth/jwt/jwt.user.guard';
 
-@Controller('users')
+@Controller('api/users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -25,7 +25,6 @@ export class UserController {
   @UsePipes(ValidationPipe)
   @Post('/signup')
   create(@Body() createUserDto: CreateUserDto) {
-    console.log('회원강비');
     return this.userService.create(createUserDto);
   }
 

@@ -16,7 +16,7 @@ import { UpdateCompanyDto } from './dto/update-company.dto';
 import { CompanyGuard } from '../auth/jwt/jwt.company.guard';
 import { ParamDto } from 'src/utils/param.dto';
 
-@Controller('companys')
+@Controller('api/companys')
 export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
 

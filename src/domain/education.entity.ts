@@ -58,6 +58,9 @@ export class Education {
   user: User;
 
   // 이력서 연결
-  @ManyToOne(() => Resume, (resume) => resume.education)
+  @ManyToOne(() => Resume, (resume) => resume.education, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   resume: Resume;
 }

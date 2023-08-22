@@ -15,7 +15,7 @@ import { Chat } from 'src/domain/chat.entity';
 import { UserGuard } from '../auth/jwt/jwt.user.guard';
 import { CompanyGuard } from '../auth/jwt/jwt.company.guard';
 
-@Controller('chats')
+@Controller('api/chats')
 export class ChatController {
   constructor(private readonly chatService: ChatService) {}
 

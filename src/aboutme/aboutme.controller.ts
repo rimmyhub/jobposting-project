@@ -1,42 +1,69 @@
 import {
   Controller,
-  Get,
-  Post,
   Body,
-  Patch,
   Param,
+  UseGuards,
+  Post,
+  Request,
+  Get,
+  Patch,
   Delete,
 } from '@nestjs/common';
+import { UserGuard } from 'src/auth/jwt/jwt.user.guard';
 import { AboutmeService } from './aboutme.service';
 import { CreateAboutmeDto } from './dto/create-aboutme.dto';
+import { Aboutme } from 'src/domain/aboutme.entity';
 import { UpdateAboutmeDto } from './dto/update-aboutme.dto';
 
-@Controller('aboutmes')
+<<<<<<< HEAD
+@Controller('/api/aboutmes')
+=======
+@Controller('api/aboutmes')
+>>>>>>> main
 export class AboutmeController {
   constructor(private readonly aboutmeService: AboutmeService) {}
 
-  @Post()
-  create(@Body() createAboutmeDto: CreateAboutmeDto) {
-    return this.aboutmeService.create(createAboutmeDto);
+  // 자기소개서 생성
+  @UseGuards(UserGuard)
+  @Post(':resumeId')
+  createAboutme(
+    @Request() req,
+    @Param('resumeId') resumeId: string,
+    @Body() createAboutmeDto: CreateAboutmeDto,
+  ): Promise<Aboutme> {
+    return this.aboutmeService.createAboutme(
+      req.user.id,
+      +resumeId,
+      createAboutmeDto,
+    );
   }
 
-  @Get()
-  findAll() {
-    return this.aboutmeService.findAll();
+  // 자기소개서 조회
+  @UseGuards(UserGuard)
+  @Get(':resumeId')
+  getAboutme(@Request() req, @Param('resumeId') resumeId: string) {
+    return this.aboutmeService.getAboutme(req.user.id, +resumeId);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.aboutmeService.findOne(+id);
+  // 자기소개서 수정
+  @UseGuards(UserGuard)
+  @Patch(':resumeId')
+  updateAboutme(
+    @Request() req,
+    @Param('resumeId') resumeId: string,
+    @Body() updateAboutmeDto: UpdateAboutmeDto,
+  ) {
+    return this.aboutmeService.updateAboutme(
+      req.user.id,
+      +resumeId,
+      updateAboutmeDto,
+    );
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAboutmeDto: UpdateAboutmeDto) {
-    return this.aboutmeService.update(+id, updateAboutmeDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.aboutmeService.remove(+id);
+  // 자기소개서 삭제
+  @UseGuards(UserGuard)
+  @Delete(':resumeId')
+  removeAboutme(@Request() req, @Param('resumeId') resumeId: string) {
+    return this.aboutmeService.removeAboutme(req.user.id, +resumeId);
   }
 }
