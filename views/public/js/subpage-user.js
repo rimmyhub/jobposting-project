@@ -36,7 +36,7 @@ async function getUserResume() {
   // const resumeId = params.get('ID');
 
   // 일단 테스트 단계라 하드코딩함
-  const resumeId = 32;
+  const resumeId = 1;
   // 만들어둔 이력서 조회 API fetch 요청 보냄
   const userResumeData = await fetch(`/api/resumes/${resumeId}`);
   // 받아온 데이터 할당

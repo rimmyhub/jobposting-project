@@ -51,7 +51,7 @@ const signup = async () => {
     const confirmPassword = document.getElementById(
       'input-confirmpassword',
     ).value;
-    const companyTitle = document.getElementById('input-title').value;
+    const title = document.getElementById('input-title').value;
     const website = document.getElementById('input-website').value;
     const business = document.getElementById('input-business').value;
     const employees = document.getElementById('input-employees').value;
@@ -60,8 +60,7 @@ const signup = async () => {
     console.log(
       email,
       password,
-      confirmPassword,
-      companyTitle,
+      title,
       introduction,
       website,
       address,
@@ -77,8 +76,7 @@ const signup = async () => {
       body: JSON.stringify({
         email,
         password,
-        confirmPassword,
-        companyTitle,
+        title,
         introduction,
         website,
         address,

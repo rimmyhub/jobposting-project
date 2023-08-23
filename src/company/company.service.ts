@@ -49,7 +49,7 @@ export class CompanyService {
   async createCompany(createCompanyDto: CreateCompanyDto) {
     const {
       email,
-      companyTitle,
+      title,
       password,
       introduction,
       website,
@@ -63,7 +63,7 @@ export class CompanyService {
     const hashedPassword = await bcrypt.hash(password, 10);
     const newCompany = await this.companyRepository.save({
       email,
-      companyTitle,
+      title,
       password: hashedPassword,
       introduction,
       website,
