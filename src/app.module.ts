@@ -19,6 +19,7 @@ import { ChatModule } from './chat/chat.module';
 import { ChatGateway } from './chat/chat.geteway';
 import { UploadModule } from './upload/upload.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { EventsModule } from './events/events.module';
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({ useFactory: ormConfig }),
@@ -39,6 +40,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     AuthModule,
     CommentModule,
     ChatModule,
+    EventsModule,
   ],
   controllers: [AppController],
   providers: [AppService, ChatGateway],
