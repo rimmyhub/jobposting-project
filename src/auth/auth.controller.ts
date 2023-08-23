@@ -49,7 +49,7 @@ export class AuthController {
 
   // 회사로그인
   @UseGuards(LocalGuard)
-  @Post('company')
+  @Post('/company')
   async companyLogin(
     @Request() req,
     @Res({ passthrough: true }) res: Response,

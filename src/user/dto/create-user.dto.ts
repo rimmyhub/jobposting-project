@@ -36,7 +36,9 @@ export class CreateUserDto {
   @IsNotEmpty()
   address: string;
 
-  // 생년월일 정규표현식 예) 20000525
-  @Matches(/^\d{4}\d{2}\d{2}$/)
+  // 생년월일 정규표현식 예) 1999-05-05
+  // @Matches(/^\d{4}\d{2}\d{2}$/)
+  @IsNotEmpty()
+  @Matches(/^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/)
   birth: string;
 }

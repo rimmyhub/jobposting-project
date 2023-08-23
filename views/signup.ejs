@@ -23,7 +23,7 @@
   </head>
   <body>
     <div class="main-container">
-      <%- include('includes/header') %>
+      <%- include('includes/header', { isLogin: 0}) %>
       <div class="signup-box">
         <% if (type === "user") { %>
         <h1>개인 정보 입력</h1>
@@ -46,7 +46,7 @@
             <input id="input-password" type="text" placeholder="password" />
           </div>
           <div class="email-input-box input-box">
-            <input id="input-name" type="text" placeholder="username" />
+            <input id="input-username" type="text" placeholder="username" />
           </div>
           <div class="email-input-box input-box">
             <input id="input-phone" type="text" placeholder="phone" />

@@ -47,17 +47,15 @@ export class AppController {
 
   // 회원가입 경로
   @Get('signup/:type') // 경로뒤에 타입을 user company 중 어느것을 입력하는지에 따라 화면이 바뀜
-  @Render('signup')
-  getSignup(
-    @Request() req,
-    @Param() param: string,
-    @Res({ passthrough: true }) res: Response,
-  ) {
+  // @Render('signup')
+  getSignup(@Request() req, @Param('type') type: string, @Res() res: Response) {
     const cookie: string = req.cookies['authorization'];
     if (cookie) {
       return res.redirect('/'); // 만약 로그인 되어있으면 진입 금지
     }
-    return { type: param['type'], isLogin: 0 };
+    return res.render('signup', {
+      type,
+    });
   }
 
   @Get('chat')
