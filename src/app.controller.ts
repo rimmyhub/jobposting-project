@@ -30,19 +30,14 @@ export class AppController {
     const cookie: string = await req.cookies['authorization'];
     if (cookie) {
       // 리다이렉트를 하면서 데이터를 전달하는 방법을 찾자..
-      // this.getMain(req, type);
       // return { type: param, isLogin: 1 }; // 만약 로그인 되어있으면 진입 금지
-
       res.redirect('/'); // { passthrough: true } 가 없으니 중복가 안뜸
       return;
-      // return res.render('index', {
-      //   isLogin: 1,
-      // });
     }
     return res.render(`signin`, {
       // 'ejs 파일이름'
       type,
-    }); // 클라이언트에서 받은 params값을 nest에서 ejs로 보내려면
+    });
   }
 
   // 회원가입 경로
@@ -80,16 +75,38 @@ export class AppController {
 
   // 유저 - 마이페이지
   @Get('mypage/user')
-  @Render('mypage-user')
-  getMypageUser() {
-    return { title: 'Title' };
+  // @Render('mypage-user')
+  getMypageUser(
+    @Request() req,
+    @Res() res: Response,
+    @Param('type') type: string,
+  ) {
+    const cookie: string = req.cookies['authorization'];
+    if (!cookie) {
+      return res.redirect('/signin/user'); // 만약 로그인 되어있으면 진입 금지
+    }
+    return res.render('mypage-user', {
+      type,
+      isLogin: 1,
+    });
   }
 
-  // 유저 - 마이페이지
+  // 회사 - 마이페이지
   @Get('mypage/company')
-  @Render('mypage-company')
-  getMypageComapny() {
-    return { title: 'Title' };
+  // @Render('mypage-company')
+  getMypageComapny(
+    @Request() req,
+    @Res() res: Response,
+    @Param('type') type: string,
+  ) {
+    const cookie: string = req.cookies['authorization'];
+    if (!cookie) {
+      return res.redirect('/signin/company'); // 만약 로그인 되어있으면 진입 금지
+    }
+    return res.render('mypage-company', {
+      type,
+      isLogin: 1,
+    });
   }
 
   // 채용공고 서비스
