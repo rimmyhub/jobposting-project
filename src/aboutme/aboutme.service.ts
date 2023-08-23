@@ -31,7 +31,7 @@ export class AboutmeService {
   // 자기소개서 조회
   async getAboutme(id: number, resumeId: number): Promise<Aboutme[]> {
     const existingResume = await this.aboutmeRepository.findOne({
-      where: { id: resumeId },
+      where: { resumeId },
     });
 
     if (!existingResume) {
