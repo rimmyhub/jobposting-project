@@ -8,6 +8,8 @@ import {
   Post,
   UseGuards,
   Request,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { CompanyService } from './company.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
@@ -21,8 +23,9 @@ export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
 
   // 회사 회원가입
+  @UsePipes(ValidationPipe)
   @Post('/signup')
-  createCompany(@Body() createCompanyDto: CreateCompanyDto): Promise<Company> {
+  createCompany(@Body() createCompanyDto: CreateCompanyDto) {
     return this.companyService.createCompany(createCompanyDto);
   }
 

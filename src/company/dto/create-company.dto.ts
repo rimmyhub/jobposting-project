@@ -9,17 +9,13 @@ import {
 
 export class CreateCompanyDto {
   @IsNotEmpty()
-  @IsString()
-  @IsEmail()
-  @MinLength(5) //최솟값
+  @IsEmail({})
   email: string;
 
   @IsNotEmpty()
   @IsString()
   @MinLength(5) //최솟값
-  @Matches(/^[a-zA-Z0-9]*$/, {
-    message: '비밀번호는 영어와 숫자만 사용할 수 있습니다.',
-  })
+  @Matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{4,25}$/)
   password: string;
 
   @IsNotEmpty()
