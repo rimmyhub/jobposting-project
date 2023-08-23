@@ -3,7 +3,7 @@ import { CreateResumeDto } from './dto/create-resume.dto';
 import { UpdateResumeDto } from './dto/update-resume.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Resume } from 'src/domain/resume.entity';
-import { LessThan, Repository } from 'typeorm';
+import { IsNull, LessThan, Not, Repository } from 'typeorm';
 import { Cron } from '@nestjs/schedule';
 
 @Injectable()
@@ -17,21 +17,24 @@ export class ResumeService {
   ) {}
 
   // 소프트리무브 시킨 이력서가 시간이 지나면 자동으로 삭제 하는 로직
-  @Cron('0 0 * * *') // 왼쪽 0부터 초, 분, 시, 일, 월, 요일
-  async cleanupOldResumes() {
+  @Cron('0 0 * * *') // 프로덕션 환경에서는 해당 코드
+  // @Cron('*/10 * * * * *') // 개발환경에서는 10초마다 해당 데코레이터 실행으로 설정해서 코드 작업 하시쥬
+  async cleanupResumes() {
     // Date 타입의 데이터를 담고
     const oneDayAgo = new Date();
     // 담은 데이터에서 1일을 뺀 데이터를 세팅
     oneDayAgo.setDate(oneDayAgo.getDate() - 1);
     // 1일 이전에 소프트리무브 시킨 이력서 삭제
     const cleanupTarget = await this.resumeRepository.find({
-      where: {
-        deletedAt: LessThan(oneDayAgo),
-      },
+      withDeleted: true,
     });
     // 완전 삭제시킬 cleanupTarget list에서 하나하나를 DB에서 삭제해준다.
     for (const resume of cleanupTarget) {
-      await this.resumeRepository.delete(resume);
+      // 뽑아온 데이터에서 삭제할 데이터들 조건 만들기
+      if (resume.deletedAt <= oneDayAgo && resume.deletedAt !== null) {
+        // db에서 삭제 ==> delete 사용시 삭제 안됨 !!
+        await this.resumeRepository.remove(resume);
+      }
     }
   }
 
@@ -91,6 +94,7 @@ export class ResumeService {
       where: { id: resumeId },
       select: ['userId', 'title', 'content'],
     });
+
     // 예외 처리
     if (!resume) {
       throw new HttpException('Not found resume', HttpStatus.NOT_FOUND);
