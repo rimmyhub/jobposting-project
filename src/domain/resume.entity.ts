@@ -20,7 +20,11 @@ export class Resume {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'int', comment: '해당 이력서의 유저 아이디' })
+  @Column({
+    type: 'int',
+    name: 'user_id',
+    comment: '해당 이력서의 유저 아이디',
+  })
   userId: number;
 
   @Column({ type: 'varchar', length: 100, comment: '이력서제목' })
@@ -55,12 +59,7 @@ export class Resume {
   education: Education[];
 
   // 1대1 유저 -- 이력서
-  @OneToOne((type) => User)
+  @OneToOne((type) => User, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   @JoinColumn()
   user: User;
-  // @OneToOne(() => User, (user) => user.resume, {
-  //   onDelete: 'CASCADE',
-  //   onUpdate: 'CASCADE',
-  // })
-  // user: User;
 }

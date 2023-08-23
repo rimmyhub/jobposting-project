@@ -27,6 +27,7 @@ export class UserController {
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
+
   // 유저정보 상세조회
   @UseGuards(UserGuard)
   @Get('/user-page/:id')
