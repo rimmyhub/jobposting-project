@@ -19,16 +19,16 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
     />
+    <script src="/js/signup.js" defer></script>
   </head>
   <body>
     <div class="main-container">
-      <%- include('includes/header') %>
+      <%- include('includes/header', { isLogin: 0}) %>
       <div class="signup-box">
         <% if (type === "user") { %>
         <h1>개인 정보 입력</h1>
         <% } else if (type === 'company') { %>
         <h1>회사 정보 입력</h1>
-
         <% } %>
         <div class="box">
           <div class="profile-box">
@@ -40,60 +40,73 @@
 
           <% if (type === "user") { %>
           <div class="email-input-box input-box">
-            <input type="text" placeholder="email" />
+            <input id="input-email" type="text" placeholder="email" />
           </div>
           <div class="email-input-box input-box">
-            <input type="text" placeholder="password" />
+            <input id="input-password" type="text" placeholder="password" />
           </div>
           <div class="email-input-box input-box">
-            <input type="text" placeholder="username" />
+            <input id="input-username" type="text" placeholder="username" />
           </div>
           <div class="email-input-box input-box">
-            <input type="text" placeholder="phone" />
+            <input id="input-phone" type="text" placeholder="phone" />
           </div>
-          <select class="gender-select" aria-placeholder="gender">
+          <select id="gender" class="gender-select" aria-placeholder="gender">
             <option value="M">male</option>
             <option value="F">female</option>
           </select>
           <div class="email-input-box input-box">
-            <input type="text" placeholder="address" />
+            <input id="input-address" type="text" placeholder="address" />
           </div>
           <div class="email-input-box input-box">
-            <input type="date" placeholder="생년월일" />
+            <input id="input-birth" type="date" placeholder="생년월일" />
           </div>
 
           <% } else if (type === 'company') { %>
           <div class="email-input-box input-box">
-            <input type="text" placeholder="email" />
+            <input id="input-email" type="text" placeholder="email" />
           </div>
           <div class="email-input-box input-box">
-            <input type="text" placeholder="password" />
+            <input id="input-password" type="text" placeholder="password" />
           </div>
           <div class="email-input-box input-box">
-            <input type="text" placeholder="confirmPassword" />
+            <input
+              id="input-confirmpassword"
+              type="text"
+              placeholder="confirmPassword"
+            />
           </div>
           <div class="email-input-box input-box">
-            <input type="text" placeholder="company title" />
+            <input id="input-title" type="text" placeholder="company title" />
           </div>
           <div class="email-input-box input-box">
-            <input type="text" placeholder="introduction" />
+            <input
+              id="input-introduction"
+              type="text"
+              placeholder="introduction"
+            />
           </div>
           <div class="email-input-box input-box">
-            <input type="text" placeholder="website" />
+            <input id="input-website" type="text" placeholder="website" />
           </div>
           <div class="email-input-box input-box">
-            <input type="text" placeholder="address" />
+            <input id="input-address" type="text" placeholder="address" />
           </div>
           <div class="email-input-box input-box">
-            <input type="text" placeholder="business" />
+            <input id="input-business" type="text" placeholder="business" />
           </div>
           <div class="email-input-box input-box">
-            <input type="text" placeholder="employees" />
+            <input id="input-employees" type="text" placeholder="employees" />
           </div>
           <% } %>
 
           <div class="email-input-box">
-            <input class="signin-btn" value="회원가입" type="button" />
+            <input
+              id="signup-btn"
+              class="signin-btn"
+              value="회원가입"
+              type="button"
+            />
           </div>
         </div>
       </div>

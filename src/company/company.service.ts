@@ -85,13 +85,6 @@ export class CompanyService {
       select: { id: true, email: true, password: true },
       where: { email },
     });
-    // 이메일이 없을 경우
-    if (!isEmail) {
-      throw new HttpException(
-        '가입되지 않은 이메일입니다.',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
     return isEmail;
   }
 

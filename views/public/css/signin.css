@@ -10,8 +10,8 @@
 }
 
 .signin-box {
+  padding-bottom: 20px;
   width: 659px;
-  height: 455px;
   border-radius: 10px;
   position: absolute;
   transform: translate(-50%, -50%);
