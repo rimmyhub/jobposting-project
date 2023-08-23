@@ -18,9 +18,11 @@ import { CommentModule } from './comment/comment.module';
 import { ChatModule } from './chat/chat.module';
 import { ChatGateway } from './chat/chat.geteway';
 import { MailModule } from './mail/mail.module';
+import { UploadModule } from './upload/upload.module';
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({ useFactory: ormConfig }),
+    UploadModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),

@@ -17,20 +17,19 @@
     position: relative;
   }
 
-  .logo {
-    margin: 0;
+  .header-logo {
     cursor: pointer;
-    /* position: absolute; */
-    transform: translate(0%, +15%);
+    margin-bottom: 5px;
   }
 
-  .nav-list {
+  .header-nav-list {
     display: flex;
     position: absolute;
     right: 10px;
+    margin-bottom: 0;
   }
 
-  li {
+  .header-nav-list > li {
     list-style: none;
     padding: 10px;
     cursor: pointer;
@@ -70,13 +69,13 @@
   <div>
     <div class="container-header">
       <div>
-        <img class="logo" src="/img/winner.png" alt="" srcset="" />
+        <img class="header-logo" src="/img/winner.png" alt="" srcset="" />
       </div>
       <div class="search-box">
         <i class="fa-solid fa-magnifying-glass search-font"></i>
         <input class="search-input" type="text" />
       </div>
-      <ul class="nav-list">
+      <ul class="header-nav-list">
         <li>로그인</li>
         <li>회원가입</li>
       </ul>
