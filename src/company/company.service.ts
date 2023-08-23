@@ -147,7 +147,7 @@ export class CompanyService {
   @Cron('0 0 * * *') // 매 시간마다 실행
   async deleteOldData() {
     const now = new Date();
-    const threshold = new Date(now.getTime() - 30); //일단 30초 //1시간:3600
+    const threshold = new Date(now.getTime() - 30 * 1000); //일단 30초 //1시간:3600
 
     // deleted 가 true이면서 deletedAt가 일정 시간 이전인 회사를 조회
     const outdatedData = await this.companyRepository.find({
