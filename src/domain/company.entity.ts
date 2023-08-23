@@ -23,7 +23,7 @@ export class Company {
   password: string;
 
   @Column({ type: 'varchar', length: 30, comment: '회사명' })
-  companyTitle: string;
+  title: string;
 
   @Column({ type: 'varchar', length: 255, comment: '소개' })
   introduction: string;

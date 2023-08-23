@@ -75,24 +75,22 @@
   const profileBtnEl = document.querySelector('.profile-save-btn'); //저장 버튼
   const pictureBtnEl = document.querySelector('.picture-btn'); // 이미지 수정버튼
 
-  uploadInputEl.addEventListener('change', async (e) => {
+  uploadInputEl.addEventListener('submit', async (e) => {
     console.log(e.target.files[0]);
     const file = e.target.files[0];
-    // if (file.size > 1 * 1024 * 1024) {
-    //   alert('파일용량은 최대 1MB입니다.');
-    //   return;
-    // }
-    // if (!file.type.includes('jpeg') && !file.type.includes('png')) {
-    //   alert('jpeg 또는 png 파일만 업로드 가능합니다.');
-    //   return;
-    // }
-
+    if (file.size > 1024 * 1024) {
+      alert('파일용량은 최대 1MB입니다.');
+      return;
+    }
+    if (!file.type.includes('jpeg') && !file.type.includes('png')) {
+      alert('jpeg 또는 png 파일만 업로드 가능합니다.');
+      return;
+    }
+    // 백으로가서 반환을하는 것?..
     const response = await fetch('/api/upload', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        file: file.value,
-      }),
+      headers: { 'Content-Type': 'multipart/form-data' },
+      body: file,
     });
     const { data } = await response.json();
     console.log(data);

@@ -20,11 +20,7 @@ export class CreateCompanyDto {
 
   @IsNotEmpty()
   @IsString()
-  confirmPassword: string;
-
-  @IsNotEmpty()
-  @IsString()
-  companyTitle: string;
+  title: string;
 
   @IsNotEmpty()
   @IsString()
