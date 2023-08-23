@@ -15,8 +15,6 @@ export class UserService {
     private userRepository: Repository<User>,
   ) {}
 
-  // 유저 refeshToken 저장
-
   // 유저정보상세조회
   async findOne(id: number) {
     const userInfo = await this.userRepository.findOne({
