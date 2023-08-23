@@ -17,6 +17,7 @@ import { AuthModule } from './auth/auth.module';
 import { CommentModule } from './comment/comment.module';
 import { ChatModule } from './chat/chat.module';
 import { ChatGateway } from './chat/chat.geteway';
+import { MailModule } from './mail/mail.module';
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({ useFactory: ormConfig }),
@@ -35,6 +36,7 @@ import { ChatGateway } from './chat/chat.geteway';
     AuthModule,
     CommentModule,
     ChatModule,
+    MailModule,
   ],
   controllers: [AppController],
   providers: [AppService, ChatGateway],
