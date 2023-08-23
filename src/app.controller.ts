@@ -60,9 +60,13 @@ export class AppController {
   }
 
   // 유저 - 서브 페이지
-  @Get('subpage/user/:id')
+  @Get('subpage/:userId/:resumeId')
   @Render('subpage-user')
-  async getSubpageUser(@Request() req, @Param('id') type: string) {
+  async getSubpageUser(
+    @Request() req,
+    @Param('userId') userId: string,
+    @Param('resumeId') resumeId: string,
+  ) {
     const cookie: string = await req.cookies['authorization'];
     if (cookie) {
       // console.log('15번라인');

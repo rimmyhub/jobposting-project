@@ -1,17 +1,17 @@
 document.addEventListener('DOMContentLoaded', (e) => {
-  e.preventDefault();
-  // 유저 정보를 불러오는 함수를 실행
-  // getUserData();
-  // 유저 이력서 정보를 불러오는 함수 실행
-  getUserResume();
-  // 유저의 학력을 불러오는 함수 실행
-  getUserEducation();
-  // 유저의 경력을 불러오는 함수 실행
-  getUserCareer();
-  // 유저의 포트폴리오를 불러오는 함수 실행
-  getUserPortfolio();
-  // 유저의 자기소개서를 불러오는 함수 실행
-  getUserAboutMe();
+  // e.preventDefault();
+  // // 유저 정보를 불러오는 함수를 실행
+  // // getUserData();
+  // // 유저 이력서 정보를 불러오는 함수 실행
+  // getUserResume();
+  // // 유저의 학력을 불러오는 함수 실행
+  // getUserEducation();
+  // // 유저의 경력을 불러오는 함수 실행
+  // getUserCareer();
+  // // 유저의 포트폴리오를 불러오는 함수 실행
+  // getUserPortfolio();
+  // // 유저의 자기소개서를 불러오는 함수 실행
+  // getUserAboutMe();
 });
 
 // 유저 정보를 불러오는 함수 로직
