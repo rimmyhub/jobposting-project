@@ -21,7 +21,7 @@ const getResumes = async () => {
 
   datas.forEach((el) => {
     const column = document.createElement('div');
-    column.innerHTML = `<div id="${el.id}" OnClick="location.href='/subpage/user/${el.id}'" class="jobseeker-card">
+    column.innerHTML = `<div id="${el.id}" OnClick="location.href='/subpage/${el.user.id}/${el.id}'" class="jobseeker-card">
                           <img
                             class="jobseeker-img"
                             src="/img/userImg.jpg"
