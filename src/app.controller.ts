@@ -60,10 +60,18 @@ export class AppController {
   }
 
   // 유저 - 서브 페이지
-  @Get('subpage/user')
+  @Get('subpage/user/:id')
   @Render('subpage-user')
-  getSubpageUser() {
-    return { title: 'Title' };
+  async getSubpageUser(@Request() req, @Param('id') type: string) {
+    const cookie: string = await req.cookies['authorization'];
+    if (cookie) {
+      // console.log('15번라인');
+      return { isLogin: 1 };
+    }
+    return {
+      isLogin: 0,
+    };
+    // return { title: 'Title' };
   }
 
   // 회사 - 서브 페이지

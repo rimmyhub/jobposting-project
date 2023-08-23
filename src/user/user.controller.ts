@@ -27,11 +27,13 @@ export class UserController {
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
-
   // 유저정보 상세조회
   @UseGuards(UserGuard)
-  @Get('/user-page')
-  findOne(@Request() req) {
+  @Get('/user-page/:id')
+  findOne(@Request() req, @Param('id') id: number) {
+    if (id) {
+      return this.userService.findOne(id);
+    }
     // AuthGuard로 받은 req안에 user에 접근하면 현재 로그인한 유저(회사)의 정보에 접근할 수 있습니다.
     return this.userService.findOne(req.user.id);
   }

@@ -34,6 +34,7 @@ export class ResumeController {
   // 이력서 - 전체 조회
   @Get()
   async findAllResume(): Promise<Resume[]> {
+    console.log('findAllResume');
     return await this.resumeService.findAllResume();
   }
 

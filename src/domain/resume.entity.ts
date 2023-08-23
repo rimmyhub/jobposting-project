@@ -7,6 +7,7 @@ import {
   DeleteDateColumn,
   OneToMany,
   OneToOne,
+  JoinColumn,
 } from 'typeorm';
 import { Aboutme } from './aboutme.entity';
 import { Portfolio } from './portfolio.entity';
@@ -54,9 +55,12 @@ export class Resume {
   education: Education[];
 
   // 1대1 유저 -- 이력서
-  @OneToOne(() => User, (user) => user.resume, {
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
-  })
+  @OneToOne((type) => User)
+  @JoinColumn()
   user: User;
+  // @OneToOne(() => User, (user) => user.resume, {
+  //   onDelete: 'CASCADE',
+  //   onUpdate: 'CASCADE',
+  // })
+  // user: User;
 }
