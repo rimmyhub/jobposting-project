@@ -31,15 +31,31 @@ export class AppController {
     return { title: 'Title' };
   }
 
+  // 유저 - 서브 페이지
   @Get('subpage/user')
   @Render('subpage-user')
   getSubpageUser() {
     return { title: 'Title' };
   }
 
+  // 회사 - 서브 페이지
   @Get('subpage/company')
   @Render('subpage-company')
   getSubpageCompany() {
+    return { title: 'Title' };
+  }
+
+  // 유저 - 마이페이지
+  @Get('mypage/user')
+  @Render('mypage-user')
+  getMypageUser() {
+    return { title: 'Title' };
+  }
+
+  // 유저 - 마이페이지
+  @Get('mypage/company')
+  @Render('mypage-company')
+  getMypageComapny() {
     return { title: 'Title' };
   }
 

@@ -11,7 +11,18 @@
       integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
       crossorigin="anonymous"
     />
+    <script
+      src="https://kit.fontawesome.com/9021aeec94.js"
+      crossorigin="anonymous"
+    ></script>
+
     <style>
+      /* 추가 수정버튼 마진값 */
+      .fa-solid {
+        margin: 10px;
+      }
+
+      /* 이력서 텍스트 시작 마진값 */
       .text-start {
         margin: 10px;
       }
@@ -27,7 +38,7 @@
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="#">Home</a></li>
           <li class="breadcrumb-item active" aria-current="page">
-            subpage / user
+            mypage / company
           </li>
         </ol>
       </nav>
@@ -41,21 +52,10 @@
             alt="..."
             style="width: 150px"
           />
-          <p class="fs-2 fw-semibold" style="margin: 10px">홍길동</p>
-          <p class="fs-4" style="margin: 10px">개발자</p>
-          <p class="fw-normal" style="margin: 10px">
-            스파르타 주식회사ᆞ스파르타대학교
-          </p>
-          <p class="fw-normal" style="margin: 10px">
-            경기도 성남시ᆞ010 - 1234 -1234
-          </p>
         </div>
-
-        <div class="container">
-          <button type="button" class="text-start btn btn-primary">
-            메세지 보내기
-          </button>
-        </div>
+      </div>
+      <div style="margin: 10px">
+        <button type="button" class="btn btn-primary">이미지 수정</button>
       </div>
     </div>
     <!-- 구분선 -->
@@ -63,16 +63,14 @@
 
     <!-- 이력서타이틀 -->
     <div class="container">
-      <p class="fs-4 fw-semibold text-secondary-emphasis">🖋️ 이력서</p>
+      <p class="fs-4 fw-semibold text-secondary-emphasis">이력서</p>
     </div>
 
-    <!-- 개인정보 영역 -->
+    <!-- 개인소개 영역 -->
     <div class="container text-center">
-      <div class="row gx-5">
-        <div class="col-sm-4">
-          <p class="text-start fs-5 fw-semibold" style="margin: 10px">
-            개인 정보
-          </p>
+      <div class="row">
+        <div class="col-sm-2">
+          <p class="text-start fs-5 fw-semibold" style="margin: 10px">소개</p>
         </div>
 
         <div class="col-sm-8">
@@ -88,7 +86,35 @@
           </p>
           <!-- 구분선 -->
           <hr />
+        </div>
+        <!-- 수정 아이콘 -->
+        <div class="col-sm-2">
+          <!-- 모달 -->
+          <button
+            type="button"
+            class="btn btn-primary fa-solid fa-pen"
+            data-bs-toggle="modal"
+            data-bs-target="#staticBackdrop"
+          >
+            수정
+          </button>
+          <%- include('includes/introduction') %>
+          <!-- 모달 -->
+          <!-- 소개 -->
+        </div>
+      </div>
+    </div>
 
+    <!-- 개인정보 영역 -->
+    <div class="container text-center">
+      <div class="row">
+        <div class="col-sm-2">
+          <p class="text-start fs-5 fw-semibold" style="margin: 10px">
+            개인 정보
+          </p>
+        </div>
+
+        <div class="col-sm-8">
           <!-- 이름 -->
           <div class="row">
             <div class="col-sm-4">
@@ -155,6 +181,21 @@
           </div>
           <!-- 생년월일 -->
         </div>
+        <!-- 수정 아이콘 -->
+        <div class="col-sm-2">
+          <!-- 모달 -->
+          <button
+            type="button"
+            class="btn btn-primary fa-solid fa-pen"
+            data-bs-toggle="modal"
+            data-bs-target="#user"
+          >
+            수정
+          </button>
+          <%- include('includes/user') %>
+          <!-- 모달 -->
+          <!-- 개인정보 -->
+        </div>
       </div>
     </div>
     <!-- 개인정보 -->
@@ -164,7 +205,7 @@
     <!-- 학력 영역 -->
     <div class="container text-center">
       <div class="row">
-        <div class="col-sm-4">
+        <div class="col-sm-2">
           <p class="text-start fs-5 fw-semibold" style="margin: 10px">학력</p>
         </div>
 
@@ -173,7 +214,7 @@
             class="fs-2 fw-semibold text-start information"
             style="margin: 10px"
           >
-            스파르타 대학교(4년제)
+            스파르타대학교(4년제)
           </p>
 
           <!-- 구분선 -->
@@ -196,7 +237,7 @@
               <p class="text-start text-body-secondary">입학년도</p>
             </div>
             <div class="col-sm-8">
-              <p class="text-start">2018년 3월</p>
+              <p class="text-start">2014년 3월</p>
             </div>
           </div>
           <!-- 입학년도 -->
@@ -207,21 +248,58 @@
               <p class="text-start text-body-secondary">졸업년도</p>
             </div>
             <div class="col-sm-8">
-              <p class="text-start">2018년 3월</p>
+              <p class="text-start">2018년 2월</p>
             </div>
           </div>
           <!-- 졸업년도 -->
+
+          <!-- 퇴사날짜 -->
+          <div class="row">
+            <div class="col-sm-4">
+              <p class="text-start text-body-secondary">퇴사날짜</p>
+            </div>
+            <div class="col-sm-8">
+              <p class="text-start">2018년 3월</p>
+            </div>
+          </div>
+          <!-- 퇴사날짜 -->
+        </div>
+        <!-- 수정 아이콘 -->
+        <div class="col-sm-2" style="margin-top: 20px">
+          <!-- 추가 모달 -->
+          <button
+            type="button"
+            class="btn btn-primary fa-solid fa-plus"
+            data-bs-toggle="modal"
+            data-bs-target="#staticBackdrop"
+          >
+            추가
+          </button>
+          <%- include('includes/education-add') %>
+          <!-- 추가 모달 -->
+
+          <!-- 수정 모달 -->
+          <button
+            type="button"
+            class="btn btn-primary fa-solid fa-pen"
+            data-bs-toggle="modal"
+            data-bs-target="#staticBackdrop"
+          >
+            수정
+          </button>
+          <%- include('includes/education') %>
+          <!-- 수정 모달 -->
         </div>
       </div>
     </div>
-    <!-- 학력 정보 영역 -->
+    <!-- 경력 정보 영역 -->
 
     <hr />
 
     <!-- 경력 영역 -->
     <div class="container text-center">
       <div class="row">
-        <div class="col-sm-4">
+        <div class="col-sm-2">
           <p class="text-start fs-5 fw-semibold" style="margin: 10px">경력</p>
         </div>
 
@@ -280,6 +358,32 @@
           </div>
           <!-- 퇴사날짜 -->
         </div>
+        <!-- 수정 아이콘 -->
+        <div class="col-sm-2" style="margin-top: 20px">
+          <!-- 추가 모달 -->
+          <button
+            type="button"
+            class="btn btn-primary fa-solid fa-plus"
+            data-bs-toggle="modal"
+            data-bs-target="#staticBackdrop"
+          >
+            추가
+          </button>
+          <%- include('includes/career-add') %>
+          <!-- 추가 모달 -->
+
+          <!-- 수정 모달 -->
+          <button
+            type="button"
+            class="btn btn-primary fa-solid fa-pen"
+            data-bs-toggle="modal"
+            data-bs-target="#staticBackdrop"
+          >
+            수정
+          </button>
+          <%- include('includes/career') %>
+          <!-- 수정 모달 -->
+        </div>
       </div>
     </div>
     <!-- 경력 정보 영역 -->
@@ -289,7 +393,7 @@
     <!-- 포트폴리오 영역 -->
     <div class="container text-center">
       <div class="row">
-        <div class="col-sm-4">
+        <div class="col-sm-2">
           <p class="text-start fs-5 fw-semibold" style="margin: 10px">
             포트폴리오
           </p>
@@ -318,6 +422,32 @@
           </div>
         </div>
         <!-- URL -->
+        <!-- 수정 아이콘 -->
+        <div class="col-sm-2" style="margin-top: 20px">
+          <!-- 추가 모달 -->
+          <button
+            type="button"
+            class="btn btn-primary fa-solid fa-plus"
+            data-bs-toggle="modal"
+            data-bs-target="#staticBackdrop"
+          >
+            추가
+          </button>
+          <%- include('includes/portfolio-add') %>
+          <!-- 추가 모달 -->
+
+          <!-- 수정 모달 -->
+          <button
+            type="button"
+            class="btn btn-primary fa-solid fa-pen"
+            data-bs-toggle="modal"
+            data-bs-target="#staticBackdrop"
+          >
+            수정
+          </button>
+          <%- include('includes/portfolio') %>
+          <!-- 수정 모달 -->
+        </div>
       </div>
     </div>
     <!-- 포트폴리오 영역 -->
@@ -327,7 +457,7 @@
     <!-- 자기소개서 영역 -->
     <div class="container text-center">
       <div class="row">
-        <div class="col-sm-4">
+        <div class="col-sm-2">
           <p class="text-start fs-5 fw-semibold" style="margin: 10px">
             자기소개서
           </p>
@@ -366,6 +496,32 @@
             발전시키고, 이를 통해 사회에 기여하는 컴퓨터 공학자로 성장하고자
             합니다. 감사합니다.
           </p>
+          <!-- 수정 아이콘 -->
+        </div>
+        <div class="col-sm-2" style="margin-top: 20px">
+          <!-- 추가 모달 -->
+          <button
+            type="button"
+            class="btn btn-primary fa-solid fa-plus"
+            data-bs-toggle="modal"
+            data-bs-target="#staticBackdrop"
+          >
+            추가
+          </button>
+          <%- include('includes/aboutme-add') %>
+          <!-- 추가 모달 -->
+
+          <!-- 수정 모달 -->
+          <button
+            type="button"
+            class="btn btn-primary fa-solid fa-pen"
+            data-bs-toggle="modal"
+            data-bs-target="#staticBackdrop"
+          >
+            수정
+          </button>
+          <%- include('includes/aboutme') %>
+          <!-- 수정 모달 -->
         </div>
       </div>
     </div>
