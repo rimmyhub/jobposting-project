@@ -12,7 +12,6 @@ const getResumes = async () => {
       return res.json();
     })
     .then((data) => {
-      console.log(data);
       return data;
     })
     .catch((err) => {
@@ -36,3 +35,26 @@ const getResumes = async () => {
     jobseekerList.append(column);
   });
 };
+
+const logout = document.getElementById('logout');
+
+logout.addEventListener('click', async () => {
+  deleteCookie();
+});
+
+async function deleteCookie() {
+  let isSuccess;
+  await fetch('/api/auth/logout', {
+    method: 'DELETE',
+  })
+    .then((el) => {
+      isSuccess = el.ok;
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+  if (isSuccess) {
+    alert('로그아웃 되었습니다.');
+    location.href = '/';
+  }
+}

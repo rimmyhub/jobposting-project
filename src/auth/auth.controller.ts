@@ -91,9 +91,9 @@ export class AuthController {
   }
 
   // 로그아웃
-  @Delete('logout')
+  @Delete('/logout')
   async logout(@Request() req, @Res({ passthrough: true }) res: Response) {
-    console.log('authorization = ', req.cookies);
+    console.log(' 로그아웃authorization = ', req.cookies);
     // 먼저 로그아웃이 되어있는지 확인하기
     const authorization = await req.cookies['authorization'];
     if (!authorization) {

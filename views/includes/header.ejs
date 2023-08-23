@@ -70,6 +70,7 @@
     transform: translate(0%, +20%);
   }
 </style>
+
 <nav>
   <div>
     <div class="container-header">
@@ -85,7 +86,7 @@
       <% if(isLogin === 1) { %>
       <ul class="header-nav-list">
         <li>
-          <a href="/signin/user"> 로그아웃</a>
+          <a id="logout" href="#"> 로그아웃</a>
         </li>
         <li>
           <a href="/signup/user">회원가입</a>
