@@ -3,9 +3,9 @@ import { IsNotEmpty, IsString } from 'class-validator';
 export class CreateResumeDto {
   @IsString()
   @IsNotEmpty()
-  title: string;
+  title?: string;
 
   @IsString()
   @IsNotEmpty()
-  content: string;
+  content?: string;
 }

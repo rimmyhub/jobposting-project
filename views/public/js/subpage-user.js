@@ -28,6 +28,9 @@ async function getUserData() {
 async function getUserResume() {
   const resumeTitleTag = document.querySelector('#resumeTitle');
   const resumeDescTag = document.querySelector('#resumeDesc');
+  resumeTitleTag.innerHTML = '';
+  resumeDescTag.innerHTML = '';
+
   // 로그인 기능이 실현될 시에 해당 코드 활성화
   // const params = new URLSearchParams(window.location.search);
   // const resumeId = params.get('ID');
@@ -58,6 +61,8 @@ async function getUserEducation() {
   // 로그인 기능이 실현될 시에 해당 코드 활성화
   // const params = new URLSearchParams(window.location.search);
   // const resumeId = params.get('ID');
+
+  educationBox.innerHTML = '';
 
   // 테스트용 하드코딩
   const resumeId = 32;
@@ -120,6 +125,8 @@ async function getUserCareer() {
   // 로그인 기능이 실현될 시에 해당 코드 활성화
   // const params = new URLSearchParams(window.location.search);
   // const resumeId = params.get('ID');
+
+  careerBox.innerHTML = '';
 
   // 테스트용 하드코딩
   const resumeId = 32;
@@ -193,6 +200,8 @@ async function getUserPortfolio() {
   // const params = new URLSearchParams(window.location.search);
   // const resumeId = params.get('ID');
 
+  portfolioBox.innerHTML = '';
+
   // 테스트용 하드코딩
   const resumeId = 32;
 
@@ -233,6 +242,8 @@ async function getUserAboutMe() {
   // 로그인 기능이 실현될 시에 해당 코드 활성화
   // const params = new URLSearchParams(window.location.search);
   // const resumeId = params.get('ID');
+
+  aboutMeBox.innerHTML = '';
 
   // 테스트용 하드코딩
   const resumeId = 32;
