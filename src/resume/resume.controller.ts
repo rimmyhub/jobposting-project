@@ -8,6 +8,8 @@ import {
   Delete,
   UseGuards,
   Request,
+  Req,
+  Put,
 } from '@nestjs/common';
 import { ResumeService } from './resume.service';
 import { CreateResumeDto } from './dto/create-resume.dto';
@@ -43,11 +45,14 @@ export class ResumeController {
 
   // 이력서 - 수정
   @UseGuards(UserGuard)
-  @Patch(':resumeId')
+  @Put(':resumeId')
   updateResume(
     @Param('resumeId') resumeId: number,
     @Body() updateResumeDto: UpdateResumeDto,
+    @Req() req,
   ) {
+    console.log(req);
+    console.log(updateResumeDto);
     return this.resumeService.updateResume(+resumeId, updateResumeDto);
   }
 
