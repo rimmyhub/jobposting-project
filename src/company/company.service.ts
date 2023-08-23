@@ -46,7 +46,7 @@ export class CompanyService {
     }
   }
   // 회사 생성 + 회사 회원가입
-  async createCompany(createCompanyDto: CreateCompanyDto): Promise<Company> {
+  async createCompany(createCompanyDto: CreateCompanyDto) {
     const {
       email,
       companyTitle,
@@ -57,10 +57,10 @@ export class CompanyService {
       business,
       employees,
     } = createCompanyDto;
+
     const company = await this.companyRepository.findOne({ where: { email } });
     if (company) throw new UnauthorizedException('이미 등록된 이메일입니다');
     const hashedPassword = await bcrypt.hash(password, 10);
-
     const newCompany = await this.companyRepository.save({
       email,
       companyTitle,
