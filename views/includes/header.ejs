@@ -35,6 +35,11 @@
     cursor: pointer;
   }
 
+  .header-nav-list > li > a {
+    text-decoration: none;
+    color: black;
+  }
+
   .search-box {
     width: 275px;
     border: 1px solid #396cf9;
@@ -69,16 +74,33 @@
   <div>
     <div class="container-header">
       <div>
-        <img class="header-logo" src="/img/winner.png" alt="" srcset="" />
+        <a href="/">
+          <img class="header-logo" src="/img/winner.png" alt="" srcset="" />
+        </a>
       </div>
       <div class="search-box">
         <i class="fa-solid fa-magnifying-glass search-font"></i>
         <input class="search-input" type="text" />
       </div>
+      <% if(isLogin === 1) { %>
       <ul class="header-nav-list">
-        <li>로그인</li>
-        <li>회원가입</li>
+        <li>
+          <a href="/signin/user"> 로그아웃</a>
+        </li>
+        <li>
+          <a href="/signup/user">회원가입</a>
+        </li>
       </ul>
+      <% } else if(isLogin === 0) { %>
+      <ul class="header-nav-list">
+        <li>
+          <a href="/signin/user"> 로그인</a>
+        </li>
+        <li>
+          <a href="/signup/user">회원가입</a>
+        </li>
+      </ul>
+      <% }%>
     </div>
   </div>
 </nav>
