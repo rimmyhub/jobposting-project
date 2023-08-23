@@ -80,11 +80,35 @@ export class ResumeService {
 
   // 이력서 - 전체 조회
   async findAllResume(): Promise<Resume[]> {
+    const result = await this.resumeRepository
+      .createQueryBuilder('resume')
+      .select([
+        'resume.id',
+        'resume.title',
+        'resume.userId',
+        'resume.content',
+        'user.name',
+      ]) // user테이블의 name만 가져오기
+      .innerJoin('resume.user', 'user') // user테이블과 join
+      .where('resume.deletedAt IS NULL') // deleteAt에 null값이 들어있는 데이터만 가져오기
+      .getMany();
+
+    return result;
+
     // 삭제되지 않은 이력서 중에서 이력서의 제목만 반환
-    return await this.resumeRepository.find({
-      where: { deletedAt: null },
-      select: ['id', 'userId', 'title'],
-    });
+    // return await this.resumeRepository.find({
+    //   select: ['id', 'userId', 'title'],
+    //   relations: ['user'],
+    // });
+    // return await this.resumeRepository.find({
+    //   select: ['id', 'userId', 'title'],
+    //   join: {
+    //     alias: 'r',
+    //     leftJoinAndSelect: {
+    //       user: 'r.user',
+    //     },
+    //   },
+    // });
   }
 
   // 이력서 - 상세 조회
