@@ -51,12 +51,23 @@ const signup = async () => {
     const confirmPassword = document.getElementById(
       'input-confirmpassword',
     ).value;
-    const title = document.getElementById('input-title').value;
+    const companyTitle = document.getElementById('input-title').value;
     const website = document.getElementById('input-website').value;
     const business = document.getElementById('input-business').value;
     const employees = document.getElementById('input-employees').value;
     const introduction = document.getElementById('input-introduction').value;
 
+    console.log(
+      email,
+      password,
+      confirmPassword,
+      companyTitle,
+      introduction,
+      website,
+      address,
+      business,
+      employees,
+    );
     await fetch('/api/companys/signup', {
       // api앞에 /를 붙이지 않으면 현재 주소창의 3000바로 옆에 있는 params값이 붙는다.
       method: 'POST',
@@ -67,7 +78,7 @@ const signup = async () => {
         email,
         password,
         confirmPassword,
-        companyTitle: title,
+        companyTitle,
         introduction,
         website,
         address,
