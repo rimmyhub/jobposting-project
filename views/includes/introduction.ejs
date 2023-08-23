@@ -24,7 +24,7 @@
         <div class="mb-3 row">
           <label class="col-sm-3 col-form-label">소개</label>
           <div class="col-sm-9">
-            <input class="form-control" />
+            <input class="form-control" id="title" />
           </div>
         </div>
         <!-- 소개 -->
@@ -33,18 +33,26 @@
         <div class="mb-3 row">
           <label class="col-sm-3 col-form-label">내용</label>
           <div class="col-sm-9">
-            <input class="form-control" />
+            <input class="form-control" id="content" />
           </div>
         </div>
       </div>
 
       <!-- 내용 -->
       <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary">삭제</button>
+        <button
+          type="button"
+          class="btn btn-outline-secondary"
+          id="deleteResumeBtn"
+        >
+          삭제
+        </button>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
           취소
         </button>
-        <button type="button" class="btn btn-primary">저장</button>
+        <button type="button" class="btn btn-primary" id="updateResumeBtn">
+          저장
+        </button>
       </div>
     </div>
   </div>

@@ -56,12 +56,12 @@ export class ResumeService {
     const existResume = await this.resumeRepository.find({
       where: { userId: id },
     });
-    if (existResume.length !== 0) {
-      throw new HttpException(
-        '이미 본인의 이력서를 보유하고 계십니다.',
-        HttpStatus.CONFLICT,
-      );
-    }
+    // if (existResume.length !== 0) {
+    //   throw new HttpException(
+    //     '이미 본인의 이력서를 보유하고 계십니다.',
+    //     HttpStatus.CONFLICT,
+    //   );
+    // }
     // 이력서 생성
     const resume = this.resumeRepository.create({
       userId: id,

@@ -32,7 +32,7 @@ export class PortfolioService {
   // 포트폴리오 조회
   async getPortfolio(id: number, resumeId: number): Promise<Portfolio[]> {
     const existingResume = await this.portfolioRepository.findOne({
-      where: { id: resumeId },
+      where: { resumeId },
     });
 
     if (!existingResume) {
