@@ -23,7 +23,7 @@ export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
 
   // 회사 회원가입
-  @UsePipes(ValidationPipe)
+  // @UsePipes(ValidationPipe)
   @Post('/signup')
   createCompany(@Body() createCompanyDto: CreateCompanyDto) {
     return this.companyService.createCompany(createCompanyDto);
