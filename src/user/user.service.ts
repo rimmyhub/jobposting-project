@@ -68,6 +68,26 @@ export class UserService {
     return newUser;
   }
 
+  async verifyCode(userId: number, code: string): Promise<boolean> {
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+      select: ['verificationCode'],
+    });
+
+    if (!user) {
+      return false; // 유저가 없으면 false 반환
+    }
+
+    return user.verificationCode === code; // 입력한 코드와 유저의 저장된 코드 비교
+  }
+
+  async completeVerification(userId: number): Promise<void> {
+    await this.userRepository.update(userId, {
+      isVerified: true,
+      verificationCode: null,
+    } as Partial<User>);
+  }
+
   // 유저정보 수정
   async update(id: number, updateUserDto: UpdateUserDto) {
     // 먼저 유저가 있는지 확인한다.

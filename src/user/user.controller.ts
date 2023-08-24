@@ -16,6 +16,7 @@ import { UserService } from './user.service';
 import { MailService } from '../mail/mail.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { VerifyCodeDto } from './dto/verify-code.dto';
 import { UserGuard } from '../auth/jwt/jwt.user.guard';
 
 @Controller('api/users')
@@ -43,6 +44,21 @@ export class UserController {
   private generateVerificationCode(): string {
     // 인증 코드 생성
     return Math.random().toString(36).substr(2, 6).toUpperCase();
+  }
+
+  @Post('/verify')
+  async verifyCode(@Body() verifyCodeDto: VerifyCodeDto) {
+    const { userId, code } = verifyCodeDto;
+
+    const isVerified = await this.userService.verifyCode(userId, code);
+
+    if (isVerified) {
+      // 인증 완료 처리
+      await this.userService.completeVerification(userId);
+      return { message: '인증이 완료되었습니다.' };
+    } else {
+      throw new HttpException('유효하지 않은 인증 코드입니다.', 400);
+    }
   }
 
   // 유저정보 상세조회
