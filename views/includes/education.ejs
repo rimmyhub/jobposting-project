@@ -29,23 +29,27 @@
                 <button
                   class="btn btn btn-outline-primary dropdown-toggle"
                   type="button"
-                  id="dropdownMenuButton1"
+                  id="selectedValue"
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
                   학력 선택
                 </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                  <li><a class="dropdown-item" href="#">초등학교</a></li>
-                  <li><a class="dropdown-item" href="#">중학교</a></li>
+                <ul
+                  id="dropdown"
+                  class="dropdown-menu"
+                  aria-labelledby="dropdownMenuButton1"
+                >
+                  <li><a class="dropdown-item item">초등학교</a></li>
+                  <li><a class="dropdown-item item">중학교</a></li>
                   <li>
-                    <a class="dropdown-item" href="#">고등학교</a>
+                    <a class="dropdown-item item">고등학교</a>
                   </li>
                   <li>
-                    <a class="dropdown-item" href="#">대학교</a>
+                    <a class="dropdown-item item">대학교</a>
                   </li>
                   <li>
-                    <a class="dropdown-item" href="#">대학원</a>
+                    <a class="dropdown-item item">대학원</a>
                   </li>
                 </ul>
               </div>
@@ -96,3 +100,17 @@
     </div>
   </div>
 </div>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const dropdownItems = document.querySelectorAll('.item');
+    const selectedValueElement = document.getElementById('selectedValue');
+
+    dropdownItems.forEach((item) => {
+      item.addEventListener('click', () => {
+        const selectedText = item.textContent;
+        console.log(selectedText);
+        selectedValueElement.textContent = selectedText;
+      });
+    });
+  });
+</script>
