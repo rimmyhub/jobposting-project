@@ -4,7 +4,6 @@ import {
   Matches,
   MaxLength,
   MinLength,
-  Min,
   IsNotEmpty,
 } from 'class-validator';
 

@@ -10,14 +10,17 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   app.use(cookieParser());
+  app.useGlobalFilters(new HttpExceptionFilter()); //ExceptionFilter
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
       forbidNonWhitelisted: true,
       transform: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
     }),
   );
-  app.useGlobalFilters(new HttpExceptionFilter()); //ExceptionFilter
 
   app.setBaseViewsDir(resolve('./views'));
   app.useStaticAssets(resolve('./views/public'));

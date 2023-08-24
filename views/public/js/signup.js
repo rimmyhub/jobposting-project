@@ -79,7 +79,7 @@ const signup = async () => {
         website: website,
         address: address,
         business: business,
-        employees: employees,
+        employees: Number(employees),
       }),
     })
       .then((el) => {
