@@ -121,10 +121,17 @@ export class AppController {
     });
   }
 
-  // 채용공고 서비스
+  // 유저 로그인 시 - 채용공고
   @Get('jobposting')
-  @Render('jobposting')
-  getHiyalu() {
+  @Render('jobposting-user')
+  getJobpstingUser() {
+    return { title: 'Title' };
+  }
+
+  // 회사 로그인 시 - 채용 공고
+  @Get('jobposting/company')
+  @Render('jobposting-company')
+  getJobpstingCompany() {
     return { title: 'Title' };
   }
 }
