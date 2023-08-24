@@ -27,6 +27,9 @@
     display: flex;
     justify-content: space-between;
     width: 250px;
+    display: flex;
+    justify-content: space-between;
+    width: 250px;
     right: 10px;
     margin-bottom: 0;
   }
@@ -34,13 +37,57 @@
   .header-nav-list > li {
     list-style: none;
     /* padding: 10px; */
+    /* padding: 10px; */
     cursor: pointer;
+    position: relative;
     position: relative;
   }
 
   .header-nav-list > li > a {
     text-decoration: none;
     color: black;
+  }
+
+  .header-nav-list > li > .logout {
+    color: #ea612d;
+  }
+
+  .header-icon {
+    font-size: 26px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .header-nav-list > li > img {
+    width: 50px;
+  }
+
+  .login-nav-list {
+    justify-content: space-between;
+    display: flex;
+    position: absolute;
+    width: 100px;
+    right: 50px;
+    margin-bottom: 0;
+  }
+
+  .login-nav-list > li {
+    list-style: none;
+    cursor: pointer;
+    position: relative;
+  }
+  .login-nav-list > li > a {
+    text-decoration: none;
+    color: black;
+  }
+
+  .signin-icon {
+    color: #279eff;
+  }
+
+  .signup-icon {
+    color: #279eff;
   }
 
   .header-nav-list > li > .logout {
@@ -126,10 +173,16 @@
       <% } else if(isLogin === 0) { %>
       <ul class="login-nav-list">
         <li>
-          <a href="/signin/user">로그인</a>
+          <a href="/signin/user">
+            <i
+              class="fa-solid fa-arrow-right-to-bracket signin-icon header-icon"
+            ></i>
+          </a>
         </li>
         <li>
-          <a href="/signup/user">회원가입</a>
+          <a href="/signup/user"
+            ><i class="fa-solid fa-user-plus signup-icon header-icon"></i
+          ></a>
         </li>
       </ul>
       <% }%>
