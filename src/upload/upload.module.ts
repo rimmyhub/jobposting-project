@@ -8,8 +8,8 @@ import { APP_GUARD } from '@nestjs/core';
 @Module({
   imports: [
     ThrottlerModule.forRoot({
-      ttl: 10000,
-      limit: 100,
+      ttl: 100000,
+      limit: 1000,
     }),
   ],
   controllers: [UploadController],
