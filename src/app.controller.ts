@@ -122,9 +122,9 @@ export class AppController {
   }
 
   // 채용공고 서비스
-  @Get('jobposting')
-  @Render('jobposting')
-  getHiyalu() {
+  @Get('jobposting/user')
+  @Render('jobposting-user')
+  getJobpstingUser() {
     return { title: 'Title' };
   }
 }
