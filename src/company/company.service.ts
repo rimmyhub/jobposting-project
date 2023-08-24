@@ -120,10 +120,12 @@ export class CompanyService {
   }
 
   // 소프트 리무브
-  @Cron('*/10 * * * * *')
+  // 윤영님꺼랑 똑같이 했는데 될지모르겠다
+  @Cron('0 0 * * *')
   async cleanupResumes() {
     const oneDayAgo = new Date();
-    oneDayAgo.setDate(oneDayAgo.getTime() - 30000);
+    oneDayAgo.setDate(oneDayAgo.getDate() - 1);
+    console.log(oneDayAgo);
     const cleanupTarget = await this.companyRepository.find({
       withDeleted: true,
     });

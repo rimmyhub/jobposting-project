@@ -18,7 +18,7 @@ const signup = async () => {
     const phone = document.getElementById('input-phone').value;
     const gender = document.getElementById('gender').value;
     const birth = document.getElementById('input-birth').value;
-    const profileImage = document.getElementById('user-img').value;
+    const image = document.getElementById('user-img').value;
     // 프로필 이미지를 선택해서 파일을 불러와야함
 
     await fetch('/api/users/signup', {
@@ -28,7 +28,7 @@ const signup = async () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        profileImage,
+        image,
         email,
         password,
         name: username,

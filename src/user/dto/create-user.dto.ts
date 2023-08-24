@@ -12,6 +12,7 @@ export class CreateUserDto {
   @IsEmail({}) // 이메일은 이메일형식으로만 받기
   email: string;
 
+  @IsString()
   image: string;
 
   @IsNotEmpty()
