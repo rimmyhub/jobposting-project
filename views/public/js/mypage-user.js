@@ -199,7 +199,16 @@ async function getUserEducation() {
       </div>
     </div>
     <!-- 졸업년도 -->
-  </div>`;
+  </div>
+  
+  <button
+            type="button"
+            class="btn btn-primary fa-solid fa-pen"
+            data-bs-toggle="modal"
+            data-bs-target="#education"
+          >
+            수정
+          </button>`;
   });
 }
 
@@ -429,7 +438,7 @@ addEducationBtn.addEventListener('click', async () => {
       major,
       admissionYear,
       graduationYear,
-      education: 'MiddleSchool',
+      education: 'ElementarySchool',
     }),
   });
   // 받아온 데이터 가공
@@ -443,3 +452,42 @@ addEducationBtn.addEventListener('click', async () => {
   alert(`${jsonAddEducationData.education} 학력이 추가되었습니다.`);
   window.location.reload();
 });
+
+// 학력 수정 버튼 클릭 후 "저장" 버튼 클릭 시 학력 수정 로직 실행 함수
+const educationUpdateBtn = document.querySelector('#educationUpdateBtn');
+
+educationUpdateBtn.addEventListener('click', async () => {
+  const schoolTitle = document.querySelector('#schoolTitleUpdateTag').value;
+  const major = document.querySelector('#majorUpdateTag').value;
+  const admissionYear = document.querySelector('#admissionYearUpdateTag').value;
+  const graduationYear = document.querySelector(
+    '#graduationYearUpdateTag',
+  ).value;
+
+  const educationId = 3;
+
+  const educationUpdateData = await fetch(`/api/educations/${educationId}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      schoolTitle,
+      major,
+      admissionYear,
+      graduationYear,
+      education: 'ElementarySchool',
+    }),
+  });
+  // 가져온 데이터 가공
+  const jsonEducationUpdateData = await educationUpdateData.json();
+  // 예외처리
+  if (jsonEducationUpdateData.message) {
+    alert(jsonEducationUpdateData.message);
+    return;
+  }
+  alert(
+    `${jsonEducationUpdateData.education} 학력이 정상적으로 수정 되었습니다.`,
+  );
+  window.location.reload();
+});
+
+//

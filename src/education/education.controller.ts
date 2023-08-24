@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  Put,
 } from '@nestjs/common';
 import { EducationService } from './education.service';
 import { CreateEducationDto } from './dto/create-education.dto';
@@ -35,7 +36,7 @@ export class EducationController {
 
   // 학력 - 수정
   @UseGuards(UserGuard)
-  @Patch('/:educationId')
+  @Put('/:educationId')
   updateEducation(
     @Param('educationId') educationId: number,
     @Body() updateEducationDto: UpdateEducationDto,
