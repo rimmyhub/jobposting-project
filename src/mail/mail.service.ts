@@ -5,31 +5,23 @@ import { MailerService } from '@nestjs-modules/mailer';
 export class MailService {
   constructor(private readonly mailerService: MailerService) {}
 
-  //   sendMail(): void {
-  //     // this.mailerService.sendMail 메소드를 사용하여 이메일을 전송
-  //     this.mailerService.sendMail({
-  //       to: 'paul1222@naver.com',
-  //       from: 'paul12220@naver.com',
-  //       subject: '회원가입 인증 이메일',
-  //       text: '이메일을 확인하고 회원가입을 완료하세요.',
-  //       html: '<b>이메일을 확인하고 회원가입을 완료하세요.</b>',
-  //     });
-  //   }
-
-  async sendMail(email: string): Promise<void> {
+  async sendMail(email: string, code: string): Promise<void> {
     try {
       const result = await this.mailerService.sendMail({
         to: email,
-        from: 'jobposting@gmail.com',
-        subject: '회원가입 인증 이메일',
-        text: '이메일을 확인하고 회원가입을 완료하세요.',
-        html: '<b>이메일을 확인하고 회원가입을 완료하세요.</b>',
+        from: {
+          name: '잡포스팅',
+          address: 'jobposting@gmail.com',
+        },
+        subject: '회원가입 인증 코드',
+        text: `회원가입을 위한 인증 코드는 ${code} 입니다.`,
+        html: `<p>회원가입을 위한 인증 코드는 <strong>${code}</strong> 입니다.</p>`,
       });
       console.log(result);
     } catch (error) {
       console.error(error);
       throw new HttpException(
-        '인증 이메일 전송에 실패했습니다.',
+        '인증 코드 전송에 실패했습니다.',
         HttpStatus.BAD_REQUEST,
       );
     }

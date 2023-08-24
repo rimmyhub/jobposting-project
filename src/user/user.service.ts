@@ -42,7 +42,7 @@ export class UserService {
   }
 
   // 유저생성
-  async create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto): Promise<User> {
     const { email, address, birth, gender, name, password, phone } =
       createUserDto;
     // 유저의 이메일이 중복되는지 확인
@@ -56,7 +56,7 @@ export class UserService {
       );
     }
     const hashedPassword = await bcrypt.hash(password, 10);
-    await this.userRepository.save({
+    const newUser = await this.userRepository.save({
       email,
       address,
       birth,
@@ -65,7 +65,7 @@ export class UserService {
       password: hashedPassword,
       phone,
     });
-    return '회원가입이 완료되었습니다.';
+    return newUser;
   }
 
   // 유저정보 수정
@@ -138,5 +138,9 @@ export class UserService {
     if (isRefTokenMatch) {
       return user;
     }
+  }
+
+  async setVerificationCode(userId: number, code: string): Promise<void> {
+    await this.userRepository.update(userId, { verificationCode: code });
   }
 }

@@ -39,6 +39,10 @@ export class User {
   @Column({ type: 'varchar', length: 10, comment: '생일' })
   birth: string;
 
+  // 인증 코드
+  @Column({ type: 'varchar', length: 10, comment: '인증코드' })
+  verificationCode: string;
+
   @CreateDateColumn({ name: 'create_at', comment: '생성일' })
   createdAt: Date;
 
