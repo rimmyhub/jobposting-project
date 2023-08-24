@@ -35,44 +35,55 @@
           </li>
         </ol>
       </nav>
+      <div class="container text-center">
+        <div class="row">
+          <div class="col">
+            <img
+              src="/img/userImg.jpg"
+              class="rounded-circle border border-secondary"
+              alt="..."
+              style="width: 150px"
+            />
+          </div>
+        </div>
+        <!-- 이미지 수정 버튼 -->
+        <button
+          type="button"
+          class="btn btn-primary fa-solid fa-pen"
+          data-bs-toggle="modal"
+          data-bs-target="#profile-company-image"
+          style="margin: 10px"
+        >
+          이미지 수정
+        </button>
+        <%- include('includes/profile-company-image') %>
+      </div>
+      <hr />
+      <!-- 회사 소개 -->
       <div class="row">
-        <div class="col">
-          <img
-            src="/img/userImg.jpg"
-            class="rounded-circle border border-secondary"
-            alt="..."
-            style="width: 150px"
-          />
+        <div class="col-2">
+          <p class="text-start fs-5 fw-semibold" style="margin: 10px">
+            회사소개
+          </p>
+        </div>
+
+        <div class="col-8" id="resumeBox">
+          <p
+            class="fs-2 fw-semibold text-start information"
+            style="margin: 10px"
+          >
+            스파르타 주식회사
+          </p>
+          <p class="text-start">
+            2023 브랜드 대상 코딩교육 부문 1위! 코딩 왕초보를 위한 코딩 강의
+          </p>
         </div>
       </div>
-      <!-- 이미지 수정 버튼 -->
-      <button
-        type="button"
-        class="btn btn-primary fa-solid fa-pen"
-        data-bs-toggle="modal"
-        data-bs-target="#profile-user-image"
-      >
-        이미지 수정
-      </button>
-
-      <div class="col-2">
-        <p class="text-start fs-5 fw-semibold" style="margin: 10px">소개</p>
-      </div>
-
-      <div class="col-8" id="resumeBox">
-        <p class="fs-2 fw-semibold text-start information" style="margin: 10px">
-          컴퓨터공학과 전공, 업무 맞춤 인재 홍길동입니다
-        </p>
-        <p class="text-start">
-          Dreaming AI World by Developing AI Packs for Everyone to Make AI
-          Beneficial!
-        </p>
-        <!-- 구분선 -->
-      </div>
+      <!-- 소개 -->
       <%- include('includes/profile-user-image') %>
+      <hr />
     </div>
     <!-- 구분선 -->
-    <hr />
 
     <!-- 회사 정보 영역 -->
     <div class="container text-center">
@@ -149,9 +160,8 @@
           <!-- 수정 모달 -->
         </div>
       </div>
+      <hr />
     </div>
-
-    <hr />
 
     <!-- 채용 공고 영역 -->
     <div class="container text-center">
@@ -185,10 +195,9 @@
         </div>
         <!-- 채용공고 리스트 -->
       </div>
+      <hr />
     </div>
     <!-- 학력 정보 영역 -->
-
-    <hr />
 
     <!-- 기업리뷰 영역 -->
     <div class="container text-center">
