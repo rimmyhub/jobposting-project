@@ -8,7 +8,6 @@ import {
   Delete,
   UseGuards,
   Request,
-  Req,
   Put,
 } from '@nestjs/common';
 import { ResumeService } from './resume.service';
@@ -17,7 +16,7 @@ import { UpdateResumeDto } from './dto/update-resume.dto';
 import { UserGuard } from 'src/auth/jwt/jwt.user.guard';
 import { Resume } from 'src/domain/resume.entity';
 
-@Controller('api/resumes')
+@Controller('/api/resumes')
 export class ResumeController {
   constructor(private readonly resumeService: ResumeService) {}
 
@@ -34,7 +33,6 @@ export class ResumeController {
   // 이력서 - 전체 조회
   @Get()
   async findAllResume(): Promise<Resume[]> {
-    console.log('findAllResume');
     return await this.resumeService.findAllResume();
   }
 
@@ -50,10 +48,7 @@ export class ResumeController {
   updateResume(
     @Param('resumeId') resumeId: number,
     @Body() updateResumeDto: UpdateResumeDto,
-    @Req() req,
   ) {
-    console.log(req);
-    console.log(updateResumeDto);
     return this.resumeService.updateResume(+resumeId, updateResumeDto);
   }
 

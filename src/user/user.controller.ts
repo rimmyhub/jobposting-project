@@ -11,6 +11,7 @@ import {
   UsePipes,
   ValidationPipe,
   Request,
+  Put,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -47,7 +48,7 @@ export class UserController {
 
   // 유저정보 수정
   @UseGuards(UserGuard)
-  @Patch()
+  @Put()
   update(@Request() req, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(req.user.id, updateUserDto);
   }

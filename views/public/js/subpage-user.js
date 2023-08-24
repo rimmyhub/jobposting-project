@@ -17,11 +17,25 @@ document.addEventListener('DOMContentLoaded', (e) => {
 // 유저 정보를 불러오는 함수 로직
 async function getUserData() {
   const userBox = document.querySelector('#userBox');
-  userBox.innerHTML = '';
+
   // userId 채취
   const params = new URLSearchParams(window.location.search);
   const userId = params.get('id');
   const resumeId = params.get('resumeId');
+
+  // 학력 데이터 가공
+  const userEducationData = await fetch(`/api/educations/${resumeId}`);
+  const jsonUserEducationData = await userEducationData.json();
+  console.log(jsonUserEducationData);
+
+  // 학력이 없을 경우 예외처리
+  if (
+    jsonUserEducationData.message ===
+    `현재 작성하신 이력서에 <학력>은 작성 전 입니다.`
+  ) {
+    userBox.innerHTML = `<p>해당 이력서에 (학력란)을 작성하시면 이 곳이 오픈 됩니다.</p>`;
+    return;
+  }
 
   // 유저 데이터 가공
   const userData = await fetch(`/api/users/user/${userId}`);
@@ -31,9 +45,8 @@ async function getUserData() {
   const userResumeData = await fetch(`/api/resumes/${resumeId}`);
   const jsonUserResumeData = await userResumeData.json();
 
-  // 학력 데이터 가공
-  const userEducationData = await fetch(`/api/educations/${resumeId}`);
-  const jsonUserEducationData = await userEducationData.json();
+  // 위의 3가지 내용이 전부 조회가 될 경우 innerHTML 실행
+  userBox.innerHTML = '';
 
   userBox.innerHTML = `<div class="col" id="userBox">
                         <img
@@ -58,6 +71,7 @@ async function getUserResume() {
   const resumeTitleTag = document.querySelector('#resumeTitle');
   const resumeDescTag = document.querySelector('#resumeDesc');
   const userInfoBox = document.querySelector('#userInfoBox');
+
   resumeTitleTag.innerHTML = '';
   resumeDescTag.innerHTML = '';
 
@@ -71,6 +85,7 @@ async function getUserResume() {
   // 받아온 데이터 할당
   const responseData = await userResumeData.json();
 
+  // 메인 로직
   resumeTitleTag.innerHTML = `<p
                                   class="fs-2 fw-semibold text-start information"
                                   id="resumeTitle"
