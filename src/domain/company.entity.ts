@@ -22,6 +22,9 @@ export class Company {
   @Column({ type: 'varchar', length: 150, comment: '패스워드' })
   password: string;
 
+  @Column({ type: 'text', comment: '회사 이미지' })
+  image: string;
+
   @Column({ type: 'varchar', length: 30, comment: '회사명' })
   title: string;
 
@@ -46,11 +49,8 @@ export class Company {
   @UpdateDateColumn({ name: 'update_at', comment: '수정일' })
   updatedAt: Date;
 
-  @Column({ default: false })
-  deleted: boolean;
-
-  @Column({ type: 'timestamp', nullable: true })
-  deletedAt: Date;
+  @DeleteDateColumn({ name: 'delete_at', comment: '삭제일' })
+  deletedAt?: Date | null;
 
   // refreshToken저장하기
   @Column({ nullable: true })

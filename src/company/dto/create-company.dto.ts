@@ -18,9 +18,8 @@ export class CreateCompanyDto {
   @Matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{4,25}$/)
   password: string;
 
-  // @IsNotEmpty()
-  // @IsString()
-  // confirmPassword: string;
+  @IsString()
+  image: string;
 
   @IsNotEmpty()
   @IsString()
