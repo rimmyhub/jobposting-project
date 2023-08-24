@@ -60,28 +60,6 @@
       </div>
       <hr />
       <!-- 회사 소개 -->
-      <div class="row">
-        <div class="col-2">
-          <p class="text-start fs-5 fw-semibold" style="margin: 10px">
-            회사소개
-          </p>
-        </div>
-
-        <div class="col-8" id="resumeBox">
-          <p
-            class="fs-2 fw-semibold text-start information"
-            style="margin: 10px"
-          >
-            스파르타 주식회사
-          </p>
-          <p class="text-start">
-            2023 브랜드 대상 코딩교육 부문 1위! 코딩 왕초보를 위한 코딩 강의
-          </p>
-        </div>
-      </div>
-      <!-- 소개 -->
-      <%- include('includes/profile-user-image') %>
-      <hr />
     </div>
     <!-- 구분선 -->
 
@@ -89,16 +67,29 @@
     <div class="container text-center">
       <div class="row">
         <div class="col-2">
-          <p class="text-start fs-5 fw-semibold" style="margin: 10px">
+          <p class="text-start fs-5 fw-semibold" style="margin-top: 20px">
             회사 정보
           </p>
         </div>
 
         <div class="col-8">
+          <div class="row">
+            <div class="col-8" id="resumeBox">
+              <p
+                class="fs-2 fw-semibold text-start information"
+                style="margin: 10px"
+              >
+                스파르타 주식회사
+              </p>
+              <p class="text-start">
+                2023 브랜드 대상 코딩교육 부문 1위! 코딩 왕초보를 위한 코딩 강의
+              </p>
+            </div>
+          </div>
           <!-- 웹사이트 -->
           <div class="row">
             <div class="col-2">
-              <p class="text-start text-body-secondary">파일</p>
+              <p class="text-start text-body-secondary">웹사이트</p>
             </div>
             <div class="col-8">
               <p class="text-start">https://www.amazon.com/</p>
@@ -152,11 +143,12 @@
             type="button"
             class="btn btn-primary fa-solid fa-pen"
             data-bs-toggle="modal"
-            data-bs-target="#aboutme"
+            data-bs-target="#company"
+            style="margin-top: 20px"
           >
             수정
           </button>
-          <%- include('includes/aboutme') %>
+          <%- include('includes/company') %>
           <!-- 수정 모달 -->
         </div>
       </div>
@@ -166,7 +158,7 @@
     <!-- 채용 공고 영역 -->
     <div class="container text-center">
       <div class="row">
-        <div class="col-4">
+        <div class="col-2">
           <p class="text-start fs-5 fw-semibold" style="margin: 10px">
             채용 공고
           </p>
@@ -193,6 +185,32 @@
           <p class="text-start">항공우주/기계, 전기전자, 생산기술</p>
           <!-- 구분선 -->
         </div>
+        <div class="col-2">
+          <!-- 추가 페이지 -->
+          <button
+            type="button"
+            class="btn btn-primary fa-solid fa-plus"
+            data-bs-toggle="modal"
+            data-bs-target="#jobposting-add"
+            style="margin-top: 20px"
+          >
+            추가
+          </button>
+          <%- include('includes/jobposting-add') %>
+          <!-- 추가 페이지 -->
+          <!-- 수정 버튼  -->
+          <button
+            type="button"
+            class="btn btn-primary fa-solid fa-pen"
+            data-bs-toggle="modal"
+            data-bs-target="#jobposting"
+            style="margin-top: 20px"
+          >
+            수정
+          </button>
+          <%- include('includes/jobposting') %>
+          <!-- 수정 버튼-->
+        </div>
         <!-- 채용공고 리스트 -->
       </div>
       <hr />
@@ -202,21 +220,21 @@
     <!-- 기업리뷰 영역 -->
     <div class="container text-center">
       <div class="row">
-        <div class="col-4">
+        <div class="col-2">
           <p class="text-start fs-5 fw-semibold" style="margin: 10px">
             기업리뷰
           </p>
         </div>
 
         <div class="col-8">
-          <!-- 파일 -->
+          <!-- 리뷰 -->
           <div class="row">
             <div class="col-4">
               <p class="text-start fw-bolder">***자ᆞ경력 1년</p>
               <p class="fs-4 text-start">⭐⭐⭐⭐⭐</p>
             </div>
           </div>
-          <!-- 파일 -->
+          <!-- 리뷰 -->
 
           <!-- 평점 내용 -->
           <p class="text-start">
@@ -234,7 +252,8 @@
       </div>
     </div>
     <!-- 포트폴리오 영역 -->
-
+    <div class="p-4"></div>
+    <%- include('includes/footer') %>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
