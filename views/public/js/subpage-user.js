@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', (e) => {
 // 유저 정보를 불러오는 함수 로직
 async function getUserData() {
   const userBox = document.querySelector('#userBox');
-
+  userBox.innerHTML = '';
   // userId 채취
   const params = new URLSearchParams(window.location.search);
   const userId = params.get('id');

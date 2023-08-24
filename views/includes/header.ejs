@@ -23,21 +23,39 @@
   }
 
   .header-nav-list {
-    display: flex;
     position: absolute;
+    display: flex;
+    justify-content: space-between;
+    width: 250px;
     right: 10px;
     margin-bottom: 0;
   }
 
   .header-nav-list > li {
     list-style: none;
-    padding: 10px;
+    /* padding: 10px; */
     cursor: pointer;
+    position: relative;
   }
 
   .header-nav-list > li > a {
     text-decoration: none;
     color: black;
+  }
+
+  .header-nav-list > li > .logout {
+    color: #ea612d;
+  }
+
+  .header-nav-list > li > .header-icon {
+    font-size: 26px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .header-nav-list > li > img {
+    width: 50px;
   }
 
   .search-box {
@@ -86,16 +104,29 @@
       <% if(isLogin === 1) { %>
       <ul class="header-nav-list">
         <li>
-          <a id="logout" href="#"> 로그아웃</a>
+          <i class="fa-solid fa-list-check header-icon"></i>
         </li>
         <li>
-          <a href="/signup/user">회원가입</a>
+          <i class="fa-regular fa-message header-icon"></i>
+        </li>
+        <li>
+          <i
+            id="logout"
+            class="fa-solid fa-arrow-right-from-bracket logout header-icon"
+          ></i>
+        </li>
+        <li id="profile">
+          <img
+            src="/img/userImg.jpg"
+            class="rounded-circle border border-secondary"
+            alt="..."
+          />
         </li>
       </ul>
       <% } else if(isLogin === 0) { %>
-      <ul class="header-nav-list">
+      <ul class="login-nav-list">
         <li>
-          <a href="/signin/user"> 로그인</a>
+          <a href="/signin/user">로그인</a>
         </li>
         <li>
           <a href="/signup/user">회원가입</a>
@@ -104,4 +135,10 @@
       <% }%>
     </div>
   </div>
+  <script>
+    const profile = document.getElementById('profile');
+    profile.addEventListener('click', () => {
+      location.href = '/mypage/user';
+    });
+  </script>
 </nav>
