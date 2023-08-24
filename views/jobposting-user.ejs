@@ -9,6 +9,12 @@
       integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
       crossorigin="anonymous"
     />
+
+    <script
+      src="https://kit.fontawesome.com/9021aeec94.js"
+      crossorigin="anonymous"
+    ></script>
+
     <link rel="stylesheet" href="/css/jobposting.css" />
     <title>Document</title>
     <style>
@@ -23,6 +29,14 @@
   <body>
     <%- include('includes/header', {isLogin: 0, type: "user"}) %>
     <div class="container">
+      <!-- 브레드크롬 -->
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item active" aria-current="page">jobposting</li>
+        </ol>
+      </nav>
+      <!-- 브레드크롬 -->
       <div class="company-info-box">
         <div class="col-md-6">
           <h1>Cloud Support Associate</h1>
