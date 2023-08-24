@@ -21,7 +21,6 @@ export class Resume {
   id: number;
 
   @Column({
-    type: 'int',
     name: 'user_id',
     comment: '해당 이력서의 유저 아이디',
   })

@@ -95,21 +95,6 @@ export class ResumeService {
       .getMany();
 
     return result;
-
-    // 삭제되지 않은 이력서 중에서 이력서의 제목만 반환
-    // return await this.resumeRepository.find({
-    //   select: ['id', 'userId', 'title'],
-    //   relations: ['user'],
-    // });
-    // return await this.resumeRepository.find({
-    //   select: ['id', 'userId', 'title'],
-    //   join: {
-    //     alias: 'r',
-    //     leftJoinAndSelect: {
-    //       user: 'r.user',
-    //     },
-    //   },
-    // });
   }
 
   // 이력서 - 상세 조회
