@@ -17,14 +17,14 @@ document.addEventListener('DOMContentLoaded', (e) => {
 // 유저 정보를 불러오는 함수 로직
 async function getUserData() {
   const userBox = document.querySelector('#userBox');
-
+  userBox.innerHTML = '';
   // userId 채취
   const params = new URLSearchParams(window.location.search);
   const userId = params.get('id');
   const resumeId = params.get('resumeId');
 
   // 유저 데이터 가공
-  const userData = await fetch(`/api/users/user-page/${userId}`);
+  const userData = await fetch(`/api/users/user/${userId}`);
   const jsonUserData = await userData.json();
 
   // 이력서 데이터 가공
@@ -84,7 +84,7 @@ async function getUserResume() {
                               </p>`;
 
   // 유저 정보 조회 fetch
-  const userData = await fetch(`/api/users/user-page/${userId}`);
+  const userData = await fetch(`/api/users/user/${userId}`);
   const jsonUserData = await userData.json();
 
   userInfoBox.innerHTML = `<div id="userInfoBox">

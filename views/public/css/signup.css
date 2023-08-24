@@ -41,7 +41,6 @@
   position: absolute;
   transform: translate(-50%, -50%);
   top: 90%;
-  cursor: pointer;
 }
 
 .img-file {
@@ -74,4 +73,11 @@
 
 .gender-select::-ms-expand {
   display: none;
+}
+
+.signup-btn {
+  margin-bottom: 10px;
+}
+.signup-btn > a {
+  text-decoration: none;
 }

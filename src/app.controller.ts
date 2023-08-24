@@ -86,7 +86,7 @@ export class AppController {
   }
 
   // 유저 - 마이페이지
-  @Get('mypage/user')
+  @Get('mypage')
   // @Render('mypage-user')
   getMypageUser(
     @Request() req,
