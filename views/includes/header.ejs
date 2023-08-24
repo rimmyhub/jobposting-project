@@ -47,7 +47,7 @@
     color: #ea612d;
   }
 
-  .header-nav-list > li > .header-icon {
+  .header-icon {
     font-size: 26px;
     position: absolute;
     top: 50%;
@@ -56,6 +56,33 @@
 
   .header-nav-list > li > img {
     width: 50px;
+  }
+
+  .login-nav-list {
+    justify-content: space-between;
+    display: flex;
+    position: absolute;
+    width: 100px;
+    right: 50px;
+    margin-bottom: 0;
+  }
+
+  .login-nav-list > li {
+    list-style: none;
+    cursor: pointer;
+    position: relative;
+  }
+  .login-nav-list > li > a {
+    text-decoration: none;
+    color: black;
+  }
+
+  .signin-icon {
+    color: #279eff;
+  }
+
+  .signup-icon {
+    color: #279eff;
   }
 
   .search-box {
@@ -126,10 +153,16 @@
       <% } else if(isLogin === 0) { %>
       <ul class="login-nav-list">
         <li>
-          <a href="/signin/user">로그인</a>
+          <a href="/signin/user">
+            <i
+              class="fa-solid fa-arrow-right-to-bracket signin-icon header-icon"
+            ></i>
+          </a>
         </li>
         <li>
-          <a href="/signup/user">회원가입</a>
+          <a href="/signup/user"
+            ><i class="fa-solid fa-user-plus signup-icon header-icon"></i
+          ></a>
         </li>
       </ul>
       <% }%>

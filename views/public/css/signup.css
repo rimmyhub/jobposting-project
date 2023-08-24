@@ -74,3 +74,10 @@
 .gender-select::-ms-expand {
   display: none;
 }
+
+.signup-btn {
+  margin-bottom: 10px;
+}
+.signup-btn > a {
+  text-decoration: none;
+}

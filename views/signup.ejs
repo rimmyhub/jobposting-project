@@ -92,8 +92,7 @@
           <div class="email-input-box input-box">
             <input id="input-employees" type="text" placeholder="employees" />
           </div>
-          <% } %>
-
+          <% } %> 
           <div class="email-input-box">
             <input
               id="signup-btn"
@@ -102,6 +101,18 @@
               type="button"
             />
           </div>
+          
+          <% if (type === "user") { %>
+          <h4 class="signup-btn" >
+            <a " href="/signup/company">회사로 회원가입하기 </a>
+          </h4>
+
+          <% } else if (type === 'company') { %>
+          <h4 class="signup-btn">
+            <a href="/signup/user">유저로 회원가입하기 </a>
+          </h4>
+          <% } %>
+
         </div>
       </div>
     </div>
