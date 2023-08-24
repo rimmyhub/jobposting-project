@@ -5,15 +5,18 @@ import {
   ParseFilePipe,
   Post,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadService } from './upload.service';
+import { UserGuard } from 'src/auth/jwt/jwt.user.guard';
 
 @Controller('/api/upload')
 export class UploadController {
   constructor(private readonly uploadService: UploadService) {}
 
+  @UseGuards(UserGuard)
   @Post()
   @UseInterceptors(FileInterceptor('file'))
   // 업로드할 파일의 필드이름 설정

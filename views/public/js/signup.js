@@ -18,6 +18,8 @@ const signup = async () => {
     const phone = document.getElementById('input-phone').value;
     const gender = document.getElementById('gender').value;
     const birth = document.getElementById('input-birth').value;
+    const profileImage = document.getElementById('user-img').value;
+    // 프로필 이미지를 선택해서 파일을 불러와야함
 
     await fetch('/api/users/signup', {
       // api앞에 /를 붙이지 않으면 현재 주소창의 3000바로 옆에 있는 params값이 붙는다.
@@ -26,6 +28,7 @@ const signup = async () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
+        profileImage,
         email,
         password,
         name: username,
