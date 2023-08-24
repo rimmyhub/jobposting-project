@@ -73,7 +73,7 @@ export class UserService {
     // 먼저 유저가 있는지 확인한다.
     await this.findOne(id);
     this.userRepository.update(id, updateUserDto);
-    return `수정이 완료되었습니다.`;
+    return { message: `수정이 완료되었습니다.` };
   }
 
   // 유저 탈퇴 deleteAt에 삭제시간 넣기

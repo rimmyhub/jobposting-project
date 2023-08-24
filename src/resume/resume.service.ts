@@ -56,12 +56,12 @@ export class ResumeService {
     const existResume = await this.resumeRepository.find({
       where: { userId: id },
     });
-    // if (existResume.length !== 0) {
-    //   throw new HttpException(
-    //     '이미 본인의 이력서를 보유하고 계십니다.',
-    //     HttpStatus.CONFLICT,
-    //   );
-    // }
+    if (existResume.length !== 0) {
+      throw new HttpException(
+        '이미 본인의 이력서를 보유하고 계십니다.',
+        HttpStatus.CONFLICT,
+      );
+    }
     // 이력서 생성
     const resume = this.resumeRepository.create({
       userId: id,
@@ -95,21 +95,6 @@ export class ResumeService {
       .getMany();
 
     return result;
-
-    // 삭제되지 않은 이력서 중에서 이력서의 제목만 반환
-    // return await this.resumeRepository.find({
-    //   select: ['id', 'userId', 'title'],
-    //   relations: ['user'],
-    // });
-    // return await this.resumeRepository.find({
-    //   select: ['id', 'userId', 'title'],
-    //   join: {
-    //     alias: 'r',
-    //     leftJoinAndSelect: {
-    //       user: 'r.user',
-    //     },
-    //   },
-    // });
   }
 
   // 이력서 - 상세 조회
@@ -122,7 +107,10 @@ export class ResumeService {
 
     // 예외 처리
     if (!resume) {
-      throw new HttpException('Not found resume', HttpStatus.NOT_FOUND);
+      throw new HttpException(
+        { message: '이력서가 존재하지 않습니다. 이력서를 작성하세요.' },
+        HttpStatus.NOT_FOUND,
+      );
     }
     // 반환
     return resume;
@@ -175,7 +163,7 @@ export class ResumeService {
       throw new HttpException('Not found resume', HttpStatus.NOT_FOUND);
     }
     // SOFT_REMOVED 이력서
-    const deletedResume = await this.resumeRepository.softRemove(resume);
+    const deletedResume = await this.resumeRepository.remove(resume);
     // 예외처리
     if (!deletedResume) {
       throw new HttpException('삭제에 실패하였습니다.', HttpStatus.BAD_REQUEST);
