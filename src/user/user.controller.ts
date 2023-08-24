@@ -31,12 +31,18 @@ export class UserController {
   // 유저정보 상세조회
   @UseGuards(UserGuard)
   @Get('/user-page/:id')
-  findOne(@Request() req, @Param('id') id: number) {
-    if (id) {
-      return this.userService.findOne(id);
-    }
+  findOne(@Request() req) {
+    // if (id) {
+    //   console.log('findOne = ', id);
+    //   return this.userService.findOne(id);
+    // }
     // AuthGuard로 받은 req안에 user에 접근하면 현재 로그인한 유저(회사)의 정보에 접근할 수 있습니다.
     return this.userService.findOne(req.user.id);
+  }
+
+  @Get('/user/:id')
+  findUser(@Param('id') id: number) {
+    return this.userService.findOne(id);
   }
 
   // 유저정보 수정
