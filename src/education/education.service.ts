@@ -21,6 +21,19 @@ export class EducationService {
     // Body
     const { schoolTitle, admissionYear, graduationYear, major, education } =
       createEducationDto;
+    // 예외처리
+    if (
+      !schoolTitle ||
+      !admissionYear ||
+      !graduationYear ||
+      !major ||
+      !education
+    ) {
+      throw new HttpException(
+        '필수 요소를 입력해주세요',
+        HttpStatus.PRECONDITION_FAILED,
+      );
+    }
     // 연도 예외 처리
     if (admissionYear > graduationYear) {
       throw new HttpException(
@@ -44,6 +57,13 @@ export class EducationService {
       major,
       education: educationType[education],
     });
+    // 예외처리
+    if (!resEducation) {
+      throw new HttpException(
+        '학력 등록에 실패하였습니다.',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
     // 저장
     await this.educationRepository.save(resEducation);
     // 반환
