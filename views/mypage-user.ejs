@@ -27,6 +27,37 @@
       .text-start {
         margin: 10px;
       }
+
+      .profile-box {
+        display: block;
+        position: relative;
+        margin-bottom: 1em;
+      }
+
+      .edit-icon {
+        position: absolute;
+        transform: translate(-50%, -50%);
+        top: 80%;
+      }
+
+      .img-file {
+        cursor: pointer;
+        width: 50px;
+        position: absolute;
+        transform: translate(-50%, -50%);
+        top: 90%;
+        opacity: 0;
+      }
+
+      .user-img {
+        width: 150px;
+        border: 0.5px solid gray;
+        border-radius: 70%;
+      }
+
+      .img-file::-webkit-file-upload-button {
+        cursor: pointer;
+      }
     </style>
   </head>
   <body>
@@ -42,27 +73,24 @@
           </li>
         </ol>
       </nav>
-      <div class="row">
-        <div class="col">
-          <img
-            src="/img/userImg.jpg"
-            class="rounded-circle border border-secondary"
-            alt="..."
-            style="width: 150px"
-          />
-        </div>
+      <!-- 프로필 수정 -->
+      <div class="profile-box">
+        <img
+          src="/img/userImg.jpg"
+          id="image"
+          class="user-img"
+          alt=""
+          srcset=""
+        />
+        <i class="fa-solid fa-pen edit-icon" style="color: #0d6efd">수정</i>
+        <input
+          id="upload-image"
+          class="img-file"
+          type="file"
+          accept="image/jpeg, image/png"
+        />
       </div>
-      <!-- 이미지 수정 버튼 -->
-      <button
-        type="button"
-        class="btn btn-primary fa-solid fa-pen"
-        data-bs-toggle="modal"
-        data-bs-target="#profile-user-image"
-      >
-        이미지 수정
-      </button>
       <!-- 최상단 영역 메세지보내기까지 -->
-      <%- include('includes/profile-user-image') %>
       <hr />
     </div>
     <!-- 구분선 -->

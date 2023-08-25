@@ -8,6 +8,43 @@ signupBtn.addEventListener('click', () => {
   signup();
 });
 
+const userImage = document.getElementById('image');
+const imageUploadEl = document.getElementById('upload-image');
+
+imageUploadEl.addEventListener('change', async (e) => {
+  const selectedFile = e.target.files[0];
+
+  // console.log(selectedFile);
+  if (selectedFile.size > 1 * 1024 * 1024) {
+    alert('파일용량은 최대 1MB입니다.');
+    return;
+  }
+  console.log(selectedFile.size);
+  if (
+    !selectedFile.type.includes('jpeg') &&
+    !selectedFile.type.includes('png')
+  ) {
+    alert('jpeg 또는 png 파일만 업로드 가능합니다!');
+    return;
+  }
+  const formData = new FormData();
+  formData.append('file', selectedFile);
+  // console.log(formData);
+  // console.log(selectedFile);
+
+  const response = await fetch('/api/upload', {
+    method: 'POST',
+    body: formData,
+  });
+  console.log(response);
+  const data = await response.json();
+  console.log(data);
+
+  imageUrl = data.url;
+
+  userImage.setAttribute('src', imageUrl);
+});
+
 const signup = async () => {
   let isSuccess;
   const email = document.getElementById('input-email').value;
@@ -18,17 +55,14 @@ const signup = async () => {
     const phone = document.getElementById('input-phone').value;
     const gender = document.getElementById('gender').value;
     const birth = document.getElementById('input-birth').value;
-    const image = document.getElementById('user-img').value;
-    // 프로필 이미지를 선택해서 파일을 불러와야함
 
     await fetch('/api/users/signup', {
-      // api앞에 /를 붙이지 않으면 현재 주소창의 3000바로 옆에 있는 params값이 붙는다.
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        image,
+        image: imageUrl,
         email,
         password,
         name: username,
