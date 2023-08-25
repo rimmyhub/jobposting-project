@@ -1,7 +1,7 @@
 export enum educationType {
-  ElementarySchool = '초등학교',
-  MiddleSchool = '중학교',
-  HighSchool = '고등학교',
-  College = '대학교',
-  GraduateSchool = '대학원',
+  초등학교 = '초등학교',
+  중학교 = '중학교',
+  고등학교 = '고등학교',
+  대학교 = '대학교',
+  대학원 = '대학원',
 }

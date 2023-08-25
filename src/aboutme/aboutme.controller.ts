@@ -8,6 +8,7 @@ import {
   Get,
   Patch,
   Delete,
+  Put,
 } from '@nestjs/common';
 import { UserGuard } from 'src/auth/jwt/jwt.user.guard';
 import { AboutmeService } from './aboutme.service';
@@ -24,7 +25,7 @@ export class AboutmeController {
   @Post(':resumeId')
   createAboutme(
     @Request() req,
-    @Param('resumeId') resumeId: string,
+    @Param('resumeId') resumeId: number,
     @Body() createAboutmeDto: CreateAboutmeDto,
   ): Promise<Aboutme> {
     return this.aboutmeService.createAboutme(
@@ -43,23 +44,33 @@ export class AboutmeController {
 
   // 자기소개서 수정
   @UseGuards(UserGuard)
-  @Patch(':resumeId')
+  @Put(':resumeId/:aboutmeId')
   updateAboutme(
     @Request() req,
-    @Param('resumeId') resumeId: string,
+    @Param('resumeId') resumeId: number,
+    @Param('aboutmeId') aboutmeId: number,
     @Body() updateAboutmeDto: UpdateAboutmeDto,
   ) {
     return this.aboutmeService.updateAboutme(
       req.user.id,
       +resumeId,
+      +aboutmeId,
       updateAboutmeDto,
     );
   }
 
   // 자기소개서 삭제
   @UseGuards(UserGuard)
-  @Delete(':resumeId')
-  removeAboutme(@Request() req, @Param('resumeId') resumeId: string) {
-    return this.aboutmeService.removeAboutme(req.user.id, +resumeId);
+  @Delete(':resumeId/:aboutmeId')
+  removeAboutme(
+    @Request() req,
+    @Param('resumeId') resumeId: number,
+    @Param('aboutmeId') aboutmeId: number,
+  ) {
+    return this.aboutmeService.removeAboutme(
+      req.user.id,
+      +resumeId,
+      +aboutmeId,
+    );
   }
 }

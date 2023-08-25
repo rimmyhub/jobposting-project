@@ -3,17 +3,58 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 // 데이터베이스와 레포지토리를 쓰려면
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Not, IsNull } from 'typeorm';
+import { Repository, Not, IsNull, And } from 'typeorm';
 import { User } from '../domain/user.entity';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
+  findAllData(arg0: number) {
+    throw new Error('Method not implemented.');
+  }
   // 레포지토리를 쓰려면 constructor에 정의
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
   ) {}
+
+  // 유저의 모든 정보를 조회하는 로직
+  async findAllUserData(userId: number) {
+    console.log(userId); // 1
+    const userAllInfo = await this.userRepository
+      .createQueryBuilder('user')
+      .select([
+        'user.name',
+        'user.email',
+        'user.gender',
+        'user.phone',
+        'user.address',
+        'resume.title',
+        'resume.content',
+        'education.schoolTitle',
+        'education.major',
+        'education.admissionYear',
+        'education.graduationYear',
+        'career.companyTitle',
+        'career.position',
+        'career.job',
+        'career.joiningDate',
+        'career.resignationDate',
+        'portfolio.file',
+        'portfolio.address',
+        'aboutme.title',
+        'aboutme.content',
+      ])
+      .innerJoin('user.resume', 'resume')
+      .innerJoin('resume.education', 'education')
+      .innerJoin('resume.career', 'career')
+      .innerJoin('resume.portfolio', 'portfolio')
+      .innerJoin('resume.aboutme', 'aboutme')
+      .where('user.id = :id', { id: userId })
+      .getMany();
+
+    return userAllInfo;
+  }
 
   // 유저정보상세조회
   async findOne(id: number) {

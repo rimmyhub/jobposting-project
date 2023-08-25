@@ -40,10 +40,16 @@ export class UserController {
     // AuthGuard로 받은 req안에 user에 접근하면 현재 로그인한 유저(회사)의 정보에 접근할 수 있습니다.
     return this.userService.findOne(req.user.id);
   }
-
+  // 유저정보 조회
   @Get('/user/:id')
   findUser(@Param('id') id: number) {
     return this.userService.findOne(id);
+  }
+
+  // 유저의 모든 정보 조회
+  @Get('/:userId/mypage')
+  findAll(@Param('userId') userId: number) {
+    return this.userService.findAllUserData(+userId);
   }
 
   // 유저정보 수정

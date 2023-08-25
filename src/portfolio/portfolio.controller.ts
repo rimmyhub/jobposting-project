@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Put,
   Request,
   UseGuards,
 } from '@nestjs/common';
@@ -45,22 +46,32 @@ export class PortfolioController {
 
   // 포트폴리오 수정
   @UseGuards(UserGuard)
-  @Patch(':resumeId')
+  @Put(':resumeId/:portfolioId')
   updatePortfolio(
     @Request() req,
-    @Param('resumeId') resumeId: string,
+    @Param('resumeId') resumeId: number,
+    @Param('portfolioId') portfolioId: number,
     @Body() updatePortfoiloDto: UpdatePortfolioDto,
   ) {
     return this.portfolioService.updatePortfolio(
       req.user.id,
       +resumeId,
+      +portfolioId,
       updatePortfoiloDto,
     );
   }
   // 포트폴리오 삭제
   @UseGuards(UserGuard)
-  @Delete(':resumeId')
-  removePortfolio(@Request() req, @Param('resumeId') resumeId: string) {
-    return this.portfolioService.removePortfolio(req.user.id, +resumeId);
+  @Delete(':resumeId/:portfolioId')
+  removePortfolio(
+    @Request() req,
+    @Param('resumeId') resumeId: number,
+    @Param('portfolioId') portfolioId: number,
+  ) {
+    return this.portfolioService.removePortfolio(
+      req.user.id,
+      +resumeId,
+      +portfolioId,
+    );
   }
 }
