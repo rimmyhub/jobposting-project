@@ -16,6 +16,9 @@ export class Aboutme {
   content: string;
 
   // 1:N 관계설정 - 이력서
-  @ManyToOne(() => Resume, (resume) => resume.aboutme)
+  @ManyToOne(() => Resume, (resume) => resume.aboutme, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   resume: Resume;
 }
