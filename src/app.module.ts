@@ -41,6 +41,7 @@ import { EjsModule } from './ejs/ejs.module';
     AuthModule,
     CommentModule,
     ChatModule,
+
     EventsModule,
     EjsModule,
   ],
