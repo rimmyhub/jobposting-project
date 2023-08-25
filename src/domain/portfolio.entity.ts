@@ -15,6 +15,9 @@ export class Portfolio {
   @Column({ type: 'varchar', comment: '파일' })
   file: string;
 
-  @ManyToOne(() => Resume, (resume) => resume.portfolio)
+  @ManyToOne(() => Resume, (resume) => resume.portfolio, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   resume: Resume;
 }

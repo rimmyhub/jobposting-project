@@ -108,7 +108,7 @@ export class ResumeService {
     // 예외 처리
     if (!resume) {
       throw new HttpException(
-        { message: '이력서가 존재하지 않습니다. 이력서를 작성하세요.' },
+        { message: '아직 작성하신 이력서가 없으시네용 ~~??' },
         HttpStatus.NOT_FOUND,
       );
     }
@@ -160,7 +160,10 @@ export class ResumeService {
     });
     // 예외처리
     if (!resume) {
-      throw new HttpException('Not found resume', HttpStatus.NOT_FOUND);
+      throw new HttpException(
+        '어머 해당하는 이력서가 없네유??',
+        HttpStatus.NOT_FOUND,
+      );
     }
     // SOFT_REMOVED 이력서
     const deletedResume = await this.resumeRepository.remove(resume);
@@ -170,6 +173,6 @@ export class ResumeService {
     }
 
     // 반환값
-    return { message: `${deletedResume.title} 이력서가 삭제되었습니다.` };
+    return deletedResume;
   }
 }
