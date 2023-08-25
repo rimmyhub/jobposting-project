@@ -82,7 +82,7 @@ export class UserService {
   }
 
   // 유저생성
-  async create(createUserDto: CreateUserDto): Promise<User> {
+  async create(createUserDto: CreateUserDto) {
     const { email, address, birth, gender, name, password, phone, image } =
       createUserDto;
 
@@ -98,7 +98,7 @@ export class UserService {
       );
     }
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = await this.userRepository.save({
+    await this.userRepository.save({
       email,
       password: hashedPassword,
       name,
@@ -108,56 +108,7 @@ export class UserService {
       phone,
       image,
     });
-    return newUser;
-  }
-
-
-  // 이메일 인증을 완료하는 함수
-  async completeVerification(userId: number): Promise<void> {
-    // 유저 정보를 DB에서 찾아주자
-    const user = await this.userRepository.findOne({
-      where: { id: userId },
-    });
-
-    // 유저가 없을시 예외처리
-    if (!user) {
-      throw new HttpException(
-        '유저를 찾을 수 없습니다.',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-
-    
-    // 이미 인증을 한 유저인지 확인
-    if (!user.isVerified) {
-      // 유저의 인증 상태를 변경
-      user.isVerified = true;
-      user.verificationCode = null;
-
-      await this.userRepository.save(user); // 변경된 상태를 저장
-    } else {
-      console.log('이미 인증된 상태입니다.');
-    }
-  }
-
-  // 입력된 인증번호와 DB의 인증번호가 일치하는지 판단하는 함수
-  async verifyCode(userId: number, code: string): Promise<boolean> {
-    // 유저 정보를 DB에서 찾아주자
-    const user = await this.userRepository.findOne({
-      where: { id: userId },
-      select: ['verificationCode'],
-    });
-
-    // 유저가 없을시 예외처리
-    if (!user) {
-      throw new HttpException(
-        '유저를 찾을 수 없습니다.',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-
-    // 입력된 인증번호와 DB의 인증번호가 일치하는지 판단
-    return user.verificationCode === code;
+    return '회원가입이 완료되었습니다.';
   }
 
   // 유저정보 수정
@@ -203,12 +154,12 @@ export class UserService {
 
   // 유저의 이메일을 찾아주는 함수
   async findEmail(email: string) {
-    const user = await this.userRepository.findOne({
-      select: ['id', 'email', 'password', 'isVerified'],
+    const isEmail = await this.userRepository.findOne({
+      select: { id: true, email: true, password: true },
       where: { email },
     });
 
-    return user;
+    return isEmail;
   }
 
   // getUserRefTokenMatch
@@ -231,11 +182,5 @@ export class UserService {
     if (isRefTokenMatch) {
       return user;
     }
-  }
-
-  // 사용자의 인증 번호 설정
-  async setVerificationCode(userId: number, code: string): Promise<void> {
-    // 사용자의 인증 번호 업데이트
-    await this.userRepository.update(userId, { verificationCode: code });
   }
 }
