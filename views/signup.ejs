@@ -34,9 +34,20 @@
           <div class="profile-box">
             <!-- public폴더에 경로가 고정되어있기때문에 
               경로맨 앞에 "/"를 붙이고 아래의 경로로 탐색한다. -->
-            <img src="/img/userImg.jpg" class="user-img" alt="" srcset="" />
+            <img
+              src="/img/userImg.jpg"
+              id="image"
+              class="user-img"
+              alt=""
+              srcset=""
+            />
             <i class="fa-solid fa-pen edit-icon"></i>
-            <input class="img-file" type="file" accept="image/jpeg, image/png" />
+            <input
+              id="upload-image"
+              class="img-file"
+              type="file"
+              accept="image/jpeg, image/png"
+            />
           </div>
 
           <% if (type === "user") { %>
@@ -92,7 +103,7 @@
           <div class="email-input-box input-box">
             <input id="input-employees" type="text" placeholder="employees" />
           </div>
-          <% } %> 
+          <% } %>
           <div class="email-input-box">
             <input
               id="signup-btn"
@@ -101,10 +112,10 @@
               type="button"
             />
           </div>
-          
+
           <% if (type === "user") { %>
-          <h4 class="signup-btn" >
-            <a " href="/signup/company">회사로 회원가입하기 </a>
+          <h4 class="signup-btn">
+            <a href="/signup/company">회사로 회원가입하기 </a>
           </h4>
 
           <% } else if (type === 'company') { %>
@@ -112,7 +123,6 @@
             <a href="/signup/user">유저로 회원가입하기 </a>
           </h4>
           <% } %>
-
         </div>
       </div>
     </div>

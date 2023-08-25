@@ -90,7 +90,7 @@ export class JobpostingService {
   ): Promise<Jobposting> {
     // 회사 아이디가 있는지 확인
     const existingCompany = await this.jobpostingRepository.findOne({
-      where: { id: companyId },
+      where: { companyId },
     });
 
     // 해당 id가 있는 채용 공고 있는지 확인

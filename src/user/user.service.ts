@@ -85,6 +85,8 @@ export class UserService {
   async create(createUserDto: CreateUserDto): Promise<User> {
     const { email, address, birth, gender, name, password, phone, image } =
       createUserDto;
+
+    console.log(image);
     // 유저의 이메일이 중복되는지 확인
     const isEmail = await this.findEmail(email);
 
