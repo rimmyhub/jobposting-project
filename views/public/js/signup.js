@@ -8,6 +8,7 @@ signupBtn.addEventListener('click', () => {
   signup();
 });
 
+// 이미지 업로드
 const userImage = document.getElementById('image');
 const imageUploadEl = document.getElementById('upload-image');
 
@@ -109,6 +110,7 @@ const signup = async () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
+        image: imageUrl,
         email: email,
         title: title,
         password: password,

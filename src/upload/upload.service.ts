@@ -14,5 +14,3 @@ export class UploadService {
     return { url: file.location };
   }
 }
-
-// 업로드된 이미지를 다시 불러올지에 대한 정보가 없음.

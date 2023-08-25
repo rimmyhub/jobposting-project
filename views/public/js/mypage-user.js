@@ -4,6 +4,44 @@ document.addEventListener('DOMContentLoaded', (e) => {
   init();
 });
 
+// 이미지 업로드
+const userImage = document.getElementById('image');
+const imageUploadEl = document.getElementById('upload-image');
+
+imageUploadEl.addEventListener('change', async (e) => {
+  const selectedFile = e.target.files[0];
+
+  // console.log(selectedFile);
+  if (selectedFile.size > 1 * 1024 * 1024) {
+    alert('파일용량은 최대 1MB입니다.');
+    return;
+  }
+  console.log(selectedFile.size);
+  if (
+    !selectedFile.type.includes('jpeg') &&
+    !selectedFile.type.includes('png')
+  ) {
+    alert('jpeg 또는 png 파일만 업로드 가능합니다!');
+    return;
+  }
+  const formData = new FormData();
+  formData.append('file', selectedFile);
+  // console.log(formData);
+  // console.log(selectedFile);
+
+  const response = await fetch('/api/upload', {
+    method: 'POST',
+    body: formData,
+  });
+  console.log(response);
+  const data = await response.json();
+  console.log(data);
+
+  imageUrl = data.url;
+
+  userImage.setAttribute('src', imageUrl);
+});
+
 // Get 요청 함수 모음
 function init() {
   // 유저 데이터
