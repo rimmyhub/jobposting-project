@@ -1,0 +1,41 @@
+.apply-container {
+  display: flex;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  width: 700px;
+}
+
+.apply-container > div:nth-child(1) > h5 {
+  transform: translateY(4px);
+}
+
+.apply-list {
+  flex-grow: 1;
+  margin-left: 25px;
+}
+
+.apply-card {
+  /* display: flex;
+  justify-content: space-between;
+  align-items: center; */
+  width: 100%;
+  margin-bottom: 10px;
+  border-bottom: 0.5px solid #54679d;
+  padding-bottom: 20px;
+}
+
+.button-wrapper {
+  margin-left: auto;
+}
+
+.apply-card > button {
+  border: 0.8px solid #396cf9;
+  background-color: white;
+  border-radius: 8px;
+  width: 100px;
+  color: #396cf9;
+
+  order: 1;
+}
