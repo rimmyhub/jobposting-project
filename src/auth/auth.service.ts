@@ -80,7 +80,7 @@ export class AuthService {
   // validate
   async validateClient(email: string, password: string, role: string) {
     let clientInfo: any;
-    // 유저인지 회사인지 사판단한다.
+    // 유저인지 회사인지 판단한다.
     if (role === 'user') {
       // 해당 이메일의 유저정보가 있는지 확인
       clientInfo = await this.userService.findEmail(email);
@@ -92,7 +92,21 @@ export class AuthService {
 
     // 로그인한 회사의 id email password를 result에 담는다.
     // 패스워드일치 확인
+    if (!clientInfo) {
+      throw new HttpException(
+        '존재하지 않는 사용자입니다.',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
     await this.validatePassword(password, clientInfo.password);
+
+    if (!clientInfo.isVerified) {
+      throw new HttpException(
+        '이메일 인증이 완료되지 않았습니다.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
 
     const payload = {
       id: clientInfo.id,
