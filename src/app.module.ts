@@ -17,6 +17,7 @@ import { AuthModule } from './auth/auth.module';
 import { CommentModule } from './comment/comment.module';
 import { ChatModule } from './chat/chat.module';
 import { ChatGateway } from './chat/chat.geteway';
+import { MailModule } from './mail/mail.module';
 import { UploadModule } from './upload/upload.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { EventsModule } from './events/events.module';
@@ -40,6 +41,7 @@ import { EventsModule } from './events/events.module';
     AuthModule,
     CommentModule,
     ChatModule,
+    MailModule,
     EventsModule,
   ],
   controllers: [AppController],

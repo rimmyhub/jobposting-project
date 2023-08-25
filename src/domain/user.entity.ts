@@ -43,6 +43,14 @@ export class User {
   @Column({ type: 'varchar', length: 10, comment: '생일' })
   birth: string;
 
+  // 인증 번호
+  @Column({ type: 'varchar', length: 10, comment: '인증번호' })
+  verificationCode: string;
+
+  // 인증이 완료되면 true로 변경
+  @Column({ default: false })
+  isVerified: boolean;
+
   @CreateDateColumn({ name: 'create_at', comment: '생성일' })
   createdAt: Date;
 
