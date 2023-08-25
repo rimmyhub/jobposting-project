@@ -38,7 +38,8 @@ export class UserController {
     await this.mailService.sendMail(newUser.email, verificationCode);
     // 생성된 인증 코드를 유저 정보에 저장
     await this.userService.setVerificationCode(newUser.id, verificationCode);
-    return newUser;
+
+    return { message: '회원가입되었습니다.' }; // 메세지 응답 추가
   }
 
   private generateVerificationCode(): string {
