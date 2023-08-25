@@ -36,7 +36,14 @@ export class CareerService {
 
   // findAllCareer 함수는 모든 경력 정보를 조회한다.
   async findAllCareer(resumeId: number): Promise<Career[]> {
-    return this.careerRepository.find({ where: { resumeId } });
+    const careers = await this.careerRepository.find({ where: { resumeId } });
+    if (careers.length === 0) {
+      throw new HttpException(
+        '아직 경력을 등록하지 않으셨어요 !!',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    return careers;
   }
 
   // updateCareer 함수는 특정 ID에 해당하는 경력 정보를 업데이트한다.
@@ -49,9 +56,7 @@ export class CareerService {
       );
     }
     Object.assign(career, updateCareerDto);
-    await this.careerRepository.save(career);
-
-    return `해당 경력이 수정되었습니다.`;
+    return await this.careerRepository.save(career);
   }
 
   // removeCareer 함수는 특정 ID에 해당하는 경력 정보를 삭제한다.

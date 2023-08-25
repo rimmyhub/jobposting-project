@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  Put,
 } from '@nestjs/common';
 
 import { CareerService } from './career.service';
@@ -39,7 +40,7 @@ export class CareerController {
 
   // 경력 수정
   @UseGuards(UserGuard)
-  @Patch(':careerId')
+  @Put(':careerId')
   updateCareer(
     @Param('careerId') id: string,
     @Body() updateCareerDto: UpdateCareerDto,

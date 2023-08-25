@@ -36,6 +36,9 @@ export class EducationService {
         HttpStatus.PRECONDITION_FAILED,
       );
     }
+
+    console.log(education);
+
     // 연도 예외 처리
     if (admissionYear > graduationYear) {
       throw new HttpException(
@@ -74,6 +77,15 @@ export class EducationService {
 
   // 학력 - 조회
   async findEducation(resumeId: number): Promise<Education[]> {
+    const resume = await this.educationRepository.find({ where: { resumeId } });
+
+    if (!resume) {
+      throw new HttpException(
+        '아직 "학력"을 등록할 "이력서"가 없으시네용 ㅎ.ㅎ',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
     const educations = await this.educationRepository.find({
       where: { resumeId },
     });
@@ -150,8 +162,8 @@ export class EducationService {
       throw new HttpException('Not found Education', HttpStatus.NOT_FOUND);
     }
     // 삭제
-    this.educationRepository.remove(eduData);
+    const deletedEducation = await this.educationRepository.remove(eduData);
     // 반환
-    return { message: '학력이 삭제되었습니다.' };
+    return { message: `${deletedEducation.education} 학력이 삭제되었습니다.` };
   }
 }
