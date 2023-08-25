@@ -8,8 +8,8 @@ import {
   Post,
   UseGuards,
   Request,
-  UsePipes,
   ValidationPipe,
+  UsePipes,
 } from '@nestjs/common';
 import { CompanyService } from './company.service';
 import { CreateCompanyDto } from './dto/create-company.dto';

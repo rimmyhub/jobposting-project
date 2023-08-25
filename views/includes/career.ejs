@@ -11,7 +11,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">경력 수정</h1>
         <button
           type="button"
           class="btn-close"
@@ -19,12 +19,64 @@
           aria-label="Close"
         ></button>
       </div>
-      <div class="modal-body">...</div>
+      <div class="modal-body text-start">
+        <!-- 회사명 -->
+        <div class="modal-body">
+          <div class="mb-3 row">
+            <label class="col-sm-3 col-form-label">회사명</label>
+            <div class="col-sm-9">
+              <input class="form-control" id="careerUpdateName" />
+            </div>
+          </div>
+          <!-- 회사명 -->
+          <!-- 직책 -->
+          <div class="mb-3 row">
+            <label class="col-sm-3 col-form-label">직책</label>
+            <div class="col-sm-9">
+              <input class="form-control" id="careerUpdatePosition" />
+            </div>
+          </div>
+          <!-- 직책 -->
+          <!-- 직무 -->
+          <div class="mb-3 row">
+            <label class="col-sm-3 col-form-label">직무</label>
+            <div class="col-sm-9">
+              <input class="form-control" id="updateCareerJob" />
+            </div>
+          </div>
+          <!-- 직무 -->
+          <!-- 입사날짜 -->
+          <div class="mb-3 row">
+            <label class="col-sm-3 col-form-label">입사날짜</label>
+            <div class="col-sm-9">
+              <input class="form-control" id="updateCareerJoiningDate" />
+            </div>
+          </div>
+          <!-- 입사날짜 -->
+          <!-- 퇴사날짜 -->
+          <div class="mb-3 row">
+            <label class="col-sm-3 col-form-label">퇴사날짜</label>
+            <div class="col-sm-9">
+              <input class="form-control" id="updateCareerResignationDate" />
+            </div>
+          </div>
+          <!-- 퇴사날짜 -->
+        </div>
+      </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-          Close
+        <button
+          type="button"
+          class="btn btn-outline-secondary"
+          id="deleteCareerBtn"
+        >
+          삭제
         </button>
-        <button type="button" class="btn btn-primary">Understood</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          취소
+        </button>
+        <button type="button" class="btn btn-primary" id="updateCareerBtn">
+          저장
+        </button>
       </div>
     </div>
   </div>

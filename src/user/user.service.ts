@@ -3,19 +3,58 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 // 데이터베이스와 레포지토리를 쓰려면
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Not, IsNull } from 'typeorm';
+import { Repository, Not, IsNull, And } from 'typeorm';
 import { User } from '../domain/user.entity';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
+  findAllData(arg0: number) {
+    throw new Error('Method not implemented.');
+  }
   // 레포지토리를 쓰려면 constructor에 정의
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
   ) {}
 
-  // 유저 refeshToken 저장
+  // 유저의 모든 정보를 조회하는 로직
+  async findAllUserData(userId: number) {
+    console.log(userId); // 1
+    const userAllInfo = await this.userRepository
+      .createQueryBuilder('user')
+      .select([
+        'user.name',
+        'user.email',
+        'user.gender',
+        'user.phone',
+        'user.address',
+        'resume.title',
+        'resume.content',
+        'education.schoolTitle',
+        'education.major',
+        'education.admissionYear',
+        'education.graduationYear',
+        'career.companyTitle',
+        'career.position',
+        'career.job',
+        'career.joiningDate',
+        'career.resignationDate',
+        'portfolio.file',
+        'portfolio.address',
+        'aboutme.title',
+        'aboutme.content',
+      ])
+      .innerJoin('user.resume', 'resume')
+      .innerJoin('resume.education', 'education')
+      .innerJoin('resume.career', 'career')
+      .innerJoin('resume.portfolio', 'portfolio')
+      .innerJoin('resume.aboutme', 'aboutme')
+      .where('user.id = :id', { id: userId })
+      .getMany();
+
+    return userAllInfo;
+  }
 
   // 유저정보상세조회
   async findOne(id: number) {
@@ -28,6 +67,7 @@ export class UserService {
         gender: true,
         address: true,
         birth: true,
+        image: true,
       },
       where: { id: id }, // deleteAt값이 null인값만 찾는다
     });
@@ -43,7 +83,7 @@ export class UserService {
 
   // 유저생성
   async create(createUserDto: CreateUserDto): Promise<User> {
-    const { email, address, birth, gender, name, password, phone } =
+    const { email, address, birth, gender, name, password, phone, image } =
       createUserDto;
     // 유저의 이메일이 중복되는지 확인
     const isEmail = await this.findEmail(email);
@@ -58,15 +98,17 @@ export class UserService {
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = await this.userRepository.save({
       email,
+      password: hashedPassword,
+      name,
       address,
       birth,
       gender,
-      name,
-      password: hashedPassword,
       phone,
+      image,
     });
     return newUser;
   }
+
 
   // 이메일 인증을 완료하는 함수
   async completeVerification(userId: number): Promise<void> {
@@ -83,6 +125,7 @@ export class UserService {
       );
     }
 
+    
     // 이미 인증을 한 유저인지 확인
     if (!user.isVerified) {
       // 유저의 인증 상태를 변경
@@ -105,7 +148,10 @@ export class UserService {
 
     // 유저가 없을시 예외처리
     if (!user) {
-      return false;
+      throw new HttpException(
+        '유저를 찾을 수 없습니다.',
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     // 입력된 인증번호와 DB의 인증번호가 일치하는지 판단
@@ -117,7 +163,7 @@ export class UserService {
     // 먼저 유저가 있는지 확인한다.
     await this.findOne(id);
     this.userRepository.update(id, updateUserDto);
-    return `수정이 완료되었습니다.`;
+    return { message: `수정이 완료되었습니다.` };
   }
 
   // 유저 탈퇴 deleteAt에 삭제시간 넣기
@@ -132,6 +178,7 @@ export class UserService {
         gender: true,
         address: true,
         birth: true,
+        image: true,
       },
       where: { id, deletedAt: Not(IsNull()) },
     });

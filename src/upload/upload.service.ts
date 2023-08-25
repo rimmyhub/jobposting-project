@@ -27,3 +27,9 @@ export class UploadService {
     );
   }
 }
+
+// const result = await this.s3.upload(params).promise();
+// return result.Location;
+
+//업로드 서비스에 프로필 테이블에 저장 or s3에 저장하는 로직을 만을어야함
+// 유저 레포지토리에있는 유저를 불러와서

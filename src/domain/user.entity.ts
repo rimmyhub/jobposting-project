@@ -7,6 +7,7 @@ import {
   DeleteDateColumn,
   OneToMany,
   OneToOne,
+  JoinColumn,
 } from 'typeorm';
 import { Education } from '../domain/education.entity';
 import { Chat } from './chat.entity';
@@ -23,6 +24,9 @@ export class User {
 
   @Column({ type: 'varchar', length: 150, comment: '패스워드' })
   password: string;
+
+  @Column({ type: 'text', comment: '사용자 이미지' })
+  image: string;
 
   @Column({ type: 'varchar', length: 30, comment: '유저 이름' })
   name: string;
@@ -80,7 +84,8 @@ export class User {
   applicant: Applicant[];
 
   // 1대1관계 이력서 -- 유저
-  @OneToOne(() => Resume, (resume) => resume.user)
+  @OneToOne((type) => Resume)
+  @JoinColumn()
   resume: Resume;
 
   @OneToMany(() => Comment, (comment) => comment.user)

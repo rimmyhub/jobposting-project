@@ -11,6 +11,7 @@ import {
   UsePipes,
   ValidationPipe,
   Request,
+  Put,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { MailService } from '../mail/mail.service';
@@ -64,15 +65,30 @@ export class UserController {
 
   // 유저정보 상세조회
   @UseGuards(UserGuard)
-  @Get('/user-page')
+  @Get('/user-page/:id')
   findOne(@Request() req) {
+    // if (id) {
+    //   console.log('findOne = ', id);
+    //   return this.userService.findOne(id);
+    // }
     // AuthGuard로 받은 req안에 user에 접근하면 현재 로그인한 유저(회사)의 정보에 접근할 수 있습니다.
     return this.userService.findOne(req.user.id);
+  }
+  // 유저정보 조회
+  @Get('/user/:id')
+  findUser(@Param('id') id: number) {
+    return this.userService.findOne(id);
+  }
+
+  // 유저의 모든 정보 조회
+  @Get('/:userId/mypage')
+  findAll(@Param('userId') userId: number) {
+    return this.userService.findAllUserData(+userId);
   }
 
   // 유저정보 수정
   @UseGuards(UserGuard)
-  @Patch()
+  @Put()
   update(@Request() req, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(req.user.id, updateUserDto);
   }

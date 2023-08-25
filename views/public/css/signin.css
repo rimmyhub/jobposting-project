@@ -10,8 +10,8 @@
 }
 
 .signin-box {
+  padding-bottom: 20px;
   width: 659px;
-  height: 455px;
   border-radius: 10px;
   position: absolute;
   transform: translate(-50%, -50%);
@@ -62,4 +62,8 @@
 .signup-btn {
   color: black;
   cursor: pointer;
+}
+
+.signup-btn > h4 > a {
+  text-decoration: none;
 }

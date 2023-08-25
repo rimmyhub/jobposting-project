@@ -3,7 +3,7 @@ import { CreateResumeDto } from './dto/create-resume.dto';
 import { UpdateResumeDto } from './dto/update-resume.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Resume } from 'src/domain/resume.entity';
-import { LessThan, Repository } from 'typeorm';
+import { IsNull, LessThan, Not, Repository } from 'typeorm';
 import { Cron } from '@nestjs/schedule';
 
 @Injectable()
@@ -17,21 +17,24 @@ export class ResumeService {
   ) {}
 
   // 소프트리무브 시킨 이력서가 시간이 지나면 자동으로 삭제 하는 로직
-  @Cron('0 0 * * *') // 왼쪽 0부터 초, 분, 시, 일, 월, 요일
-  async cleanupOldResumes() {
+  @Cron('0 0 * * *') // 프로덕션 환경에서는 해당 코드
+  // @Cron('*/10 * * * * *') // 개발환경에서는 10초마다 해당 데코레이터 실행으로 설정해서 코드 작업 하시쥬
+  async cleanupResumes() {
     // Date 타입의 데이터를 담고
     const oneDayAgo = new Date();
     // 담은 데이터에서 1일을 뺀 데이터를 세팅
     oneDayAgo.setDate(oneDayAgo.getDate() - 1);
     // 1일 이전에 소프트리무브 시킨 이력서 삭제
     const cleanupTarget = await this.resumeRepository.find({
-      where: {
-        deletedAt: LessThan(oneDayAgo),
-      },
+      withDeleted: true,
     });
     // 완전 삭제시킬 cleanupTarget list에서 하나하나를 DB에서 삭제해준다.
     for (const resume of cleanupTarget) {
-      await this.resumeRepository.delete(resume);
+      // 뽑아온 데이터에서 삭제할 데이터들 조건 만들기
+      if (resume.deletedAt <= oneDayAgo && resume.deletedAt !== null) {
+        // db에서 삭제 ==> delete 사용시 삭제 안됨 !!
+        await this.resumeRepository.remove(resume);
+      }
     }
   }
 
@@ -77,11 +80,21 @@ export class ResumeService {
 
   // 이력서 - 전체 조회
   async findAllResume(): Promise<Resume[]> {
-    // 삭제되지 않은 이력서 중에서 이력서의 제목만 반환
-    return await this.resumeRepository.find({
-      where: { deletedAt: null },
-      select: ['id', 'userId', 'title'],
-    });
+    const result = await this.resumeRepository
+      .createQueryBuilder('resume')
+      .select([
+        'resume.id',
+        'resume.title',
+        'resume.userId',
+        'resume.content',
+        'user.name',
+        'user.id',
+      ]) // user테이블의 name만 가져오기
+      .innerJoin('resume.user', 'user') // user테이블과 join
+      .where('resume.deletedAt IS NULL') // deleteAt에 null값이 들어있는 데이터만 가져오기
+      .getMany();
+
+    return result;
   }
 
   // 이력서 - 상세 조회
@@ -91,9 +104,13 @@ export class ResumeService {
       where: { id: resumeId },
       select: ['userId', 'title', 'content'],
     });
+
     // 예외 처리
     if (!resume) {
-      throw new HttpException('Not found resume', HttpStatus.NOT_FOUND);
+      throw new HttpException(
+        { message: '아직 작성하신 이력서가 없으시네용 ~~??' },
+        HttpStatus.NOT_FOUND,
+      );
     }
     // 반환
     return resume;
@@ -143,16 +160,19 @@ export class ResumeService {
     });
     // 예외처리
     if (!resume) {
-      throw new HttpException('Not found resume', HttpStatus.NOT_FOUND);
+      throw new HttpException(
+        '어머 해당하는 이력서가 없네유??',
+        HttpStatus.NOT_FOUND,
+      );
     }
     // SOFT_REMOVED 이력서
-    const deletedResume = await this.resumeRepository.softRemove(resume);
+    const deletedResume = await this.resumeRepository.remove(resume);
     // 예외처리
     if (!deletedResume) {
       throw new HttpException('삭제에 실패하였습니다.', HttpStatus.BAD_REQUEST);
     }
 
     // 반환값
-    return { message: `${deletedResume.title} 이력서가 삭제되었습니다.` };
+    return deletedResume;
   }
 }

@@ -16,6 +16,7 @@
       crossorigin="anonymous"
     ></script>
 
+    <title>Document</title>
     <style>
       /* 추가 수정버튼 마진값 */
       .fa-solid {
@@ -27,23 +28,20 @@
         margin: 10px;
       }
     </style>
-    <title>Document</title>
   </head>
   <body>
-    <%- include('includes/header') %>
+    <%- include('includes/header', {isLogin: 1, type: "user"}) %>
     <!-- 전체 컨테이너 -->
     <div class="container text-center">
       <!-- 브레드크롬 -->
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item"><a href="/">Home</a></li>
           <li class="breadcrumb-item active" aria-current="page">
-            mypage / company
+            mypage / user
           </li>
         </ol>
       </nav>
-
-      <!-- 최상단 영역 메세지보내기까지 -->
       <div class="row">
         <div class="col">
           <img
@@ -54,12 +52,20 @@
           />
         </div>
       </div>
-      <div style="margin: 10px">
-        <button type="button" class="btn btn-primary">이미지 수정</button>
-      </div>
+      <!-- 이미지 수정 버튼 -->
+      <button
+        type="button"
+        class="btn btn-primary fa-solid fa-pen"
+        data-bs-toggle="modal"
+        data-bs-target="#profile-user-image"
+      >
+        이미지 수정
+      </button>
+      <!-- 최상단 영역 메세지보내기까지 -->
+      <%- include('includes/profile-user-image') %>
+      <hr />
     </div>
     <!-- 구분선 -->
-    <hr />
 
     <!-- 이력서타이틀 -->
     <div class="container">
@@ -69,26 +75,23 @@
     <!-- 개인소개 영역 -->
     <div class="container text-center">
       <div class="row">
-        <div class="col-sm-2">
+        <div class="col-2">
           <p class="text-start fs-5 fw-semibold" style="margin: 10px">소개</p>
         </div>
 
-        <div class="col-sm-8">
+        <div class="col-8" id="resumeBox">
           <p
             class="fs-2 fw-semibold text-start information"
             style="margin: 10px"
           >
-            컴퓨터공학과 전공, 업무 맞춤 인재 홍길동입니다
+            예시 ) 이력서 제목입니다.
           </p>
-          <p class="text-start">
-            Dreaming AI World by Developing AI Packs for Everyone to Make AI
-            Beneficial!
-          </p>
+          <p class="text-start">예시 ) 이력서 설명 입니다.</p>
           <!-- 구분선 -->
           <hr />
         </div>
         <!-- 수정 아이콘 -->
-        <div class="col-sm-2">
+        <div class="col-2">
           <!-- 모달 -->
           <button
             type="button"
@@ -108,19 +111,19 @@
     <!-- 개인정보 영역 -->
     <div class="container text-center">
       <div class="row">
-        <div class="col-sm-2">
+        <div class="col-2">
           <p class="text-start fs-5 fw-semibold" style="margin: 10px">
             개인 정보
           </p>
         </div>
 
-        <div class="col-sm-8">
+        <div class="col-8" id="userInfoBox">
           <!-- 이름 -->
           <div class="row">
-            <div class="col-sm-4">
+            <div class="col-4">
               <p class="text-start text-body-secondary">이름</p>
             </div>
-            <div class="col-sm-8">
+            <div class="col-8">
               <p class="text-start">홍길동</p>
             </div>
           </div>
@@ -128,10 +131,10 @@
 
           <!-- 이메일 -->
           <div class="row">
-            <div class="col-sm-4">
+            <div class="col-4">
               <p class="text-start text-body-secondary">이메일</p>
             </div>
-            <div class="col-sm-8">
+            <div class="col-8">
               <p class="text-start">asdf1234@gmail.com</p>
             </div>
           </div>
@@ -139,10 +142,10 @@
 
           <!-- 전화번호 -->
           <div class="row">
-            <div class="col-sm-4">
+            <div class="col-4">
               <p class="text-start text-body-secondary">전화번호</p>
             </div>
-            <div class="col-sm-8">
+            <div class="col-8">
               <p class="text-start">010-1234-1234</p>
             </div>
           </div>
@@ -150,10 +153,10 @@
 
           <!-- 성별 -->
           <div class="row">
-            <div class="col-sm-4">
+            <div class="col-4">
               <p class="text-start text-body-secondary">성별</p>
             </div>
-            <div class="col-sm-8">
+            <div class="col-8">
               <p class="text-start">남자</p>
             </div>
           </div>
@@ -161,10 +164,10 @@
 
           <!-- 주소 -->
           <div class="row">
-            <div class="col-sm-4">
+            <div class="col-4">
               <p class="text-start text-body-secondary">주소</p>
             </div>
-            <div class="col-sm-8">
+            <div class="col-8">
               <p class="text-start">경기도 성남시 분당고 불정로</p>
             </div>
           </div>
@@ -172,17 +175,17 @@
 
           <!-- 생년월일 -->
           <div class="row">
-            <div class="col-sm-4">
+            <div class="col-4">
               <p class="text-start text-body-secondary">생년월일</p>
             </div>
-            <div class="col-sm-8">
+            <div class="col-8">
               <p class="text-start">2000 - 08 -16</p>
             </div>
           </div>
           <!-- 생년월일 -->
         </div>
         <!-- 수정 아이콘 -->
-        <div class="col-sm-2">
+        <div class="col-2">
           <!-- 모달 -->
           <button
             type="button"
@@ -197,75 +200,72 @@
           <!-- 개인정보 -->
         </div>
       </div>
+      <hr />
     </div>
     <!-- 개인정보 -->
-
-    <hr />
 
     <!-- 학력 영역 -->
     <div class="container text-center">
       <div class="row">
-        <div class="col-sm-2">
+        <div class="col-2">
           <p class="text-start fs-5 fw-semibold" style="margin: 10px">학력</p>
         </div>
 
-        <div class="col-sm-8">
+        <div class="col-8" id="educationBox">
           <p
             class="fs-2 fw-semibold text-start information"
             style="margin: 10px"
           >
-            스파르타대학교(4년제)
+            예시 ) 스파르타대학교(4년제)
           </p>
 
           <!-- 구분선 -->
           <hr />
-
+          <!-- 학력 -->
+          <div class="row">
+            <div class="col-4">
+              <p class="text-start text-body-secondary">학력</p>
+            </div>
+            <div class="col-8">
+              <p class="text-start">대학교</p>
+            </div>
+          </div>
+          <!-- 학력 -->
           <!-- 전공 -->
           <div class="row">
-            <div class="col-sm-4">
+            <div class="col-4">
               <p class="text-start text-body-secondary">전공</p>
             </div>
             <div class="col-sm-8">
-              <p class="text-start">컴퓨터공학과</p>
+              <p class="text-start">예시 ) 컴퓨터공학과</p>
             </div>
           </div>
           <!-- 전공 -->
 
           <!-- 입학년도 -->
           <div class="row">
-            <div class="col-sm-4">
+            <div class="col-4">
               <p class="text-start text-body-secondary">입학년도</p>
             </div>
             <div class="col-sm-8">
-              <p class="text-start">2014년 3월</p>
+              <p class="text-start">예시 ) 2014년 3월</p>
             </div>
           </div>
           <!-- 입학년도 -->
 
           <!-- 졸업년도 -->
           <div class="row">
-            <div class="col-sm-4">
+            <div class="col-4">
               <p class="text-start text-body-secondary">졸업년도</p>
             </div>
             <div class="col-sm-8">
-              <p class="text-start">2018년 2월</p>
+              <p class="text-start">예시 ) 2018년 2월</p>
             </div>
           </div>
           <!-- 졸업년도 -->
-
-          <!-- 퇴사날짜 -->
-          <div class="row">
-            <div class="col-sm-4">
-              <p class="text-start text-body-secondary">퇴사날짜</p>
-            </div>
-            <div class="col-sm-8">
-              <p class="text-start">2018년 3월</p>
-            </div>
-          </div>
-          <!-- 퇴사날짜 -->
         </div>
         <!-- 수정 아이콘 -->
-        <div class="col-sm-2" style="margin-top: 20px">
+        <div class="col-2" style="margin-top: 20px">
           <!-- 추가 모달 -->
           <button
             type="button"
@@ -291,24 +291,23 @@
           <!-- 수정 모달 -->
         </div>
       </div>
+      <hr />
     </div>
     <!-- 경력 정보 영역 -->
-
-    <hr />
 
     <!-- 경력 영역 -->
     <div class="container text-center">
       <div class="row">
-        <div class="col-sm-2">
+        <div class="col-2">
           <p class="text-start fs-5 fw-semibold" style="margin: 10px">경력</p>
         </div>
 
-        <div class="col-sm-8">
+        <div class="col-8" id="careerBox">
           <p
             class="fs-2 fw-semibold text-start information"
             style="margin: 10px"
           >
-            스파르타 주식회사
+            예시 ) 스파르타 주식회사
           </p>
 
           <!-- 구분선 -->
@@ -316,21 +315,21 @@
 
           <!-- 직책 -->
           <div class="row">
-            <div class="col-sm-4">
+            <div class="col-4">
               <p class="text-start text-body-secondary">직책</p>
             </div>
-            <div class="col-sm-8">
-              <p class="text-start">대리</p>
+            <div class="col-8">
+              <p class="text-start">예시 ) 대리</p>
             </div>
           </div>
           <!-- 직책 -->
 
           <!-- 직무 -->
           <div class="row">
-            <div class="col-sm-4">
+            <div class="col-4">
               <p class="text-start text-body-secondary">직무</p>
             </div>
-            <div class="col-sm-8">
+            <div class="col-8">
               <p class="text-start">개발자</p>
             </div>
           </div>
@@ -338,28 +337,28 @@
 
           <!-- 입사날짜 -->
           <div class="row">
-            <div class="col-sm-4">
+            <div class="col-4">
               <p class="text-start text-body-secondary">입사날짜</p>
             </div>
-            <div class="col-sm-8">
-              <p class="text-start">2018년 3월</p>
+            <div class="col-8">
+              <p class="text-start">예시 ) 2018년 3월</p>
             </div>
           </div>
           <!-- 입사날짜 -->
 
           <!-- 퇴사날짜 -->
           <div class="row">
-            <div class="col-sm-4">
+            <div class="col-4">
               <p class="text-start text-body-secondary">퇴사날짜</p>
             </div>
-            <div class="col-sm-8">
-              <p class="text-start">2018년 3월</p>
+            <div class="col-8">
+              <p class="text-start">예시 ) 2018년 3월</p>
             </div>
           </div>
           <!-- 퇴사날짜 -->
         </div>
         <!-- 수정 아이콘 -->
-        <div class="col-sm-2" style="margin-top: 20px">
+        <div class="col-2" style="margin-top: 20px">
           <!-- 추가 모달 -->
           <button
             type="button"
@@ -385,45 +384,44 @@
           <!-- 수정 모달 -->
         </div>
       </div>
+      <hr />
     </div>
     <!-- 경력 정보 영역 -->
-
-    <hr />
 
     <!-- 포트폴리오 영역 -->
     <div class="container text-center">
       <div class="row">
-        <div class="col-sm-2">
+        <div class="col-2">
           <p class="text-start fs-5 fw-semibold" style="margin: 10px">
             포트폴리오
           </p>
         </div>
 
-        <div class="col-sm-8">
+        <div class="col-8" id="portfolioBox">
           <!-- 파일 -->
           <div class="row">
-            <div class="col-sm-4">
+            <div class="col-4">
               <p class="text-start text-body-secondary">파일</p>
             </div>
-            <div class="col-sm-8">
-              <p class="text-start">포트폴리오_홍길동.pdf</p>
+            <div class="col-8">
+              <p class="text-start">예시 ) 포트폴리오_홍길동.pdf</p>
             </div>
           </div>
           <!-- 파일 -->
 
           <!-- URL -->
           <div class="row">
-            <div class="col-sm-4">
+            <div class="col-4">
               <p class="text-start text-body-secondary">URL</p>
             </div>
-            <div class="col-sm-8">
-              <p class="text-start">이력서_홍길동.pdf</p>
+            <div class="col-8">
+              <p class="text-start">예시 ) 이력서_홍길동.pdf</p>
             </div>
           </div>
         </div>
         <!-- URL -->
         <!-- 수정 아이콘 -->
-        <div class="col-sm-2" style="margin-top: 20px">
+        <div class="col-2" style="margin-top: 20px">
           <!-- 추가 모달 -->
           <button
             type="button"
@@ -449,26 +447,25 @@
           <!-- 수정 모달 -->
         </div>
       </div>
+      <hr />
     </div>
     <!-- 포트폴리오 영역 -->
-
-    <hr />
 
     <!-- 자기소개서 영역 -->
     <div class="container text-center">
       <div class="row">
-        <div class="col-sm-2">
+        <div class="col-2">
           <p class="text-start fs-5 fw-semibold" style="margin: 10px">
             자기소개서
           </p>
         </div>
 
-        <div class="col-sm-8">
+        <div class="col-8" id="aboutMeBox">
           <p
             class="fs-2 fw-semibold text-start information"
             style="margin: 10px"
           >
-            지원동기
+            예시 ) 지원동기
           </p>
           <hr />
           <p class="text-start">
@@ -498,7 +495,7 @@
           </p>
           <!-- 수정 아이콘 -->
         </div>
-        <div class="col-sm-2" style="margin-top: 20px">
+        <div class="col-2" style="margin-top: 20px">
           <!-- 추가 모달 -->
           <button
             type="button"
@@ -516,7 +513,7 @@
             type="button"
             class="btn btn-primary fa-solid fa-pen"
             data-bs-toggle="modal"
-            data-bs-target="#staticBackdrop"
+            data-bs-target="#aboutme"
           >
             수정
           </button>
@@ -526,11 +523,14 @@
       </div>
     </div>
     <!-- 자기소개서 영역 -->
-
+    <!-- 여백값 주기 -->
+    <div class="p-4"></div>
+    <%- include('includes/footer') %>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
       crossorigin="anonymous"
     ></script>
   </body>
+  <script src="/js/mypage-user.js"></script>
 </html>

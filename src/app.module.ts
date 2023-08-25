@@ -19,6 +19,8 @@ import { ChatModule } from './chat/chat.module';
 import { ChatGateway } from './chat/chat.geteway';
 import { MailModule } from './mail/mail.module';
 import { UploadModule } from './upload/upload.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { EventsModule } from './events/events.module';
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({ useFactory: ormConfig }),
@@ -26,6 +28,7 @@ import { UploadModule } from './upload/upload.module';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    ScheduleModule.forRoot(),
     UserModule,
     CompanyModule,
     JobpostingModule,
@@ -39,6 +42,7 @@ import { UploadModule } from './upload/upload.module';
     CommentModule,
     ChatModule,
     MailModule,
+    EventsModule,
   ],
   controllers: [AppController],
   providers: [AppService, ChatGateway],

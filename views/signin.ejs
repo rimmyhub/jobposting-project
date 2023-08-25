@@ -21,10 +21,12 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
     />
+    <!-- ejs에서는 public아래의 경로를 써준과 동시에 defer을 붙여라 -->
+    <script src="/js/signin.js" defer></script>
   </head>
   <body>
     <div class="main-container">
-      <%- include('includes/header') %>
+      <%- include('includes/header', {isLogin: 0, type: "user"}) %>
       <div class="signin-container">
         <div class="box-shadow">
           <div class="signin-box">
@@ -32,22 +34,37 @@
             <h1>사용자 로그인</h1>
             <% } else if (type === 'company') { %>
             <h1>회사 로그인</h1>
-            <% } %>사용자 로그인
+            <% } %>
 
-            <div class="email-input-box">
+            <div id="email" class="email-input-box">
               <i class="fa-regular fa-user icon"></i>
-              <input type="text" />
+              <input id="input-email" type="text" />
             </div>
             <div class="email-input-box password-box">
               <i class="fa-solid fa-lock icon"></i>
-              <input type="text" />
+              <input id="input-password" type="text" />
             </div>
             <div class="email-input-box">
-              <input class="signin-btn" value="로그인" type="button" />
+              <input
+                id="signin"
+                class="signin-btn"
+                value="로그인"
+                type="button"
+              />
             </div>
             <div class="signup-box">
               <div class="signup-btn">
-                <h4>회원가입</h4>
+                <% if (type === "user") { %>
+                <h4>
+                  <a href="/signin/company"> 회사 로그인 </a>
+                </h4>
+
+                <% } else if (type === 'company') {%>
+                <h4>
+                  <a href="/signin/user"> 유저 로그인 </a>
+                </h4>
+
+                <% } %>
               </div>
             </div>
           </div>

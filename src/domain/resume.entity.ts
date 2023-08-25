@@ -7,6 +7,7 @@ import {
   DeleteDateColumn,
   OneToMany,
   OneToOne,
+  JoinColumn,
 } from 'typeorm';
 import { Aboutme } from './aboutme.entity';
 import { Portfolio } from './portfolio.entity';
@@ -19,7 +20,10 @@ export class Resume {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'int', comment: '해당 이력서의 유저 아이디' })
+  @Column({
+    name: 'user_id',
+    comment: '해당 이력서의 유저 아이디',
+  })
   userId: number;
 
   @Column({ type: 'varchar', length: 100, comment: '이력서제목' })
@@ -54,9 +58,7 @@ export class Resume {
   education: Education[];
 
   // 1대1 유저 -- 이력서
-  @OneToOne(() => User, (user) => user.resume, {
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
-  })
+  @OneToOne((type) => User, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
+  @JoinColumn()
   user: User;
 }

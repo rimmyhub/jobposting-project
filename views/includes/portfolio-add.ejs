@@ -11,7 +11,9 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">
+          포트폴리오 추가
+        </h1>
         <button
           type="button"
           class="btn-close"
@@ -19,12 +21,30 @@
           aria-label="Close"
         ></button>
       </div>
-      <div class="modal-body">...</div>
+      <div class="modal-body text-start">
+        <!-- 파일 -->
+        <div class="modal-body">
+          <div class="mb-3">
+            <input class="form-control" type="file" id="formFile" />
+          </div>
+          <!-- 파일 -->
+          <!-- URL -->
+          <div class="mb-3 row">
+            <label class="col-sm-2 col-form-label">URL</label>
+            <div class="col-sm-10">
+              <input class="form-control" id="addURLTag" />
+            </div>
+          </div>
+          <!-- URL -->
+        </div>
+      </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-          Close
+          취소
         </button>
-        <button type="button" class="btn btn-primary">Understood</button>
+        <button type="button" class="btn btn-primary" id="addPortfolioBtn">
+          저장
+        </button>
       </div>
     </div>
   </div>

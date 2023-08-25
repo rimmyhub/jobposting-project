@@ -41,6 +41,17 @@
   position: absolute;
   transform: translate(-50%, -50%);
   top: 90%;
+}
+
+.img-file {
+  cursor: pointer;
+  width: 17px;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 90%;
+  opacity: 0;
+}
+.img-file::-webkit-file-upload-button {
   cursor: pointer;
 }
 
@@ -62,4 +73,11 @@
 
 .gender-select::-ms-expand {
   display: none;
+}
+
+.signup-btn {
+  margin-bottom: 10px;
+}
+.signup-btn > a {
+  text-decoration: none;
 }

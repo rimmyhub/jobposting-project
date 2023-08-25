@@ -5,12 +5,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Education } from 'src/domain/education.entity';
 import { Repository } from 'typeorm';
 import { educationType } from 'commons/education.enums';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class EducationService {
   constructor(
     @InjectRepository(Education)
     private readonly educationRepository: Repository<Education>,
+    private configService: ConfigService,
   ) {}
 
   // 학력 - 등록
@@ -21,17 +23,33 @@ export class EducationService {
     // Body
     const { schoolTitle, admissionYear, graduationYear, major, education } =
       createEducationDto;
+    // 예외처리
+    if (
+      !schoolTitle ||
+      !admissionYear ||
+      !graduationYear ||
+      !major ||
+      !education
+    ) {
+      throw new HttpException(
+        '필수 요소를 입력해주세요',
+        HttpStatus.PRECONDITION_FAILED,
+      );
+    }
+
+    console.log(education);
+
     // 연도 예외 처리
     if (admissionYear > graduationYear) {
       throw new HttpException(
-        'Please set an appropriate year.',
+        '작성연도가 올바르지 않습니다.',
         HttpStatus.PRECONDITION_FAILED,
       );
     }
     // 일치한 타입이 없는경우 예외 처리
     if (!Object.keys(educationType).includes(education)) {
       throw new HttpException(
-        'Conflict Education Type',
+        '학력 타입이 올바르지 않습니다.',
         HttpStatus.BAD_REQUEST,
       );
     }
@@ -44,6 +62,13 @@ export class EducationService {
       major,
       education: educationType[education],
     });
+    // 예외처리
+    if (!resEducation) {
+      throw new HttpException(
+        '학력 등록에 실패하였습니다.',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
     // 저장
     await this.educationRepository.save(resEducation);
     // 반환
@@ -52,7 +77,25 @@ export class EducationService {
 
   // 학력 - 조회
   async findEducation(resumeId: number): Promise<Education[]> {
-    return await this.educationRepository.find({ where: { resumeId } });
+    const resume = await this.educationRepository.find({ where: { resumeId } });
+
+    if (!resume) {
+      throw new HttpException(
+        '아직 "학력"을 등록할 "이력서"가 없으시네용 ㅎ.ㅎ',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    const educations = await this.educationRepository.find({
+      where: { resumeId },
+    });
+    if (!educations.length) {
+      throw new HttpException(
+        { message: this.configService.get<string>('Is_Null_Education') },
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    return educations;
   }
 
   // 학력 - 수정
@@ -119,8 +162,8 @@ export class EducationService {
       throw new HttpException('Not found Education', HttpStatus.NOT_FOUND);
     }
     // 삭제
-    this.educationRepository.remove(eduData);
+    const deletedEducation = await this.educationRepository.remove(eduData);
     // 반환
-    return { message: '학력이 삭제되었습니다.' };
+    return { message: `${deletedEducation.education} 학력이 삭제되었습니다.` };
   }
 }

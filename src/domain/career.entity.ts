@@ -49,6 +49,7 @@ export class Career {
 
   @ManyToOne(() => Resume, (resume) => resume.career, {
     onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
   })
   resume: Resume;
 

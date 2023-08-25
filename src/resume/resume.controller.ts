@@ -8,6 +8,7 @@ import {
   Delete,
   UseGuards,
   Request,
+  Put,
 } from '@nestjs/common';
 import { ResumeService } from './resume.service';
 import { CreateResumeDto } from './dto/create-resume.dto';
@@ -15,7 +16,7 @@ import { UpdateResumeDto } from './dto/update-resume.dto';
 import { UserGuard } from 'src/auth/jwt/jwt.user.guard';
 import { Resume } from 'src/domain/resume.entity';
 
-@Controller('api/resumes')
+@Controller('/api/resumes')
 export class ResumeController {
   constructor(private readonly resumeService: ResumeService) {}
 
@@ -43,7 +44,7 @@ export class ResumeController {
 
   // 이력서 - 수정
   @UseGuards(UserGuard)
-  @Patch(':resumeId')
+  @Put(':resumeId')
   updateResume(
     @Param('resumeId') resumeId: number,
     @Body() updateResumeDto: UpdateResumeDto,
