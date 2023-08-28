@@ -31,7 +31,7 @@ export class UserController {
 
   // 유저정보 상세조회
   @UseGuards(UserGuard)
-  @Get('/user-page/:id')
+  @Get('/user-page')
   findOne(@Request() req) {
     // if (id) {
     //   console.log('findOne = ', id);

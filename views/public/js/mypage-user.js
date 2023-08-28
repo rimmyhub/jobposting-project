@@ -7,7 +7,6 @@ document.addEventListener('DOMContentLoaded', (e) => {
 // 이미지 업로드
 const userImage = document.getElementById('image');
 const imageUploadEl = document.getElementById('upload-image');
-
 imageUploadEl.addEventListener('change', async (e) => {
   const selectedFile = e.target.files[0];
 
@@ -43,9 +42,9 @@ imageUploadEl.addEventListener('change', async (e) => {
 });
 
 // Get 요청 함수 모음
-function init() {
+async function init() {
   // 유저 데이터
-  getUserData();
+  await getUserData();
   // 유저 이력서
   getUserResume();
   // 유저 학력
@@ -58,30 +57,24 @@ function init() {
   getUserAboutMe();
 }
 
-// 해당 유저의 모든 데이터를 긁어오는 함수
-async function getAllData() {
-  const userId = '';
-  const userAllData = await fetch(`/api/users/${userId}/mypage`);
-  const resUserAllData = await userAllData.json();
-  console.log(resUserAllData);
+// 유저의 이력서ID 값만 가져오는 함수
+async function getResumeId() {
+  const userId = await getUserData();
 
-  data = [];
-  data.forEach(() => {
-    // userId == > 유저, 이력서, 학력, 경력 , 포트폴리오, 자기소개 다 불러올 수 있나?
-  });
+  const resumeId = await fetch(`/api/resumes/user/${userId}`);
+  const res = await resumeId.json();
+  return res;
 }
 
 // 유저 정보를 불러오는 함수 로직
 async function getUserData() {
   const userInfoBox = document.querySelector('#userInfoBox');
-  // 테스트용 하드코딩
-  const userId = 1;
   // 메인로직
-  const userData = await fetch(`/api/users/user/${userId}`);
+  const userData = await fetch(`/api/users/user-page`);
   // 데이터 가공
   const jsonUserData = await userData.json();
   // 붙여넣기
-  userInfoBox.innerHTML = `<div class="col-sm-8" id="userInfoBox">
+  userInfoBox.innerHTML = `<div class="col-sm-8" id="userInfoBox" data-id="${jsonUserData.id}">
     <!-- 이름 -->
     <div class="row">
       <div class="col-sm-4">
@@ -148,52 +141,45 @@ async function getUserData() {
     </div>
     <!-- 생년월일 -->
   </div>`;
+  return jsonUserData.id;
 }
 
 // 유저의 이력서를 불러오는 함수 로직
 async function getUserResume() {
   const resumeBox = document.querySelector('#resumeBox');
-
-  // 로그인 기능이 실현될 시에 해당 코드 활성화
-  // const params = new URLSearchParams(window.location.search);
-  // const resumeId = params.get('ID');
-
-  // 일단 테스트 단계라 하드코딩함
-  const resumeId = 1;
+  // 이력서ID 가져오기
+  const resumeId = await getResumeId();
   // 만들어둔 이력서 조회 API fetch 요청 보냄
   const userResumeData = await fetch(`/api/resumes/${resumeId}`);
   // 받아온 데이터 할당
-  const responseData = await userResumeData.json();
+  const jsonUserResumeData = await userResumeData.json();
   // 예외 처리
-  if (responseData.message) {
-    return alert(responseData.message);
+  if (jsonUserResumeData.message) {
+    return alert(jsonUserResumeData.message);
   }
   resumeBox.innerHTML = '';
   // 메인 로직
-  resumeBox.innerHTML = `<div class="col-sm-8" id="resumeBox">
+  resumeBox.innerHTML = `<div class="col-sm-8" id="resumeBox" data-resumeId="${jsonUserResumeData.id}">
                         <p
                             class="fs-2 fw-semibold text-start information"
                             style="margin: 10px"
                         >
-                            ${responseData.title}
+                            ${jsonUserResumeData.title}
                         </p>
                         <p class="text-start">
-                            ${responseData.content}
+                            ${jsonUserResumeData.content}
                         </p>
                         <!-- 구분선 -->
                         <hr />
                         </div>`;
+  return jsonUserResumeData.id;
 }
 
 // 유저의 학력을 불러오는 함수 로직
 async function getUserEducation() {
   const educationBox = document.querySelector('#educationBox');
-  // 로그인 기능이 실현될 시에 해당 코드 활성화
-  // const params = new URLSearchParams(window.location.search);
-  // const resumeId = params.get('ID');
-
-  // 테스트용 하드코딩
-  const resumeId = 1;
+  // 유저 이력서 아이디
+  const resumeId = await getUserResume();
   // 서버에게 데이터 요청
   const userEducationData = await fetch(`/api/educations/${resumeId}`);
   // 데이터 가공
@@ -208,7 +194,7 @@ async function getUserEducation() {
   educationBox.innerHTML = '';
 
   jsonUserEducationData.forEach((educationInfo) => {
-    educationBox.innerHTML += `<div class="col-sm-8" id="educationBox">
+    educationBox.innerHTML += `<div class="col-sm-8" id="educationBox" data-id="${educationInfo.id}">
     <p
       class="fs-2 fw-semibold text-start information"
       style="margin: 10px"
@@ -267,13 +253,8 @@ async function getUserEducation() {
 // 유저의 경력을 불러오는 함수 로직
 async function getUserCareer() {
   const careerBox = document.querySelector('#careerBox');
-
-  // 로그인 기능이 실현될 시에 해당 코드 활성화
-  // const params = new URLSearchParams(window.location.search);
-  // const resumeId = params.get('ID');
-
-  // 테스트용 하드코딩
-  const resumeId = 1;
+  // 유저 이력서 아이디
+  const resumeId = await getUserResume();
   // 서버요청
   const userCareerData = await fetch(`/api/careers/${resumeId}`);
   // 데이터가공
@@ -355,13 +336,8 @@ async function getUserCareer() {
 // 유저의 포트폴리오를 불러오는 함수 로직
 async function getUserPortfolio() {
   const portfolioBox = document.querySelector('#portfolioBox');
-
-  // 로그인 기능이 실현될 시에 해당 코드 활성화
-  // const params = new URLSearchParams(window.location.search);
-  // const resumeId = params.get('ID');
-
-  // 테스트용 하드코딩
-  const resumeId = 1;
+  // 유저 이력서 아이디
+  const resumeId = await getUserResume();
   // 서버요청
   const userPortfolio = await fetch(`/api/portfolio/${resumeId}`);
   // 가공
@@ -410,13 +386,8 @@ async function getUserPortfolio() {
 // 유저의 자기소개서를 불러오는 함수 로직
 async function getUserAboutMe() {
   const aboutMeBox = document.querySelector('#aboutMeBox');
-
-  // 로그인 기능이 실현될 시에 해당 코드 활성화
-  // const params = new URLSearchParams(window.location.search);
-  // const resumeId = params.get('ID');
-
-  // 테스트용 하드코딩
-  const resumeId = 1;
+  // 유저 이력서 아이디
+  const resumeId = await getUserResume();
   // 서버 요청
   const userAboutMe = await fetch(`/api/aboutmes/${resumeId}`);
   // 데이터 가공
@@ -458,8 +429,8 @@ updateBtn.addEventListener('click', async (e) => {
   // body value
   const title = document.querySelector('#title').value;
   const content = document.querySelector('#content').value;
-  // 테스트용 하드코딩
-  const resumeId = 1;
+  // 유저 이력서 아이디
+  const resumeId = await getUserResume();
   // 서버요청
   const updateResumeData = await fetch(`/api/resumes/${resumeId}`, {
     method: 'PUT',
@@ -479,8 +450,8 @@ updateBtn.addEventListener('click', async (e) => {
 // 이력서 "수정" 버튼 클릭 후 "삭제" 누를 시 이력서 "삭제" 로직 실행 함수
 const deleteResumeBtn = document.querySelector('#deleteResumeBtn');
 deleteResumeBtn.addEventListener('click', async (e) => {
-  // 테스트용 하드코딩
-  const resumeId = 1;
+  // 유저 이력서 아이디
+  const resumeId = await getUserResume();
   // 서버요청
   const removeData = await fetch(`/api/resumes/${resumeId}`, {
     method: 'DELETE',
@@ -497,7 +468,6 @@ deleteResumeBtn.addEventListener('click', async (e) => {
 });
 
 // 개인정보 "수정" 버튼 클릭 후 "저장" 버튼 클릭 시 "수정" 로직 실행 함수
-// 아직 userId 가져오는 url이 없어서 아직 구현 안됨.
 const userUpdateBtn = document.querySelector('#userUpdateBtn');
 userUpdateBtn.addEventListener('click', async () => {
   // body 값
@@ -515,8 +485,11 @@ userUpdateBtn.addEventListener('click', async () => {
   });
   // 데이터 가공
   const jsonUserUpdateData = await userUpdateData.json();
-  console.log(jsonUserUpdateData);
-  // window.location.reload();
+  if (jsonUserUpdateData.message) {
+    return alert(jsonUserUpdateData.message);
+  }
+  alert(`유저 정보가 수정되었습니다.`);
+  window.location.reload();
 });
 
 // 학력 "추가" 버튼 클릭 후 "저장" 버튼 클릭 시 학력 "추가" 로직 실행 함수
@@ -527,8 +500,8 @@ addEducationBtn.addEventListener('click', async () => {
   const major = document.querySelector('#majorTag').value;
   const admissionYear = document.querySelector('#admissionYearTag').value;
   const graduationYear = document.querySelector('#graduationYearTag').value;
-  // 테스트용 하드코딩
-  const resumeId = 4;
+  // 유저 이력서 아이디
+  const resumeId = await getUserResume();
   // 데이터 보내기
   const addEducationData = await fetch(`/api/educations/${resumeId}`, {
     method: 'POST',
@@ -538,7 +511,7 @@ addEducationBtn.addEventListener('click', async () => {
       major,
       admissionYear,
       graduationYear,
-      education: 'ElementarySchool',
+      education: '초등학교',
     }),
   });
   // 받아온 데이터 가공
@@ -555,7 +528,7 @@ addEducationBtn.addEventListener('click', async () => {
 
 // 학력 "수정" 버튼 클릭 후 "저장" 버튼 클릭 시 학력 "수정" 로직 실행 함수
 const educationUpdateBtn = document.querySelector('#educationUpdateBtn');
-educationUpdateBtn.addEventListener('click', async () => {
+educationUpdateBtn.addEventListener('click', async (e) => {
   // 바디값
   const schoolTitle = document.querySelector('#schoolTitleUpdateTag').value;
   const major = document.querySelector('#majorUpdateTag').value;
@@ -564,26 +537,27 @@ educationUpdateBtn.addEventListener('click', async () => {
     '#graduationYearUpdateTag',
   ).value;
   // 테스트용 하드코딩
+  console.log(e.target.parentNode);
   const educationId = 2;
 
-  // 학력 등록 로직
-  const dropdownItems = document.querySelectorAll('.item');
-  const selectedValueElement = document.getElementById('selectedValue');
+  // // 학력 등록 로직
+  // const dropdownItems = document.querySelectorAll('.item');
+  // const selectedValueElement = document.getElementById('selectedValue');
 
-  const educationPick = (dropdownItems) => {
-    const eduPick = dropdownItems.forEach((item) => {
-      item.addEventListener('click', () => {
-        const selectedText = item.textContent;
-        selectedValueElement.textContent = selectedText;
-        console.log(selectedText);
-        return selectedText;
-      });
-    });
-    return eduPick;
-  };
-  // 함수 결과물 확인 로직
-  const education = educationPick(dropdownItems);
-  console.log(education);
+  // const educationPick = (dropdownItems) => {
+  //   const eduPick = dropdownItems.forEach((item) => {
+  //     item.addEventListener('click', () => {
+  //       const selectedText = item.textContent;
+  //       selectedValueElement.textContent = selectedText;
+  //       console.log(selectedText);
+  //       return selectedText;
+  //     });
+  //   });
+  //   return eduPick;
+  // };
+  // // 함수 결과물 확인 로직
+  // const education = educationPick(dropdownItems);
+  // console.log(education);
   // 서버요청
   const educationUpdateData = await fetch(`/api/educations/${educationId}`, {
     method: 'PUT',
@@ -593,7 +567,7 @@ educationUpdateBtn.addEventListener('click', async () => {
       major,
       admissionYear,
       graduationYear,
-      education,
+      education: '초등학교',
     }),
   });
   // 가져온 데이터 가공
@@ -611,8 +585,6 @@ educationUpdateBtn.addEventListener('click', async () => {
 });
 
 // 학력 "수정" 버튼 클릭 후 "삭제" 버튼 클릭 시 학력 "삭제" 로직 실행 함수
-// 생각할것 해당 학력을 어떻게 삭제할건지... api 자체는 /api/educations/:educationId
-// educationId 어디서 받아오냐...??????
 const educationDeleteBtn = document.querySelector('#educationDeleteBtn');
 educationDeleteBtn.addEventListener('click', async (e) => {
   // 하드코딩용
@@ -638,8 +610,8 @@ addCareerBtn.addEventListener('click', async () => {
   const resignationDate = document.querySelector('#addResignationDate').value;
   const position = document.querySelector('#addPosition').value;
 
-  // 테스팅용
-  const resumeId = 1;
+  // 유저 이력서 아이디
+  const resumeId = await getUserResume();
   // 메인로직
   const addCareerData = await fetch(`/api/careers/${resumeId}`, {
     method: 'POST',
@@ -724,8 +696,8 @@ addPortfolioBtn.addEventListener('click', async () => {
   // 바디 밸류값 가져오기
   const address = document.querySelector('#addURLTag').value;
   const file = document.querySelector('#formFile').value;
-  // 테스팅용 하드코딩
-  const resumeId = 1;
+  // 유저 이력서 아이디
+  const resumeId = await getUserResume();
   // 메인로직
   const portFolio = await fetch(`/api/portfolio/${resumeId}`, {
     method: 'POST',
@@ -812,8 +784,8 @@ addAboutMeBtn.addEventListener('click', async () => {
   const content = document.querySelector(
     '#addExampleFormControlTextarea1',
   ).value;
-  // 테스트용 하드코딩
-  const resumeId = 1;
+  // 유저 이력서 아이디
+  const resumeId = await getUserResume();
   // 메인로직
   const aboutMe = await fetch(`/api/aboutmes/${resumeId}`, {
     method: 'POST',
