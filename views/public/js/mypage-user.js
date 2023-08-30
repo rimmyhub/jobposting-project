@@ -4,14 +4,20 @@ document.addEventListener('DOMContentLoaded', (e) => {
   init();
 });
 
-// 이미지 업로드
+// 유저 이미지 수정하기
 const userImage = document.getElementById('image');
-const imageUploadEl = document.getElementById('upload-image');
+const imageUploadEl = document.getElementById('user-image');
+const imageDeleteEl = document.getElementById('image-delete');
+
+console.dir(userImage);
+console.dir(imageUploadEl);
+console.dir(imageDeleteEl);
 
 imageUploadEl.addEventListener('change', async (e) => {
   const selectedFile = e.target.files[0];
 
-  // console.log(selectedFile);
+  console.log(selectedFile);
+
   if (selectedFile.size > 1 * 1024 * 1024) {
     alert('파일용량은 최대 1MB입니다.');
     return;
@@ -26,20 +32,22 @@ imageUploadEl.addEventListener('change', async (e) => {
   }
   const formData = new FormData();
   formData.append('file', selectedFile);
-  // console.log(formData);
-  // console.log(selectedFile);
-
   const response = await fetch('/api/upload', {
     method: 'POST',
     body: formData,
   });
-  console.log(response);
   const data = await response.json();
   console.log(data);
 
   imageUrl = data.url;
 
   userImage.setAttribute('src', imageUrl);
+});
+
+// 기본프로필 적용하기
+imageDeleteEl.addEventListener('click', () => {
+  url = '';
+  userImage.setAttribute('src', '/img/profile.jpg');
 });
 
 // Get 요청 함수 모음
@@ -74,14 +82,16 @@ async function getAllData() {
 // 유저 정보를 불러오는 함수 로직
 async function getUserData() {
   const userInfoBox = document.querySelector('#userInfoBox');
+  const profileBox = document.querySelector('.profile-box');
   // 테스트용 하드코딩
-  const userId = 1;
+  const userId = 6;
   // 메인로직
   const userData = await fetch(`/api/users/user/${userId}`);
   // 데이터 가공
   const jsonUserData = await userData.json();
   // 붙여넣기
-  userInfoBox.innerHTML = `<div class="col-sm-8" id="userInfoBox">
+  userInfoBox.innerHTML = `
+ <div class="col-sm-8" id="userInfoBox">
     <!-- 이름 -->
     <div class="row">
       <div class="col-sm-4">
@@ -148,6 +158,26 @@ async function getUserData() {
     </div>
     <!-- 생년월일 -->
   </div>`;
+
+  // 이미지 보여주기
+  profileBox.innerHTML = `
+  <div class="profile-box">
+     <img
+       src="${jsonUserData.image}"
+       id="image"
+       class="user-img"
+       alt=""
+       srcset=""
+     />
+     <i class="fa-solid fa-pen edit-icon" style="color: #0d6efd">수정</i>
+     <input
+       id="user-image"
+       class="img-file"
+       type="file"
+       accept="image/jpeg, image/png"
+     />
+  </div>
+`;
 }
 
 // 유저의 이력서를 불러오는 함수 로직

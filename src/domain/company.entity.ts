@@ -40,8 +40,8 @@ export class Company {
   @Column({ type: 'varchar', length: 255, comment: '업계' })
   business: string;
 
-  @Column({ type: 'int', comment: '직원수' })
-  employees: number;
+  @Column({ type: 'varchar', length: 255, comment: '직원수' })
+  employees: string;
 
   @CreateDateColumn({ name: 'create_at', comment: '생성일' })
   createdAt: Date;

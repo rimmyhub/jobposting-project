@@ -13,13 +13,13 @@ import { Applicant } from './applicant.entity';
 
 @Entity()
 export class Jobposting {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('increment')
   id: number;
 
   @Column({ name: 'company_id' })
   companyId: number;
 
-  @Column({ type: 'varchar', length: 255, comment: '제목' })
+  @Column({ type: 'varchar', length: 255, comment: '채용 공고 제목' })
   title: string;
 
   @Column({ type: 'varchar', length: 150, comment: '경력' })
@@ -31,9 +31,6 @@ export class Jobposting {
   @Column({ type: 'varchar', length: 255, comment: '학력' })
   education: string;
 
-  @Column({ type: 'varchar', length: 150, comment: '직무' })
-  job: string;
-
   @Column({ type: 'varchar', length: 150, comment: '근무 형태' })
   workType: string;
 
@@ -43,8 +40,8 @@ export class Jobposting {
   @Column({ type: 'varchar', comment: '채용 공고 내용' })
   content: string;
 
-  @Column({ type: 'date', comment: '채용 마감일' })
-  Deadline: Date;
+  @Column({ type: 'varchar', comment: '채용 마감일' })
+  dueDate: string;
 
   @CreateDateColumn({ name: 'create_at', comment: '생성일' })
   createdAt: Date;
