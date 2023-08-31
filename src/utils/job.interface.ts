@@ -1,4 +1,6 @@
 export interface Job {
+  companyTitle: string;
+  companyId: number;
   title: string;
   career: string;
   salary: string;
@@ -6,11 +8,10 @@ export interface Job {
   workType: string;
   workArea: string;
   content: string;
-  Deadline: string;
+  dueDate: string;
 }
 
 export interface Company {
-  id: string;
   email: string;
   title: string;
   password: string;
@@ -21,3 +22,15 @@ export interface Company {
   employees: string;
   image: string;
 }
+
+// {
+//   companyId: number;
+//   password?: string;
+//   title?: string;
+//   introduction?: string;
+//   business?: string;
+//   employees?: string | number;
+//   image?: string;
+//   website: string;
+//   address: string;
+// }[] = [];
