@@ -119,6 +119,7 @@ const ejs = (window.onload = function () {
   if (sendBtn) {
     // 메세지 버튼
     sendBtn.addEventListener('click', () => {
+      console.log('sendBtn');
       sendMessage();
     });
   }
