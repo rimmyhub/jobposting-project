@@ -81,6 +81,35 @@ export class JobpostingService {
     return await this.jobpostingRepository.find({ where: { companyId } });
   }
 
+  // 검색시 해당 검색어를 포함하는 채용 공고글 전체 조회
+  async findJobPostings(title: string) {
+    if (!title) {
+      throw new HttpException('검색어를 입력해주세요', HttpStatus.NOT_FOUND);
+    }
+
+    const jobPostings = await this.jobpostingRepository
+      .createQueryBuilder('jobposting')
+      .select([
+        'jobposting.companyId',
+        'jobposting.title',
+        'company.title',
+        'jobposting.workArea',
+        'jobposting.Deadline',
+      ])
+      .innerJoin('jobposting.company', 'company')
+      .where('jobposting.title LIKE :title', { title: `%${title}%` })
+      .getMany();
+
+    if (jobPostings.length === 0) {
+      throw new HttpException(
+        '검색하신 항목이 존재하지 않습니다.',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    return jobPostings;
+  }
+
   // 채용공고 1개 조회
   async findOneJobposting(
     companyId: number,
