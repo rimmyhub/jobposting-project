@@ -42,6 +42,6 @@ export class CreateCompanyDto {
   business: string;
 
   @IsNotEmpty()
-  @IsNumber()
+  @IsString()
   employees: string;
 }
