@@ -5,6 +5,7 @@ import {
   MaxLength,
   MinLength,
   IsNotEmpty,
+  IsBoolean, // isVerified 값을 위해 추가했습니다.
 } from 'class-validator';
 
 export class CreateUserDto {
@@ -43,4 +44,8 @@ export class CreateUserDto {
   @IsNotEmpty()
   @Matches(/^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/)
   birth: string;
+
+  @IsNotEmpty()
+  @IsBoolean() // 추가: isVerified 값을 위한 decorator
+  isVerified: boolean; // 추가: isVerified 필드
 }
