@@ -31,7 +31,7 @@ export class ChatGateway {
   ): void {
     // 이미 접속한 방인지 확인
     console.log('socket.rooms', roomId);
-    socket.join(roomId);
+    socket.join(String(roomId));
   }
   @SubscribeMessage('message')
   sendMessage(
@@ -43,6 +43,6 @@ export class ChatGateway {
     // console.log('socket.rooms', socket.rooms);
 
     // 룸에 있는 유저에게만 메세지 보내기
-    socket.to(roomId[1]).emit('receive-message', message);
+    this.server.to(String(roomId[1])).emit('receive-message', message);
   }
 }

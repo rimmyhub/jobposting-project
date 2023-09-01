@@ -104,7 +104,7 @@ const signup = async () => {
       employees,
     );
 
-    await fetch('/api/companys/signup', {
+    await fetch('/api/companies/signup', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

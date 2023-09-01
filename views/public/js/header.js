@@ -134,7 +134,7 @@ const ejs = (window.onload = function () {
 async function getChatRooms() {
   let type = window.localStorage.getItem('type');
   let payload;
-
+  console.log('type = ', type);
   if (type === 'user') {
     await fetch('/api/chats/user')
       .then((res) => res.json()) //json으로 받을 것을 명시
@@ -151,6 +151,7 @@ async function getChatRooms() {
     await fetch('/api/chats/company')
       .then((res) => res.json()) //json으로 받을 것을 명시
       .then((datas) => {
+        console.log('datas', datas);
         payload = datas;
       })
       .catch((e) => {

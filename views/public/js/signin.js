@@ -15,6 +15,7 @@ const login = async (type) => {
   const email = document.getElementById('input-email').value;
   const password = document.getElementById('input-password').value;
   let isSuccess;
+  let errMsg;
   if (type === 'user') {
     await fetch('/api/auth/user', {
       // api앞에 /를 붙이지 않으면 현재 주소창의 3000바로 옆에 있는 params값이 붙는다.
@@ -28,8 +29,14 @@ const login = async (type) => {
         role: type,
       }),
     })
-      .then((el) => {
-        isSuccess = el.ok;
+      .then((response) => {
+        isSuccess = response.ok;
+        return response.json();
+      })
+      .then((result) => {
+        errMsg = result.message;
+        window.localStorage.setItem('id', result.id);
+        window.localStorage.setItem('type', 'user');
       })
       .catch((e) => {
         console.log(e);
@@ -46,8 +53,14 @@ const login = async (type) => {
         role: type,
       }),
     })
-      .then((el) => {
-        isSuccess = el.ok;
+      .then((response) => {
+        isSuccess = response.ok;
+        return response.json();
+      })
+      .then((result) => {
+        errMsg = result.message;
+        window.localStorage.setItem('id', result.id);
+        window.localStorage.setItem('type', 'company');
       })
       .catch((e) => {
         console.log(e);
@@ -56,6 +69,6 @@ const login = async (type) => {
   if (isSuccess) {
     location.href = '/';
   } else {
-    alert('로그인에 실패하였습니다.');
+    alert(`${errMsg}`);
   }
 };

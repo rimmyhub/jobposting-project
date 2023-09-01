@@ -17,7 +17,6 @@ export class LocalGuard implements CanActivate {
       req.body.password,
       req.body.role,
     );
-    console.log('user = ', user);
     if (!user) {
       throw new UnauthorizedException();
     }
