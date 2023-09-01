@@ -20,11 +20,8 @@ import { ChatGateway } from './chat/chat.geteway';
 import { UploadModule } from './upload/upload.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { EventsModule } from './events/events.module';
-<<<<<<< HEAD
-// import { EjsModule } from './ejs/ejs.module';
-=======
 import { JobcrawlerModule } from './jobcrawler/jobcrawler.module';
->>>>>>> origin/main
+
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({ useFactory: ormConfig }),
@@ -47,12 +44,8 @@ import { JobcrawlerModule } from './jobcrawler/jobcrawler.module';
     ChatModule,
 
     EventsModule,
-<<<<<<< HEAD
-    // EjsModule,
-=======
-
     JobcrawlerModule,
->>>>>>> origin/main
+
   ],
   controllers: [AppController],
   providers: [AppService, ChatGateway],
