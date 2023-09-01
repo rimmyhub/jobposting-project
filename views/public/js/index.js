@@ -71,7 +71,7 @@ async function getJobposting() {
   // const jobsData = await jobData.json();
 
   // 회사 정보 가져오기
-  const companyData = await fetch(`/api/companys`);
+  const companyData = await fetch(`/api/companies`);
   const companiesData = await companyData.json();
 
   jobpostingBox.innerHTML = '';
