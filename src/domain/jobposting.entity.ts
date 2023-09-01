@@ -13,38 +13,35 @@ import { Applicant } from './applicant.entity';
 
 @Entity()
 export class Jobposting {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('increment')
   id: number;
 
   @Column({ name: 'company_id' })
   companyId: number;
 
-  @Column({ type: 'varchar', length: 255, comment: '제목' })
+  @Column({ type: 'varchar', comment: '채용 공고 제목' })
   title: string;
 
-  @Column({ type: 'varchar', length: 150, comment: '경력' })
+  @Column({ type: 'varchar', comment: '경력' })
   career: string;
 
-  @Column({ type: 'varchar', length: 150, comment: '급여' })
+  @Column({ type: 'varchar', comment: '급여' })
   salary: string;
 
-  @Column({ type: 'varchar', length: 255, comment: '학력' })
+  @Column({ type: 'varchar', comment: '학력' })
   education: string;
 
-  @Column({ type: 'varchar', length: 150, comment: '직무' })
-  job: string;
-
-  @Column({ type: 'varchar', length: 150, comment: '근무 형태' })
+  @Column({ type: 'varchar', comment: '근무 형태' })
   workType: string;
 
-  @Column({ type: 'varchar', length: 255, comment: '근무 지역' })
+  @Column({ type: 'varchar', comment: '근무 지역' })
   workArea: string;
 
-  @Column({ type: 'varchar', comment: '채용 공고 내용' })
+  @Column({ type: 'text', comment: '채용 공고 내용' })
   content: string;
 
-  @Column({ type: 'date', comment: '채용 마감일' })
-  Deadline: Date;
+  @Column({ type: 'varchar', comment: '채용 마감일' })
+  dueDate: Date;
 
   @CreateDateColumn({ name: 'create_at', comment: '생성일' })
   createdAt: Date;

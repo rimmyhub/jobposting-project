@@ -43,11 +43,10 @@ export class JobpostingService {
       career,
       salary,
       education,
-      job,
       workType,
       workArea,
       content,
-      Deadline,
+      dueDate,
     } = createJobpostingDto;
 
     const jobposting = this.jobpostingRepository.create({
@@ -56,11 +55,10 @@ export class JobpostingService {
       career,
       salary,
       education,
-      job,
       workType,
       workArea,
       content,
-      Deadline,
+      dueDate,
     });
 
     await this.jobpostingRepository.save(jobposting);

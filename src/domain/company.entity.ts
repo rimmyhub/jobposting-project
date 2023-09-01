@@ -16,32 +16,32 @@ export class Company {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'varchar', length: 50, comment: '이메일' })
+  @Column({ type: 'varchar', comment: '이메일' })
   email: string;
 
-  @Column({ type: 'varchar', length: 150, comment: '패스워드' })
+  @Column({ type: 'varchar', comment: '패스워드' })
   password: string;
 
   @Column({ type: 'text', comment: '회사 이미지' })
   image: string;
 
-  @Column({ type: 'varchar', length: 30, comment: '회사명' })
+  @Column({ type: 'varchar', comment: '회사명' })
   title: string;
 
-  @Column({ type: 'varchar', length: 255, comment: '소개' })
+  @Column({ type: 'varchar', comment: '소개' })
   introduction: string;
 
-  @Column({ type: 'varchar', length: 255, comment: '웹사이트' })
+  @Column({ type: 'varchar', comment: '웹사이트' })
   website: string;
 
-  @Column({ type: 'varchar', length: 255, comment: '본사 주소' })
+  @Column({ type: 'varchar', comment: '본사 주소' })
   address: string;
 
-  @Column({ type: 'varchar', length: 255, comment: '업계' })
+  @Column({ type: 'varchar', comment: '업계' })
   business: string;
 
-  @Column({ type: 'int', comment: '직원수' })
-  employees: number;
+  @Column({ type: 'varchar', comment: '직원수' })
+  employees: string;
 
   @CreateDateColumn({ name: 'create_at', comment: '생성일' })
   createdAt: Date;
