@@ -19,7 +19,7 @@
     <title>Document</title>
   </head>
   <body>
-    <%- include('includes/header', {isLogin: 0, type: "user"}) %>
+    <%- include('includes/header', {isLogin: isLogin, type: "user"}) %>
     <!-- 전체 컨테이너 -->
     <div class="container text-center">
       <!-- 브레드크롬 -->
@@ -52,7 +52,11 @@
         </div>
 
         <div class="container">
-          <button type="button" class="text-start btn btn-primary">
+          <button
+            id="user-msg"
+            type="button"
+            class="text-start btn btn-primary"
+          >
             메세지 보내기
           </button>
         </div>

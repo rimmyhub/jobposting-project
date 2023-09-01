@@ -10,7 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ChatService } from './chat.service';
-import { CreateChatDto } from './dto/create-chat.dto';
+import { CreateRoomDto } from './dto/create-room.dto';
 import { Chat } from 'src/domain/chat.entity';
 import { UserGuard } from '../auth/jwt/jwt.user.guard';
 import { CompanyGuard } from '../auth/jwt/jwt.company.guard';
@@ -21,33 +21,74 @@ export class ChatController {
 
   // 유저가 -> 회사에게 채팅 신청
   @UseGuards(UserGuard)
-  @Post(':companyId/company')
+  @Post('/user/:companyId')
   createUserChat(
     @Request() req,
     @Param('companyId') companyId: string,
-    @Body() createChatDto: CreateChatDto,
   ): Promise<Chat> {
-    return this.chatService.createUserChat(
-      req.user.id,
-      +companyId,
-      createChatDto,
+    return this.chatService.createUserChat(req.user.id, +companyId);
+  }
+  // @UseGuards(UserGuard)
+  // @Post(':companyId/company')
+  // createUserChat(
+  //   @Request() req,
+  //   @Param('companyId') companyId: string,
+  //   @Body() createChatDto: CreateChatDto,
+  // ): Promise<Chat> {
+  //   return this.chatService.createUserChat(
+  //     req.user.id,
+  //     +companyId,
+  //     createChatDto,
+  //   );
+  // }
+
+  // 회사 -> 유저 채팅 신청
+  @UseGuards(CompanyGuard)
+  @Post('/company/:userId')
+  async createCompanyChat(
+    @Request() req,
+    @Param('userId') userId: string,
+    // @Body() createChatDto: CreateChatDto,
+  ): Promise<Chat> {
+    const result = await this.chatService.createCompanyChat(
+      req.company.id,
+      Number(userId),
     );
+    return result;
+  }
+
+  // 회사관리자의 채팅방 전체조회
+  @UseGuards(CompanyGuard)
+  @Get('/company')
+  async comGetChatRoom(@Request() req): Promise<Chat[]> {
+    console.log('getChatRoom = ', req.company.id);
+    const chatRooms = await this.chatService.comGetAllChatRoom(req.company.id);
+    return chatRooms;
+  }
+
+  // 유저의 채팅방 전체조회
+  @UseGuards(UserGuard)
+  @Get('/user')
+  async userGetChatRoom(@Request() req): Promise<Chat[]> {
+    console.log('getChatRoom = ', req.user.id);
+    const chatRooms = await this.chatService.userGetAllChatRoom(req.user.id);
+    return chatRooms;
   }
 
   // 회사가 -> 유저에게 채팅 신청
-  @UseGuards(CompanyGuard)
-  @Post(':userId/user')
-  createCompanyChat(
-    @Request() req,
-    @Param('userId') userId: string,
-    @Body() createChatDto: CreateChatDto,
-  ): Promise<Chat> {
-    return this.chatService.createCompanyChat(
-      req.company.id,
-      +userId,
-      createChatDto,
-    );
-  }
+  // @UseGuards(CompanyGuard)
+  // @Post(':userId/user')
+  // createCompanyChat(
+  //   @Request() req,
+  //   @Param('userId') userId: string,
+  //   @Body() createChatDto: CreateChatDto,
+  // ): Promise<Chat> {
+  //   return this.chatService.createCompanyChat(
+  //     req.company.id,
+  //     +userId,
+  //     createChatDto,
+  //   );
+  // }
 
   // 유저가 - 회사 채팅 삭제
   @UseGuards(UserGuard)

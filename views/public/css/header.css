@@ -2,8 +2,8 @@ body {
   margin: 0;
 }
 
-.container {
-  /* border-bottom: 0.5px solid rgba(128, 128, 128, 0.92); */
+.container-header {
+  border-bottom: 0.5px solid rgba(128, 128, 128, 0.92);
   color: black;
   width: 100%;
   height: 80px;
@@ -16,23 +16,89 @@ body {
   position: relative;
 }
 
-.logo {
-  margin: 0;
+.header-logo {
   cursor: pointer;
-  /* position: absolute; */
-  transform: translate(0%, +15%);
+  margin-bottom: 5px;
 }
 
-.nav-list {
+.header-nav-list {
+  position: absolute;
+  display: flex;
+  justify-content: space-between;
+  width: 250px;
+  display: flex;
+  justify-content: space-between;
+  width: 250px;
+  right: 10px;
+  margin-bottom: 0;
+}
+
+.header-nav-list > li {
+  list-style: none;
+  /* cursor: pointer; */
+  position: relative;
+  position: relative;
+}
+
+.header-nav-list > li > a {
+  text-decoration: none;
+  color: black;
+}
+
+.header-nav-list > li > .logout {
+  color: #ea612d;
+}
+
+.header-icon {
+  font-size: 26px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.header-nav-list > li > img {
+  width: 50px;
+}
+
+.login-nav-list {
+  justify-content: space-between;
   display: flex;
   position: absolute;
-  right: 10px;
+  width: 100px;
+  right: 50px;
+  margin-bottom: 0;
 }
 
-li {
+.login-nav-list > li {
   list-style: none;
-  padding: 10px;
+  position: relative;
+}
+.login-nav-list > li > a {
+  text-decoration: none;
+  color: black;
+}
+
+.header-icon {
   cursor: pointer;
+}
+
+.signup-icon {
+  color: #279eff;
+}
+
+.header-nav-list > li > .logout {
+  color: #ea612d;
+}
+
+.header-nav-list > li > .header-icon {
+  font-size: 26px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.header-nav-list > li > img {
+  width: 50px;
 }
 
 .search-box {
@@ -63,4 +129,132 @@ li {
   margin-left: 3px;
   cursor: pointer;
   transform: translate(0%, +20%);
+}
+
+.message-icon {
+  position: relative;
+}
+.message-icon > .message-box {
+  border-radius: 10px;
+  border: 1px solid #e1e2e3;
+  display: none;
+  width: 400px;
+  min-height: 500px;
+  position: absolute;
+  z-index: 1;
+  background-color: white;
+  transform: translate(-93%, 8%);
+}
+
+.message-box > .message-box-title {
+  border-bottom: 0.5px solid #e1e2e3;
+  padding: 10px 20px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.message-box-title > h5 {
+  margin: 0;
+}
+.close-message {
+  color: #ea612d;
+  cursor: pointer;
+}
+
+.message-list {
+  display: flex;
+  flex-direction: column;
+}
+.message-list div .message-card {
+  cursor: pointer;
+  padding: 10px;
+  display: flex;
+  box-sizing: border-box;
+  border-bottom: 0.5px solid #e1e2e3;
+}
+.message-icon > .chat-container {
+  border-radius: 10px;
+  border: 1px solid #e1e2e3;
+  display: none;
+  flex-direction: column;
+  width: 400px;
+  min-height: 500px;
+  position: absolute;
+  z-index: 10;
+  background-color: white;
+  transform: translate(-93%, 8%);
+}
+
+.chat-container > .chat-box-title {
+  flex: 1;
+  border-bottom: 0.5px solid #e1e2e3;
+  padding: 10px 20px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chatting-container {
+  flex: 13;
+  overflow-y: scroll;
+}
+.chat-input {
+  flex: 1;
+  display: flex;
+  justify-content: stretch;
+  align-items: stretch;
+}
+
+.chat-input > span {
+  width: 100%;
+  display: flex;
+  justify-content: stretch;
+  align-items: center;
+  padding: 0.5rem;
+  box-sizing: border-box;
+}
+
+.chat-input > span > input {
+  border: 0.2 solid #b6b8bb;
+  font-size: 12px;
+  height: 100%;
+  flex: 8;
+}
+
+.chat-input > span > button {
+  flex: 1;
+  border: none;
+  height: 100%;
+  border-radius: 3px;
+}
+
+.user-profile {
+  width: 90px;
+  z-index: 100;
+  padding: 10px;
+  position: relative;
+}
+.user-profile > img {
+  border: 0.5px solid #e1e2e3;
+  border-radius: 70%;
+  width: 60px;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  position: absolute;
+}
+.message-card > .message-info {
+  box-sizing: border-box;
+  padding: 5px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.message-info > .user-name {
+  height: 30px;
+  font-weight: 700;
+  font-size: 19px;
 }

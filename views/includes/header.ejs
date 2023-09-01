@@ -1,312 +1,112 @@
-<style>
-  body {
-    margin: 0;
-  }
-
-  .container-header {
-    border-bottom: 0.5px solid rgba(128, 128, 128, 0.92);
-    color: black;
-    width: 100%;
-    height: 80px;
-    display: flex;
-    align-items: center;
-    /* justify-content: space-around; */
-    line-height: 40px;
-    padding: 10px;
-    box-sizing: border-box;
-    position: relative;
-  }
-
-  .header-logo {
-    cursor: pointer;
-    margin-bottom: 5px;
-  }
-
-  .header-nav-list {
-    position: absolute;
-    display: flex;
-    justify-content: space-between;
-    width: 250px;
-    display: flex;
-    justify-content: space-between;
-    width: 250px;
-    right: 10px;
-    margin-bottom: 0;
-  }
-
-  .header-nav-list > li {
-    list-style: none;
-    /* cursor: pointer; */
-    position: relative;
-    position: relative;
-  }
-
-  .header-nav-list > li > a {
-    text-decoration: none;
-    color: black;
-  }
-
-  .header-nav-list > li > .logout {
-    color: #ea612d;
-  }
-
-  .header-icon {
-    font-size: 26px;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-
-  .header-nav-list > li > img {
-    width: 50px;
-  }
-
-  .login-nav-list {
-    justify-content: space-between;
-    display: flex;
-    position: absolute;
-    width: 100px;
-    right: 50px;
-    margin-bottom: 0;
-  }
-
-  .login-nav-list > li {
-    list-style: none;
-    position: relative;
-  }
-  .login-nav-list > li > a {
-    text-decoration: none;
-    color: black;
-  }
-
-  .header-icon {
-    cursor: pointer;
-  }
-
-  .signup-icon {
-    color: #279eff;
-  }
-
-  .header-nav-list > li > .logout {
-    color: #ea612d;
-  }
-
-  .header-nav-list > li > .header-icon {
-    font-size: 26px;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-
-  .header-nav-list > li > img {
-    width: 50px;
-  }
-
-  .search-box {
-    width: 275px;
-    border: 1px solid #396cf9;
-    border-radius: 10px;
-    height: 35px;
-    margin-left: 10px;
-    padding: 0 5px 0 5px;
-    box-sizing: border-box;
-    display: flex;
-    padding: 0;
-    padding-left: 10px;
-  }
-  .search-input {
-    width: 100%;
-    border: none;
-    border-radius: 10px;
-    padding: 10px;
-    margin-left: 10px;
-  }
-  .search-input:focus {
-    outline: none;
-  }
-
-  .search-font {
-    font-size: 1.3em;
-    margin-left: 3px;
-    cursor: pointer;
-    transform: translate(0%, +20%);
-  }
-
-  .message-icon {
-    position: relative;
-  }
-  .message-icon > .message-box {
-    border-radius: 10px;
-    border: 1px solid #e1e2e3;
-    display: none;
-    width: 400px;
-    min-height: 300px;
-    position: absolute;
-    z-index: 1;
-    background-color: white;
-    transform: translate(-93%, 15%);
-  }
-
-  .message-box > .message-box-title {
-    border-bottom: 0.5px solid #e1e2e3;
-    padding: 10px 20px;
-    box-sizing: border-box;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .message-box-title > h5 {
-    margin: 0;
-  }
-  .message-box-title > .close-message {
-    color: #ea612d;
-    cursor: pointer;
-  }
-
-  .message-list {
-    display: flex;
-    flex-direction: column;
-  }
-  .message-list > .message-card {
-    padding: 10px;
-    display: flex;
-    box-sizing: border-box;
-    border-bottom: 0.5px solid #e1e2e3;
-  }
-
-  .user-profile {
-    width: 90px;
-    z-index: 100;
-    padding: 10px;
-    position: relative;
-  }
-  .user-profile > img {
-    border: 0.5px solid #e1e2e3;
-    border-radius: 70%;
-    width: 60px;
-    transform: translate(-50%, -50%);
-    top: 50%;
-    left: 50%;
-    position: absolute;
-  }
-  .message-card > .message-info {
-    box-sizing: border-box;
-    padding: 5px;
-    width: 100%;
-    overflow: hidden;
-  }
-
-  .message-info > .user-name {
-    height: 30px;
-    font-weight: 700;
-    font-size: 19px;
-  }
-</style>
-
-<nav>
-  <div>
-    <div class="container-header">
-      <div>
-        <a href="/">
-          <img class="header-logo" src="/img/winner.png" alt="" srcset="" />
-        </a>
-      </div>
-      <div class="search-box">
-        <i class="fa-solid fa-magnifying-glass search-font"></i>
-        <input class="search-input" type="text" />
-      </div>
-      <% if(isLogin === 1) { %>
-      <ul class="header-nav-list">
-        <li>
-          <i class="fa-solid fa-list-check header-icon"></i>
-        </li>
-        <li id="message-icon" class="message-icon">
-          <i class="fa-regular fa-message header-icon"></i>
-          <!-- 메세지 리스트가 있는 박스 -->
-          <div id="message-box" class="message-box">
-            <div class="message-box-title">
-              <h5>메세지 내역</h5>
-              <i id="close-message" class="fa-solid fa-xmark close-message"></i>
-            </div>
-            <div class="message-list">
-              <div class="message-card">
-                <div class="user-profile">
-                  <img src="/img/userImg.jpg" alt="" srcset="" />
-                </div>
-                <div class="message-info">
-                  <div class="user-name">유저네임</div>
-                  <div>메세지 내용</div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- 메세지창 -->
-          <div id="message-box" class="message-box">
-            <div class="message-box-title">
-              <h5>새 메세지</h5>
-              <i id="close-message" class="fa-solid fa-xmark close-message"></i>
-            </div>
-            <div class="message-list">
-              <div class="message-card">
-                <div class="user-profile">
-                  지
-                  <img src="/img/userImg.jpg" alt="" srcset="" />
-                </div>
-                <div class="message-info">
-                  <div class="user-name">유저네임</div>
-                  <div>메세지 내용</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </li>
-        <li>
-          <i
-            id="logout"
-            class="fa-solid fa-arrow-right-from-bracket logout header-icon"
-          ></i>
-        </li>
-        <li id="profile">
-          <img
-            src="/img/userImg.jpg"
-            class="rounded-circle border border-secondary"
-            alt="..."
-          />
-        </li>
-      </ul>
-      <% } else if(isLogin === 0) { %>
-      <ul class="login-nav-list">
-        <li>
-          <a href="/signin/user">
-            <i
-              class="fa-solid fa-arrow-right-to-bracket signin-icon header-icon"
-            ></i>
+<body>
+  <nav>
+    <div>
+      <div class="container-header">
+        <div>
+          <a href="/">
+            <img class="header-logo" src="/img/winner.png" alt="" srcset="" />
           </a>
-        </li>
-        <li>
-          <a href="/signup/user"
-            ><i class="fa-solid fa-user-plus signup-icon header-icon"></i
-          ></a>
-        </li>
-      </ul>
-      <% }%>
+        </div>
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass search-font"></i>
+          <input class="search-input" type="text" />
+        </div>
+        <% if(isLogin === 1) { %>
+        <ul class="header-nav-list">
+          <li>
+            <i class="fa-solid fa-list-check header-icon"></i>
+          </li>
+          <li id="message-icon" class="message-icon">
+            <i class="fa-regular fa-message header-icon"></i>
+            <!-- 메세지 리스트가 있는 박스 -->
+            <div id="message-box" class="message-box">
+              <div class="message-box-title">
+                <h5>메세지 내역</h5>
+                <i
+                  id="close-message"
+                  class="fa-solid fa-xmark close-message"
+                ></i>
+              </div>
+              <div id="message-list" class="message-list">
+                <!-- <div>
+                  <div id="message-card" class="message-card">
+                    <div class="user-profile">
+                      <img src="/img/userImg.jpg" alt="" srcset="" />
+                    </div>
+                    <div class="message-info">
+                      <div class="user-name">유저네임</div>
+                      <div>메세지 내용</div>
+                    </div>
+                  </div>
+                </div> -->
+              </div>
+            </div>
+            <div id="chat-container" class="chat-container">
+              <div class="chat-box-title">
+                <h6>땡땡이님</h6>
+                <i
+                  id="close-chatting"
+                  class="fa-solid fa-xmark close-message"
+                ></i>
+              </div>
+              <div class="chatting-container">
+                <ul id="chatting-list" class="chatting-list">
+                  <li id="sent" class="sent"></li>
+                  <li class="received"></li>
+                </ul>
+              </div>
+              <div class="chat-input">
+                <span>
+                  <input id="chat-content" type="text" />
+                  <button id="send-btn" class="send-button">전송</button>
+                </span>
+              </div>
+            </div>
+          </li>
+          <li>
+            <i
+              id="logout"
+              class="fa-solid fa-arrow-right-from-bracket logout header-icon"
+            ></i>
+          </li>
+          <li id="profile">
+            <img
+              src="/img/userImg.jpg"
+              class="rounded-circle border border-secondary"
+              alt="..."
+            />
+          </li>
+        </ul>
+        <% } else if(isLogin === 0) { %>
+        <ul class="login-nav-list">
+          <li>
+            <a href="/signin/user">
+              <i
+                class="fa-solid fa-arrow-right-to-bracket signin-icon header-icon"
+              ></i>
+            </a>
+          </li>
+          <li>
+            <a href="/signup/user"
+              ><i class="fa-solid fa-user-plus signup-icon header-icon"></i
+            ></a>
+          </li>
+        </ul>
+        <% }%>
+      </div>
     </div>
-  </div>
-</nav>
-<script>
-  const message = document.getElementById('message-icon');
-  const profile = document.getElementById('profile');
-  const messageBox = document.getElementById('message-box');
-  const closeMessage = document.getElementById('close-message');
-  profile.addEventListener('click', () => {
-    location.href = '/mypage';
-  });
-  message.addEventListener('click', () => {
-    messageBox.style.display = 'block';
-  });
-  closeMessage.addEventListener('click', () => {
-    messageBox.style.display = 'none';
-    event.stopPropagation(); // 이벤트 버블링 막기
-  });
-</script>
+  </nav>
+
+  <script src="/js/header.js" defer></script>
+  <script
+    src="https://cdn.socket.io/4.4.0/socket.io.min.js"
+    integrity="sha384-1fOn6VtTq3PWwfsOrk45LnYcGosJwzMHv+Xh/Jx5303FVOXzEnw0EpLv30mtjmlj"
+    crossorigin="anonymous"
+  ></script>
+</body>
+<link rel="stylesheet" href="/css/chat.css" />
+<link rel="stylesheet" href="/css/header.css" />
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+/>

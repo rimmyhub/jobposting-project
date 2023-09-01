@@ -4,14 +4,15 @@ import {
   DeleteDateColumn,
   Entity,
   JoinColumn,
-  ManyToMany,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { User } from './user.entity';
 import { Company } from './company.entity';
+import { ChatContent } from './chatContent.entity';
 
 @Entity()
 export class Chat {
@@ -23,12 +24,6 @@ export class Chat {
 
   @Column({ name: 'company_id' })
   companyId: number;
-
-  @Column({ type: 'text', comment: '유저 메세지' }) //longtext
-  userMessage: string;
-
-  @Column({ type: 'text', comment: '회사 메세지' }) //longtext
-  companyMessage: string;
 
   @CreateDateColumn({ name: 'create_at', comment: '생성일' })
   createdAt: Date;
@@ -46,4 +41,8 @@ export class Chat {
   // 회사 연결
   @ManyToOne(() => Company, (company) => company.chat)
   company: Company;
+
+  // 1대1 Chat --- ChatContent
+  @OneToMany(() => ChatContent, (chatContent) => chatContent.chat)
+  chatContent: ChatContent[];
 }

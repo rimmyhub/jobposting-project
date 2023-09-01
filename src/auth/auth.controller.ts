@@ -29,22 +29,27 @@ export class AuthController {
     @Request() req,
     @Res({ passthrough: true }) res: Response,
   ): Promise<any> {
-    const payload = await this.authService.login(
-      req.user.id,
-      req.user.email,
-      req.user.role,
-    );
+    try {
+      const payload = await this.authService.login(
+        req.user.id,
+        req.user.email,
+        req.user.role,
+      );
 
-    // access token
-    res.cookie('authorization', `Bearer ${payload['accessToken']}`, {
-      httpOnly: true,
-    });
+      // access token
+      res.cookie('authorization', `Bearer ${payload['accessToken']}`, {
+        httpOnly: true,
+      });
 
-    // refresh token
-    res.cookie('refresh_token', payload['refreshToken'], {
-      httpOnly: true,
-    });
-    return '로그인되었습니다'; // 네스트기본적인 응답값은 JSON값으로 반환이 된다.
+      // refresh token
+      res.cookie('refresh_token', payload['refreshToken'], {
+        httpOnly: true,
+      });
+
+      res.status(200).send({ id: req.user.id }); // 네스트기본적인 응답값은 JSON값으로 반환이 된다.
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   // 회사로그인
@@ -54,20 +59,26 @@ export class AuthController {
     @Request() req,
     @Res({ passthrough: true }) res: Response,
   ): Promise<any> {
-    const payload = await this.authService.login(
-      req.user.id,
-      req.user.email,
-      req.user.role,
-    );
-    // access token
-    res.cookie('authorization', `Bearer ${payload['accessToken']}`, {
-      httpOnly: true,
-    });
-    // refresh token
-    res.cookie('refresh_token', payload['refreshToken'], {
-      httpOnly: true,
-    });
-    return '로그인되었습니다'; // 네스트기본적인 응답값은 JSON값으로 반환이 된다.
+    try {
+      const payload = await this.authService.login(
+        req.user.id,
+        req.user.email,
+        req.user.role,
+      );
+
+      // access token
+      res.cookie('authorization', `Bearer ${payload['accessToken']}`, {
+        httpOnly: true,
+      });
+      // refresh token
+      res.cookie('refresh_token', payload['refreshToken'], {
+        httpOnly: true,
+      });
+      // return '로그인되었습니다.';
+      res.status(200).send({ id: req.user.id }); // 네스트기본적인 응답값은 JSON값으로 반환이 된다.
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   // refresh토큰 재발급하기
