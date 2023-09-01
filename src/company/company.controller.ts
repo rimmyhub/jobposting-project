@@ -18,7 +18,7 @@ import { UpdateCompanyDto } from './dto/update-company.dto';
 import { CompanyGuard } from '../auth/jwt/jwt.company.guard';
 import { ParamDto } from 'src/utils/param.dto';
 
-@Controller('api/companys')
+@Controller('api/companies')
 export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
 
@@ -33,6 +33,12 @@ export class CompanyController {
   @Get()
   findAllCompany() {
     return this.companyService.findAllCompany();
+  }
+
+  // 검색시 업무 또는 회사 이름에 해당 검색어를 포함하는 회사 전체 조회
+  @Get('search')
+  findSearchTag(@Body('title') title: string) {
+    return this.companyService.findSearchTag(title);
   }
 
   // 회사 1개 조회

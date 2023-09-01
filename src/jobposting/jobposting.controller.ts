@@ -40,6 +40,12 @@ export class JobpostingController {
     return this.jobpostingService.findAllJobposting(+companyId);
   }
 
+  // 검색시 해당 검색어를 포함하는 채용 공고글 전체 조회
+  @Get()
+  findJobPostings(@Body('title') title: string) {
+    return this.jobpostingService.findJobPostings(title);
+  }
+
   // 회사별 채용공고 1개 조회
   @Get(':companyId/:jobpostingId')
   findOneJobposting(

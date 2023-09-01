@@ -6,6 +6,7 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   OneToMany,
+  JoinColumn,
 } from 'typeorm';
 import { Jobposting } from './jobposting.entity';
 import { Comment } from './comment.entity';
@@ -64,6 +65,7 @@ export class Company {
 
   //1:N 관계 설정
   @OneToMany(() => Jobposting, (jobposting) => jobposting.company)
+  @JoinColumn()
   jobposting: Jobposting[];
 
   // 1:N관계 설정
