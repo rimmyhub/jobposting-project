@@ -5,6 +5,7 @@ import { SearchService } from './search.service';
 export class SearchController {
   constructor(private readonly searchService: SearchService) {}
 
+  // 진행중
   // 인덱스 생성 api
   @Post()
   async createIndex() {
