@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { CreateChatDto } from './dto/create-chat.dto';
+import { CreateRoomDto } from './dto/create-room.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Chat } from 'src/domain/chat.entity';
 import { Repository } from 'typeorm';
@@ -13,37 +13,75 @@ export class ChatService {
 
   // 유저 -> 회사에게 채팅 신청
   // 유효성 검사 필요없나?.. 생각하기
-  async createUserChat(
-    id: number,
-    companyId: number,
-    createChatDto: CreateChatDto,
-  ): Promise<Chat> {
-    const { userMessage, companyMessage } = createChatDto;
-
+  async createUserChat(id: number, companyId: number): Promise<Chat> {
     const chat = await this.chatRepository.save({
       user: { id }, // 외래키 가져오는 방법
       company: { id: companyId }, // 외래키 가져오는 방법
-      userMessage,
-      companyMessage,
     });
     return chat;
   }
 
   // 회사 -> 유저에게 채팅신청
-  async createCompanyChat(
-    id: number,
-    userId: number,
-    createChatDto: CreateChatDto,
-  ): Promise<Chat> {
-    const { userMessage, companyMessage } = createChatDto;
+  async createCompanyChat(id: number, userId: number): Promise<Chat> {
+    const isChatRoom = await this.chatRepository.find({
+      where: {
+        userId: userId,
+        companyId: id,
+      },
+    });
+    if (isChatRoom.length !== 0) {
+      throw new HttpException('이미 대화상대입니다.', HttpStatus.BAD_REQUEST);
+    }
 
     const chat = await this.chatRepository.save({
       company: { id }, // company 가드로 회사 가져오기
       user: { id: userId }, // userid 외래키 찾기
-      userMessage,
-      companyMessage,
     });
     return chat;
+  }
+
+  async comGetAllChatRoom(id: number): Promise<Chat[]> {
+    const chatRooms = await this.chatRepository
+      .createQueryBuilder('chat')
+      .select([
+        'chat.id',
+        'chat.companyId',
+        'chat.userId',
+        'user.email',
+
+        'chatContent.senderId',
+        'chatContent.chatContent',
+        'chatContent.createdAt',
+      ])
+      .leftJoin('chat.user', 'user')
+
+      .leftJoin('chat.chatContent', 'chatContent')
+      .where(`chat.companyId = ${id}`)
+      .getMany();
+
+    return chatRooms;
+  }
+
+  async userGetAllChatRoom(id: number): Promise<Chat[]> {
+    console.log('id = ', id);
+    const chatRooms = await this.chatRepository
+      .createQueryBuilder('chat')
+      .select([
+        'chat.id',
+        'chat.companyId',
+        'chat.userId',
+        'company.email',
+        'chatContent.senderId',
+        'chatContent.chatContent',
+        'chatContent.createdAt',
+      ])
+      .leftJoin('chat.company', 'company')
+      .leftJoin('chat.chatContent', 'chatContent')
+      .where(`chat.userId = ${id}`)
+      .getMany();
+    // console.log('chatRooms');
+    console.log('chatRooms= ', chatRooms);
+    return chatRooms;
   }
 
   // 유저가 -> 회사 채팅 삭제
