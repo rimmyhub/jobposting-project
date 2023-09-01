@@ -23,7 +23,6 @@ const ejs = (window.onload = function () {
       deleteCookie();
     });
   }
-
   // 메인페이지에서는 얘가 없어서 오류남
   if (sendMsgUser) {
     // 회사가 유저에게 메세지
@@ -128,8 +127,17 @@ const ejs = (window.onload = function () {
     handleNewMsg(message);
   });
 
-  getChatRooms();
+  isLogin();
 });
+
+function isLogin() {
+  const id = window.localStorage.getItem('id');
+
+  console.log('id = ', id);
+  if (id) {
+    getChatRooms();
+  }
+}
 
 async function getChatRooms() {
   let type = window.localStorage.getItem('type');

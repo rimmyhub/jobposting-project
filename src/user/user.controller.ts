@@ -80,6 +80,7 @@ export class UserController {
   // 인증번호 전송
   @Post('/send-verification')
   async sendVerification(@Body('email') email: string) {
+    console.log('email = ', email);
     const existingUser = await this.userService.findEmail(email);
 
     if (existingUser) {
