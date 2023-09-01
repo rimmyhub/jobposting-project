@@ -8,7 +8,7 @@ import {
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
-import { Server, Socket } from 'socket.io';
+import { Server, Socket, Namespace } from 'socket.io';
 // 소켓IO
 @WebSocketGateway(8080, {
   cors: {
@@ -16,8 +16,9 @@ import { Server, Socket } from 'socket.io';
   },
 })
 export class ChatGateway {
-  @WebSocketServer()
-  server: Server;
+  // @WebSocketServer()
+  // server: Server;
+  @WebSocketServer() io: Namespace;
 
   constructor() {}
 
@@ -30,9 +31,10 @@ export class ChatGateway {
     @MessageBody() roomId: string,
   ): void {
     // 이미 접속한 방인지 확인
-    console.log('socket.rooms', roomId);
-    socket.join(String(roomId));
+    console.log('socket.rooms', socket.id);
+    socket.join(roomId);
   }
+
   @SubscribeMessage('message')
   sendMessage(
     @ConnectedSocket() socket: Socket,
@@ -43,6 +45,6 @@ export class ChatGateway {
     // console.log('socket.rooms', socket.rooms);
 
     // 룸에 있는 유저에게만 메세지 보내기
-    this.server.to(String(roomId[1])).emit('receive-message', message);
+    this.io.to(roomId[1]).emit('receive-message', message);
   }
 }
