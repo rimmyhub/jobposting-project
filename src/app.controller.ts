@@ -1,6 +1,7 @@
 import { Controller, Get, Render, Param, Request, Res } from '@nestjs/common';
 import { AppService } from './app.service';
 import { Response } from 'express';
+import { get } from 'http';
 
 @Controller()
 export class AppController {
@@ -133,5 +134,18 @@ export class AppController {
   @Render('jobposting-company')
   getJobpstingCompany() {
     return { title: 'Title' };
+  }
+
+  // 채용공고 지원 내역 보기
+  @Get('/my-applycants')
+  @Render('apply')
+  async getApply(@Request() req) {
+    const cookie: string = await req.cookies['authorization'];
+    if (cookie) {
+      return { isLogin: 1 };
+    }
+    return {
+      isLogin: 0,
+    };
   }
 }

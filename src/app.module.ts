@@ -21,7 +21,9 @@ import { UploadModule } from './upload/upload.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { EventsModule } from './events/events.module';
 import { JobcrawlerModule } from './jobcrawler/jobcrawler.module';
+
 import { JobPostingSearchModule } from './search/search.module';
+
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({ useFactory: ormConfig }),
@@ -45,6 +47,7 @@ import { JobPostingSearchModule } from './search/search.module';
 
     EventsModule,
     JobcrawlerModule,
+
     JobPostingSearchModule,
   ],
   controllers: [AppController],
