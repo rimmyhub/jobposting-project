@@ -102,7 +102,7 @@ export class ResumeService {
     // 해당 이력서 조회
     const resume = await this.resumeRepository.findOne({
       where: { id: resumeId },
-      select: ['userId', 'title', 'content'],
+      select: ['id', 'userId', 'title', 'content'],
     });
 
     // 예외 처리
@@ -114,6 +114,13 @@ export class ResumeService {
     }
     // 반환
     return resume;
+  }
+
+  // 이력서 - 유저의 이력서 ID조회
+  async findResumeId(userId: number) {
+    const resume = await this.resumeRepository.findOne({ where: { userId } });
+    if (!resume) resume.id = 0;
+    return resume.id;
   }
 
   // 이력서 - 수정

@@ -3,6 +3,7 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -53,7 +54,11 @@ export class Jobposting {
   deletedAt?: Date | null;
 
   // 1:N 관계 설정 - 회사
-  @ManyToOne(() => Company, (company) => company.jobposting)
+  @ManyToOne(() => Company, (company) => company.jobposting, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  @JoinColumn()
   company: Company;
 
   // 1:N 관계 설정 - 지원하기
