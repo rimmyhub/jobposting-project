@@ -46,7 +46,6 @@ export class CreateCompanyDto {
   @IsString()
   employees: string;
 
-  @IsNotEmpty()
   @IsBoolean() // 추가: isVerified 값을 위한 decorator
   isVerified: boolean; // 추가: isVerified 필드
 }

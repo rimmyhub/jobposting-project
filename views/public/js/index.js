@@ -1,28 +1,27 @@
 // 파라미터값 가져오기
 document.addEventListener('DOMContentLoaded', async () => {
   getResumes();
-
-  getJobposting();
+  getCompanies();
 });
 
 // 모든 유저정보 가져오기
 const getResumes = async () => {
   const jobseekerList = document.getElementById('jobseeker-list');
+  try {
+    const datas = await fetch('/api/resumes')
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        return data;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 
-  const datas = await fetch('/api/resumes')
-    .then((res) => {
-      return res.json();
-    })
-    .then((data) => {
-      return data;
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-
-  datas.forEach((el) => {
-    const column = document.createElement('div');
-    column.innerHTML = `<div id="${el.id}" OnClick="location.href='/subpage/${el.user.id}/${el.id}?id=${el.user.id}&resumeId=${el.id}'" class="jobseeker-card">
+    datas.forEach((el) => {
+      const column = document.createElement('div');
+      column.innerHTML = `<div id="${el.id}" OnClick="location.href='/subpage/${el.user.id}/${el.id}?id=${el.user.id}&resumeId=${el.id}'" class="jobseeker-card">
                           <img
                             class="jobseeker-img"
                             src="/img/userImg.jpg"
@@ -34,8 +33,11 @@ const getResumes = async () => {
                             <div class="jobseeker-job">${el.content}</div>
                           </div>
                         </div>`;
-    jobseekerList.append(column);
-  });
+      jobseekerList.append(column);
+    });
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 const logout = document.getElementById('logout');
@@ -61,38 +63,36 @@ async function deleteCookie() {
   }
 }
 
-async function getJobposting() {
-  const jobpostingBox = document.querySelector('.jobposting-list');
-  const params = new URLSearchParams(window.location.search);
-  const companyId = params.get('companyId');
+// 회사 정보 가져오기
+async function getCompanies() {
+  try {
+    const companiesBox = document.querySelector('.jobposting-list');
 
-  // 채용공고 데이터 가져오기
-  // const jobData = await fetch(`/api/jobpostings/${companyId}`);
-  // const jobsData = await jobData.json();
+    // 회사 정보 가져오기
+    const companyData = await fetch(`/api/companies`);
+    const companiesData = await companyData.json();
 
-  // 회사 정보 가져오기
-  const companyData = await fetch(`/api/companies`);
-  const companiesData = await companyData.json();
+    companiesBox.innerHTML = '';
 
-  jobpostingBox.innerHTML = '';
-
-  // 각 회사와 채용 정보 항목을 처리
-  companiesData.forEach((company) => {
-    const jobpostingCard = document.createElement('div');
-    jobpostingCard.classList.add('jobposting-card');
-    jobpostingCard.innerHTML = `
-      <img
-        class="jobposting-img"
-        src="${company.image}"
-        alt=""
-        srcset=""
-        onerror="this.src='/img/company.jpg';"
-      />
-      <div>
-        <div class="jobposting-title">${company.title}</div>
-        <div class="jobposting-job">${company.business}</div>
-        <p>${company.employees}</p>
-      </div>`;
-    jobpostingBox.appendChild(jobpostingCard);
-  });
+    // 각 회사와 채용 정보 항목을 처리
+    companiesData.forEach((company) => {
+      const jobpostingCard = document.createElement('div');
+      jobpostingCard.innerHTML = `<div class="jobposting-card">
+                                 <img
+                                   class="jobposting-img"
+                                   src="${company.image}"
+                                   alt=""
+                                   srcset=""
+                                   onerror="this.src='/img/company.jpg';"
+                                 />
+                                 <div>
+                                   <div class="jobposting-title">${company.title}</div>
+                                   <div class="jobposting-job">${company.business}</div>
+                                   <p>${company.employees}</p>
+                                 </div>`;
+      companiesBox.append(jobpostingCard);
+    });
+  } catch (error) {
+    console.error(error);
+  }
 }
