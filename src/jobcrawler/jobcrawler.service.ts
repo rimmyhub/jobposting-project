@@ -172,7 +172,7 @@ export class JobcrawlerService {
     console.time('코드 실행시간');
     // 코드 실행시간을 구해줌
 
-    const totalPage = 10; // 크롤링할 갯수
+    const totalPage = 1; // 크롤링할 갯수
     const jobInfo = [];
     const companyInfo = [];
 
@@ -202,7 +202,7 @@ export class JobcrawlerService {
 
         // [[company, company], [company, company], [company, company], []]
 
-        await this.delay(5000); // 각페이지 크롤링 후 5초 대기
+        await this.delay(10000); // 각페이지 크롤링 후 5초 대기
       }
     }
     // 코드 실행시간을 측정

@@ -22,6 +22,8 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { EventsModule } from './events/events.module';
 import { JobcrawlerModule } from './jobcrawler/jobcrawler.module';
 
+import { JobPostingSearchModule } from './search/search.module';
+
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({ useFactory: ormConfig }),
@@ -46,6 +48,7 @@ import { JobcrawlerModule } from './jobcrawler/jobcrawler.module';
     EventsModule,
     JobcrawlerModule,
 
+    JobPostingSearchModule,
   ],
   controllers: [AppController],
   providers: [AppService, ChatGateway],

@@ -42,6 +42,12 @@ export class ResumeController {
     return await this.resumeService.findOneResume(+resumeId);
   }
 
+  // 이력서 - 유저 이력서 ID 조회
+  @Get('user/:userId')
+  async findResumeId(@Param('userId') userId: number) {
+    return await this.resumeService.findResumeId(+userId);
+  }
+
   // 이력서 - 수정
   @UseGuards(UserGuard)
   @Put(':resumeId')

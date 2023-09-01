@@ -1,6 +1,8 @@
 // 파라미터값 가져오기
 document.addEventListener('DOMContentLoaded', async () => {
   getResumes();
+
+  getJobposting();
 });
 
 // 모든 유저정보 가져오기
@@ -57,4 +59,40 @@ async function deleteCookie() {
     alert('로그아웃 되었습니다.');
     location.href = '/';
   }
+}
+
+async function getJobposting() {
+  const jobpostingBox = document.querySelector('.jobposting-list');
+  const params = new URLSearchParams(window.location.search);
+  const companyId = params.get('companyId');
+
+  // 채용공고 데이터 가져오기
+  // const jobData = await fetch(`/api/jobpostings/${companyId}`);
+  // const jobsData = await jobData.json();
+
+  // 회사 정보 가져오기
+  const companyData = await fetch(`/api/companys`);
+  const companiesData = await companyData.json();
+
+  jobpostingBox.innerHTML = '';
+
+  // 각 회사와 채용 정보 항목을 처리
+  companiesData.forEach((company) => {
+    const jobpostingCard = document.createElement('div');
+    jobpostingCard.classList.add('jobposting-card');
+    jobpostingCard.innerHTML = `
+      <img
+        class="jobposting-img"
+        src="${company.image}"
+        alt=""
+        srcset=""
+        onerror="this.src='/img/company.jpg';"
+      />
+      <div>
+        <div class="jobposting-title">${company.title}</div>
+        <div class="jobposting-job">${company.business}</div>
+        <p>${company.employees}</p>
+      </div>`;
+    jobpostingBox.appendChild(jobpostingCard);
+  });
 }

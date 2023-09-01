@@ -18,44 +18,6 @@ export class UserService {
     private userRepository: Repository<User>,
   ) {}
 
-  // 유저의 모든 정보를 조회하는 로직
-  async findAllUserData(userId: number) {
-    console.log(userId); // 1
-    const userAllInfo = await this.userRepository
-      .createQueryBuilder('user')
-      .select([
-        'user.name',
-        'user.email',
-        'user.gender',
-        'user.phone',
-        'user.address',
-        'resume.title',
-        'resume.content',
-        'education.schoolTitle',
-        'education.major',
-        'education.admissionYear',
-        'education.graduationYear',
-        'career.companyTitle',
-        'career.position',
-        'career.job',
-        'career.joiningDate',
-        'career.resignationDate',
-        'portfolio.file',
-        'portfolio.address',
-        'aboutme.title',
-        'aboutme.content',
-      ])
-      .innerJoin('user.resume', 'resume')
-      .innerJoin('resume.education', 'education')
-      .innerJoin('resume.career', 'career')
-      .innerJoin('resume.portfolio', 'portfolio')
-      .innerJoin('resume.aboutme', 'aboutme')
-      .where('user.id = :id', { id: userId })
-      .getMany();
-
-    return userAllInfo;
-  }
-
   // 유저정보상세조회
   async findOne(id: number) {
     const userInfo = await this.userRepository.findOne({

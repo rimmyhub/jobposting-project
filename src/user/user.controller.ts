@@ -31,7 +31,7 @@ export class UserController {
 
   // 유저정보 상세조회
   @UseGuards(UserGuard)
-  @Get('/user-page/:id')
+  @Get('/user-page')
   findOne(@Request() req) {
     // if (id) {
     //   console.log('findOne = ', id);
@@ -44,12 +44,6 @@ export class UserController {
   @Get('/user/:id')
   findUser(@Param('id') id: number) {
     return this.userService.findOne(id);
-  }
-
-  // 유저의 모든 정보 조회
-  @Get('/:userId/mypage')
-  findAll(@Param('userId') userId: number) {
-    return this.userService.findAllUserData(+userId);
   }
 
   // 유저정보 수정

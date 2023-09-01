@@ -81,6 +81,30 @@ export class CompanyService {
     return await this.companyRepository.find();
   }
 
+  // 검색시 업무 또는 회사 이름에 해당 검색어를 포함하는 회사 전체 조회
+  async findSearchTag(title: string) {
+    const searchCompanies = await this.companyRepository
+      .createQueryBuilder('company')
+      .select([
+        'company.title',
+        'company.image',
+        'company.business',
+        'company.employees',
+      ])
+      .where('company.title LIKE :title OR company.business LIKE :title', {
+        title: `%${title}%`,
+      })
+      .getMany();
+
+    if (searchCompanies.length === 0) {
+      throw new HttpException(
+        '검색하신 항목이 존재하지 않습니다.',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    return searchCompanies;
+  }
+
   // 가입된 이메일이 있는지 확인
   async findEmail(email: string) {
     const isEmail = await this.companyRepository.findOne({
