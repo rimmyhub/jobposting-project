@@ -57,11 +57,17 @@ export class CompanyService {
       business,
       employees,
       image,
+      isVerified,
     } = createCompanyDto;
 
-    const company = await this.companyRepository.findOne({ where: { email } });
-    if (company) throw new UnauthorizedException('이미 등록된 이메일입니다');
     const hashedPassword = await bcrypt.hash(password, 10);
+    if (isVerified !== true) {
+      throw new HttpException(
+        '이메일 인증을 진행해주세요!',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    
     const newCompany = await this.companyRepository.save({
       email,
       title,
@@ -72,6 +78,7 @@ export class CompanyService {
       business,
       employees,
       image,
+      isVerified,
     });
     return newCompany;
   }
@@ -108,7 +115,7 @@ export class CompanyService {
   // 가입된 이메일이 있는지 확인
   async findEmail(email: string) {
     const isEmail = await this.companyRepository.findOne({
-      select: { id: true, email: true, password: true },
+      select: { id: true, email: true, password: true, isVerified: true },
       where: { email },
     });
     return isEmail;
@@ -179,5 +186,94 @@ export class CompanyService {
       throw new HttpException('삭제에 실패했습니다', HttpStatus.BAD_REQUEST);
     }
     return { message: `${deletCompany.title} 가 삭제되었습니다.` };
+  }
+
+  
+  // 인증번호 저장
+  async storeVerificationCode(email: string, code: string): Promise<void> {
+    const company = this.companyRepository.create({
+      email,
+      verificationCode: code,
+    });
+    await this.companyRepository.save(company);
+  }
+
+  // 인증번호 맞는지 확인
+  async verifyCode(email: string, code: string): Promise<boolean> {
+    const company = await this.companyRepository.findOne({
+      where: { email, verificationCode: code },
+    });
+    return !!company; // 회사 정보가 있다면 true, 없다면 false 반환
+  }
+
+  // 회사의 인증상태를 변경하는 함수
+  async updateCompanyVerification(
+    email: string,
+    isVerified: boolean,
+  ): Promise<boolean> {
+    try {
+      const company = await this.companyRepository.findOne({
+        where: { email },
+      });
+
+      if (!company) {
+        throw new HttpException(
+          '사용자를 찾을 수 없습니다.',
+          HttpStatus.NOT_FOUND,
+        );
+      }
+
+      company.isVerified = isVerified;
+
+      await this.companyRepository.save(company);
+      return true; // 성공적으로 업데이트되었음을 반환
+    } catch (error) {
+      throw new HttpException(
+        '사용자 업데이트 실패',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  // 회사를 생성할 때, 기존 사용자의 정보를 update한다.
+  async updateCompanyInfo(updateCompanyDto: CreateCompanyDto): Promise<any> {
+    const { email, password } = updateCompanyDto;
+
+    const existingCompany = await this.companyRepository.findOne({
+      where: { email },
+    });
+
+    if (!existingCompany) {
+      throw new HttpException(
+        '사용자를 찾을 수 없습니다.',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    // 인증된 사용자인 경우에만 정보 업데이트
+    if (existingCompany.isVerified) {
+      existingCompany.title = updateCompanyDto.title;
+      existingCompany.introduction = updateCompanyDto.introduction;
+      existingCompany.website = updateCompanyDto.website;
+      existingCompany.address = updateCompanyDto.address;
+      existingCompany.business = updateCompanyDto.business;
+      existingCompany.employees = updateCompanyDto.employees;
+      existingCompany.image = updateCompanyDto.image;
+
+      if (password) {
+        // 새로운 비밀번호가 제공된 경우에만 업데이트
+        const hashedPassword = await bcrypt.hash(password, 10);
+        existingCompany.password = hashedPassword;
+      }
+
+      await this.companyRepository.save(existingCompany);
+
+      return '사용자 정보가 업데이트되었습니다.';
+    } else {
+      throw new HttpException(
+        '이메일 인증을 진행해주세요!',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 }

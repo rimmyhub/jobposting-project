@@ -5,6 +5,7 @@ import {
   IsString,
   Matches,
   MinLength,
+  IsBoolean, // isVerified 값을 위해 추가했습니다.
 } from 'class-validator';
 
 export class CreateCompanyDto {
@@ -44,4 +45,8 @@ export class CreateCompanyDto {
   @IsNotEmpty()
   @IsString()
   employees: string;
+
+  @IsNotEmpty()
+  @IsBoolean() // 추가: isVerified 값을 위한 decorator
+  isVerified: boolean; // 추가: isVerified 필드
 }

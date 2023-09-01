@@ -45,21 +45,27 @@ export class UserService {
 
   // 유저생성
   async create(createUserDto: CreateUserDto) {
-    const { email, address, birth, gender, name, password, phone, image } =
-      createUserDto;
+    const {
+      email,
+      address,
+      birth,
+      gender,
+      name,
+      password,
+      phone,
+      image,
+      isVerified,
+    } = createUserDto;
 
-    console.log(image);
-    // 유저의 이메일이 중복되는지 확인
-    const isEmail = await this.findEmail(email);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    // 중복 에러처리하기
-    if (isEmail) {
+    if (isVerified !== true) {
       throw new HttpException(
-        '이미 가입된 이메일입니다.',
+        '이메일 인증을 진행해주세요!',
         HttpStatus.BAD_REQUEST,
       );
     }
-    const hashedPassword = await bcrypt.hash(password, 10);
+
     await this.userRepository.save({
       email,
       password: hashedPassword,
@@ -69,7 +75,9 @@ export class UserService {
       gender,
       phone,
       image,
+      isVerified,
     });
+
     return '회원가입이 완료되었습니다.';
   }
 
@@ -117,7 +125,7 @@ export class UserService {
   // 유저의 이메일을 찾아주는 함수
   async findEmail(email: string) {
     const isEmail = await this.userRepository.findOne({
-      select: { id: true, email: true, password: true },
+      select: { id: true, email: true, password: true, isVerified: true },
       where: { email },
     });
 
@@ -143,6 +151,88 @@ export class UserService {
     );
     if (isRefTokenMatch) {
       return user;
+    }
+  }
+
+  // 인증번호 저장
+  async storeVerificationCode(email: string, code: string): Promise<void> {
+    const user = this.userRepository.create({ email, verificationCode: code });
+    await this.userRepository.save(user);
+  }
+
+  // 인증번호 맞는지 확인
+  async verifyCode(email: string, code: string): Promise<boolean> {
+    const user = await this.userRepository.findOne({
+      where: { email, verificationCode: code },
+    });
+    return !!user; // 유저 정보가 있다면 true, 없다면 false 반환
+  }
+
+  // 유저의 인증상태를 변경하는 함수
+  async updateUserVerification(
+    email: string,
+    isVerified: boolean,
+  ): Promise<boolean> {
+    try {
+      const user = await this.userRepository.findOne({ where: { email } });
+
+      if (!user) {
+        throw new HttpException(
+          '사용자를 찾을 수 없습니다.',
+          HttpStatus.NOT_FOUND,
+        );
+      }
+
+      user.isVerified = isVerified;
+
+      await this.userRepository.save(user);
+      return true; // 성공적으로 업데이트되었음을 반환
+    } catch (error) {
+      throw new HttpException(
+        '사용자 업데이트 실패',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  // 유저를 생성할 때, 기존 사용자의 정보를 update한다.
+  async updateUserInfo(updateUserDto: CreateUserDto): Promise<any> {
+    const { email, password } = updateUserDto;
+
+    const existingUser = await this.userRepository.findOne({
+      where: { email },
+    });
+
+    if (!existingUser) {
+      throw new HttpException(
+        '사용자를 찾을 수 없습니다.',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    // 인증된 사용자인 경우에만 정보 업데이트
+    if (existingUser.isVerified) {
+      existingUser.name = updateUserDto.name;
+      existingUser.address = updateUserDto.address;
+      existingUser.birth = updateUserDto.birth;
+      existingUser.gender = updateUserDto.gender;
+      existingUser.phone = updateUserDto.phone;
+      existingUser.image = updateUserDto.image;
+
+      if (password) {
+        // 새로운 비밀번호가 제공된 경우에만 업데이트
+        const hashedPassword = await bcrypt.hash(password, 10);
+        existingUser.password = hashedPassword;
+      }
+
+      await this.userRepository.save(existingUser);
+
+      return '사용자 정보가 업데이트되었습니다.';
+    } else {
+      throw new HttpException(
+        '이메일 인증을 진행해주세요!',
+        HttpStatus.BAD_REQUEST,
+      );
     }
   }
 }

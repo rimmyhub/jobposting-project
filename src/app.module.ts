@@ -21,8 +21,8 @@ import { UploadModule } from './upload/upload.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { EventsModule } from './events/events.module';
 import { JobcrawlerModule } from './jobcrawler/jobcrawler.module';
-
 import { JobPostingSearchModule } from './search/search.module';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -44,10 +44,9 @@ import { JobPostingSearchModule } from './search/search.module';
     AuthModule,
     CommentModule,
     ChatModule,
-
+    MailModule,
     EventsModule,
     JobcrawlerModule,
-
     JobPostingSearchModule,
   ],
   controllers: [AppController],

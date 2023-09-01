@@ -51,60 +51,100 @@
           </div>
 
           <% if (type === "user") { %>
-          <div class="email-input-box input-box">
+          <!-- 이메일 입력 + 인증번호 전송 버튼 -->
+          <div class="email-input-box">
             <input id="input-email" type="text" placeholder="email" />
-          </div>
-          <div class="email-input-box input-box">
-            <input id="input-password" type="text" placeholder="password" />
-          </div>
-          <div class="email-input-box input-box">
-            <input id="input-username" type="text" placeholder="username" />
-          </div>
-          <div class="email-input-box input-box">
-            <input id="input-phone" type="text" placeholder="phone" />
-          </div>
-          <select id="gender" class="gender-select" aria-placeholder="gender">
-            <option value="M">male</option>
-            <option value="F">female</option>
-          </select>
-          <div class="email-input-box input-box">
-            <input id="input-address" type="text" placeholder="address" />
-          </div>
-          <div class="email-input-box input-box">
-            <input id="input-birth" type="date" placeholder="생년월일" />
+            <button id="send-verification-btn" class="btn btn-sm btn-primary">
+              인증번호 전송
+            </button>
           </div>
 
-          <% } else if (type === 'company') { %>
-          <div class="email-input-box input-box">
-            <input id="input-email" type="text" placeholder="email" />
+          <!-- 인증번호 입력 + 인증번호 확인 버튼 -->
+          <div class="email-input-box">
+            <input
+              id="input-verification-code"
+              type="text"
+              placeholder="verification-code"
+            />
+            <button id="verify-code-btn" class="btn btn-sm btn-primary">
+              인증번호 확인
+            </button>
           </div>
-          <div class="email-input-box input-box">
+
+          <div class="email-input-box expand">
+            <input id="input-password" type="text" placeholder="비밀번호" />
+          </div>
+
+          <div class="email-input-box expand">
+            <input id="input-username" type="text" placeholder="사용자명" />
+          </div>
+
+          <div class="email-input-box expand">
+            <input id="input-phone" type="text" placeholder="전화번호" />
+          </div>
+
+          <div class="email-input-box expand">
+            <select id="gender" class="gender-select" aria-placeholder="성별">
+              <option value="M">남성</option>
+              <option value="F">여성</option>
+            </select>
+          </div>
+
+          <div class="email-input-box expand">
+            <input id="input-address" type="text" placeholder="주소" />
+          </div>
+
+          <div class="email-input-box expand">
+            <input id="input-birth" type="date" placeholder="생년월일" />
+          </div>
+          <% } else if (type === 'company') { %>
+          <div class="email-input-box">
+            <input id="input-email" type="text" placeholder="email" />
+            <!-- '인증번호 전송' 버튼 -->
+            <button id="send-verification-btn" class="btn btn-sm btn-primary">
+              인증번호 전송
+            </button>
+          </div>
+
+          <!-- 인증번호 입력 필드 -->
+          <div class="email-input-box">
+            <input
+              id="input-verification-code"
+              type="text"
+              placeholder="verification-code"
+            />
+            <!-- '인증번호 확인' 버튼 -->
+            <button id="verify-code-btn" class="btn btn-sm btn-primary">
+              인증번호 확인
+            </button>
+          </div>
+          <div class="email-input-box expand">
             <input id="input-password" type="text" placeholder="password" />
           </div>
-          <div class="email-input-box input-box">
+          <div class="email-input-box expand">
             <input id="input-title" type="text" placeholder="company title" />
           </div>
-          <div class="email-input-box input-box">
+          <div class="email-input-box expand">
             <input
               id="input-introduction"
               type="text"
               placeholder="introduction"
             />
           </div>
-          <div class="email-input-box input-box">
+          <div class="email-input-box expand">
             <input id="input-website" type="text" placeholder="website" />
           </div>
-          <div class="email-input-box input-box">
+          <div class="email-input-box expand">
             <input id="input-address" type="text" placeholder="address" />
           </div>
-          <div class="email-input-box input-box">
+          <div class="email-input-box expand">
             <input id="input-business" type="text" placeholder="business" />
           </div>
-          <div class="email-input-box input-box">
+          <div class="email-input-box expand">
             <input id="input-employees" type="text" placeholder="employees" />
           </div>
           <% } %>
-          <div class="email-input-box">
+          <div class="email-input-box expand">
             <input
               id="signup-btn"
               class="signin-btn"
