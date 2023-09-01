@@ -77,11 +77,13 @@ export class JobcrawlerService {
           $(node).find("li:contains('주소') .txt em").text().trim() ||
           '서울시 강남구';
 
-        const website = $(node)
-          .find("li:contains('홈페이지') .txt a.link_txt")
-          .attr('href');
+        const website =
+          $(node)
+            .find("li:contains('홈페이지') .txt a.link_txt")
+            .attr('href') || '';
 
-        const image = 'http:' + $(node).find('div.jcinfo_logo img').attr('src');
+        const image =
+          'http:' + $(node).find('div.jcinfo_logo img').attr('src') || '';
 
         // 컴퍼니를 변수에 할당
         const company = {
@@ -126,7 +128,6 @@ export class JobcrawlerService {
 
       const career =
         $(node).find('.txt em.bb:eq(1)').text().trim() || '경력 무관';
-
       const salary =
         $(node).find('.txt em:eq(4)').text().trim() || '면접 후 결정';
 
@@ -141,14 +142,14 @@ export class JobcrawlerService {
 
       const content = faker.lorem.paragraph();
 
-      const dueDate = faker.date.future();
+      // const dueDate = faker.date.future();
+      let dueDate;
+      const $dueDate = $('.fleft');
+      $dueDate.each((idx, node) => {
+        dueDate = $(node).find('.day:eq(1) em').text().trim() || '상시 채용';
+        // dueDate = jobs[idx].dueDate;
+      });
 
-      // const $dueDate = $('.fleft');
-      // $dueDate.each((idx, node) => {
-      //   const dueDate = $(node).find('.day:eq(1) em').text().trim();
-      //   jobs[idx].dueDate = dueDate;
-      // });
-      // let dueDate;
       const jobposting = {
         companyId: Number(companyId),
         title,
@@ -171,7 +172,7 @@ export class JobcrawlerService {
     console.time('코드 실행시간');
     // 코드 실행시간을 구해줌
 
-    const totalPage = 2; // 크롤링할 페이지 수
+    const totalPage = 10; // 크롤링할 갯수
     const jobInfo = [];
     const companyInfo = [];
 
@@ -183,89 +184,89 @@ export class JobcrawlerService {
 
       // Cheerio를 사용하여 페이지의 HTML을 파싱하고, jobLinks선택하여 채용공고의 링크를 제공
       const $ = cheerio.load(jobpostingContent);
-      const jobLinks = $(
-        "li.c_col .cell_mid .cl_top a[target='_blank']",
-      ).first();
-
-      // 취업공고 정보를 반복문으로 돌려서 추출
-      for (let j = 0; j < jobLinks.length; j++) {
+      const jobLinks = $('li.c_col .cell_mid .cl_top a');
+      for (const jobLink of jobLinks) {
         // 채용공고의 링크를 순회해서 상세페이지의 HTML을 가져오고
-        const jobLink = jobLinks[j];
+
         const jobDetailUrl = $(jobLink).attr('href');
 
         console.log('================jobLinks===============', jobDetailUrl);
 
-        // jobParsing채용공고 HTML 정보를 추출한 후 companyContent 추가
         const companyContent = await this.getAxiosData(jobDetailUrl);
-        // jobParsing채용공고 HTML 정보를 추출한 후 jobpostings배열에 추가
+
         const jobContent = await this.getAxiosData(jobDetailUrl);
-
-        // 회사 파싱 후 companies 변수에 삽입
         const companies = this.companyParsing(companyContent);
-        // 채용공고 파싱 후 jobs 변수에 삽입
         const jobs = this.jobParsing(jobContent);
-
         companyInfo.push(companies);
         jobInfo.push(jobs);
-        //각각 회사 정보, 채용정보에 푸쉬
 
-        console.log('===========companyInfo===========', companyInfo);
-        console.log('==========jobInfo================', jobs);
+        // [[company, company], [company, company], [company, company], []]
 
-        // await this.delay(5000); // 각페이지 크롤링 후 5초 대기
+        await this.delay(5000); // 각페이지 크롤링 후 5초 대기
       }
     }
     // 코드 실행시간을 측정
-    console.timeEnd('코드 실행시간');
+    console.log('===========companyInfo===========', companyInfo);
+    console.log('==========jobInfo================', jobInfo);
 
     // companyEntities에 담을 초기화 배열
-    const companyEntities = [];
-    companyInfo.forEach((company) => {
-      const companyEntity = this.companyRepository.create({
-        // 생성하고
-        id: company.id,
-        email: company.email,
-        password: company.password,
-        title: company.title,
-        introduction: company.introduction,
-        business: company.business,
-        employees: company.employees,
-        image: company.image,
-        website: company.website,
-        address: company.website,
-      });
-      companyEntities.push(companyEntity);
 
-      console.log(
-        '==============companyEntities================',
-        companyEntities,
-      );
-    });
+    for (const companys of companyInfo) {
+      for (const company of companys) {
+        // const companyEntities = [];
+        const companyEntity = this.companyRepository.create({
+          // 생성하고
+          id: company.id,
+          email: company.email,
+          password: company.password,
+          title: company.title,
+          introduction: company.introduction,
+          business: company.business,
+          employees: company.employees,
+          image: company.image,
+          website: company.website,
+          address: company.address,
+        });
+        // companyEntities.push(companyEntity);
+        const isExist = await this.companyRepository.findOne({
+          where: { id: company.id },
+        });
+        if (!isExist) {
+          await this.companyRepository.insert(companyEntity);
+        }
+      }
+    }
+    // console.log(
+    //   '==============companyEntities================',
+    //   companyEntities,
+    // );
 
-    await this.companyRepository.insert(companyEntities); // 회사 DB에 저장한다
+    // 회사 DB에 저장한다
 
-    jobInfo.forEach((job) => {
-      const jobEntity = this.jobpostingRepository.create({
-        // 생성하고
-        companyId: job.companyId,
-        // company: { id: company.id },
-        // companyId: company.id,
-        title: job.title,
-        career: job.career,
-        salary: job.salary,
-        education: job.education,
-        workType: job.workType,
-        workArea: job.workArea,
-        content: job.content,
-        dueDate: job.dueDate,
-      });
-      this.jobpostingRepository.insert(jobEntity); // 채용공고 DB에 저장한다
-    });
+    for (const jobs of jobInfo) {
+      for (const job of jobs) {
+        const jobEntity = this.jobpostingRepository.create({
+          // 생성하고
+          companyId: job.companyId,
+          // company: { id: company.id },
+          // companyId: company.id,
+          title: job.title,
+          career: job.career,
+          salary: job.salary,
+          education: job.education,
+          workType: job.workType,
+          workArea: job.workArea,
+          content: job.content,
+          dueDate: job.dueDate,
+        });
+        this.jobpostingRepository.insert(jobEntity); // 채용공고 DB에 저장한다
+      }
+    }
 
     // 리턴값 보여주기..
     return { jobInfo, companyInfo };
   }
-  // private delay(ms: number) {
-  //   return new Promise((resolve) => setTimeout(resolve, ms));
-  // }
+  private delay(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
 }
