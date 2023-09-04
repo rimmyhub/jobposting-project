@@ -226,11 +226,14 @@ const handleNewMsg = (senderId, message) => {
   sent.appendChild(builNewMsg(senderId, message));
 };
 
-const builNewMsg = async (senderId, message) => {
+const builNewMsg = async (senderId, message, senderType) => {
   // const sendTime = createAt.substring(0, 10);
+  const type = window.localStorage.getItem('type');
   const myId = window.localStorage.getItem('id');
   const li = document.createElement('li');
-  li.classList.add(myId === String(senderId) ? 'sent' : 'received');
+  li.classList.add(
+    myId === String(senderId) && senderType === type ? 'sent' : 'received',
+  );
   const dom = `<span class="message">${message}</span>`;
   // <span class="time">${sendTime}</span>`;
   li.innerHTML = dom;
@@ -245,7 +248,7 @@ async function getChatContents(id) {
     .then((res) => res.json()) //json으로 받을 것을 명시
     .then((datas) => {
       datas.forEach((el) => {
-        builNewMsg(el.senderId, el.content, el.createdAt);
+        builNewMsg(el.senderId, el.content, el.senderType);
       });
     })
     .catch((e) => {
