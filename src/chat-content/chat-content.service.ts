@@ -12,7 +12,6 @@ export class ChatContentService {
 
   // 채팅내용 저장하기
   async saveChatContents(payload: Array<any>) {
-    console.log('saveChatContents', payload);
     this.chatContentRepository.save({
       content: payload[0],
       chatId: payload[1].roomId,

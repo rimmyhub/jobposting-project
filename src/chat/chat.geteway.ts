@@ -40,13 +40,17 @@ export class ChatGateway {
     @ConnectedSocket() socket: Socket,
     @MessageBody() payload: Array<any>,
   ) {
-    console.log('payload=  ', payload);
     // 채팅내용을 저장하기
     await this.chatContentService.saveChatContents(payload);
     // 룸에 있는 유저에게만 메세지 보내기
     this.io
       .to(payload[1].roomId)
-      .emit('receive-message', payload[0], payload[1].userId);
+      .emit(
+        'receive-message',
+        payload[0],
+        payload[1].userId,
+        payload[1].userType,
+      );
   }
 
   // 방나가기

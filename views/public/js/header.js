@@ -121,8 +121,8 @@ const ejs = (window.onload = function () {
       sendMessage();
     });
   }
-  socket.on('receive-message', (message, userId) => {
-    builNewMsg(userId, message);
+  socket.on('receive-message', (message, userId, userType) => {
+    builNewMsg(userId, message, userType);
   });
 
   isLogin();
@@ -229,6 +229,7 @@ const handleNewMsg = (senderId, message) => {
 const builNewMsg = async (senderId, message, senderType) => {
   // const sendTime = createAt.substring(0, 10);
   const type = window.localStorage.getItem('type');
+  console.log(senderType, type);
   const myId = window.localStorage.getItem('id');
   const li = document.createElement('li');
   li.classList.add(
@@ -248,6 +249,7 @@ async function getChatContents(id) {
     .then((res) => res.json()) //json으로 받을 것을 명시
     .then((datas) => {
       datas.forEach((el) => {
+        console.log(el);
         builNewMsg(el.senderId, el.content, el.senderType);
       });
     })
@@ -268,6 +270,7 @@ async function sendMessage() {
   console.log(chattingContainer.scrollTop);
   const userId = window.localStorage.getItem('id');
   const userType = window.localStorage.getItem('type');
+
   const payload = {
     userId,
     userType,
