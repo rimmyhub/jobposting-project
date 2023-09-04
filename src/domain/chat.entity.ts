@@ -3,10 +3,8 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  JoinColumn,
   ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -42,7 +40,7 @@ export class Chat {
   @ManyToOne(() => Company, (company) => company.chat)
   company: Company;
 
-  // 1대1 Chat --- ChatContent
+  // 1대다 Chat --- ChatContent
   @OneToMany(() => ChatContent, (chatContent) => chatContent.chat)
   chatContent: ChatContent[];
 }

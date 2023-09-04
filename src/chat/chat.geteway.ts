@@ -1,14 +1,14 @@
 import {
   ConnectedSocket,
   MessageBody,
-  OnGatewayConnection,
-  OnGatewayDisconnect,
-  OnGatewayInit,
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket, Namespace } from 'socket.io';
+import { ChatService } from './chat.service';
+import { ChatContentService } from 'src/chat-content/chat-content.service';
+
 // 소켓IO
 @WebSocketGateway(8080, {
   cors: {
@@ -16,11 +16,12 @@ import { Server, Socket, Namespace } from 'socket.io';
   },
 })
 export class ChatGateway {
-  // @WebSocketServer()
-  // server: Server;
   @WebSocketServer() io: Namespace;
 
-  constructor() {}
+  constructor(
+    private readonly chatService: ChatService,
+    private readonly chatContentService: ChatContentService,
+  ) {}
 
   @SubscribeMessage('createRoom')
   createRoom() {}
@@ -30,21 +31,27 @@ export class ChatGateway {
     @ConnectedSocket() socket: Socket,
     @MessageBody() roomId: string,
   ): void {
-    // 이미 접속한 방인지 확인
-    console.log('socket.rooms', socket.id);
     socket.join(roomId);
   }
 
+  // 메세지 보내기
   @SubscribeMessage('message')
-  sendMessage(
+  async sendMessage(
     @ConnectedSocket() socket: Socket,
-    @MessageBody() message: string,
-    @MessageBody() roomId: string,
+    @MessageBody() payload: Array<any>,
   ) {
-    console.log('socket roomId = ', roomId[1]);
-    // console.log('socket.rooms', socket.rooms);
-
+    // 채팅내용을 저장하기
+    await this.chatContentService.saveChatContents(payload);
     // 룸에 있는 유저에게만 메세지 보내기
-    this.io.to(roomId[1]).emit('receive-message', message);
+    this.io.to(payload[1].roomId).emit('receive-message', payload[0]);
+  }
+
+  // 방나가기
+  @SubscribeMessage('leave')
+  leaveRoom(@ConnectedSocket() socket: Socket, @MessageBody() roomId: string) {
+    // 이미 접속한 방인지 확인
+    if (socket.rooms) {
+      socket.leave(roomId);
+    }
   }
 }

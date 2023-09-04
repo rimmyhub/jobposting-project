@@ -28,19 +28,6 @@ export class ChatController {
   ): Promise<Chat> {
     return this.chatService.createUserChat(req.user.id, +companyId);
   }
-  // @UseGuards(UserGuard)
-  // @Post(':companyId/company')
-  // createUserChat(
-  //   @Request() req,
-  //   @Param('companyId') companyId: string,
-  //   @Body() createChatDto: CreateChatDto,
-  // ): Promise<Chat> {
-  //   return this.chatService.createUserChat(
-  //     req.user.id,
-  //     +companyId,
-  //     createChatDto,
-  //   );
-  // }
 
   // 회사 -> 유저 채팅 신청
   @UseGuards(CompanyGuard)
@@ -74,22 +61,6 @@ export class ChatController {
     const chatRooms = await this.chatService.userGetAllChatRoom(req.user.id);
     return chatRooms;
   }
-
-  // 회사가 -> 유저에게 채팅 신청
-  // @UseGuards(CompanyGuard)
-  // @Post(':userId/user')
-  // createCompanyChat(
-  //   @Request() req,
-  //   @Param('userId') userId: string,
-  //   @Body() createChatDto: CreateChatDto,
-  // ): Promise<Chat> {
-  //   return this.chatService.createCompanyChat(
-  //     req.company.id,
-  //     +userId,
-  //     createChatDto,
-  //   );
-  // }
-
   // 유저가 - 회사 채팅 삭제
   @UseGuards(UserGuard)
   @Delete(':chatId/company')
@@ -102,5 +73,12 @@ export class ChatController {
   @Delete(':chatId/user')
   removeCompanyChat(@Request() req, @Param('chatId') chatId: string) {
     return this.chatService.removeCompanyChat(req.company.id, +chatId);
+  }
+
+  // 채팅내용 저장하기
+  @Post('save')
+  saveChatContent(@Request() req) {
+    const { chatContent, chatId, senderId, senderType } = req.Body;
+    console.log('save = ', chatContent, chatId, senderId, senderType);
   }
 }

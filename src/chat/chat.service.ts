@@ -1,5 +1,4 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { CreateRoomDto } from './dto/create-room.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Chat } from 'src/domain/chat.entity';
 import { Repository } from 'typeorm';
@@ -40,6 +39,7 @@ export class ChatService {
     return chat;
   }
 
+  // 회사유저의 채팅리스트 불러오기
   async comGetAllChatRoom(id: number): Promise<Chat[]> {
     const chatRooms = await this.chatRepository
       .createQueryBuilder('chat')
@@ -48,20 +48,20 @@ export class ChatService {
         'chat.companyId',
         'chat.userId',
         'user.email',
-
-        'chatContent.senderId',
-        'chatContent.chatContent',
-        'chatContent.createdAt',
+        // 'chatContent.senderId',
+        // 'chatContent.content',
+        // 'chatContent.createdAt',
       ])
       .leftJoin('chat.user', 'user')
 
-      .leftJoin('chat.chatContent', 'chatContent')
+      // .leftJoin('chat.chatContent', 'chatContent')
       .where(`chat.companyId = ${id}`)
       .getMany();
 
     return chatRooms;
   }
 
+  // 일반 유저의 채팅리스트 불러오기
   async userGetAllChatRoom(id: number): Promise<Chat[]> {
     console.log('id = ', id);
     const chatRooms = await this.chatRepository
@@ -71,16 +71,14 @@ export class ChatService {
         'chat.companyId',
         'chat.userId',
         'company.email',
-        'chatContent.senderId',
-        'chatContent.chatContent',
-        'chatContent.createdAt',
+        // 'chatContent.senderId',
+        // 'chatContent.content',
+        // 'chatContent.createdAt',
       ])
       .leftJoin('chat.company', 'company')
-      .leftJoin('chat.chatContent', 'chatContent')
+      // .leftJoin('chat.chatContent', 'chatContent')
       .where(`chat.userId = ${id}`)
       .getMany();
-    // console.log('chatRooms');
-    console.log('chatRooms= ', chatRooms);
     return chatRooms;
   }
 

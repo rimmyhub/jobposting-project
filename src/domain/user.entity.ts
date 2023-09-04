@@ -75,7 +75,7 @@ export class User {
   @OneToMany(() => Education, (education) => education.user)
   educations: Education[];
 
-  //1:N 관계 설정 - 채팅
+  //1대다 관계 설정 - 채팅
   @OneToMany(() => Chat, (chat) => chat.user)
   chat: Chat[];
 

@@ -3,9 +3,7 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  JoinColumn,
   ManyToOne,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -16,14 +14,14 @@ export class ChatContent {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ name: 'sender_id', comment: '보낸유저의 ID' })
   senderId: number;
 
-  @Column()
+  @Column({ name: 'sender_type' })
   senderType: string;
 
-  @Column()
-  chatContent: string;
+  @Column({ name: 'content' })
+  content: string;
 
   @CreateDateColumn({ name: 'create_at', comment: '생성일' })
   createdAt: Date;
@@ -34,7 +32,10 @@ export class ChatContent {
   @DeleteDateColumn({ name: 'delete_at', comment: '삭제일' })
   deletedAt?: Date | null;
 
-  // 1대1 Chat --- ChatContent
+  @Column({ name: 'chat_id' })
+  chatId: number;
+
+  // 다대1 Chat --- ChatContent
   @ManyToOne(() => Chat, (chat) => chat.chatContent)
   chat: Chat;
 }
