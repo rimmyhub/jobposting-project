@@ -137,7 +137,7 @@ export class AppController {
   }
 
   // 채용공고 지원 내역 보기
-  @Get('/my-applycants')
+  @Get('/apply')
   @Render('apply')
   async getApply(@Request() req) {
     const cookie: string = await req.cookies['authorization'];

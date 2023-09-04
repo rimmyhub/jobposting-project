@@ -67,7 +67,7 @@ export class CompanyService {
         HttpStatus.BAD_REQUEST,
       );
     }
-    
+
     const newCompany = await this.companyRepository.save({
       email,
       title,
@@ -84,8 +84,12 @@ export class CompanyService {
   }
 
   // 회사 전체 조회
-  async findAllCompany() {
-    return await this.companyRepository.find();
+  async findAllCompany({ page }) {
+    return await this.companyRepository.find({
+      take: 20,
+      skip: (page - 1) * 20,
+      order: { createdAt: 'DESC' },
+    });
   }
 
   // 검색시 업무 또는 회사 이름에 해당 검색어를 포함하는 회사 전체 조회
@@ -188,7 +192,6 @@ export class CompanyService {
     return { message: `${deletCompany.title} 가 삭제되었습니다.` };
   }
 
-  
   // 인증번호 저장
   async storeVerificationCode(email: string, code: string): Promise<void> {
     const company = this.companyRepository.create({

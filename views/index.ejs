@@ -63,101 +63,153 @@
           <i class="fa-solid fa-caret-down caret-down"></i>
         </div>
       </div>
-      <div class="jobposting-box">
-        <div class="box-title">
-          <h3>회사</h3>
-        </div>
-        <div class="jobposting-list">
-          <div class="jobposting-card">
-            <img
-              class="jobposting-img"
-              src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Kakao_logo.jpg"
-              alt=""
-              srcset=""
-            />
-            <div>
-              <div class="jobposting-title">카카오 개발자모십니다.</div>
-              <div class="jobposting-job">IT</div>
-              <p>서울 어쩌구</p>
-            </div>
-          </div>
-          <div class="jobposting-card">
-            <img
-              class="jobposting-img"
-              src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Kakao_logo.jpg"
-              alt=""
-              srcset=""
-            />
-            <div>
-              <div class="jobposting-title">카카오 개발자모십니다.</div>
-              <div class="jobposting-job">IT</div>
-              <p>서울 어쩌구</p>
-            </div>
-          </div>
-          <div class="jobposting-card">
-            <img
-              class="jobposting-img"
-              src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Kakao_logo.jpg"
-              alt=""
-              srcset=""
-            />
-            <div>
-              <div class="jobposting-title">카카오 개발자모십니다.</div>
-              <div class="jobposting-job">IT</div>
-              <p>서울 어쩌구</p>
-            </div>
-          </div>
-          <div class="jobposting-card">
-            <img
-              class="jobposting-img"
-              src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Kakao_logo.jpg"
-              alt=""
-              srcset=""
-            />
-
-            <div>
-              <div class="jobposting-title">카카오 개발자모십니다.</div>
-              <div class="jobposting-job">IT</div>
-              <p>서울 어쩌구</p>
-            </div>
-          </div>
-          <div class="jobposting-card">
-            <img
-              class="jobposting-img"
-              src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Kakao_logo.jpg"
-              alt=""
-              srcset=""
-            />
-            <div>
-              <div class="jobposting-title">카카오 개발자모십니다.</div>
-              <div class="jobposting-job">IT</div>
-              <p>서울 어쩌구</p>
-            </div>
-          </div>
-        </div>
-        <button class="add-btn">더보기</button>
-      </div>
-      <div class="jobposting-box">
-        <div class="box-title">
+      <div class="jobposting-box" id="jobposting-box">
+        <div class="box-title" id="jobposting-box-title">
           <h3>채용공고</h3>
         </div>
-        <div class="jobposting-list">
-          <div class="jobposting-card">
-            <img
-              class="jobposting-img"
-              src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Kakao_logo.jpg"
-              alt=""
-              srcset=""
-            />
+        <div class="jobposting-list" id="jobposting-list">
+          <!-- <div class="jobposting-card" id="jobposting-card">
             <div>
-              <div class="jobposting-title">카카오 개발자모십니다.</div>
-              <div class="jobposting-job">IT</div>
+              <div class="jobposting-title" id="jobposting-title">
+                카카오 개발자모십니다.
+              </div>
+              <div class="jobposting-job" id="jobposting-job">IT</div>
               <p>서울 어쩌구</p>
             </div>
           </div>
+          <div class="jobposting-card" id="jobposting-card">
+            <div>
+              <div class="jobposting-title" id="jobposting-title">
+                카카오 개발자모십니다.
+              </div>
+              <div class="jobposting-job" id="jobposting-job">IT</div>
+              <p>서울 어쩌구</p>
+            </div>
+          </div>
+          <div class="jobposting-card" id="jobposting-card">
+            <div>
+              <div class="jobposting-title" id="jobposting-title">
+                카카오 개발자모십니다.
+              </div>
+              <div class="jobposting-job" id="jobposting-job">IT</div>
+              <p>서울 어쩌구</p>
+            </div>
+          </div>
+          <div class="jobposting-card" id="jobposting-card">
+            <div>
+              <div class="jobposting-title" id="jobposting-title">
+                카카오 개발자모십니다.
+              </div>
+              <div class="jobposting-job" id="jobposting-job">IT</div>
+              <p>서울 어쩌구</p>
+            </div>
+          </div>
+          <div class="jobposting-card" id="jobposting-card">
+            <div>
+              <div class="jobposting-title" id="jobposting-title">
+                카카오 개발자모십니다.
+              </div>
+              <div class="jobposting-job" id="jobposting-job">IT</div>
+              <p>서울 어쩌구</p>
+            </div>
+          </div> -->
         </div>
-        <button class="add-btn">더보기</button>
+        <button class="add-btn" id="jobposting-add-btn">더보기</button>
       </div>
+      <div class="jobposting-box" id="companies-box">
+        <div class="box-title" id="companies-box-title">
+          <h3>회사</h3>
+        </div>
+        <div class="jobposting-list" id="companies-list">
+          <!-- <div class="jobposting-card" id="companies-card">
+            <img
+              class="jobposting-img"
+              id="companies-img"
+              src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Kakao_logo.jpg"
+              alt=""
+              srcset=""
+              onerror="this.src='/img/company.jpg';"
+            />
+            <div>
+              <div class="jobposting-title" id="companies-title">
+                카카오 개발자모십니다.
+              </div>
+              <div class="jobposting-job" id="companies-job">IT</div>
+              <p>서울 어쩌구</p>
+            </div>
+          </div>
+          <div class="jobposting-card" id="companies-card">
+            <img
+              class="jobposting-img"
+              id="companies-img"
+              src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Kakao_logo.jpg"
+              alt=""
+              srcset=""
+              onerror="this.src='/img/company.jpg';"
+            />
+            <div>
+              <div class="jobposting-title" id="companies-title">
+                카카오 개발자모십니다.
+              </div>
+              <div class="jobposting-job" id="companies-job">IT</div>
+              <p>서울 어쩌구</p>
+            </div>
+          </div>
+          <div class="jobposting-card" id="companies-card">
+            <img
+              class="jobposting-img"
+              id="companies-img"
+              src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Kakao_logo.jpg"
+              alt=""
+              srcset=""
+              onerror="this.src='/img/company.jpg';"
+            />
+            <div>
+              <div class="jobposting-title" id="companies-title">
+                카카오 개발자모십니다.
+              </div>
+              <div class="jobposting-job" id="companies-job">IT</div>
+              <p>서울 어쩌구</p>
+            </div>
+          </div>
+          <div class="jobposting-card" id="companies-card">
+            <img
+              class="jobposting-img"
+              id="companies-img"
+              src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Kakao_logo.jpg"
+              alt=""
+              srcset=""
+              onerror="this.src='/img/company.jpg';"
+            />
+            <div>
+              <div class="jobposting-title" id="companies-title">
+                카카오 개발자모십니다.
+              </div>
+              <div class="jobposting-job" id="companies-job">IT</div>
+              <p>서울 어쩌구</p>
+            </div>
+          </div>
+          <div class="jobposting-card" id="companies-card">
+            <img
+              class="jobposting-img"
+              id="companies-img"
+              src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Kakao_logo.jpg"
+              alt=""
+              srcset=""
+              onerror="this.src='/img/company.jpg';"
+            />
+            <div>
+              <div class="jobposting-title" id="companies-title">
+                카카오 개발자모십니다.
+              </div>
+              <div class="jobposting-job" id="companies-job">IT</div>
+              <p>서울 어쩌구</p>
+            </div>
+          </div> -->
+        </div>
+        <button class="add-btn" id="companies-add-btn">더보기</button>
+      </div>
+
       <div class="jobposting-box">
         <div class="box-title">
           <h3>인재</h3>

@@ -12,6 +12,7 @@ import {
   UsePipes,
   HttpStatus,
   HttpException,
+  Query,
 } from '@nestjs/common';
 import { CompanyService } from './company.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
@@ -48,8 +49,8 @@ export class CompanyController {
 
   // 회사 전체 조회
   @Get()
-  findAllCompany() {
-    return this.companyService.findAllCompany();
+  findAllCompany(@Query('page') page: string) {
+    return this.companyService.findAllCompany({ page: Number(page) });
   }
 
   // 검색시 업무 또는 회사 이름에 해당 검색어를 포함하는 회사 전체 조회
