@@ -60,6 +60,19 @@ export class AppController {
     return { title: 'Title' };
   }
 
+  // 회사 정보 서브 페이지 (로그인 없이 모든 공고 조회)
+  @Get('subpage/company/:companyId')
+  @Render('subpage-company')
+  getSubpageCompany(@Request() req, @Param('companyId') companyId: string) {
+    return { companyId };
+  }
+  // 채용공고 (로그인 없이 모든 공고 조회)
+  @Get('jobposting/:jobpostingId')
+  @Render('jobposting-user')
+  getJobpstingUser(@Param('jobpostingId') jobpostingId: string) {
+    return { jobpostingId };
+  }
+
   // 유저 - 서브 페이지
   @Get('subpage/:userId/:resumeId')
   @Render('subpage-user')
@@ -77,13 +90,6 @@ export class AppController {
       isLogin: 0,
     };
     // return { title: 'Title' };
-  }
-
-  // 회사 - 서브 페이지
-  @Get('subpage/company')
-  @Render('subpage-company')
-  getSubpageCompany() {
-    return { title: 'Title' };
   }
 
   // 유저 - 마이페이지
@@ -120,13 +126,6 @@ export class AppController {
       type,
       isLogin: 1,
     });
-  }
-
-  // 유저 로그인 시 - 채용공고
-  @Get('jobposting')
-  @Render('jobposting-user')
-  getJobpstingUser() {
-    return { title: 'Title' };
   }
 
   // 회사 로그인 시 - 채용 공고

@@ -3,13 +3,13 @@
 // 마감일을 d-day 로 표시해주기
 // 지원 취소 버튼누르면 alret, confirm! 하게해서 취소하게되면 회사 규정에 따라 재지원이 불가능할 수도 있습니다.  취소하시겠습니까?
 
-// const applyBox = document.querySelector('.apply-list');
+const applyBox = document.querySelector('.apply-list');
 
-// async function getApplies() {
-//   try {
-//     const response = await fetch('');
-//   } catch (error) {}
-// }
+async function getApplies() {
+  try {
+    const response = await fetch('');
+  } catch (error) {}
+}
 
 //참고 예시
 // // 채용공고 영역
