@@ -36,41 +36,24 @@
 // // getJobpostings 함수를 호출하여 채용공고 데이터를 가져오고 HTML에 추가합니다.
 // getJobpostings();
 
-jobpostingId = document.location.pathname.split('/')[2];
+const applyBox = document.querySelector('.apply-list');
+const applyBtn = document.querySelector('#apply-btn');
 
-console.log(jobpostingId);
+console.log(applyBox);
 
-const endpoint = isUser
-  ? '/api/user/apply'
-  : isCompany
-  ? '/api/companies/apply'
-  : '';
-
-console.log(endpoint);
-
-if (isUser) {
-  const applyBox = document.querySelector('.apply-list');
-  const applyBtn = document.querySelector('#apply-btn');
-
-  console.log(applyBox);
-
-  async function getAppliesUser() {
-    try {
-      const response = await fetch(`api/applications/user/${jobpostingId}`);
-      const applyUserData = await response.json();
-      const temp = applyUserData.map((applyUser) => {
-        return `
+async function getAppliesUser() {
+  try {
+    const response = await fetch(`api/applications/user/${jobpostingId}`);
+    const applyUserData = await response.json();
+    const temp = applyUserData.map((applyUser) => {
+      return `
             <div class="apply-card">
             <h4>cloud support associate</h4>
             <h6>항공우주/기계,전기전자,생산기술</h6>
             <h6>마감일 : 2023-01-03</h6>
-            
-            
-            
             `;
-      });
-    } catch (error) {
-      console.error('error');
-    }
+    });
+  } catch (error) {
+    console.error('error');
   }
 }

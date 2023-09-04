@@ -20,42 +20,53 @@
     <div class="container" style="margin-top: 20px">
       <div class="row">
         <div class="col-2">
+          <% if (type === "user") { %>
           <p class="text-start fs-5 fw-semibold" style="margin-top: 30px">
-            회사 정보
+            내가 지원한 공고
           </p>
+          <% }else if (type === 'company') { %>
+          <p class="text-start fs-5 fw-semibold" style="margin-top: 30px">
+            내가 작성한 공고
+          </p>
+          <% } %>
         </div>
         <div class="col-10">
           <div class="row">
+            <% if (type === 'user') { %>
             <div class="apply-list">
               <div class="apply-card">
                 <h4>cloud support associate</h4>
                 <h6>항공우주/기계,전기전자,생산기술</h6>
                 <h6>마감일 : 2023-01-03</h6>
-                <button
-                  type="button"
-                  class="btn btn-outline-primary"
-                  id="apply-btn"
-                >
-                  지원 취소
-                </button>
-                <hr />
               </div>
-              <div class="apply-card">
-                <h4>cloud support associate</h4>
-                <h6>항공우주/기계,전기전자,생산기술</h6>
-                <h6>마감일 : 2023-01-03</h6>
-                <button type="button" class="btn btn-outline-primary">
-                  지원 취소
-                </button>
+              <% }else if (type === 'company'){ %>
+              <div class="apply-list">
+                <div class="apply-card">
+                  <h4>cloud support associate</h4>
+                  <h6>항공우주/기계,전기전자,생산기술</h6>
+                  <h6>마감일 : 2023-01-03</h6>
+                </div>
+                <% } %>
+                <div>
+                  <% if (type === 'user') { %>
+                  <button
+                    type="button"
+                    class="btn btn-outline-primary"
+                    id="apply-btn"
+                  >
+                    지원 취소
+                  </button>
+                  <% }else if (type === 'company'){ %>
+                  <button
+                    type="button"
+                    class="btn btn-outline-primary"
+                    id="apply-btn"
+                  >
+                    공고 수정
+                  </button>
+                  <% } %>
+                </div>
                 <hr />
-              </div>
-              <div class="apply-card">
-                <h4>cloud support associate</h4>
-                <h6>항공우주/기계,전기전자,생산기술</h6>
-                <h6>마감일 : 2023-01-03</h6>
-                <button type="button" class="btn btn-outline-primary">
-                  지원 취소
-                </button>
               </div>
             </div>
           </div>
