@@ -48,13 +48,13 @@ export class ChatService {
         'chat.companyId',
         'chat.userId',
         'user.email',
-        'chatContent.senderId',
-        'chatContent.chatContent',
-        'chatContent.createdAt',
+        // 'chatContent.senderId',
+        // 'chatContent.content',
+        // 'chatContent.createdAt',
       ])
       .leftJoin('chat.user', 'user')
 
-      .leftJoin('chat.chatContent', 'chatContent')
+      // .leftJoin('chat.chatContent', 'chatContent')
       .where(`chat.companyId = ${id}`)
       .getMany();
 
@@ -71,12 +71,12 @@ export class ChatService {
         'chat.companyId',
         'chat.userId',
         'company.email',
-        'chatContent.senderId',
-        'chatContent.chatContent',
-        'chatContent.createdAt',
+        // 'chatContent.senderId',
+        // 'chatContent.content',
+        // 'chatContent.createdAt',
       ])
       .leftJoin('chat.company', 'company')
-      .leftJoin('chat.chatContent', 'chatContent')
+      // .leftJoin('chat.chatContent', 'chatContent')
       .where(`chat.userId = ${id}`)
       .getMany();
     return chatRooms;

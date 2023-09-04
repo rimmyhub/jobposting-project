@@ -1,6 +1,8 @@
 let messageList;
 let chatContainer;
 let chatBoxTitle;
+let sent;
+let received;
 const socket = io('http://localhost:8080');
 const ejs = (window.onload = function () {
   const params = new URLSearchParams(window.location.search);
@@ -13,9 +15,10 @@ const ejs = (window.onload = function () {
   const closeChatting = document.getElementById('close-chatting');
   const sendMsgUser = document.getElementById('user-msg');
   const sendBtn = document.getElementById('send-btn');
-  const sent = document.getElementById('sent');
   const logout = document.getElementById('logout');
 
+  received = document.getElementById('received');
+  sent = document.getElementById('sent');
   chatBoxTitle = document.getElementById('chat-box-title');
   chatContainer = document.getElementById('chat-container');
   messageList = document.getElementById('message-list');
@@ -90,15 +93,15 @@ const ejs = (window.onload = function () {
       });
   };
 
-  const handleNewMsg = (message) => {
-    sent.appendChild(builNewMsg(message));
-  };
+  // const handleNewMsg = (message) => {
+  //   sent.appendChild(builNewMsg(message));
+  // };
 
-  const builNewMsg = (message) => {
-    const li = document.createElement('li');
-    li.appendChild(document.createTextNode(message));
-    return li;
-  };
+  // const builNewMsg = (message) => {
+  //   const li = document.createElement('li');
+  //   li.appendChild(document.createTextNode(message));
+  //   return li;
+  // };
 
   async function deleteCookie() {
     let isSuccess;
@@ -124,7 +127,6 @@ const ejs = (window.onload = function () {
       sendMessage();
     });
   }
-
   socket.on('receive-message', (message) => {
     console.log('message = ', message);
     handleNewMsg(message);
@@ -140,6 +142,7 @@ function isLogin() {
   }
 }
 
+// 채팅리스트 가져오기
 async function getChatRooms() {
   let type = window.localStorage.getItem('type');
   let payload;
@@ -153,7 +156,7 @@ async function getChatRooms() {
         console.log(e);
       });
 
-    appendMsgList(payload);
+    appendMsgList(payload, type);
   } else if (type === 'company') {
     await fetch('/api/chats/company')
       .then((res) => res.json()) //json으로 받을 것을 명시
@@ -167,6 +170,7 @@ async function getChatRooms() {
   }
 }
 
+// 메세지리스트 화면에 출력하기
 function appendMsgList(datas, type) {
   if (type === 'company') {
     datas.forEach((el) => {
@@ -202,7 +206,7 @@ function appendMsgList(datas, type) {
 }
 
 let roomId;
-function chattingBox(id, email) {
+async function chattingBox(id, email) {
   const userName = document.createElement('h6');
   userName.innerText = `${email} 님`;
   chatBoxTitle.append(userName);
@@ -217,21 +221,47 @@ function chattingBox(id, email) {
   icon.onclick = leaveRoom;
 
   chatBoxTitle.append(icon);
-
+  await getChatContents(id);
   socket.emit('join', id);
   roomId = id;
   chatContainer.style.display = 'flex';
+}
+
+const handleNewMsg = (message) => {
+  sent.appendChild(builNewMsg(message));
+};
+
+const builNewMsg = (message) => {
+  const li = document.createElement('li');
+  li.appendChild(document.createTextNode(message));
+  return li;
+};
+
+async function getChatContents(id) {
+  await fetch(`/api/chat-content/${id}`)
+    .then((res) => res.json()) //json으로 받을 것을 명시
+    .then((datas) => {
+      console.log('chatContent = ', datas);
+
+      // payload = datas;
+      datas.forEach((el) => {
+        handleNewMsg(el.content);
+      });
+    })
+    .catch((e) => {
+      console.log(e);
+    });
 }
 
 function leaveRoom() {
   chatContainer.style.display = 'none';
   socket.emit('leave', roomId);
   chatBoxTitle.innerHTML = '';
+  sent.innerHTML = '';
 }
 
 // 메세지 보내기
 function sendMessage() {
-  // 메세지 내용 저장하기
   const userId = window.localStorage.getItem('id');
   const userType = window.localStorage.getItem('type');
   const payload = {
@@ -239,6 +269,7 @@ function sendMessage() {
     userType,
     roomId,
   };
+  // 메세지 내용 저장하기
   socket.emit('message', chatContent.value, payload);
   chatContent.value = '';
 }

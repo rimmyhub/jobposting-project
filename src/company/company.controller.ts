@@ -16,7 +16,6 @@ import {
 } from '@nestjs/common';
 import { CompanyService } from './company.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
-import { Company } from 'src/domain/company.entity';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 import { CompanyGuard } from '../auth/jwt/jwt.company.guard';
 import { ParamDto } from 'src/utils/param.dto';
