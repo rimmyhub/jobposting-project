@@ -27,39 +27,25 @@
                   class="fa-solid fa-xmark close-message"
                 ></i>
               </div>
-              <div id="message-list" class="message-list">
-                <!-- <div>
-                  <div id="message-card" class="message-card">
-                    <div class="user-profile">
-                      <img src="/img/userImg.jpg" alt="" srcset="" />
-                    </div>
-                    <div class="message-info">
-                      <div class="user-name">유저네임</div>
-                      <div>메세지 내용</div>
-                    </div>
-                  </div>
-                </div> -->
-              </div>
+              <div id="message-list" class="message-list"></div>
             </div>
             <div id="chat-container" class="chat-container">
-              <div id="chat-box-title" class="chat-box-title">
-                <!-- <h6>땡땡이님</h6>
-                <i
-                  id="close-chatting"
-                  class="fa-solid fa-xmark close-message"
-                ></i> -->
-              </div>
-              <div class="chatting-container">
+              <div id="chat-box-title" class="chat-box-title"></div>
+              <div id="chatting-container" class="chatting-container">
                 <ul id="chatting-list" class="chatting-list">
                   <!-- 나의 메세지 -->
-                  <li id="sent" class="sent"></li>
+                  <!-- <li id="sent" class="sent"></li> -->
                   <!-- 상대방의 메세지 -->
-                  <li id="received" class="received"></li>
+                  <!-- <li id="received" class="received"></li> -->
                 </ul>
               </div>
               <div class="chat-input">
                 <span>
-                  <input id="chat-content" type="text" />
+                  <input
+                    id="chat-content"
+                    type="text"
+                    onkeyPress="if(window.event.keyCode==13){sendMessage()}"
+                  />
                   <button id="send-btn" class="send-button">전송</button>
                 </span>
               </div>

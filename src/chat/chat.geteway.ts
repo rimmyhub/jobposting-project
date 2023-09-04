@@ -5,7 +5,7 @@ import {
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
-import { Server, Socket, Namespace } from 'socket.io';
+import { Socket, Namespace } from 'socket.io';
 import { ChatService } from './chat.service';
 import { ChatContentService } from 'src/chat-content/chat-content.service';
 
@@ -40,10 +40,13 @@ export class ChatGateway {
     @ConnectedSocket() socket: Socket,
     @MessageBody() payload: Array<any>,
   ) {
+    console.log('payload=  ', payload);
     // 채팅내용을 저장하기
     await this.chatContentService.saveChatContents(payload);
     // 룸에 있는 유저에게만 메세지 보내기
-    this.io.to(payload[1].roomId).emit('receive-message', payload[0]);
+    this.io
+      .to(payload[1].roomId)
+      .emit('receive-message', payload[0], payload[1].userId);
   }
 
   // 방나가기

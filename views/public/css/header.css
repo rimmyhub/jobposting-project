@@ -2,6 +2,24 @@ body {
   margin: 0;
 }
 
+.message-box::-webkit-scrollbar,
+.chatting-container::-webkit-scrollbar {
+  width: 8px; /* 스크롤바의 너비 */
+}
+
+.message-box::-webkit-scrollbar-thumb,
+.chatting-container::-webkit-scrollbar-thumb {
+  height: 30%; /* 스크롤바의 길이 */
+  background: #b6b8bb; /* 스크롤바의 색상 */
+
+  border-radius: 10px;
+}
+
+.message-box::-webkit-scrollbar-track,
+.chatting-container::-webkit-scrollbar-track {
+  background: rgba(33, 122, 244, 0.1); /*스크롤바 뒷 배경 색상*/
+}
+
 .container-header {
   border-bottom: 0.5px solid rgba(128, 128, 128, 0.92);
   color: black;
@@ -181,6 +199,7 @@ body {
   flex-direction: column;
   width: 400px;
   min-height: 500px;
+  max-height: 500px;
   position: absolute;
   z-index: 10;
   background-color: white;
@@ -204,8 +223,41 @@ body {
 
 .chatting-container {
   flex: 13;
-  overflow-y: scroll;
+  overflow: scroll;
+  /* overflow: auto; */
 }
+
+.chatting-list {
+  padding: 10px;
+}
+
+.chatting-list > li {
+  padding-top: 0.3rem;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+  margin: 0px;
+}
+
+.sent {
+  flex-direction: row-reverse;
+  float: rightdisplay-container;
+}
+
+.message {
+  padding: 5px;
+  /* border: 1px solid black; */
+  border-radius: 5px;
+}
+
+.sent .message {
+  background-color: #638cfa5e;
+}
+
+.received .message {
+  background-color: #85878b6c;
+}
+
 .chat-input {
   flex: 1;
   display: flex;

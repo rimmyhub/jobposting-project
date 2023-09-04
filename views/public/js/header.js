@@ -3,6 +3,8 @@ let chatContainer;
 let chatBoxTitle;
 let sent;
 let received;
+let chattingList;
+let chattingContainer;
 const socket = io('http://localhost:8080');
 const ejs = (window.onload = function () {
   const params = new URLSearchParams(window.location.search);
@@ -17,6 +19,8 @@ const ejs = (window.onload = function () {
   const sendBtn = document.getElementById('send-btn');
   const logout = document.getElementById('logout');
 
+  chattingContainer = document.getElementById('chatting-container');
+  chattingList = document.getElementById('chatting-list');
   received = document.getElementById('received');
   sent = document.getElementById('sent');
   chatBoxTitle = document.getElementById('chat-box-title');
@@ -32,7 +36,7 @@ const ejs = (window.onload = function () {
   // 메인페이지에서는 얘가 없어서 오류남
   if (sendMsgUser) {
     // 회사가 유저에게 메세지
-    sendMsgUser.addEventListener('click', () => {
+    sendMsgUser.addEventListener('click', async () => {
       sendMessageUser(userId);
       chatContainer.style.display = 'flex';
     });
@@ -93,16 +97,6 @@ const ejs = (window.onload = function () {
       });
   };
 
-  // const handleNewMsg = (message) => {
-  //   sent.appendChild(builNewMsg(message));
-  // };
-
-  // const builNewMsg = (message) => {
-  //   const li = document.createElement('li');
-  //   li.appendChild(document.createTextNode(message));
-  //   return li;
-  // };
-
   async function deleteCookie() {
     let isSuccess;
     await fetch('/api/auth/logout', {
@@ -127,9 +121,8 @@ const ejs = (window.onload = function () {
       sendMessage();
     });
   }
-  socket.on('receive-message', (message) => {
-    console.log('message = ', message);
-    handleNewMsg(message);
+  socket.on('receive-message', (message, userId) => {
+    builNewMsg(userId, message);
   });
 
   isLogin();
@@ -206,6 +199,7 @@ function appendMsgList(datas, type) {
 }
 
 let roomId;
+// 채팅창 열기
 async function chattingBox(id, email) {
   const userName = document.createElement('h6');
   userName.innerText = `${email} 님`;
@@ -225,27 +219,33 @@ async function chattingBox(id, email) {
   socket.emit('join', id);
   roomId = id;
   chatContainer.style.display = 'flex';
+  chattingContainer.scrollTop = chattingContainer.scrollHeight;
 }
 
-const handleNewMsg = (message) => {
-  sent.appendChild(builNewMsg(message));
+const handleNewMsg = (senderId, message) => {
+  sent.appendChild(builNewMsg(senderId, message));
 };
 
-const builNewMsg = (message) => {
+const builNewMsg = async (senderId, message) => {
+  // const sendTime = createAt.substring(0, 10);
+  const myId = window.localStorage.getItem('id');
   const li = document.createElement('li');
-  li.appendChild(document.createTextNode(message));
-  return li;
+  li.classList.add(myId === String(senderId) ? 'sent' : 'received');
+  const dom = `<span class="message">${message}</span>`;
+  // <span class="time">${sendTime}</span>`;
+  li.innerHTML = dom;
+  await chattingList.append(li);
+
+  chattingContainer.scrollTop = chattingContainer.scrollHeight;
 };
 
+// 채팅내용가져오기
 async function getChatContents(id) {
   await fetch(`/api/chat-content/${id}`)
     .then((res) => res.json()) //json으로 받을 것을 명시
     .then((datas) => {
-      console.log('chatContent = ', datas);
-
-      // payload = datas;
       datas.forEach((el) => {
-        handleNewMsg(el.content);
+        builNewMsg(el.senderId, el.content, el.createdAt);
       });
     })
     .catch((e) => {
@@ -257,11 +257,12 @@ function leaveRoom() {
   chatContainer.style.display = 'none';
   socket.emit('leave', roomId);
   chatBoxTitle.innerHTML = '';
-  sent.innerHTML = '';
+  chattingList.innerHTML = '';
 }
 
 // 메세지 보내기
-function sendMessage() {
+async function sendMessage() {
+  console.log(chattingContainer.scrollTop);
   const userId = window.localStorage.getItem('id');
   const userType = window.localStorage.getItem('type');
   const payload = {
@@ -270,6 +271,6 @@ function sendMessage() {
     roomId,
   };
   // 메세지 내용 저장하기
-  socket.emit('message', chatContent.value, payload);
+  await socket.emit('message', chatContent.value, payload);
   chatContent.value = '';
 }
