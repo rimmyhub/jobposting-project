@@ -6,7 +6,6 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   ManyToOne,
-  JoinColumn,
 } from 'typeorm';
 import { User } from './user.entity';
 import { Resume } from './resume.entity';

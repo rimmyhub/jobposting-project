@@ -45,7 +45,7 @@ export class Resume {
   @OneToMany(() => Aboutme, (aboutme) => aboutme.resume)
   aboutme: Aboutme[];
 
-  // 1:N관계설정 - 포트 폴리오
+  // 1:N관계설정 - 포트폴리오
   @OneToMany(() => Portfolio, (portfolio) => portfolio.resume)
   portfolio: Portfolio[];
 
