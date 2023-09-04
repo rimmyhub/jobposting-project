@@ -1,53 +1,65 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Client } from '@opensearch-project/opensearch';
+import { AwsSigv4Signer } from '@opensearch-project/opensearch/aws';
 
+const AWS = require('aws-sdk');
 const configService = new ConfigService();
-
-// 도메인 세팅
-// const host = configService.get('HOST');
-// const auth = configService.get('AUTH');
-// const openSearchHost = `https://${auth}@${host}`;
 
 @Injectable()
 export class SearchService {
   private readonly client: Client;
 
-  // Elasticsearch를 사용하기 위해 객체를 생성
   constructor() {
     this.client = new Client({
+      ...AwsSigv4Signer({
+        region: configService.get('REGION'),
+        service: configService.get('SERVICE'),
+        getCredentials: () =>
+          new Promise((resolve, reject) => {
+            AWS.config.getCredentials((err, credentials) => {
+              if (err) {
+                console.error('Error getting AWS credentials:', err);
+                reject(err);
+              } else {
+                resolve(credentials);
+              }
+            });
+          }),
+      }),
       node: configService.get('HOST'),
     });
   }
 
   async createIndex() {
-    // 인덱스 생성
-    const indexes = await this.client.indices.create({ index: 'winner' });
-    console.log(indexes);
-    // 더미데이터
-    const document = {
-      title: '라이온킹',
-      author: '난몰라',
-      year: '2018',
-      genre: '하이틴',
+    console.log('Creating index:');
+
+    const index_name = 'winner';
+    const settings = {
+      settings: {
+        index: {
+          number_of_shards: 1,
+          number_of_replicas: 1,
+        },
+      },
     };
-    // 인덱스에 더미데이터 저장
-    const createDocument = await this.client.index({
-      index: 'winner',
-      body: document,
+
+    var response = await this.client.indices.create({
+      index: index_name,
+      body: settings,
     });
-    console.log(createDocument);
-    // 반환값
-    return createDocument;
+
+    console.log(response.body);
+    return response;
   }
 
   async searchJobs(text: string) {
     console.log('hi');
     const indexes = await this.client.search({
-      index: 'winner', // Elasticsearch 에서 검색할 인덱스 이름
+      index: 'winner',
       body: {
         query: {
-          match: { title: text }, // title 필드에서 받아온 text 를 포함하는 값 검색
+          match: { title: text },
         },
       },
     });
