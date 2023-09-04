@@ -232,7 +232,13 @@ function leaveRoom() {
 // 메세지 보내기
 function sendMessage() {
   // 메세지 내용 저장하기
-
-  socket.emit('message', chatContent.value, roomId);
+  const userId = window.localStorage.getItem('id');
+  const userType = window.localStorage.getItem('type');
+  const payload = {
+    userId,
+    userType,
+    roomId,
+  };
+  socket.emit('message', chatContent.value, payload);
   chatContent.value = '';
 }

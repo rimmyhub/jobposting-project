@@ -23,6 +23,7 @@ import { EventsModule } from './events/events.module';
 import { JobcrawlerModule } from './jobcrawler/jobcrawler.module';
 import { JobPostingSearchModule } from './search/search.module';
 import { MailModule } from './mail/mail.module';
+import { ChatContentModule } from './chat-content/chat-content.module';
 
 @Module({
   imports: [
@@ -48,6 +49,7 @@ import { MailModule } from './mail/mail.module';
     EventsModule,
     JobcrawlerModule,
     JobPostingSearchModule,
+    ChatContentModule,
   ],
   controllers: [AppController],
   providers: [AppService, ChatGateway],
