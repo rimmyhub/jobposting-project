@@ -8,6 +8,7 @@ import {
   Delete,
   UseGuards,
   Request,
+  Query,
 } from '@nestjs/common';
 import { JobpostingService } from './jobposting.service';
 import { CreateJobpostingDto } from './dto/create-jobposting.dto';
@@ -34,11 +35,17 @@ export class JobpostingController {
     );
   }
 
-  // 회사별 채용공고 전체 조회
-  @Get(':companyId')
-  findAllJobposting(@Param('companyId') companyId: string) {
-    return this.jobpostingService.findAllJobposting(+companyId);
+  // 채용공고 전체 조회
+  @Get()
+  findAllJobposting(@Query('page') page: string) {
+    return this.jobpostingService.findAllJobposting({ page: Number(page) });
   }
+
+  // // 회사별 채용공고 전체 조회
+  // @Get(':companyId')
+  // findCompanyAllJobposting(@Param('companyId') companyId: string) {
+  //   return this.jobpostingService.findCompanyAllJobposting(+companyId);
+  // }
 
   // 검색시 해당 검색어를 포함하는 채용 공고글 전체 조회
   @Get()

@@ -66,20 +66,29 @@ export class JobpostingService {
   }
 
   // 채용공고 전체 조회
-  async findAllJobposting(companyId: number): Promise<Jobposting[]> {
-    const existingCompany = await this.jobpostingRepository.findOne({
-      where: { companyId },
+  async findAllJobposting({ page }) {
+    return await this.jobpostingRepository.find({
+      take: 20,
+      skip: (page - 1) * 20,
+      order: { createdAt: 'DESC' },
     });
-
-    if (!existingCompany) {
-      throw new HttpException(
-        '채용공고를 찾을 수 없습니다.',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-
-    return await this.jobpostingRepository.find({ where: { companyId } });
   }
+
+  // // 회사별 채용공고 전체 조회
+  // async findCompanyAllJobposting(companyId: number): Promise<Jobposting[]> {
+  //   const existingCompany = await this.jobpostingRepository.findOne({
+  //     where: { companyId },
+  //   });
+
+  //   if (!existingCompany) {
+  //     throw new HttpException(
+  //       '채용공고를 찾을 수 없습니다.',
+  //       HttpStatus.BAD_REQUEST,
+  //     );
+  //   }
+
+  //   return await this.jobpostingRepository.find({ where: { companyId } });
+  // }
 
   // 검색시 해당 검색어를 포함하는 채용 공고글 전체 조회
   async findJobPostings(title: string) {
