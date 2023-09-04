@@ -61,15 +61,38 @@ export class ApplicantService {
     return apply;
   }
 
-  // 회사 지원내역 전체보기
-  async getApplies(id: number) {
+  // // 회사 지원내역 전체보기
+  // async getApplies(id: number) {
+  //   return await this.applicantRepository.findOne({
+  //     where: { id },
+  //   });
+  // }
+
+  async findAllUserApply(
+    id: number,
+    jobpostingId: number,
+  ): Promise<Applicant[]> {
+    const existingApplicant = await this.applicantRepository.findOne({
+      where: { jobpostingId },
+    });
+
+    if (!existingApplicant) {
+      throw new HttpException(
+        '채용공고를 찾을 수 없습니다.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
     return await this.applicantRepository.find({
-      where: { id },
+      where: { jobpostingId },
     });
   }
 
   // 채용별 회사 지원 전체 조회 - 회사만
-  async findAllApply(id: number, jobpostingId: number): Promise<Applicant[]> {
+  async findAllCompanyApply(
+    id: number,
+    jobpostingId: number,
+  ): Promise<Applicant[]> {
     const existingApplicant = await this.applicantRepository.findOne({
       where: { jobpostingId },
     });
