@@ -44,7 +44,6 @@ export class UserGuard
       const payload = await this.jwtService.verify(token, {
         secret: this.configService.get<string>('ACCESS_TOKEN_KEY'),
       });
-      console.log('payload = ', payload);
       if (payload.role !== 'user') {
         throw new HttpException(
           '일반 유저만 사용할 수 있습니다.',

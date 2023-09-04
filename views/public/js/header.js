@@ -1,5 +1,6 @@
 let messageList;
 let chatContainer;
+let chatBoxTitle;
 const socket = io('http://localhost:8080');
 const ejs = (window.onload = function () {
   const params = new URLSearchParams(window.location.search);
@@ -8,15 +9,17 @@ const ejs = (window.onload = function () {
   const message = document.getElementById('message-icon');
   const messageBox = document.getElementById('message-box');
   const messageCard = document.getElementById('message-card');
-  chatContainer = document.getElementById('chat-container');
   const closeMessage = document.getElementById('close-message');
   const closeChatting = document.getElementById('close-chatting');
   const sendMsgUser = document.getElementById('user-msg');
   const sendBtn = document.getElementById('send-btn');
-  chatContent = document.getElementById('chat-content');
   const sent = document.getElementById('sent');
-  messageList = document.getElementById('message-list');
   const logout = document.getElementById('logout');
+
+  chatBoxTitle = document.getElementById('chat-box-title');
+  chatContainer = document.getElementById('chat-container');
+  messageList = document.getElementById('message-list');
+  chatContent = document.getElementById('chat-content');
 
   if (logout) {
     logout.addEventListener('click', async () => {
@@ -51,15 +54,14 @@ const ejs = (window.onload = function () {
   if (closeMessage) {
     closeMessage.addEventListener('click', (event) => {
       messageBox.style.display = 'none';
-
       event.stopPropagation();
     });
   }
 
   if (closeChatting) {
     closeChatting.addEventListener('click', () => {
-      console.log('채팅창 닫기');
-      chatContainer.style.display = 'none';
+      // chatContainer.style.display = 'none';
+      leaveRoom();
     });
   }
 
@@ -110,7 +112,8 @@ const ejs = (window.onload = function () {
         console.log(e);
       });
     if (isSuccess) {
-      alert('로그아웃 되었습니다.');
+      window.localStorage.removeItem('id');
+      window.localStorage.removeItem('type');
       location.href = '/';
     }
   }
@@ -118,12 +121,12 @@ const ejs = (window.onload = function () {
   if (sendBtn) {
     // 메세지 버튼
     sendBtn.addEventListener('click', () => {
-      console.log('sendBtn');
       sendMessage();
     });
   }
 
   socket.on('receive-message', (message) => {
+    console.log('message = ', message);
     handleNewMsg(message);
   });
 
@@ -132,8 +135,6 @@ const ejs = (window.onload = function () {
 
 function isLogin() {
   const id = window.localStorage.getItem('id');
-
-  console.log('id = ', id);
   if (id) {
     getChatRooms();
   }
@@ -142,30 +143,26 @@ function isLogin() {
 async function getChatRooms() {
   let type = window.localStorage.getItem('type');
   let payload;
-  console.log('type = ', type);
   if (type === 'user') {
     await fetch('/api/chats/user')
       .then((res) => res.json()) //json으로 받을 것을 명시
       .then((datas) => {
-        console.log('getChat User', datas);
         payload = datas;
       })
       .catch((e) => {
         console.log(e);
       });
-    console.log('payload = ', payload);
+
     appendMsgList(payload);
   } else if (type === 'company') {
     await fetch('/api/chats/company')
       .then((res) => res.json()) //json으로 받을 것을 명시
       .then((datas) => {
-        console.log('datas', datas);
         payload = datas;
       })
       .catch((e) => {
         console.log(e);
       });
-    console.log('payload = ', payload);
     appendMsgList(payload, type);
   }
 }
@@ -175,7 +172,7 @@ function appendMsgList(datas, type) {
     datas.forEach((el) => {
       const li = document.createElement('div');
       console.log('el = ', el);
-      li.innerHTML = `<div id="message-card" class="message-card" onclick="chattingBox(${el.id})">
+      li.innerHTML = `<div id="message-card" class="message-card" onclick="chattingBox('${el.id}', '${el.user.email}')">
                         <div class="user-profile">
                           <img src="/img/userImg.jpg" alt="" srcset="" />
                         </div>
@@ -190,7 +187,7 @@ function appendMsgList(datas, type) {
     datas.forEach((el) => {
       const li = document.createElement('div');
       console.log('el = ', el);
-      li.innerHTML = `<div id="message-card" class="message-card" onclick="chattingBox(${el.id})">
+      li.innerHTML = `<div id="message-card" class="message-card" onclick="chattingBox('${el.id}', '${el.company.email}')">
                         <div class="user-profile">
                           <img src="/img/userImg.jpg" alt="" srcset="" />
                         </div>
@@ -205,12 +202,37 @@ function appendMsgList(datas, type) {
 }
 
 let roomId;
-function chattingBox(param) {
-  socket.emit('join', param);
-  roomId = param;
+function chattingBox(id, email) {
+  const userName = document.createElement('h6');
+  userName.innerText = `${email} 님`;
+  chatBoxTitle.append(userName);
+
+  // icon변수에 i태그의 요소와  id를 추가
+  const icon = Object.assign(document.createElement('i'), {
+    id: 'close-chatting',
+  });
+
+  // icon에 className을 추가
+  icon.className = 'fa-solid fa-xmark close-message';
+  icon.onclick = leaveRoom;
+
+  chatBoxTitle.append(icon);
+
+  socket.emit('join', id);
+  roomId = id;
   chatContainer.style.display = 'flex';
 }
 
+function leaveRoom() {
+  chatContainer.style.display = 'none';
+  socket.emit('leave', roomId);
+  chatBoxTitle.innerHTML = '';
+}
+
+// 메세지 보내기
 function sendMessage() {
+  // 메세지 내용 저장하기
+
   socket.emit('message', chatContent.value, roomId);
+  chatContent.value = '';
 }
