@@ -70,7 +70,7 @@ function jobpostingAppendTemp(data) {
   const temp = data
     .map((jobposting) => {
       return `
-        <div class="jobposting-card" id="jobposting-card">
+        <div class="jobposting-card" id="jobposting-card" onclick="goToJobpostingSubpage(${jobposting.id})">
             <div>
               <div class="jobposting-title" id="jobposting-title">
               ${jobposting.title}
@@ -113,13 +113,18 @@ addJobpostingBtn.addEventListener('click', async function () {
   }
 });
 
+function goToJobpostingSubpage(jobpostingId) {
+  const subpageUrl = `/jobposting/${jobpostingId}`;
+  window.location.href = subpageUrl;
+}
+
 // 회사 영역
 const companiesBox = document.querySelector('#companies-list');
 function companiesAppendTemp(data) {
   const temp = data
     .map((company) => {
       return `
-              <div class="jobposting-card" id="companies-card">
+              <div class="jobposting-card" id="companies-card" onclick="goToCompanySubpage(${company.id})">
               <img
                 class="jobposting-img"
                 id="companies-img"
@@ -166,3 +171,8 @@ addCompaniesBtn.addEventListener('click', async function () {
     this.setAttribute('data-page', Number(page) + 1);
   }
 });
+
+function goToCompanySubpage(companyId) {
+  const subpageUrl = `/subpage/company/${companyId}`;
+  window.location.href = subpageUrl;
+}

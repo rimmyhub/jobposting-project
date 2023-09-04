@@ -28,6 +28,13 @@ export class ApplicantController {
     return this.applicantService.createApply(req.user.id, +jobpostingId);
   }
 
+  // 회사 지원 내역 전체 보기
+  @UseGuards(UserGuard)
+  @Get()
+  getApplies(@Request() req) {
+    return this.applicantService.getApplies(req.user.id);
+  }
+
   // 채용공고별 회사지원 조회 하기 - 회사만
   @UseGuards(CompanyGuard)
   @Get(':jobpostingId')
