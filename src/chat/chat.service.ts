@@ -48,7 +48,6 @@ export class ChatService {
         'chat.companyId',
         'chat.userId',
         'user.email',
-
         'chatContent.senderId',
         'chatContent.chatContent',
         'chatContent.createdAt',
@@ -79,8 +78,6 @@ export class ChatService {
       .leftJoin('chat.chatContent', 'chatContent')
       .where(`chat.userId = ${id}`)
       .getMany();
-    // console.log('chatRooms');
-    console.log('chatRooms= ', chatRooms);
     return chatRooms;
   }
 
