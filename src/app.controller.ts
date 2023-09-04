@@ -83,18 +83,15 @@ export class AppController {
   ) {
     const cookie: string = await req.cookies['authorization'];
     if (cookie) {
-      // console.log('15번라인');
       return { isLogin: 1 };
     }
     return {
       isLogin: 0,
     };
-    // return { title: 'Title' };
   }
 
   // 유저 - 마이페이지
   @Get('mypage')
-  // @Render('mypage-user')
   getMypageUser(
     @Request() req,
     @Res() res: Response,
@@ -112,7 +109,6 @@ export class AppController {
 
   // 회사 - 마이페이지
   @Get('mypage/company')
-  // @Render('mypage-company')
   getMypageComapny(
     @Request() req,
     @Res() res: Response,
