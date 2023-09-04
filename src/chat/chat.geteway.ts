@@ -30,8 +30,8 @@ export class ChatGateway {
     @ConnectedSocket() socket: Socket,
     @MessageBody() roomId: string,
   ): void {
-    // 이미 접속한 방인지 확인
-    console.log('socket.rooms', socket.id);
+    console.log('socket.rooms = ', socket.rooms);
+
     socket.join(roomId);
   }
 
@@ -42,9 +42,16 @@ export class ChatGateway {
     @MessageBody() roomId: string,
   ) {
     console.log('socket roomId = ', roomId[1]);
-    // console.log('socket.rooms', socket.rooms);
 
     // 룸에 있는 유저에게만 메세지 보내기
-    this.io.to(roomId[1]).emit('receive-message', message);
+    this.io.to(roomId[1]).emit('receive-message', message[0]);
+  }
+
+  @SubscribeMessage('leave')
+  leaveRoom(@ConnectedSocket() socket: Socket, @MessageBody() roomId: string) {
+    // 이미 접속한 방인지 확인
+    if (socket.rooms) {
+      socket.leave(roomId);
+    }
   }
 }
