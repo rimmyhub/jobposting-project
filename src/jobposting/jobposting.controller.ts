@@ -21,6 +21,12 @@ import { ParamDto } from 'src/utils/param.dto';
 export class JobpostingController {
   constructor(private readonly jobpostingService: JobpostingService) {}
 
+  // 채용공고 아이디 가져오기
+  @Get('getId')
+  getJobpostingId(@Query('id') id: string) {
+    return this.jobpostingService.getJobpostingId({ id: Number(id) });
+  }
+
   // 회사별 채용공고 생성 (회사 연결)
   @UseGuards(CompanyGuard)
   @Post(':companyId')

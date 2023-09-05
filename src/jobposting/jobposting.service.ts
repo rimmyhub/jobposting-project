@@ -14,7 +14,21 @@ export class JobpostingService {
     private readonly companyRepository: Repository<Company>,
   ) {}
 
-  // 채용 공고 생성
+  // 채용공고 아이디 가져오기
+  async getJobpostingId({ id }: { id: number }) {
+    const jobposting = await this.jobpostingRepository.findOne({
+      where: { id },
+    }); // 쿼리 조건을 추가하여 원하는 jobposting 가져옴
+
+    console.log(jobposting);
+    if (!jobposting) {
+      throw new Error('채용공고를 찾을 수 없습니다.');
+    }
+
+    return jobposting.id; // jobposting의 id 속성 반환
+  }
+
+  // 회사별 채용공고 생성 (회사 연결)
   async createJobposting(
     id: number,
     companyId: number,
