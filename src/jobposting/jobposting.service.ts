@@ -21,48 +21,52 @@ export class JobpostingService {
     createJobpostingDto: CreateJobpostingDto,
   ): Promise<Jobposting> {
     // 회사에 아이디가 생성되있는지 찾기
-    const existingCompany = await this.companyRepository.findOne({
-      where: { id: companyId },
-    });
-    console.log('existingCompany', existingCompany);
-    // 데이터베이스에 회사가 생성되어있는지 확인
-    if (!existingCompany) {
-      throw new HttpException(
-        '회사를 찾을 수 없습니다.',
-        HttpStatus.BAD_REQUEST,
-      );
+    try {
+      const existingCompany = await this.companyRepository.findOne({
+        where: { id: companyId },
+      });
+      console.log('existingCompany', existingCompany);
+      // 데이터베이스에 회사가 생성되어있는지 확인
+      if (!existingCompany) {
+        throw new HttpException(
+          '회사를 찾을 수 없습니다.',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+
+      // 로그인된 회사 ID와 채용공고의 회사 ID 비교
+      if (companyId !== id) {
+        throw new HttpException('권한이 없습니다.', HttpStatus.FORBIDDEN);
+      }
+
+      const {
+        title,
+        career,
+        salary,
+        education,
+        workType,
+        workArea,
+        content,
+        dueDate,
+      } = createJobpostingDto;
+
+      const jobposting = this.jobpostingRepository.create({
+        companyId,
+        title,
+        career,
+        salary,
+        education,
+        workType,
+        workArea,
+        content,
+        dueDate,
+      });
+
+      await this.jobpostingRepository.save(jobposting);
+      return jobposting;
+    } catch (error) {
+      console.error();
     }
-
-    // 로그인된 회사 ID와 채용공고의 회사 ID 비교
-    if (companyId !== id) {
-      throw new HttpException('권한이 없습니다.', HttpStatus.FORBIDDEN);
-    }
-
-    const {
-      title,
-      career,
-      salary,
-      education,
-      workType,
-      workArea,
-      content,
-      dueDate,
-    } = createJobpostingDto;
-
-    const jobposting = this.jobpostingRepository.create({
-      companyId,
-      title,
-      career,
-      salary,
-      education,
-      workType,
-      workArea,
-      content,
-      dueDate,
-    });
-
-    await this.jobpostingRepository.save(jobposting);
-    return jobposting;
   }
 
   // 채용공고 전체 조회
@@ -89,6 +93,11 @@ export class JobpostingService {
 
   //   return await this.jobpostingRepository.find({ where: { companyId } });
   // }
+
+  // 회사별 채용공고 전체 조회
+  async findCompanyAllJobposting(id: number): Promise<Jobposting[]> {
+    return await this.jobpostingRepository.find({ where: { companyId: id } });
+  }
 
   // 검색시 해당 검색어를 포함하는 채용 공고글 전체 조회
   async findJobPostings(title: string) {

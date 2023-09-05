@@ -20,7 +20,7 @@ export class ApplicantController {
 
   // 내가 지원한 공고 가져오기
   @UseGuards(UserGuard)
-  @Get('me')
+  @Get('user')
   getJobpostingById(@Request() req) {
     return this.applicantService.getJobpostingById(req.user.id);
   }

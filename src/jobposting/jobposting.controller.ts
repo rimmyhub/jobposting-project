@@ -48,6 +48,13 @@ export class JobpostingController {
   //   return this.jobpostingService.findCompanyAllJobposting(+companyId);
   // }
 
+  // 회사별 채용공고 전체 조회
+  @UseGuards(CompanyGuard)
+  @Get('company')
+  findCompanyAllJobposting(@Request() req) {
+    return this.jobpostingService.findCompanyAllJobposting(req.company.id);
+  }
+
   // 검색시 해당 검색어를 포함하는 채용 공고글 전체 조회
   @Get()
   findJobPostings(@Body('title') title: string) {

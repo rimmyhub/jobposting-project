@@ -5,11 +5,13 @@
 // 지원하기 버튼 누르면 지원리스트로 이동하고 지원 내역 표시
 
 // jobposting 값만 가져오는 함수
-async function fetchJobpostingId() {
-  const jobpostingIdResponse = await fetch(`api/applications/me`); // 내가 지원한 것만 보겠다.
-  const jobpostingId = await jobpostingIdResponse.json();
-  return jobpostingId;
-}
+// async function fetchJobpostingId() {
+//   const jobpostingIdResponse = await fetch(`api/applications/me`); // 내가 지원한 것만 보겠다.
+//   const jobpostingId = await jobpostingIdResponse.json();
+//   return jobpostingId;
+// }
+
+// const jobpostingId = await fetchJobpostingId();
 // 1. 잡포스팅의 모든 데이터를 가져온다
 // 2. 유저가 지원한 잡포스팅의 데이터만 가져온다
 // - applicnat체크로
@@ -18,22 +20,16 @@ async function fetchJobpostingId() {
 //
 // 3. 특정한 잡포스팅 데이터만 가져온다.
 
-console.log(jobpostingId);
 const type = window.location.pathname.split('/')[2];
-
 const applyBox = document.querySelector('.apply-list');
 const applyBtn = document.querySelector('#apply-btn');
-
-console.log(applyBox);
 
 async function getAppliesUser() {
   try {
     if (type === 'user') {
-      const jobpostingId = await fetchJobpostingId();
-
-      const response = await fetch(`/api/applications/user/${jobpostingId}`);
+      const response = await fetch('/api/applications/user');
+      console.log(response);
       const applyUserData = await response.json();
-      console.log(applyUserData);
 
       const temp = applyUserData
         .map((applyUser) => {
@@ -47,9 +43,20 @@ async function getAppliesUser() {
         })
         .join('');
       applyBox.innerHTML = temp;
+    } else if (type === 'company') {
+      const response = await fetch('/api/jobposting/company');
+      console.log(response);
     }
   } catch (error) {
-    console.error();
+    console.error(error);
   }
 }
-getAppliesUser();
+
+getAppliesUser(); // 함수 호출
+
+// 사용자 유형에 따라 버튼 동작 처리 (예: "지원 취소" 또는 "게시물 편집" 버튼 표시)
+if (type === 'user') {
+  // 사용자별 동작 처리 (예: "지원 취소" 버튼 표시)
+} else if (type === 'company') {
+  // 회사별 동작 처리 (예: "게시물 편집" 버튼 표시)
+}

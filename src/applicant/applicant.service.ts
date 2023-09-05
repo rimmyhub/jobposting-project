@@ -19,7 +19,17 @@ export class ApplicantService {
 
   // 내가 지원한 공고 가져오기
   async getJobpostingById(id: number) {
-    return await this.userRepository.findOne({ where: { id } });
+    console.log(id);
+    const applications = await this.applicantRepository.find({
+      where: { userId: id },
+      relations: ['jobposting'], // 채용공고 정보를 함께 가져오기 위해 관계 설정
+    });
+
+    const jobpostings = applications.map(
+      (application) => application.jobposting,
+    );
+
+    return jobpostings;
   }
 
   // 지원하기
@@ -73,6 +83,7 @@ export class ApplicantService {
   //   });
   // }
 
+  // 회사지원 유저
   async findAllUserApply(
     id: number,
     jobpostingId: number,
