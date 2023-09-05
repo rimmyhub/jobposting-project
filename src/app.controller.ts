@@ -138,9 +138,20 @@ export class AppController {
 
   // 회사 로그인 시 - 채용 공고
   @Get('jobposting/company')
-  @Render('jobposting-company')
-  getJobpstingCompany() {
-    return { title: 'Title' };
+  // @Render('jobposting-company')
+  getJobpstingCompany(
+    @Request() req,
+    @Res() res: Response,
+    @Param('type') type: string,
+  ) {
+    const cookie: string = req.cookies['authorization'];
+    if (!cookie) {
+      return res.redirect('/signin/company'); // 만약 로그인 되어있으면 진입 금지
+    }
+    return res.render('jobposting-company', {
+      type,
+      isLogin: 1,
+    });
   }
 
   // 채용공고 지원 내역 보기

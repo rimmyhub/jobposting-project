@@ -18,6 +18,13 @@ import { CompanyGuard } from '../auth/jwt/jwt.company.guard';
 export class ApplicantController {
   constructor(private readonly applicantService: ApplicantService) {}
 
+  // 내가 지원한 공고 가져오기
+  @UseGuards(UserGuard)
+  @Get('user')
+  getJobpostingById(@Request() req) {
+    return this.applicantService.getJobpostingById(req.user.id);
+  }
+
   // 회사지원하기 - 로그인한 유저만
   @UseGuards(UserGuard)
   @Post(':jobpostingId')
@@ -28,18 +35,27 @@ export class ApplicantController {
     return this.applicantService.createApply(req.user.id, +jobpostingId);
   }
 
-  // 회사 지원 내역 전체 보기
+  // 회사지원 조회 하기 - 유저
   @UseGuards(UserGuard)
-  @Get()
-  getApplies(@Request() req) {
-    return this.applicantService.getApplies(req.user.id);
+  @Get('user/:jobpostingId')
+  findAllUserApply(
+    @Request() req,
+    @Param('jobpostingId') jobpostingId: string,
+  ) {
+    return this.applicantService.findAllUserApply(req.user.id, +jobpostingId);
   }
 
   // 채용공고별 회사지원 조회 하기 - 회사만
   @UseGuards(CompanyGuard)
-  @Get(':jobpostingId')
-  findAllApply(@Request() req, @Param('jobpostingId') JobpostingId: string) {
-    return this.applicantService.findAllApply(req.company.id, +JobpostingId);
+  @Get('company/:jobpostingId')
+  findAllCompanyApply(
+    @Request() req,
+    @Param('jobpostingId') JobpostingId: string,
+  ) {
+    return this.applicantService.findAllCompanyApply(
+      req.company.id,
+      +JobpostingId,
+    );
   }
 
   // 회사지원 취소 - 로그인한 유저만

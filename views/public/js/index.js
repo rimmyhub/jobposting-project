@@ -114,8 +114,8 @@ addJobpostingBtn.addEventListener('click', async function () {
 });
 
 function goToJobpostingSubpage(jobpostingId) {
-  const subpageUrl = `/jobposting/${jobpostingId}`;
-  window.location.href = subpageUrl;
+  const subPageUrl = `/jobposting/${jobpostingId}`;
+  window.location.href = subPageUrl;
 }
 
 // 회사 영역
@@ -173,6 +173,6 @@ addCompaniesBtn.addEventListener('click', async function () {
 });
 
 function goToCompanySubpage(companyId) {
-  const subpageUrl = `/subpage/company/${companyId}`;
-  window.location.href = subpageUrl;
+  const subPageUrl = `/subpage/company/${companyId}`;
+  window.location.href = subPageUrl;
 }
