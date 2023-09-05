@@ -4,37 +4,22 @@
 // 지원 취소 버튼누르면 alret, confirm! 하게해서 취소하게되면 회사 규정에 따라 재지원이 불가능할 수도 있습니다.  취소하시겠습니까?
 // 지원하기 버튼 누르면 지원리스트로 이동하고 지원 내역 표시
 
-//참고 예시
-// // 채용공고 영역
-// const jobpostingBox = document.querySelector('.jobposting-list');
+// jobposting 값만 가져오는 함수
+async function fetchJobpostingId() {
+  const jobpostingIdResponse = await fetch(`api/applications/me`); // 내가 지원한 것만 보겠다.
+  const jobpostingId = await jobpostingIdResponse.json();
+  return jobpostingId;
+}
+// 1. 잡포스팅의 모든 데이터를 가져온다
+// 2. 유저가 지원한 잡포스팅의 데이터만 가져온다
+// - applicnat체크로
+// - 유저 가드를 사용해서 유저를 가져옴
+// - applicant 테이블에서 userid를 가져오고 잡포스팅아이디를 꺼내온다
+//
+// 3. 특정한 잡포스팅 데이터만 가져온다.
 
-// async function getJobpostings() {
-//   try {
-//     // 채용공고 데이터 가져오기
-//     const response = await fetch(`/api/jobpostings`);
-//     const jobpostingsData = await response.json();
-
-//     // 데이터를 사용하여 HTML 생성 및 추가
-//     const temp = jobpostingsData.map((jobposting) => {
-//       return `
-//         <div class="jobposting-card">
-//           <div>
-//             <div class="jobposting-title">${jobposting.title}</div>
-//             <div class="jobposting-job">${jobposting.dueDate}</div>
-//             <p>${jobposting.workArea}</p>
-//           </div>
-//         </div>
-//       `;
-//     }).join('');
-
-//     jobpostingBox.innerHTML = temp;
-//   } catch (error) {
-//     console.error(error);
-//   }
-// }
-
-// // getJobpostings 함수를 호출하여 채용공고 데이터를 가져오고 HTML에 추가합니다.
-// getJobpostings();
+console.log(jobpostingId);
+const type = window.location.pathname.split('/')[2];
 
 const applyBox = document.querySelector('.apply-list');
 const applyBtn = document.querySelector('#apply-btn');
@@ -43,17 +28,28 @@ console.log(applyBox);
 
 async function getAppliesUser() {
   try {
-    const response = await fetch(`api/applications/user/${jobpostingId}`);
-    const applyUserData = await response.json();
-    const temp = applyUserData.map((applyUser) => {
-      return `
-            <div class="apply-card">
-            <h4>cloud support associate</h4>
-            <h6>항공우주/기계,전기전자,생산기술</h6>
-            <h6>마감일 : 2023-01-03</h6>
-            `;
-    });
+    if (type === 'user') {
+      const jobpostingId = await fetchJobpostingId();
+
+      const response = await fetch(`/api/applications/user/${jobpostingId}`);
+      const applyUserData = await response.json();
+      console.log(applyUserData);
+
+      const temp = applyUserData
+        .map((applyUser) => {
+          return `
+                 <div class="apply-card">
+                   <h4>${applyUser.title}</h4>
+                   <h6>${applyUser.workArea}</h6>
+                   <h6>${applyUser.dueDate}</h6>
+                 </div>
+                 `;
+        })
+        .join('');
+      applyBox.innerHTML = temp;
+    }
   } catch (error) {
-    console.error('error');
+    console.error();
   }
 }
+getAppliesUser();

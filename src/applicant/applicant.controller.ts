@@ -18,6 +18,13 @@ import { CompanyGuard } from '../auth/jwt/jwt.company.guard';
 export class ApplicantController {
   constructor(private readonly applicantService: ApplicantService) {}
 
+  // 내가 지원한 공고 가져오기
+  @UseGuards(UserGuard)
+  @Get('me')
+  getJobpostingById(@Request() req) {
+    return this.applicantService.getJobpostingById(req.user.id);
+  }
+
   // 회사지원하기 - 로그인한 유저만
   @UseGuards(UserGuard)
   @Post(':jobpostingId')

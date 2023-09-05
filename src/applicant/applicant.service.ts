@@ -17,6 +17,11 @@ export class ApplicantService {
     private readonly jobpostingRepository: Repository<Jobposting>,
   ) {}
 
+  // 내가 지원한 공고 가져오기
+  async getJobpostingById(id: number) {
+    return await this.userRepository.findOne({ where: { id } });
+  }
+
   // 지원하기
   async createApply(id: number, jobpostingId: number): Promise<Applicant> {
     // 사용자 조회
@@ -71,9 +76,10 @@ export class ApplicantService {
   async findAllUserApply(
     id: number,
     jobpostingId: number,
-  ): Promise<Applicant[]> {
+  ): Promise<Jobposting> {
     const existingApplicant = await this.applicantRepository.findOne({
-      where: { jobpostingId },
+      where: { userId: id, jobpostingId },
+      relations: ['jobposting'], // 관련 엔티티 이름을 지정
     });
 
     if (!existingApplicant) {
@@ -83,9 +89,7 @@ export class ApplicantService {
       );
     }
 
-    return await this.applicantRepository.find({
-      where: { jobpostingId },
-    });
+    return existingApplicant.jobposting; //jobposting 반환
   }
 
   // 채용별 회사 지원 전체 조회 - 회사만
