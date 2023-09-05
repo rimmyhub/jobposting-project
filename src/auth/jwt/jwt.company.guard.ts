@@ -32,6 +32,7 @@ export class CompanyGuard
   // 가드를 따로 만들어서?
   // 파라미터를 넘김
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    console.log('canActivate');
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
     if (!token) {

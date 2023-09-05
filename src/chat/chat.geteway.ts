@@ -6,7 +6,6 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Socket, Namespace } from 'socket.io';
-import { ChatService } from './chat.service';
 import { ChatContentService } from 'src/chat-content/chat-content.service';
 
 // 소켓IO
@@ -18,10 +17,7 @@ import { ChatContentService } from 'src/chat-content/chat-content.service';
 export class ChatGateway {
   @WebSocketServer() io: Namespace;
 
-  constructor(
-    private readonly chatService: ChatService,
-    private readonly chatContentService: ChatContentService,
-  ) {}
+  constructor(private readonly chatContentService: ChatContentService) {}
 
   @SubscribeMessage('createRoom')
   createRoom() {}
@@ -40,7 +36,8 @@ export class ChatGateway {
     @ConnectedSocket() socket: Socket,
     @MessageBody() payload: Array<any>,
   ) {
-    // 채팅내용을 저장하기
+    console.log('payload = ', payload);
+    // 채팅내용"을 저장"하기
     await this.chatContentService.saveChatContents(payload);
     // 룸에 있는 유저에게만 메세지 보내기
     this.io

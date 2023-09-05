@@ -82,8 +82,20 @@ export class AppController {
   // 채용공고 (로그인 없이 모든 공고 조회)
   @Get('jobposting/:jobpostingId')
   @Render('jobposting-user')
-  getJobpstingUser(@Param('jobpostingId') jobpostingId: string) {
-    return { jobpostingId };
+  async getJobpstingUser(
+    @Request() req,
+    @Param('jobpostingId') jobpostingId: string,
+  ) {
+    // 그냥 authorization가 들어가 있으면 통과해버림
+    // 다른 방법 생각해보자
+    const cookie: string = await req.cookies['authorization'];
+    if (cookie) {
+      return { isLogin: 1, jobpostingId };
+    }
+    return {
+      isLogin: 0,
+      jobpostingId,
+    };
   }
 
   // 유저 - 서브 페이지
@@ -145,15 +157,32 @@ export class AppController {
   }
 
   // 채용공고 지원 내역 보기
-  @Get('/apply')
-  @Render('apply')
-  async getApply(@Request() req) {
+  @Get('apply/:type')
+  async getApply(
+    @Request() req,
+    @Param('type') type: string,
+    @Res() res: Response,
+  ) {
     const cookie: string = await req.cookies['authorization'];
-    if (cookie) {
-      return { isLogin: 1 };
+    if (!cookie) {
+      return res.redirect('/singin'); // 쿠키가 없으면 로그인하게 이동
     }
-    return {
-      isLogin: 0,
-    };
+    return res.render('apply', {
+      type,
+      isLogin: 1,
+    });
   }
 }
+//   // 채용공고 지원 내역 보기
+//   @Get('/apply')
+//   @Render('apply')
+//   async getApply(@Request() req) {
+//     const cookie: string = await req.cookies['authorization'];
+//     if (cookie) {
+//       return { isLogin: 1 };
+//     }
+//     return {
+//       isLogin: 0,
+//     };
+//   }
+// }

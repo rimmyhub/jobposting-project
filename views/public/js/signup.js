@@ -90,8 +90,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 // 회원가입 버튼
 signupBtn.addEventListener('click', async () => {
-  console.log('signupBtn 클릭, isVerified:', isVerified);
-
   if (isVerified) {
     signup();
   } else {

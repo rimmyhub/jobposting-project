@@ -5,14 +5,15 @@ let sent;
 let received;
 let chattingList;
 let chattingContainer;
-const socket = io('http://localhost:8080');
+
+const myApplyList = document.getElementById('my-apply-list');
+const socket = io('localhost:8080');
 const ejs = (window.onload = function () {
   const params = new URLSearchParams(window.location.search);
   const userId = params.get('id');
   const profile = document.getElementById('profile');
   const message = document.getElementById('message-icon');
   const messageBox = document.getElementById('message-box');
-  const messageCard = document.getElementById('message-card');
   const closeMessage = document.getElementById('close-message');
   const closeChatting = document.getElementById('close-chatting');
   const sendMsgUser = document.getElementById('user-msg');
@@ -52,11 +53,6 @@ const ejs = (window.onload = function () {
       messageBox.style.display = 'block';
     });
   }
-  if (messageCard) {
-    messageCard.addEventListener('click', () => {
-      chatContainer.style.display = 'flex';
-    });
-  }
 
   if (closeMessage) {
     closeMessage.addEventListener('click', (event) => {
@@ -76,11 +72,9 @@ const ejs = (window.onload = function () {
   const sendMessageUser = async () => {
     // 방 이름을 어떻게 할까?
     // 1. DB에 나와 상대방의 ID와 방의 ID를 임시로 만들어서 저장한다.
-
     // 내 아이디
     const id = window.localStorage.getItem('id');
     // 2.
-
     await fetch(`/api/chats/company/${userId}`, {
       method: 'POST',
       headers: {
@@ -93,7 +87,6 @@ const ejs = (window.onload = function () {
       .then((res) => res.json()) //json으로 받을 것을 명시
       .then((res) => {
         //실제 데이터를 상태변수에 업데이트
-        console.log('res = ', res);
       });
   };
 
@@ -168,7 +161,7 @@ function appendMsgList(datas, type) {
   if (type === 'company') {
     datas.forEach((el) => {
       const li = document.createElement('div');
-      console.log('el = ', el);
+
       li.innerHTML = `<div id="message-card" class="message-card" onclick="chattingBox('${el.id}', '${el.user.email}')">
                         <div class="user-profile">
                           <img src="/img/userImg.jpg" alt="" srcset="" />
@@ -183,7 +176,7 @@ function appendMsgList(datas, type) {
   } else {
     datas.forEach((el) => {
       const li = document.createElement('div');
-      console.log('el = ', el);
+
       li.innerHTML = `<div id="message-card" class="message-card" onclick="chattingBox('${el.id}', '${el.company.email}')">
                         <div class="user-profile">
                           <img src="/img/userImg.jpg" alt="" srcset="" />
@@ -227,9 +220,7 @@ const handleNewMsg = (senderId, message) => {
 };
 
 const builNewMsg = async (senderId, message, senderType) => {
-  // const sendTime = createAt.substring(0, 10);
   const type = window.localStorage.getItem('type');
-  console.log(senderType, type);
   const myId = window.localStorage.getItem('id');
   const li = document.createElement('li');
   li.classList.add(
@@ -249,7 +240,6 @@ async function getChatContents(id) {
     .then((res) => res.json()) //json으로 받을 것을 명시
     .then((datas) => {
       datas.forEach((el) => {
-        console.log(el);
         builNewMsg(el.senderId, el.content, el.senderType);
       });
     })
@@ -267,7 +257,6 @@ function leaveRoom() {
 
 // 메세지 보내기
 async function sendMessage() {
-  console.log(chattingContainer.scrollTop);
   const userId = window.localStorage.getItem('id');
   const userType = window.localStorage.getItem('type');
 
@@ -280,3 +269,9 @@ async function sendMessage() {
   await socket.emit('message', chatContent.value, payload);
   chatContent.value = '';
 }
+
+// 마이채용공고리스트
+myApplyList.addEventListener('click', () => {
+  const type = window.localStorage.getItem('type');
+  location.href = `apply/${type}`;
+});
