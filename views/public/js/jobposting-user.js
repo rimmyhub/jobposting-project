@@ -1,6 +1,3 @@
-// 이벤트 리스너가 DOM 트리 구성 후에 등록되도록 defer 속성이 설정되어 있으므로
-// 문서가 로드될 때 실행됩니다.
-
 const jobpostingId = window.location.pathname.split('/')[2];
 console.log(jobpostingId);
 
