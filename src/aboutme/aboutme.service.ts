@@ -28,24 +28,24 @@ export class AboutmeService {
       );
     }
     // 자기소개 생성
-    const aboutme = this.aboutmeRepository.create({
+    const aboutMe = this.aboutmeRepository.create({
       resumeId,
       title,
       content,
     });
     // 반환값
-    return await this.aboutmeRepository.save(aboutme);
+    return await this.aboutmeRepository.save(aboutMe);
   }
 
   // 자기소개서 조회
   async getAboutme(id: number, resumeId: number): Promise<Aboutme[]> {
-    const existingResume = await this.aboutmeRepository.findOne({
+    const existingAboutMe = await this.aboutmeRepository.findOne({
       where: { resumeId },
     });
-
-    if (!existingResume) {
+    console.log(existingAboutMe);
+    if (!existingAboutMe) {
       throw new HttpException(
-        '아직 자기소개서를 등록할 "이력서"를 작성하지 않으셨어용 *^.^*',
+        '등록된 자기소개서가 없습니다.',
         HttpStatus.BAD_REQUEST,
       );
     }
@@ -59,61 +59,37 @@ export class AboutmeService {
     aboutmeId: number,
     updateAboutmeDto: UpdateAboutmeDto,
   ) {
-    // 이력서 존재여부 확인
-    const existingResume = await this.aboutmeRepository.findOne({
-      where: { resumeId },
+    // 자소서 존재여부 확인
+    const existingAboutMe = await this.aboutmeRepository.findOne({
+      where: { id: aboutmeId },
     });
 
-    // paylode의 id를 가져오려면 어떻게 해야하지?
-    // console.log(existingResume.resumeId);
-    // if (existingResume.userId !== id) {
-    //   throw new HttpException('권한이 없습니다.', HttpStatus.FORBIDDEN);
-    // }
-    // 이력서 예외처리
-    if (!existingResume) {
+    // 자소서 예외처리
+    if (!existingAboutMe) {
       throw new HttpException(
-        '이력서를 찾을 수 없습니다.',
+        '자기소개서가 존재하지 않습니다.',
         HttpStatus.BAD_REQUEST,
       );
     }
-    const updateAboutMe = await this.aboutmeRepository.findOne({
-      where: { id: aboutmeId },
-    });
-    if (!updateAboutMe) {
-      throw new HttpException(
-        '해당하는 자기소개서가 없네요?',
-        HttpStatus.NOT_FOUND,
-      );
-    }
-    Object.assign(updateAboutMe, id, updateAboutmeDto);
-    return await this.aboutmeRepository.save(updateAboutMe);
+
+    Object.assign(existingAboutMe, id, updateAboutmeDto);
+    return await this.aboutmeRepository.save(existingAboutMe);
   }
 
   // 자기소개서 삭제
   async removeAboutme(id: number, resumeId: number, aboutmeId: number) {
-    // 이력서 체크
-    const existingResume = await this.aboutmeRepository.findOne({
-      where: { resumeId },
+    // 자소서 체크
+    const existingAboutMe = await this.aboutmeRepository.findOne({
+      where: { id: aboutmeId },
     });
-    // 이력서 예외처리
-    if (!existingResume) {
+    // 자소서 예외처리
+    if (!existingAboutMe) {
       throw new HttpException(
-        '이력서를 찾을 수 없습니다.',
+        '자기소개서가 존재하지 않습니다.',
         HttpStatus.BAD_REQUEST,
       );
     }
-    // 자기소개서 체크
-    const deleteAboutMe = await this.aboutmeRepository.findOne({
-      where: { id: aboutmeId },
-    });
-    // 예외처리
-    if (!deleteAboutMe) {
-      throw new HttpException(
-        '해당 자소서가 존재하지 않습니다.',
-        HttpStatus.NOT_FOUND,
-      );
-    }
     // 반환
-    return await this.aboutmeRepository.remove(deleteAboutMe);
+    return await this.aboutmeRepository.remove(existingAboutMe);
   }
 }

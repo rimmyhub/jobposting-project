@@ -11,6 +11,7 @@ export class SearchController {
   async createIndex() {
     console.log('hi');
     const index = await this.searchService.createIndex();
+    return index;
   }
 
   // 데이터 검색 api
