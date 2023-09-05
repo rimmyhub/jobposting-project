@@ -1,11 +1,15 @@
 import { Controller, Get, Render, Param, Request, Res } from '@nestjs/common';
 import { AppService } from './app.service';
+import { CompanyService } from './company/company.service';
 import { Response } from 'express';
 import { get } from 'http';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(
+    private readonly appService: AppService,
+    private readonly companyService: CompanyService,
+  ) {}
 
   @Get()
   @Render('index')
@@ -60,12 +64,21 @@ export class AppController {
     return { title: 'Title' };
   }
 
-  // 회사 정보 서브 페이지 (로그인 없이 모든 공고 조회)
+  // 회사 정보 서브 페이지
   @Get('subpage/company/:companyId')
   @Render('subpage-company')
-  getSubpageCompany(@Request() req, @Param('companyId') companyId: string) {
-    return { companyId };
+  async getSubpageCompany(
+    @Request() req,
+    @Param('companyId') companyId: string,
+  ) {
+    const company = await this.companyService.finOneCompany(Number(companyId));
+
+    const cookie: string = await req.cookies['authorization'];
+    const isLogin = cookie ? 1 : 0;
+
+    return { company, isLogin };
   }
+
   // 채용공고 (로그인 없이 모든 공고 조회)
   @Get('jobposting/:jobpostingId')
   @Render('jobposting-user')

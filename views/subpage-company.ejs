@@ -46,11 +46,12 @@
             alt="..."
             style="width: 150px"
           />
-          <p class="fs-2 fw-semibold" style="margin: 10px">스파르타 주식회사</p>
+          <p class="fs-2 fw-semibold" style="margin: 10px">
+            <%= company.name %>
+          </p>
 
           <p class="fw-normal" style="margin: 10px">
-            Dreaming AI World by Developing AI Packs for Everyone to Make AI
-            Beneficial!
+            <%= company.description %>
           </p>
         </div>
 
@@ -80,7 +81,7 @@
               <p class="text-start text-body-secondary">웹사이트</p>
             </div>
             <div class="col-8">
-              <p class="text-start">https://www.amazon.com/</p>
+              <p class="text-start"><%= company.website %></p>
             </div>
           </div>
           <!-- 웹사이트 -->
@@ -91,7 +92,7 @@
               <p class="text-start text-body-secondary">업계</p>
             </div>
             <div class="col-8">
-              <p class="text-start">IT</p>
+              <p class="text-start"><%= company.business %></p>
             </div>
           </div>
           <!-- 업계 -->
@@ -102,7 +103,7 @@
               <p class="text-start text-body-secondary">직원 수</p>
             </div>
             <div class="col-8">
-              <p class="text-start">829,381</p>
+              <p class="text-start"><%= company.employees %></p>
             </div>
           </div>
           <!-- 직원수 -->
@@ -112,7 +113,7 @@
               <p class="text-start text-body-secondary">본사 주소</p>
             </div>
             <div class="col-8">
-              <p class="text-start">서울특별시 천호대로 1077</p>
+              <p class="text-start"><%= company.address %></p>
             </div>
           </div>
           <!-- 지도 카카오 API 영역 -->
@@ -121,12 +122,12 @@
           <script
             type="text/javascript"
             src="//dapi.kakao.com/v2/maps/sdk.js?appkey=9e25fdfe19d6860c0e4399dad49b60dd&libraries=services"
-          ></script>  
+          ></script>
           <script>
-            var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+            var mapContainer = document.getElementById('map'),
               mapOption = {
-                center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-                level: 3, // 지도의 확대 레벨
+                center: new kakao.maps.LatLng(33.450701, 126.570667),
+                level: 3,
               };
 
             // 지도를 생성합니다
@@ -137,7 +138,7 @@
 
             // 주소로 좌표를 검색합니다
             geocoder.addressSearch(
-              '서울특별시 천호대로 1077',
+              '<%= company.address %>',
               function (result, status) {
                 // 정상적으로 검색이 완료됐으면
                 if (status === kakao.maps.services.Status.OK) {
