@@ -69,8 +69,20 @@ export class AppController {
   // 채용공고 (로그인 없이 모든 공고 조회)
   @Get('jobposting/:jobpostingId')
   @Render('jobposting-user')
-  getJobpstingUser(@Param('jobpostingId') jobpostingId: string) {
-    return { jobpostingId };
+  async getJobpstingUser(
+    @Request() req,
+    @Param('jobpostingId') jobpostingId: string,
+  ) {
+    // 그냥 authorization가 들어가 있으면 통과해버림
+    // 다른 방법 생각해보자
+    const cookie: string = await req.cookies['authorization'];
+    if (cookie) {
+      return { isLogin: 1, jobpostingId };
+    }
+    return {
+      isLogin: 0,
+      jobpostingId,
+    };
   }
 
   // 유저 - 서브 페이지
