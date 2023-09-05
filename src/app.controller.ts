@@ -144,15 +144,32 @@ export class AppController {
   }
 
   // 채용공고 지원 내역 보기
-  @Get('/apply')
-  @Render('apply')
-  async getApply(@Request() req) {
+  @Get('apply/:type')
+  async getApply(
+    @Request() req,
+    @Param('type') type: string,
+    @Res() res: Response,
+  ) {
     const cookie: string = await req.cookies['authorization'];
-    if (cookie) {
-      return { isLogin: 1 };
+    if (!cookie) {
+      return res.redirect('/singin'); // 쿠키가 없으면 로그인하게 이동
     }
-    return {
-      isLogin: 0,
-    };
+    return res.render('apply', {
+      type,
+      isLogin: 1,
+    });
   }
 }
+//   // 채용공고 지원 내역 보기
+//   @Get('/apply')
+//   @Render('apply')
+//   async getApply(@Request() req) {
+//     const cookie: string = await req.cookies['authorization'];
+//     if (cookie) {
+//       return { isLogin: 1 };
+//     }
+//     return {
+//       isLogin: 0,
+//     };
+//   }
+// }

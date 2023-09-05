@@ -5,6 +5,8 @@ let sent;
 let received;
 let chattingList;
 let chattingContainer;
+
+const myApplyList = document.getElementById('my-apply-list');
 const socket = io('localhost:8080');
 const ejs = (window.onload = function () {
   const params = new URLSearchParams(window.location.search);
@@ -267,3 +269,9 @@ async function sendMessage() {
   await socket.emit('message', chatContent.value, payload);
   chatContent.value = '';
 }
+
+// 마이채용공고리스트
+myApplyList.addEventListener('click', () => {
+  const type = window.localStorage.getItem('type');
+  location.href = `apply/${type}`;
+});
