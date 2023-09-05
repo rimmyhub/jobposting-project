@@ -1,4 +1,6 @@
+let btnContainer;
 document.addEventListener('DOMContentLoaded', (e) => {
+  btnContainer = document.getElementById('btn-container');
   e.preventDefault();
   // 유저 정보를 불러오는 함수를 실행
   getUserData();
@@ -12,7 +14,19 @@ document.addEventListener('DOMContentLoaded', (e) => {
   getUserPortfolio();
   // 유저의 자기소개서를 불러오는 함수 실행
   getUserAboutMe();
+
+  // 유저인지 회사인지 판단
+  hideBtn();
 });
+
+// 메세지보내기버튼 숨기기
+function hideBtn() {
+  const type = window.localStorage.getItem('type');
+  if (type) {
+    console.log('버튼 숨기기', btnContainer);
+    btnContainer.style.display = 'none';
+  }
+}
 
 // 유저 정보를 불러오는 함수 로직
 async function getUserData() {
