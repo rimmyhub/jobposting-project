@@ -2,6 +2,8 @@ let btnContainer;
 document.addEventListener('DOMContentLoaded', (e) => {
   btnContainer = document.getElementById('btn-container');
   e.preventDefault();
+  // 유저인지 회사인지 판단
+  hideBtn();
   init();
 });
 
@@ -19,10 +21,7 @@ function init() {
   getUserPortfolio();
   // 유저의 자기소개서를 불러오는 함수 실행
   getUserAboutMe();
-
-  // 유저인지 회사인지 판단
-  hideBtn();
-});
+}
 
 // 메세지보내기버튼 숨기기
 function hideBtn() {
@@ -31,7 +30,6 @@ function hideBtn() {
     console.log('버튼 숨기기', btnContainer);
     btnContainer.style.display = 'none';
   }
-}
 }
 
 // URI 자원
