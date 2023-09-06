@@ -1,15 +1,11 @@
 import { Controller, Get, Render, Param, Request, Res } from '@nestjs/common';
 import { AppService } from './app.service';
-import { CompanyService } from './company/company.service';
 import { Response } from 'express';
 import { get } from 'http';
 
 @Controller()
 export class AppController {
-  constructor(
-    private readonly appService: AppService,
-    private readonly companyService: CompanyService,
-  ) {}
+  constructor(private readonly appService: AppService) {}
 
   @Get()
   @Render('index')
@@ -71,12 +67,14 @@ export class AppController {
     @Request() req,
     @Param('companyId') companyId: string,
   ) {
-    const company = await this.companyService.finOneCompany(Number(companyId));
-
     const cookie: string = await req.cookies['authorization'];
-    const isLogin = cookie ? 1 : 0;
-
-    return { company, isLogin };
+    if (cookie) {
+      return { isLogin: 1, companyId };
+    }
+    return {
+      isLogin: 0,
+      companyId,
+    };
   }
 
   // 채용공고 (로그인 없이 모든 공고 조회)
