@@ -32,6 +32,9 @@ export class Jobposting {
   @Column({ type: 'varchar', comment: '학력' })
   education: string;
 
+  @Column({ type: 'text', comment: '직무' })
+  job: string;
+
   @Column({ type: 'varchar', comment: '근무 형태' })
   workType: string;
 

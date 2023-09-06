@@ -19,6 +19,10 @@ export class CreateJobpostingDto {
 
   @IsNotEmpty()
   @IsString()
+  job: string;
+
+  @IsNotEmpty()
+  @IsString()
   workType: string;
 
   @IsNotEmpty()
