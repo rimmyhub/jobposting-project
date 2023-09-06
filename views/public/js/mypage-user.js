@@ -629,7 +629,6 @@ function educationAdd() {
 let educationId;
 // 수정버튼을 누르면 위의 전역변수에 에듀케이션 ID를 저장
 function educationEditbtn(param) {
-  console.log('수정버튼', param);
   educationId = param;
 }
 
@@ -647,11 +646,7 @@ function educationUpdate() {
       '#graduationYearUpdateTag',
     ).value;
     const education = b;
-    // 테스트용 하드코딩
-    console.log(
-      e.target.parentNode.parentNode.parentNode.parentNode.parentNode
-        .parentNode,
-    );
+    // 학력 아이디
     const id = educationId;
     // 서버요청
     const educationUpdateData = await fetch(`/api/educations/${id}`, {
@@ -684,10 +679,10 @@ function educationUpdate() {
 function educationDelete() {
   const educationDeleteBtn = document.querySelector('#educationDeleteBtn');
   educationDeleteBtn.addEventListener('click', async (e) => {
-    // 하드코딩용
-    const educationId = 2;
+    //
+    const id = educationId;
     // 메인로직
-    const deleteEducationData = await fetch(`/api/educations/${educationId}`, {
+    const deleteEducationData = await fetch(`/api/educations/${id}`, {
       method: 'delete',
     });
     const jsonDeleteEducationData = await deleteEducationData.json();
