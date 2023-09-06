@@ -29,7 +29,7 @@ function init() {
 // 메세지보내기버튼 숨기기
 function hideBtn() {
   const type = window.localStorage.getItem('type');
-  if (type) {
+  if (type === 'user') {
     console.log('버튼 숨기기', btnContainer);
     btnContainer.style.display = 'none';
   }
@@ -98,6 +98,7 @@ async function getUserResume() {
   const userResumeData = await fetch(`/api/resumes/${resumeId}`);
   // 받아온 데이터 할당
   const responseData = await userResumeData.json();
+  console.log('responseData = ', responseData);
   // 예외처리
   if (responseData.message) {
     return console.log(responseData.message);

@@ -36,6 +36,8 @@ export class ChatService {
       company: { uuid: id }, // company 가드로 회사 가져오기
       user: { id: userId }, // userid 외래키 찾기
     });
+
+    console.log('chat = ', chat);
     return chat;
   }
 
@@ -43,18 +45,8 @@ export class ChatService {
   async comGetAllChatRoom(id: number): Promise<Chat[]> {
     const chatRooms = await this.chatRepository
       .createQueryBuilder('chat')
-      .select([
-        'chat.id',
-        'chat.companyId',
-        'chat.userId',
-        'user.email',
-        // 'chatContent.senderId',
-        // 'chatContent.content',
-        // 'chatContent.createdAt',
-      ])
+      .select(['chat.id', 'chat.companyId', 'chat.userId', 'user.email'])
       .leftJoin('chat.user', 'user')
-
-      // .leftJoin('chat.chatContent', 'chatContent')
       .where(`chat.companyId = ${id}`)
       .getMany();
 
@@ -63,20 +55,10 @@ export class ChatService {
 
   // 일반 유저의 채팅리스트 불러오기
   async userGetAllChatRoom(id: number): Promise<Chat[]> {
-    console.log('id = ', id);
     const chatRooms = await this.chatRepository
       .createQueryBuilder('chat')
-      .select([
-        'chat.id',
-        'chat.companyId',
-        'chat.userId',
-        'company.email',
-        // 'chatContent.senderId',
-        // 'chatContent.content',
-        // 'chatContent.createdAt',
-      ])
+      .select(['chat.id', 'chat.companyId', 'chat.userId', 'company.email'])
       .leftJoin('chat.company', 'company')
-      // .leftJoin('chat.chatContent', 'chatContent')
       .where(`chat.userId = ${id}`)
       .getMany();
     return chatRooms;

@@ -39,7 +39,6 @@ const ejs = (window.onload = function () {
     // 회사가 유저에게 메세지
     sendMsgUser.addEventListener('click', async () => {
       sendMessageUser(userId);
-      chatContainer.style.display = 'flex';
     });
   }
   if (profile) {
@@ -74,6 +73,8 @@ const ejs = (window.onload = function () {
     // 1. DB에 나와 상대방의 ID와 방의 ID를 임시로 만들어서 저장한다.
     // 내 아이디
     const id = window.localStorage.getItem('id');
+    let userEmail;
+    let getUserId;
     // 2.
     await fetch(`/api/chats/company/${userId}`, {
       method: 'POST',
@@ -84,10 +85,34 @@ const ejs = (window.onload = function () {
         id: id,
       }),
     })
-      .then((res) => res.json()) //json으로 받을 것을 명시
       .then((res) => {
-        //실제 데이터를 상태변수에 업데이트
+        return res.json();
+      }) //json으로 받을 것을 명시
+      .then((res) => {
+        if (res.message) {
+          alert(res.message);
+        } else {
+          getUserId = res.userId;
+        }
       });
+    console.log(':getUserId = ', getUserId);
+    await fetch(`/api/users/get-email/${getUserId}`, {
+      headers: {
+        Accept: 'application / json',
+      },
+      method: 'GET',
+    })
+      .then((res) => {
+        return res.json();
+      }) //json으로 받을 것을 명시
+      .then((res) => {
+        console.log('res = ', res);
+        userEmail = res.email;
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+    chattingBox(getUserId, userEmail);
   };
 
   async function deleteCookie() {

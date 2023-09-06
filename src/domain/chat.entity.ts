@@ -20,7 +20,7 @@ export class Chat {
   @Column({ name: 'user_id' })
   userId: number;
 
-  @Column({ name: 'company_id' })
+  @Column({ name: 'company_uuid' })
   companyId: number;
 
   @CreateDateColumn({ name: 'create_at', comment: '생성일' })
