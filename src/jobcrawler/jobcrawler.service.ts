@@ -108,8 +108,6 @@ export class JobcrawlerService {
     // const _workArea = [];
     // const _jobText = [];
     // const _dueDate = [];
-
-    console.log($jobList.length);
     $jobList.each((idx, node) => {
       const companyLink = $(node).find('.cpname');
       const companyId = Number(companyLink.attr('href').split('/').pop());
@@ -168,7 +166,7 @@ export class JobcrawlerService {
     return jobs;
   }
 
-  async inflearnCrawling() {
+  async incruitCrawling() {
     console.time('코드 실행시간');
 
     const totalPage = 1; // 크롤링할 페이지
@@ -191,6 +189,8 @@ export class JobcrawlerService {
         const companies = this.companyParsing(companyContent);
         const jobs = this.jobParsing(jobContent, companies[0].id);
 
+        console.log(jobs);
+
         companyInfo.push(companies);
         jobInfo.push(jobs);
 
@@ -201,7 +201,7 @@ export class JobcrawlerService {
     let companyId = 0;
     for (const companys of companyInfo) {
       const companyEntity = this.companyRepository.create({
-        uuid: companys[0].id,
+        id: companys[0].id,
         email: companys[0].email,
         password: companys[0].password,
         title: companys[0].title,
