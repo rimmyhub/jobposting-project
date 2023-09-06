@@ -623,10 +623,11 @@ function educationAdd() {
     window.location.reload();
   });
 }
-const educationUpdateBtns = document.querySelectorAll('#test123');
-console.log(educationUpdateBtns);
+
 // 학력 "수정" 버튼 클릭 후 "저장" 버튼 클릭 시 학력 "수정" 로직 실행 함수
 function educationUpdate() {
+  const educationUpdateBtns = document.querySelectorAll('#test123');
+  console.log(educationUpdateBtns);
   educationUpdateBtns.forEach((updateBtn) => {
     updateBtn.addEventListener('click', async (e) => {
       // 클릭된 수정 버튼의 부모 요소에서 data-id 값을 가져옴
