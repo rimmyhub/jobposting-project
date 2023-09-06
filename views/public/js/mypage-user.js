@@ -263,10 +263,11 @@ async function getUserEducation() {
                                 <!-- 졸업년도 -->
                                 <button
                                 type="button"
-                                id="test123"
+                                id="${educationInfo.id}"
                                 class="btn btn-primary fa-solid fa-pen"
                                 data-bs-toggle="modal"
                                 data-bs-target="#education"
+                                OnClick="educationEditbtn(${educationInfo.id})"
                                 >
                                   수정
                                 </button>
@@ -624,21 +625,18 @@ function educationAdd() {
   });
 }
 
+// 에듀케이션ID전역변수
+let educationId;
+장;
+
+// 수정버튼을 누르면 위의 전역변수에 에듀케이션 ID를 저장
+function educationEditbtn(param) {
+  console.log('수정버튼', param);
+  educationId = param;
+}
+
 // 학력 "수정" 버튼 클릭 후 "저장" 버튼 클릭 시 학력 "수정" 로직 실행 함수
 function educationUpdate() {
-  const educationUpdateBtns = document.querySelectorAll('#test123');
-  console.log(educationUpdateBtns);
-  educationUpdateBtns.forEach((updateBtn) => {
-    updateBtn.addEventListener('click', async (e) => {
-      // 클릭된 수정 버튼의 부모 요소에서 data-id 값을 가져옴
-      const educationId = e.target
-        .closest('.information')
-        .getAttribute('data-id');
-
-      // 이제 educationId를 사용할 수 있음
-      console.log('Education ID:', educationId);
-    });
-  });
   const educationUpdateBtn = document.querySelector('#educationUpdateBtn');
   educationUpdateBtn.addEventListener('click', async (e) => {
     // 바디값
@@ -656,9 +654,9 @@ function educationUpdate() {
       e.target.parentNode.parentNode.parentNode.parentNode.parentNode
         .parentNode,
     );
-    const educationId = 1;
+    const id = educationId;
     // 서버요청
-    const educationUpdateData = await fetch(`/api/educations/${educationId}`, {
+    const educationUpdateData = await fetch(`/api/educations/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
