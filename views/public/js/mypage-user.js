@@ -627,8 +627,6 @@ function educationAdd() {
 
 // 에듀케이션ID전역변수
 let educationId;
-장;
-
 // 수정버튼을 누르면 위의 전역변수에 에듀케이션 ID를 저장
 function educationEditbtn(param) {
   console.log('수정버튼', param);
