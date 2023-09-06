@@ -29,19 +29,19 @@
                 <button
                   class="btn btn btn-outline-primary dropdown-toggle"
                   type="button"
-                  id="selectedValue"
+                  id="selectedValue2"
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
                   학력 선택
                 </button>
-                <ul
-                  id="dropdown"
-                  class="dropdown-menu"
-                  aria-labelledby="dropdownMenuButton1"
-                >
-                  <li><a class="dropdown-item item">초등학교</a></li>
-                  <li><a class="dropdown-item item">중학교</a></li>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                  <li>
+                    <a class="dropdown-item item">초등학교</a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item item">중학교</a>
+                  </li>
                   <li>
                     <a class="dropdown-item item">고등학교</a>
                   </li>
@@ -108,3 +108,17 @@
     </div>
   </div>
 </div>
+<script>
+  // document.addEventListener('DOMContentLoaded', () => {
+  //   const dropdownItems = document.querySelectorAll('.item');
+  //   const selectedValueElement = document.getElementById('selectedValue');
+
+  //   dropdownItems.forEach((item) => {
+  //     item.addEventListener('click', () => {
+  //       const selectedText = item.textContent;
+  //       console.log(selectedText);
+  //       selectedValueElement.textContent = selectedText;
+  //     });
+  //   });
+  // });
+</script>

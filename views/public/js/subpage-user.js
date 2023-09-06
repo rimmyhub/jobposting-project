@@ -2,15 +2,19 @@ let btnContainer;
 document.addEventListener('DOMContentLoaded', (e) => {
   btnContainer = document.getElementById('btn-container');
   e.preventDefault();
+  init();
   // 유저인지 회사인지 판단
   hideBtn();
-  init();
 });
+// URI 자원
+const params = new URLSearchParams(window.location.search);
+const userId = params.get('id');
+const resumeId = params.get('resumeId');
 
 // init 함수
 function init() {
   // 유저 정보를 불러오는 함수를 실행
-  getUserData();
+  // getUserData();
   // 유저 이력서 정보를 불러오는 함수 실행
   getUserResume();
   // 유저의 학력을 불러오는 함수 실행
@@ -22,7 +26,6 @@ function init() {
   // 유저의 자기소개서를 불러오는 함수 실행
   getUserAboutMe();
 }
-
 // 메세지보내기버튼 숨기기
 function hideBtn() {
   const type = window.localStorage.getItem('type');
@@ -31,82 +34,74 @@ function hideBtn() {
     btnContainer.style.display = 'none';
   }
 }
-
-// URI 자원
-const params = new URLSearchParams(window.location.search);
-const userId = params.get('id');
-const resumeId = params.get('resumeId');
-
 // 유저의 종합정보를 불러오는 함수 로직
-async function getUserData() {
-  const userBox = document.querySelector('#userBox');
-  console.log(userBox);
-  // 학력 데이터 가공
-  const userEducationData = await fetch(`/api/educations/${resumeId}`);
-  const jsonUserEducationData = await userEducationData.json();
-  console.log(jsonUserEducationData.message);
+// async function getUserData() {
+//   const userBox = document.querySelector('#userBox');
+//   const edu = document.querySelector('#educationBar');
+//   const user = document.querySelector('#userInfoBar');
+//   const resume = document.querySelector('#userInfoBar');
 
-  // // 학력이 없을 경우 예외처리
-  // if (
-  //   jsonUserEducationData.message ===
-  //   `현재 작성하신 이력서에 <학력>은 작성 전 입니다.`
-  // ) {
-  //   userBox.innerHTML = `<p>해당 이력서에 (학력란)을 작성하시면 이 곳이 오픈 됩니다.</p>`;
-  //   return;
-  // }
+//   // 학력 데이터 가공
+//   const userEducationData = await fetch(`/api/educations/${resumeId}`);
+//   const jsonUserEducationData = await userEducationData.json();
+//   if (!jsonUserEducationData.message) {
+//     edu.innerHTML = `
+//                     <p class="fw-normal" id="educationBar" style="margin: 10px">
+//                       ${jsonUserEducationData[0].title}
+//                     </p>
+//   `;
+//   }
+//   // 유저 데이터 가공
+//   const userData = await fetch(`/api/users/user/${userId}`);
+//   const jsonUserData = await userData.json();
+//   if (!jsonUserData.message) {
+//     user.innerHTML = `
+//                       <p class="fw-normal" id="userInfoBar" style="margin: 10px">
+//                         <!-- ${jsonUserData.address}ᆞ${jsonUserData.phone} -->
+//                       </p>
+//                      `;
+//   }
 
-  // 유저 데이터 가공
-  const userData = await fetch(`/api/users/user/${userId}`);
-  const jsonUserData = await userData.json();
+//   // 이력서 데이터 가공
+//   const userResumeData = await fetch(`/api/resumes/${resumeId}`);
+//   const jsonUserResumeData = await userResumeData.json();
+//   if (!jsonUserResumeData.message) {
+//     resume.innerHTML = ``;
+//   }
 
-  // 이력서 데이터 가공
-  const userResumeData = await fetch(`/api/resumes/${resumeId}`);
-  const jsonUserResumeData = await userResumeData.json();
-
-  // 예외처리
-  if (jsonUserResumeData.message) {
-    return console.log(jsonUserResumeData.message);
-  }
-  // 위의 3가지 내용이 전부 조회가 될 경우 innerHTML 실행
-  // userBox.innerHTML = '';
-
-  userBox.innerHTML = `<div class="col" id="userBox">
-                        <img
-                          src="/img/userImg.jpg"
-                          class="rounded-circle border border-secondary"
-                          alt="..."
-                          style="width: 150px"
-                        />
-                        <p class="fs-2 fw-semibold" style="margin: 10px">${jsonUserData.name}</p>
-                        <p class="fs-4" style="margin: 10px">${jsonUserResumeData.title}</p>
-                        <p class="fw-normal" style="margin: 10px">
-                          ${jsonUserEducationData[0].major}ᆞ${jsonUserEducationData[0].schoolTitle}
-                        </p>
-                        <p class="fw-normal" style="margin: 10px">
-                          ${jsonUserData.address}ᆞ${jsonUserData.phone}
-                        </p>
-                      </div>`;
-}
-
+//   // 예외처리
+//   if (
+//     jsonUserData.message ||
+//     jsonUserResumeData.message ||
+//     jsonUserEducationData.message
+//   ) {
+//     return console.log(
+//       jsonUserData.message,
+//       jsonUserResumeData.message,
+//       jsonUserEducationData.message,
+//     );
+//   } else if (
+//     !jsonUserData.message &&
+//     !jsonUserResumeData.message &&
+//     !jsonUserEducationData.message
+//   ) {
+//   }
+// }
 // 유저의 이력서를 불러오는 함수 로직
 async function getUserResume() {
+  // 이력서태그
   const resumeTitleTag = document.querySelector('#resumeTitle');
   const resumeDescTag = document.querySelector('#resumeDesc');
+  // 유저정보태그
   const userInfoBox = document.querySelector('#userInfoBox');
-
-  resumeTitleTag.innerHTML = '';
-  resumeDescTag.innerHTML = '';
-
-  // 로그인 기능이 실현될 시에 해당 코드 활성화
-  const params = new URLSearchParams(window.location.search);
-  const userId = params.get('id');
-  const resumeId = params.get('resumeId');
-
   // 만들어둔 이력서 조회 API fetch 요청 보냄
   const userResumeData = await fetch(`/api/resumes/${resumeId}`);
   // 받아온 데이터 할당
   const responseData = await userResumeData.json();
-
+  // 예외처리
+  if (responseData.message) {
+    return console.log(responseData.message);
+  }
   // 메인 로직
   resumeTitleTag.innerHTML = `<p
                                   class="fs-2 fw-semibold text-start information"
@@ -123,7 +118,11 @@ async function getUserResume() {
   // 유저 정보 조회 fetch
   const userData = await fetch(`/api/users/user/${userId}`);
   const jsonUserData = await userData.json();
-
+  // 예외처리
+  if (jsonUserData.message) {
+    return console.log(jsonUserData.message);
+  }
+  // innerHTML
   userInfoBox.innerHTML = `<div id="userInfoBox">
                               <div class="row">
                                 <div class="col-sm-4">
@@ -191,19 +190,19 @@ async function getUserResume() {
                               <!-- 생년월일 -->
                             </div>`;
 }
-
 // 유저의 학력을 불러오는 함수 로직
 async function getUserEducation() {
   const educationBox = document.querySelector('#educationBox');
-  // 로그인 기능이 실현될 시에 해당 코드 활성화
-  const params = new URLSearchParams(window.location.search);
-  const resumeId = params.get('resumeId');
-
-  educationBox.innerHTML = '';
 
   const userEducationData = await fetch(`/api/educations/${resumeId}`);
 
   const jsonUserEducationData = await userEducationData.json();
+
+  if (jsonUserEducationData.message) {
+    return console.log(jsonUserEducationData.message);
+  }
+  educationBox.innerHTML = '';
+
   jsonUserEducationData.forEach((educationInfo) => {
     educationBox.innerHTML += `<div class="col-sm-8" id="educationBox">
     <p
@@ -251,20 +250,20 @@ async function getUserEducation() {
                                </div>`;
   });
 }
-
 // 유저의 경력을 불러오는 함수 로직
 async function getUserCareer() {
   const careerBox = document.querySelector('#careerBox');
 
-  // 로그인 기능이 실현될 시에 해당 코드 활성화
-  const params = new URLSearchParams(window.location.search);
-  const resumeId = params.get('resumeId');
-
-  careerBox.innerHTML = '';
-
   const userCareerData = await fetch(`/api/careers/${resumeId}`);
 
   const jsonUserCareerData = await userCareerData.json();
+
+  if (jsonUserCareerData.message) {
+    return console.log(jsonUserCareerData.message);
+  }
+
+  careerBox.innerHTML = '';
+
   jsonUserCareerData.forEach((careerInfo) => {
     careerBox.innerHTML += `<div class="col-sm-8" id="careerBox">
                                 <p
@@ -327,15 +326,15 @@ async function getUserCareer() {
 async function getUserPortfolio() {
   const portfolioBox = document.querySelector('#portfolioBox');
 
-  // 로그인 기능이 실현될 시에 해당 코드 활성화
-  const params = new URLSearchParams(window.location.search);
-  const resumeId = params.get('resumeId');
-
-  portfolioBox.innerHTML = '';
-
   const userPortfolio = await fetch(`/api/portfolio/${resumeId}`);
 
   const jsonUserPortfolio = await userPortfolio.json();
+
+  if (jsonUserPortfolio.message) {
+    return console.log(jsonUserPortfolio.message);
+  }
+
+  portfolioBox.innerHTML = '';
 
   jsonUserPortfolio.forEach((portfolioInfo) => {
     portfolioBox.innerHTML += `<div class="col-sm-8" id="portfolioBox">
@@ -362,20 +361,20 @@ async function getUserPortfolio() {
                                 </div>`;
   });
 }
-
 // 유저의 자기소개서를 불러오는 함수 로직
 async function getUserAboutMe() {
   const aboutMeBox = document.querySelector('#aboutMeBox');
 
-  // 로그인 기능이 실현될 시에 해당 코드 활성화
-  const params = new URLSearchParams(window.location.search);
-  const resumeId = params.get('resumeId');
-
-  aboutMeBox.innerHTML = '';
-
   const userAboutMe = await fetch(`/api/aboutmes/${resumeId}`);
 
   const jsonUserAboutMe = await userAboutMe.json();
+
+  if (jsonUserAboutMe.message) {
+    return console.log(jsonUserAboutMe.message);
+  }
+
+  aboutMeBox.innerHTML = '';
+
   jsonUserAboutMe.forEach((aboutMeInfo) => {
     aboutMeBox.innerHTML = `<div class="col-sm-8" id="aboutMeBox">
                                   <p

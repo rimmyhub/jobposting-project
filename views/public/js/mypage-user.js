@@ -1,9 +1,8 @@
 // 페이지 로드시 실행 함수
 document.addEventListener('DOMContentLoaded', async (e) => {
   e.preventDefault();
-  await init();
-  await init2();
-  getAboutMeId();
+  init();
+  init2();
 });
 
 // 유저 이미지 수정하기
@@ -220,58 +219,58 @@ async function getUserEducation() {
 
   jsonUserEducationData.forEach((educationInfo) => {
     educationBox.innerHTML += `<div class="col-sm-8" id="educationBox" data-id="${educationInfo.id}">
-    <p
-      class="fs-2 fw-semibold text-start information"
-      style="margin: 10px"
-    >
-      ${educationInfo.schoolTitle}
-    </p>
+                                <p
+                                  class="fs-2 fw-semibold text-start information"
+                                  style="margin: 10px"
+                                >
+                                  ${educationInfo.schoolTitle}
+                                </p>
 
-    <!-- 구분선 -->
-    <hr />
+                                <!-- 구분선 -->
+                                <hr />
 
-    <!-- 전공 -->
-    <div class="row">
-      <div class="col-sm-4">
-        <p class="text-start text-body-secondary">전공</p>
-      </div>
-      <div class="col-sm-8">
-        <p class="text-start">${educationInfo.major}</p>
-      </div>
-    </div>
-    <!-- 전공 -->
+                                <!-- 전공 -->
+                                <div class="row">
+                                  <div class="col-sm-4">
+                                    <p class="text-start text-body-secondary">전공</p>
+                                  </div>
+                                  <div class="col-sm-8">
+                                    <p class="text-start">${educationInfo.major}</p>
+                                  </div>
+                                </div>
+                                <!-- 전공 -->
 
-    <!-- 입학년도 -->
-    <div class="row">
-      <div class="col-sm-4">
-        <p class="text-start text-body-secondary">입학년도</p>
-      </div>
-      <div class="col-sm-8">
-        <p class="text-start">${educationInfo.admissionYear}</p>
-      </div>
-    </div>
-    <!-- 입학년도 -->
+                                <!-- 입학년도 -->
+                                <div class="row">
+                                  <div class="col-sm-4">
+                                    <p class="text-start text-body-secondary">입학년도</p>
+                                  </div>
+                                  <div class="col-sm-8">
+                                    <p class="text-start">${educationInfo.admissionYear}</p>
+                                  </div>
+                                </div>
+                                <!-- 입학년도 -->
 
-    <!-- 졸업년도 -->
-    <div class="row">
-      <div class="col-sm-4">
-        <p class="text-start text-body-secondary">졸업년도</p>
-      </div>
-      <div class="col-sm-8">
-        <p class="text-start">${educationInfo.graduationYear}</p>
-      </div>
-    </div>
-    <!-- 졸업년도 -->
-  </div>
-  
-  <button
-            type="button"
-            class="btn btn-primary fa-solid fa-pen"
-            data-bs-toggle="modal"
-            data-bs-target="#education"
-          >
-            수정
-          </button>`;
+                                <!-- 졸업년도 -->
+                                <div class="row">
+                                  <div class="col-sm-4">
+                                    <p class="text-start text-body-secondary">졸업년도</p>
+                                  </div>
+                                  <div class="col-sm-8">
+                                    <p class="text-start">${educationInfo.graduationYear}</p>
+                                  </div>
+                                </div>
+                                <!-- 졸업년도 -->
+                                <button
+                                type="button"
+                                id="test123"
+                                class="btn btn-primary fa-solid fa-pen"
+                                data-bs-toggle="modal"
+                                data-bs-target="#education"
+                                >
+                                  수정
+                                </button>
+                              </div>`;
   });
 }
 // 유저의 경력을 불러오는 함수 로직
@@ -519,7 +518,7 @@ function createResume() {
     if (res.message) {
       console.log(res.message);
     }
-    alert('이력서가 생성되었습니다.');
+    alert(`"${res.id}" 이력서가 생성되었습니다.`);
     window.location.reload();
   });
 }
@@ -572,8 +571,24 @@ function resumeDelete() {
   });
 }
 
+// 학력정보 불러오기
+const dropdownItems = document.querySelectorAll('.item');
+const selectedValueElement = document.getElementById('selectedValue');
+const selectedValueElement2 = document.getElementById('selectedValue2');
+let a = '추가';
+let b = '수정';
+dropdownItems.forEach((item) => {
+  item.addEventListener('click', () => {
+    selectedValueElement.textContent = item.textContent;
+    selectedValueElement2.textContent = item.textContent;
+    a = selectedValueElement.textContent;
+    b = selectedValueElement2.textContent;
+  });
+});
+
 // 학력 "추가" 버튼 클릭 후 "저장" 버튼 클릭 시 학력 "추가" 로직 실행 함수
 function educationAdd() {
+  // 이벤트 리스너 등록
   const addEducationBtn = document.querySelector('#educationSaveBtn');
   addEducationBtn.addEventListener('click', async () => {
     // body값
@@ -581,6 +596,7 @@ function educationAdd() {
     const major = document.querySelector('#majorTag').value;
     const admissionYear = document.querySelector('#admissionYearTag').value;
     const graduationYear = document.querySelector('#graduationYearTag').value;
+    const education = a;
     // 유저 이력서 아이디
     const resumeId = await getUserResume();
     // 데이터 보내기
@@ -592,7 +608,7 @@ function educationAdd() {
         major,
         admissionYear,
         graduationYear,
-        education: '초등학교',
+        education,
       }),
     });
     // 받아온 데이터 가공
@@ -607,9 +623,21 @@ function educationAdd() {
     window.location.reload();
   });
 }
-
+const educationUpdateBtns = document.querySelectorAll('#test123');
+console.log(educationUpdateBtns);
 // 학력 "수정" 버튼 클릭 후 "저장" 버튼 클릭 시 학력 "수정" 로직 실행 함수
 function educationUpdate() {
+  educationUpdateBtns.forEach((updateBtn) => {
+    updateBtn.addEventListener('click', async (e) => {
+      // 클릭된 수정 버튼의 부모 요소에서 data-id 값을 가져옴
+      const educationId = e.target
+        .closest('.information')
+        .getAttribute('data-id');
+
+      // 이제 educationId를 사용할 수 있음
+      console.log('Education ID:', educationId);
+    });
+  });
   const educationUpdateBtn = document.querySelector('#educationUpdateBtn');
   educationUpdateBtn.addEventListener('click', async (e) => {
     // 바디값
@@ -621,28 +649,13 @@ function educationUpdate() {
     const graduationYear = document.querySelector(
       '#graduationYearUpdateTag',
     ).value;
+    const education = b;
     // 테스트용 하드코딩
-    console.log(e.target.parentNode);
-    const educationId = 2;
-
-    // // 학력 등록 로직
-    // const dropdownItems = document.querySelectorAll('.item');
-    // const selectedValueElement = document.getElementById('selectedValue');
-
-    // const educationPick = (dropdownItems) => {
-    //   const eduPick = dropdownItems.forEach((item) => {
-    //     item.addEventListener('click', () => {
-    //       const selectedText = item.textContent;
-    //       selectedValueElement.textContent = selectedText;
-    //       console.log(selectedText);
-    //       return selectedText;
-    //     });
-    //   });
-    //   return eduPick;
-    // };
-    // // 함수 결과물 확인 로직
-    // const education = educationPick(dropdownItems);
-    // console.log(education);
+    console.log(
+      e.target.parentNode.parentNode.parentNode.parentNode.parentNode
+        .parentNode,
+    );
+    const educationId = 1;
     // 서버요청
     const educationUpdateData = await fetch(`/api/educations/${educationId}`, {
       method: 'PUT',
@@ -652,7 +665,7 @@ function educationUpdate() {
         major,
         admissionYear,
         graduationYear,
-        education: '초등학교',
+        education,
       }),
     });
     // 가져온 데이터 가공
@@ -688,7 +701,7 @@ function educationDelete() {
   });
 }
 
-// 경력부분에서 "추가" 버튼 클릭 후 "저장" 버튼 클릭 시 경력 "생성" 하는 로직
+// 경력 "추가" 버튼 클릭 후 "저장" 버튼 클릭 시 경력 "생성" 하는 로직
 function careerAdd() {
   const addCareerBtn = document.querySelector('#addCareerBtn');
   addCareerBtn.addEventListener('click', async () => {
@@ -727,7 +740,7 @@ function careerAdd() {
   });
 }
 
-// 경력부분 "수정" 버튼의 "저장"버튼 클릭시 경력 "수정"로직 실행
+// 경력 "수정" 버튼의 "저장"버튼 클릭시 경력 "수정"로직 실행
 function careerUpdate() {
   const updateCareerBtn = document.querySelector('#updateCareerBtn');
   updateCareerBtn.addEventListener('click', async () => {
@@ -766,7 +779,7 @@ function careerUpdate() {
   });
 }
 
-// 경력부분 "수정" 버튼의 "삭제"버튼 클릭시 경력 "삭제"로직 실행
+// 경력 "수정" 버튼의 "삭제"버튼 클릭시 경력 "삭제"로직 실행
 function careerDelete() {
   const deleteCareerBtn = document.querySelector('#deleteCareerBtn');
   deleteCareerBtn.addEventListener('click', async () => {
@@ -908,36 +921,6 @@ function aboutMeAdd() {
   });
 }
 
-// 자기소개서 "수정" 버튼 클릭 후 "삭제" 클릭 시 자기소개서 "삭제"로직 실행
-function aboutMeDelete() {
-  const deleteAboutMeBtn = document.querySelector('#aboutMeDeleteBtn');
-  deleteAboutMeBtn.addEventListener('click', async () => {
-    // 테스트용 하드코딩
-    const resumeId = 1;
-    const aboutmeId = 4;
-    // 메인로직
-    const deleteAboutMeData = await fetch(
-      `/api/aboutmes/${resumeId}/${aboutmeId}`,
-      {
-        method: 'DELETE',
-      },
-    );
-    // 데이터 가공
-    const jsonDeleteAboutMeData = await deleteAboutMeData.json();
-    // 예외처리
-    if (jsonDeleteAboutMeData.message) {
-      return alert(jsonDeleteAboutMeData.message);
-    }
-    // 반환값
-    alert(
-      `"${jsonDeleteAboutMeData.title}" 자기소개서가 정상적으로 삭제되었습니다.`,
-    );
-    // 새로고침
-    window.location.reload();
-  });
-}
-
-// =================================================================
 // 자기소개서 "수정" 버튼 클릭 후 "저장" 클릭 시 자기소개서 "수정"로직 실행
 async function aboutMeUpdate() {
   const updateAboutMeBtn = document.querySelector('#aboutMeUpdateBtn');
@@ -976,26 +959,52 @@ async function aboutMeUpdate() {
     window.location.reload();
   });
 }
-// =================================================================
 
-// =================================================================
-// 자기소개서 아이디 가져오는 함수
-async function getAboutMeId() {
-  const aboutMeChangeBtns = document.querySelectorAll('#aboutMeChangeBtn');
-  // 태그 확인
-  console.log(aboutMeChangeBtns); // ok
-  aboutMeChangeBtns.forEach((aboutMeChangeBtn) => {
-    // forEach인자 확인
-    console.log(aboutMeChangeBtn); // ok
-    aboutMeChangeBtn.addEventListener('click', (e) => {
-      const aboutMeId = e.target.parentNode.getAttribute('data-aboutMeId');
-      console.log(aboutMeId); // ok
-      return aboutMeId;
-    });
-
-    // 수정 버튼 클릭하면 기존 내용 가져와서 화면에 띄우고,
-    // 그거 innerHTML하는 과정에 모달창 저장,수정 버튼 가져오고
-    // 그 버튼에 onclick을 달았을 때 실행되는 함수의 인자에 자소서아이디를 넣어서 보낸다???????
+// 자기소개서 "수정" 버튼 클릭 후 "삭제" 클릭 시 자기소개서 "삭제"로직 실행
+function aboutMeDelete() {
+  const deleteAboutMeBtn = document.querySelector('#aboutMeDeleteBtn');
+  deleteAboutMeBtn.addEventListener('click', async () => {
+    // 테스트용 하드코딩
+    const resumeId = 1;
+    const aboutmeId = 4;
+    // 메인로직
+    const deleteAboutMeData = await fetch(
+      `/api/aboutmes/${resumeId}/${aboutmeId}`,
+      {
+        method: 'DELETE',
+      },
+    );
+    // 데이터 가공
+    const jsonDeleteAboutMeData = await deleteAboutMeData.json();
+    // 예외처리
+    if (jsonDeleteAboutMeData.message) {
+      return alert(jsonDeleteAboutMeData.message);
+    }
+    // 반환값
+    alert(
+      `"${jsonDeleteAboutMeData.title}" 자기소개서가 정상적으로 삭제되었습니다.`,
+    );
+    // 새로고침
+    window.location.reload();
   });
 }
-// =================================================================
+
+// // 자기소개서 아이디 가져오는 함수
+// async function getAboutMeId() {
+//   const aboutMeChangeBtns = document.querySelectorAll('#aboutMeChangeBtn');
+//   // 태그 확인
+//   console.log(aboutMeChangeBtns); // ok
+//   aboutMeChangeBtns.forEach((aboutMeChangeBtn) => {
+//     // forEach인자 확인
+//     console.log(aboutMeChangeBtn); // ok
+//     aboutMeChangeBtn.addEventListener('click', (e) => {
+//       const aboutMeId = e.target.parentNode.getAttribute('data-aboutMeId');
+//       console.log(aboutMeId); // ok
+//       return aboutMeId;
+//     });
+
+//     // 수정 버튼 클릭하면 기존 내용 가져와서 화면에 띄우고,
+//     // 그거 innerHTML하는 과정에 모달창 저장,수정 버튼 가져오고
+//     // 그 버튼에 onclick을 달았을 때 실행되는 함수의 인자에 자소서아이디를 넣어서 보낸다???????
+//   });
+// }
