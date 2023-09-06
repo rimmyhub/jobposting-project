@@ -17,6 +17,9 @@ export class Company {
   @PrimaryGeneratedColumn()
   uuid: number;
 
+  @Column()
+  id: number;
+
   @Column({ type: 'varchar', comment: '이메일' })
   email: string;
 
