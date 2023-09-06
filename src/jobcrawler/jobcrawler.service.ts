@@ -201,7 +201,7 @@ export class JobcrawlerService {
     let companyId = 0;
     for (const companys of companyInfo) {
       const companyEntity = this.companyRepository.create({
-        id: companys[0].id,
+        uuid: companys[0].id,
         email: companys[0].email,
         password: companys[0].password,
         title: companys[0].title,
