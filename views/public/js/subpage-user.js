@@ -1,5 +1,14 @@
+let btnContainer;
 document.addEventListener('DOMContentLoaded', (e) => {
+  btnContainer = document.getElementById('btn-container');
   e.preventDefault();
+  // 유저인지 회사인지 판단
+  hideBtn();
+  init();
+});
+
+// init 함수
+function init() {
   // 유저 정보를 불러오는 함수를 실행
   getUserData();
   // 유저 이력서 정보를 불러오는 함수 실행
@@ -12,30 +21,39 @@ document.addEventListener('DOMContentLoaded', (e) => {
   getUserPortfolio();
   // 유저의 자기소개서를 불러오는 함수 실행
   getUserAboutMe();
-});
+}
 
-// 유저 정보를 불러오는 함수 로직
+// 메세지보내기버튼 숨기기
+function hideBtn() {
+  const type = window.localStorage.getItem('type');
+  if (type) {
+    console.log('버튼 숨기기', btnContainer);
+    btnContainer.style.display = 'none';
+  }
+}
+
+// URI 자원
+const params = new URLSearchParams(window.location.search);
+const userId = params.get('id');
+const resumeId = params.get('resumeId');
+
+// 유저의 종합정보를 불러오는 함수 로직
 async function getUserData() {
   const userBox = document.querySelector('#userBox');
-
-  // userId 채취
-  const params = new URLSearchParams(window.location.search);
-  const userId = params.get('id');
-  const resumeId = params.get('resumeId');
-
+  console.log(userBox);
   // 학력 데이터 가공
   const userEducationData = await fetch(`/api/educations/${resumeId}`);
   const jsonUserEducationData = await userEducationData.json();
-  console.log(jsonUserEducationData);
+  console.log(jsonUserEducationData.message);
 
-  // 학력이 없을 경우 예외처리
-  if (
-    jsonUserEducationData.message ===
-    `현재 작성하신 이력서에 <학력>은 작성 전 입니다.`
-  ) {
-    userBox.innerHTML = `<p>해당 이력서에 (학력란)을 작성하시면 이 곳이 오픈 됩니다.</p>`;
-    return;
-  }
+  // // 학력이 없을 경우 예외처리
+  // if (
+  //   jsonUserEducationData.message ===
+  //   `현재 작성하신 이력서에 <학력>은 작성 전 입니다.`
+  // ) {
+  //   userBox.innerHTML = `<p>해당 이력서에 (학력란)을 작성하시면 이 곳이 오픈 됩니다.</p>`;
+  //   return;
+  // }
 
   // 유저 데이터 가공
   const userData = await fetch(`/api/users/user/${userId}`);
@@ -45,8 +63,12 @@ async function getUserData() {
   const userResumeData = await fetch(`/api/resumes/${resumeId}`);
   const jsonUserResumeData = await userResumeData.json();
 
+  // 예외처리
+  if (jsonUserResumeData.message) {
+    return console.log(jsonUserResumeData.message);
+  }
   // 위의 3가지 내용이 전부 조회가 될 경우 innerHTML 실행
-  userBox.innerHTML = '';
+  // userBox.innerHTML = '';
 
   userBox.innerHTML = `<div class="col" id="userBox">
                         <img

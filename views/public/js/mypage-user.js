@@ -52,7 +52,7 @@ imageDeleteEl.addEventListener('click', () => {
   userImage.setAttribute('src', '/img/profile.jpg');
 });
 
-// Get 요청 함수 모음
+// init
 async function init() {
   // 유저 데이터
   await getUserData();
@@ -211,12 +211,10 @@ async function getUserEducation() {
   const userEducationData = await fetch(`/api/educations/${resumeId}`);
   // 데이터 가공
   const jsonUserEducationData = await userEducationData.json();
-
   // 예외처리
   if (jsonUserEducationData.message) {
     return console.log(jsonUserEducationData.message);
   }
-
   // 예외처리에 걸러지지 않았다면 메인로직 실행
   educationBox.innerHTML = '';
 
@@ -416,7 +414,6 @@ async function getUserAboutMe() {
   const userAboutMe = await fetch(`/api/aboutmes/${resumeId}`);
   // 데이터 가공
   const jsonUserAboutMe = await userAboutMe.json();
-  console.log(jsonUserAboutMe);
   // 예외처리
   if (jsonUserAboutMe.message) {
     return console.log(jsonUserAboutMe.message);
@@ -449,13 +446,12 @@ async function getUserAboutMe() {
   });
 }
 
-// =================================================================
-
-// 각 이벤트 리스너 모아둔 함수
+// init2
 async function init2() {
   // 유저 관련
   userUpdate();
   // 이력서 관련
+  createResume();
   resumeUpdate();
   resumeDelete();
   // 학력 관련
@@ -499,6 +495,31 @@ function userUpdate() {
       return alert(jsonUserUpdateData.message);
     }
     alert(`유저 정보가 수정되었습니다.`);
+    window.location.reload();
+  });
+}
+
+// 이력서 "생성" 버튼 클릭 후 "저장" 누를 시 이력서 "수정" 로직 실행 함수
+function createResume() {
+  const createResumeBtn = document.querySelector('#createResumeBtn');
+  // 이벤트 리스너 설치
+  createResumeBtn.addEventListener('click', async (e) => {
+    // 바디값
+    const title = document.querySelector('#createTitle').value;
+    const content = document.querySelector('#createContent').value;
+
+    const req = await fetch(`/api/resumes`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title, content }),
+    });
+
+    const res = await req.json();
+    console.log(res);
+    if (res.message) {
+      console.log(res.message);
+    }
+    alert('이력서가 생성되었습니다.');
     window.location.reload();
   });
 }

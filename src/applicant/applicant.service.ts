@@ -17,6 +17,21 @@ export class ApplicantService {
     private readonly jobpostingRepository: Repository<Jobposting>,
   ) {}
 
+  // 내가 지원한 공고 가져오기
+  async getJobpostingById(id: number) {
+    console.log(id);
+    const applications = await this.applicantRepository.find({
+      where: { userId: id },
+      relations: ['jobposting'], // 채용공고 정보를 함께 가져오기 위해 관계 설정
+    });
+
+    const jobpostings = applications.map(
+      (application) => application.jobposting,
+    );
+
+    return jobpostings;
+  }
+
   // 지원하기
   async createApply(id: number, jobpostingId: number): Promise<Applicant> {
     // 사용자 조회
@@ -61,15 +76,38 @@ export class ApplicantService {
     return apply;
   }
 
-  // 회사 지원내역 전체보기
-  async getApplies(id: number) {
-    return await this.applicantRepository.find({
-      where: { id },
+  // // 회사 지원내역 전체보기
+  // async getApplies(id: number) {
+  //   return await this.applicantRepository.findOne({
+  //     where: { id },
+  //   });
+  // }
+
+  // 회사지원 유저
+  async findAllUserApply(
+    id: number,
+    jobpostingId: number,
+  ): Promise<Jobposting> {
+    const existingApplicant = await this.applicantRepository.findOne({
+      where: { userId: id, jobpostingId },
+      relations: ['jobposting'], // 관련 엔티티 이름을 지정
     });
+
+    if (!existingApplicant) {
+      throw new HttpException(
+        '채용공고를 찾을 수 없습니다.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    return existingApplicant.jobposting; //jobposting 반환
   }
 
   // 채용별 회사 지원 전체 조회 - 회사만
-  async findAllApply(id: number, jobpostingId: number): Promise<Applicant[]> {
+  async findAllCompanyApply(
+    id: number,
+    jobpostingId: number,
+  ): Promise<Applicant[]> {
     const existingApplicant = await this.applicantRepository.findOne({
       where: { jobpostingId },
     });

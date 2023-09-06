@@ -108,7 +108,7 @@ export class ResumeService {
     // 예외 처리
     if (!resume) {
       throw new HttpException(
-        { message: '아직 작성하신 이력서가 없으시네용 ~~??' },
+        { message: '이력서를 작성하세요.' },
         HttpStatus.NOT_FOUND,
       );
     }

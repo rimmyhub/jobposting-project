@@ -38,10 +38,7 @@ export class CareerService {
   async findAllCareer(resumeId: number): Promise<Career[]> {
     const careers = await this.careerRepository.find({ where: { resumeId } });
     if (careers.length === 0) {
-      throw new HttpException(
-        '아직 경력을 등록하지 않으셨어요 !!',
-        HttpStatus.NOT_FOUND,
-      );
+      throw new HttpException('등록된 경력이 없습니다.', HttpStatus.NOT_FOUND);
     }
     return careers;
   }
@@ -51,7 +48,7 @@ export class CareerService {
     const career = await this.careerRepository.findOne({ where: { id } });
     if (!career) {
       throw new HttpException(
-        '해당 경력을 찾을 수 없습니다.',
+        '경력이 존재하지 않습니다.',
         HttpStatus.BAD_REQUEST,
       );
     }
@@ -64,7 +61,7 @@ export class CareerService {
     const career = await this.careerRepository.findOne({ where: { id } });
     if (!career) {
       throw new HttpException(
-        '경력을 찾을 수 없습니다.',
+        '경력이 존재하지 않습니다.',
         HttpStatus.BAD_REQUEST,
       );
     }
