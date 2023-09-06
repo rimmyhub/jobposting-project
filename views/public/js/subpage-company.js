@@ -5,7 +5,7 @@ const getCompanyData = async () => {
   try {
     const response = await fetch(`/api/companies/${companyId}`); // 서버의 API 엔드포인트로 요청
     if (!response.ok) {
-      throw new Error('Failed to fetch company data');
+      throw new Error('데이터를 불러오지 못했습니다.');
     }
 
     const data = await response.json(); // JSON 데이터 파싱
