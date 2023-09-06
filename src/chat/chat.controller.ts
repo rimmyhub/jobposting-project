@@ -10,7 +10,6 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ChatService } from './chat.service';
-import { CreateRoomDto } from './dto/create-room.dto';
 import { Chat } from 'src/domain/chat.entity';
 import { UserGuard } from '../auth/jwt/jwt.user.guard';
 import { CompanyGuard } from '../auth/jwt/jwt.company.guard';
@@ -35,7 +34,6 @@ export class ChatController {
   async createCompanyChat(
     @Request() req,
     @Param('userId') userId: string,
-    // @Body() createChatDto: CreateChatDto,
   ): Promise<Chat> {
     const result = await this.chatService.createCompanyChat(
       req.company.id,
