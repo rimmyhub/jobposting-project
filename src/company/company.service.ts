@@ -32,7 +32,7 @@ export class CompanyService {
         currentRefreshToken: true,
         currentRefreshTokenExp: true,
       },
-      where: { id },
+      where: { uuid: id },
     });
 
     // 유저 테이블 내에 정의된 암호화된 refresh_token값과
@@ -119,7 +119,7 @@ export class CompanyService {
   // 가입된 이메일이 있는지 확인
   async findEmail(email: string) {
     const isEmail = await this.companyRepository.findOne({
-      select: { id: true, email: true, password: true, isVerified: true },
+      select: { uuid: true, email: true, password: true, isVerified: true },
       where: { email },
     });
     return isEmail;
@@ -127,13 +127,13 @@ export class CompanyService {
 
   // 회사 1개 조회
   async finOneCompany(id: number) {
-    return await this.companyRepository.findOne({ where: { id: id } });
+    return await this.companyRepository.findOne({ where: { uuid: id } });
   }
 
   // 회사 수정
   async updateCompany(id: number, updateCompanyDto: UpdateCompanyDto) {
     const company = await this.companyRepository.findOne({
-      where: { id },
+      where: { uuid: id },
     });
     if (!company) {
       throw new HttpException(
@@ -174,7 +174,9 @@ export class CompanyService {
 
   // 회사 삭제
   async removeCompany(id: number) {
-    const company = await this.companyRepository.findOne({ where: { id } });
+    const company = await this.companyRepository.findOne({
+      where: { uuid: id },
+    });
 
     if (!company) {
       throw new HttpException(

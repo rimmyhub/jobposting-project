@@ -37,7 +37,7 @@ export class JobpostingService {
     // 회사에 아이디가 생성되있는지 찾기
     try {
       const existingCompany = await this.companyRepository.findOne({
-        where: { id: companyId },
+        where: { uuid: companyId },
       });
       console.log('existingCompany', existingCompany);
       // 데이터베이스에 회사가 생성되어있는지 확인

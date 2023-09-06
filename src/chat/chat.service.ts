@@ -15,7 +15,7 @@ export class ChatService {
   async createUserChat(id: number, companyId: number): Promise<Chat> {
     const chat = await this.chatRepository.save({
       user: { id }, // 외래키 가져오는 방법
-      company: { id: companyId }, // 외래키 가져오는 방법
+      company: { uuid: companyId }, // 외래키 가져오는 방법
     });
     return chat;
   }
@@ -33,7 +33,7 @@ export class ChatService {
     }
 
     const chat = await this.chatRepository.save({
-      company: { id }, // company 가드로 회사 가져오기
+      company: { uuid: id }, // company 가드로 회사 가져오기
       user: { id: userId }, // userid 외래키 찾기
     });
     return chat;
