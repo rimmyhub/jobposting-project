@@ -108,8 +108,6 @@ export class JobcrawlerService {
     // const _workArea = [];
     // const _jobText = [];
     // const _dueDate = [];
-
-    console.log($jobList.length);
     $jobList.each((idx, node) => {
       const companyLink = $(node).find('.cpname');
       const companyId = Number(companyLink.attr('href').split('/').pop());
@@ -168,7 +166,7 @@ export class JobcrawlerService {
     return jobs;
   }
 
-  async inflearnCrawling() {
+  async incruitCrawling() {
     console.time('코드 실행시간');
 
     const totalPage = 1; // 크롤링할 페이지
@@ -198,22 +196,28 @@ export class JobcrawlerService {
       }
     }
 
-    let companyId = 0;
     for (const companys of companyInfo) {
-      const companyEntity = this.companyRepository.create({
-        uuid: companys[0].id,
-        email: companys[0].email,
-        password: companys[0].password,
-        title: companys[0].title,
-        introduction: companys[0].introduction,
-        business: companys[0].business,
-        employees: companys[0].employees,
-        image: companys[0].image,
-        website: companys[0].website,
-        address: companys[0].address,
-      });
-
-      await this.companyRepository.insert(companyEntity);
+      for (const company of companys) {
+        const companyEntity = this.companyRepository.create({
+          id: company.id,
+          email: company.email,
+          password: company.password,
+          title: company.title,
+          introduction: company.introduction,
+          business: company.business,
+          employees: company.employees,
+          image: company.image,
+          website: company.website,
+          address: company.address,
+        });
+        console.log(company.id);
+        // const isExist = await this.companyRepository.findOne({
+        //   where: { id: company.id },
+        // });
+        // if (!isExist) {
+        await this.companyRepository.insert(companyEntity);
+        // }
+      }
     }
 
     let jobId = 0;

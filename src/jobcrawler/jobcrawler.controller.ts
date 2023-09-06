@@ -9,7 +9,7 @@ export class JobcrawlerController {
   // 채용공고 크롤링
   @Post()
   async jobJobs() {
-    const jobs = await this.jobcrawlerService.inflearnCrawling();
+    const jobs = await this.jobcrawlerService.incruitCrawling();
     return jobs;
   }
 }
