@@ -6,6 +6,5 @@ export class VerifyCodeDto {
   email: string;
 
   @IsString()
-  @IsNotEmpty()
   code: string;
 }

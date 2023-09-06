@@ -15,6 +15,9 @@ import { Chat } from './chat.entity';
 @Entity()
 export class Company {
   @PrimaryGeneratedColumn()
+  uuid: number;
+
+  @Column()
   id: number;
 
   @Column({ type: 'varchar', comment: '이메일' })
@@ -45,7 +48,12 @@ export class Company {
   employees: string;
 
   // 인증 번호
-  @Column({ type: 'varchar', length: 10, comment: '인증번호' })
+  @Column({
+    default: 'false',
+    type: 'varchar',
+    length: 10,
+    comment: '인증번호',
+  })
   verificationCode: string;
 
   // 인증이 완료되면 true로 변경
