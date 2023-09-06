@@ -1,3 +1,4 @@
+// 필요한 모듈과 라이브러리 import
 require('dotenv').config();
 
 const axios = require('axios');
@@ -7,9 +8,12 @@ const tiktoken = require('tiktoken'); // tiktoken 라이브러리 추가
 const apiKey = process.env.OPENAI_API_KEY;
 const apiUrl = 'https://api.openai.com/v1/engines/gpt-3.5-turbo/completions';
 
-// 자기소개서 내용
-const selfIntroduction =
-  '여기에 500자 이내로 자기소개서 내용을 입력하세요. ...';
+// 자기소개서 내용 사용자 입력 수집
+const userName = 'Jane Doe';
+const selfIntroduction = '여기에 500자 이내로 자기소개서 내용을 입력하세요.';
+
+// 프롬프트 구성
+const prompt = `Write a self-introduction for ${userName}. Include information about their experience: ${selfIntroduction}`;
 
 // 토큰 개수 제한 설정 (한글로 500자의 경우 대략 100~150 토큰, 150토큰으로 제한)
 const maxTokens = 150;
@@ -59,24 +63,28 @@ const conversation = [
   },
 ];
 
+// api 호출 설정
 const headers = {
   Authorization: `Bearer ${apiKey}`,
   'Content-Type': 'application/json',
 };
 
+// api 호출
 axios
   .post(
     apiUrl,
     {
       model: 'text-babbage-001',
+      prompt,
       messages: conversation,
       max_tokens: maxTokens, // 토큰 개수 제한 추가
     },
     { headers },
   )
   .then((response) => {
-    const aiReply = response.data.choices[0].message.content;
-    console.log('AI의 응답:', aiReply); // AI의 응답을 console에 출력
+    const selfIntroduction = response.data.choices[0].message.content;
+    // 자기소개서 출력 또는 활용
+    console.log('AI의 응답:', selfIntroduction); // AI의 응답을 console에 출력
 
     // 응답을 웹페이지에 표시
     // const responseDiv = document.getElementById('response');
