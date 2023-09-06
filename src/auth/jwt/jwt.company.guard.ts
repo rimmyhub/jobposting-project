@@ -32,7 +32,6 @@ export class CompanyGuard
   // 가드를 따로 만들어서?
   // 파라미터를 넘김
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    console.log('canActivate');
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
     if (!token) {
@@ -43,7 +42,6 @@ export class CompanyGuard
         secret: this.configService.get<string>('ACCESS_TOKEN_KEY'),
         ignoreExpiration: true,
       });
-      console.log(' payload = ', payload.role !== 'company');
 
       if (payload.role !== 'company') {
         throw new HttpException(

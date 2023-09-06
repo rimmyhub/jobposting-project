@@ -19,7 +19,6 @@ export class ApplicantService {
 
   // 내가 지원한 공고 가져오기
   async getJobpostingById(id: number) {
-    console.log(id);
     const applications = await this.applicantRepository.find({
       where: { userId: id },
       relations: ['jobposting'], // 채용공고 정보를 함께 가져오기 위해 관계 설정
