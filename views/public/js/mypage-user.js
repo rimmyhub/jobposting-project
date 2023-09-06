@@ -345,15 +345,17 @@ async function getUserCareer() {
       </div>
     </div>
     <!-- 퇴사날짜 -->
-  </div>
-  <button
+    <button
             type="button"
             class="btn btn-primary fa-solid fa-pen"
             data-bs-toggle="modal"
             data-bs-target="#career"
+            onclick="sendCareerId(${careerInfo.id})"
           >
             수정
-          </button>`;
+          </button>
+  </div>
+  `;
   });
 }
 // 유저의 포트폴리오를 불러오는 함수 로직
@@ -394,15 +396,17 @@ async function getUserPortfolio() {
         <p class="text-start">${portfolioInfo.address}</p>
       </div>
     </div>
-  </div>
-  <button
+    <button
             type="button"
             class="btn btn-primary fa-solid fa-pen"
             data-bs-toggle="modal"
             data-bs-target="#portfolio"
+            onclick="sendPortfolioId(${portfolioInfo.id})"
           >
             수정
-          </button>`;
+          </button>
+  </div>
+  `;
   });
 }
 // 유저의 자기소개서를 불러오는 함수 로직
@@ -439,6 +443,7 @@ async function getUserAboutMe() {
                                 data-bs-toggle="modal"
                                 data-bs-target="#aboutme"
                                 id="aboutMeChangeBtn"
+                                onclick="sendAboutMeId(${aboutMeInfo.id})"
                               >
                                 수정
                               </button>
@@ -576,8 +581,8 @@ function resumeDelete() {
 const dropdownItems = document.querySelectorAll('.item');
 const selectedValueElement = document.getElementById('selectedValue');
 const selectedValueElement2 = document.getElementById('selectedValue2');
-let a = '추가';
-let b = '수정';
+let aEducation = '추가';
+let bEducation = '수정';
 dropdownItems.forEach((item) => {
   item.addEventListener('click', () => {
     selectedValueElement.textContent = item.textContent;
@@ -586,6 +591,12 @@ dropdownItems.forEach((item) => {
     b = selectedValueElement2.textContent;
   });
 });
+
+// 학력아이디
+let educationId;
+function educationEditbtn(id) {
+  educationId = id;
+}
 
 // 학력 "추가" 버튼 클릭 후 "저장" 버튼 클릭 시 학력 "추가" 로직 실행 함수
 function educationAdd() {
@@ -597,7 +608,7 @@ function educationAdd() {
     const major = document.querySelector('#majorTag').value;
     const admissionYear = document.querySelector('#admissionYearTag').value;
     const graduationYear = document.querySelector('#graduationYearTag').value;
-    const education = a;
+    const education = aEducation;
     // 유저 이력서 아이디
     const resumeId = await getUserResume();
     // 데이터 보내기
@@ -625,13 +636,6 @@ function educationAdd() {
   });
 }
 
-// 에듀케이션ID전역변수
-let educationId;
-// 수정버튼을 누르면 위의 전역변수에 에듀케이션 ID를 저장
-function educationEditbtn(param) {
-  educationId = param;
-}
-
 // 학력 "수정" 버튼 클릭 후 "저장" 버튼 클릭 시 학력 "수정" 로직 실행 함수
 function educationUpdate() {
   const educationUpdateBtn = document.querySelector('#educationUpdateBtn');
@@ -645,7 +649,7 @@ function educationUpdate() {
     const graduationYear = document.querySelector(
       '#graduationYearUpdateTag',
     ).value;
-    const education = b;
+    const education = bEducation;
     // 학력 아이디
     const id = educationId;
     // 서버요청
@@ -691,6 +695,13 @@ function educationDelete() {
     // 새로고침
     window.location.reload();
   });
+}
+
+// 경력 아이디 받아오기
+let getCareerId;
+function sendCareerId(id) {
+  console.log(id);
+  getCareerId = id;
 }
 
 // 경력 "추가" 버튼 클릭 후 "저장" 버튼 클릭 시 경력 "생성" 하는 로직
@@ -746,8 +757,8 @@ function careerUpdate() {
     const resignationDate = document.querySelector(
       '#updateCareerResignationDate',
     ).value;
-    //테스팅용 하드코딩
-    const careerId = 3;
+    // 경력아이디
+    const careerId = getCareerId;
     // 메인로직
     const careerUpdateData = await fetch(`/api/careers/${careerId}`, {
       method: 'PUT',
@@ -775,8 +786,8 @@ function careerUpdate() {
 function careerDelete() {
   const deleteCareerBtn = document.querySelector('#deleteCareerBtn');
   deleteCareerBtn.addEventListener('click', async () => {
-    // 테스팅용 하드코딩
-    const careerId = 4;
+    // 경력 아이디
+    const careerId = getCareerId;
     // 메인로직
     const careerDeleteData = await fetch(`/api/careers/${careerId}`, {
       method: 'DELETE',
@@ -789,6 +800,13 @@ function careerDelete() {
     );
     window.location.reload();
   });
+}
+
+// 포트폴리오 아이디
+let getPortfolioId;
+function sendPortfolioId(id) {
+  console.log(id);
+  getPortfolioId = id;
 }
 
 // 포트폴리오 "추가" 버튼을 누른 후 "저장"버튼 클릭시 포트폴리오 "작성" 로직 실행
@@ -827,9 +845,9 @@ function portfolioUpdate() {
     // 필요 밸류값 가져오기
     const address = document.querySelector('#updateURL').value;
     const file = document.querySelector('#formFile-1').value;
-    // 테스팅용 하드코딩
-    const resumeId = 1;
-    const portfolioId = 1;
+    // URI 자원
+    const resumeId = await getUserResume();
+    const portfolioId = getPortfolioId;
     // 메인로직
     const updatePortfolio = await fetch(
       `/api/portfolio/${resumeId}/${portfolioId}`,
@@ -858,9 +876,9 @@ function portfolioUpdate() {
 function portfolioDelete() {
   const deletePortfolioBtn = document.querySelector('#deletePortfolioBtn');
   deletePortfolioBtn.addEventListener('click', async () => {
-    // 테스트용 하드코딩
-    const resumeId = 1;
-    const portfolioId = 2;
+    // URI 자원
+    const resumeId = await getUserResume();
+    const portfolioId = getPortfolioId;
     // 메인로직
     const deletePortfolioData = await fetch(
       `/api/portfolio/${resumeId}/${portfolioId}`,
@@ -881,6 +899,13 @@ function portfolioDelete() {
     // 새로고침
     window.location.reload();
   });
+}
+
+// 자소서 아이디
+let getAboutMeId;
+function sendAboutMeId(id) {
+  console.log(id);
+  getAboutMeId = id;
 }
 
 // 자기소개서 "추가" 버튼 클릭 시 자기소개서 "작성" 로직 실행
@@ -926,14 +951,12 @@ async function aboutMeUpdate() {
     ).value;
     // 이력서ID 가져오기
     const resumeId = await getResumeId();
-    console.log(resumeId); // ok
     // 자소서 아이디 가져오기
-    const aboutmeId = await getAboutMeId();
-    console.log(aboutmeId); // undefined
+    const aboutMeId = getAboutMeId;
 
     // 서버로 데이터 요청
     const updateAboutMeData = await fetch(
-      `/api/aboutmes/${resumeId}/${aboutmeId}`,
+      `/api/aboutmes/${resumeId}/${aboutMeId}`,
       {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -956,12 +979,13 @@ async function aboutMeUpdate() {
 function aboutMeDelete() {
   const deleteAboutMeBtn = document.querySelector('#aboutMeDeleteBtn');
   deleteAboutMeBtn.addEventListener('click', async () => {
-    // 테스트용 하드코딩
-    const resumeId = 1;
-    const aboutmeId = 4;
+    // 이력서ID 가져오기
+    const resumeId = await getResumeId();
+    // 자소서 아이디 가져오기
+    const aboutMeId = getAboutMeId;
     // 메인로직
     const deleteAboutMeData = await fetch(
-      `/api/aboutmes/${resumeId}/${aboutmeId}`,
+      `/api/aboutmes/${resumeId}/${aboutMeId}`,
       {
         method: 'DELETE',
       },
@@ -980,23 +1004,3 @@ function aboutMeDelete() {
     window.location.reload();
   });
 }
-
-// // 자기소개서 아이디 가져오는 함수
-// async function getAboutMeId() {
-//   const aboutMeChangeBtns = document.querySelectorAll('#aboutMeChangeBtn');
-//   // 태그 확인
-//   console.log(aboutMeChangeBtns); // ok
-//   aboutMeChangeBtns.forEach((aboutMeChangeBtn) => {
-//     // forEach인자 확인
-//     console.log(aboutMeChangeBtn); // ok
-//     aboutMeChangeBtn.addEventListener('click', (e) => {
-//       const aboutMeId = e.target.parentNode.getAttribute('data-aboutMeId');
-//       console.log(aboutMeId); // ok
-//       return aboutMeId;
-//     });
-
-//     // 수정 버튼 클릭하면 기존 내용 가져와서 화면에 띄우고,
-//     // 그거 innerHTML하는 과정에 모달창 저장,수정 버튼 가져오고
-//     // 그 버튼에 onclick을 달았을 때 실행되는 함수의 인자에 자소서아이디를 넣어서 보낸다???????
-//   });
-// }
