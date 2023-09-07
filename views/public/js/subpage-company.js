@@ -4,11 +4,13 @@ const companyId = window.location.pathname.split('/').pop();
 const getCompanyData = async () => {
   try {
     const response = await fetch(`/api/companies/${companyId}`); // 서버의 API 엔드포인트로 요청
+    console.log(response);
     if (!response.ok) {
       throw new Error('데이터를 불러오지 못했습니다.');
     }
 
     const data = await response.json(); // JSON 데이터 파싱
+    console.log(data);
 
     // EJS 템플릿을 사용하여 데이터 랜더링
     const template = `
@@ -97,6 +99,7 @@ const getCompanyData = async () => {
       <hr />
     </div>
     `;
+    console.log(template);
 
     // HTML 요소에 템플릿 삽입
     const container = document.getElementById('company-container');
