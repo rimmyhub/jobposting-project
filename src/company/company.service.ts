@@ -100,7 +100,7 @@ export class CompanyService {
     }));
   }
 
-  // 검색시 업무 또는 회사 이름에 해당 검색어를 포함하는 회사 전체 조회
+  // 윤영 : 검색시 업무 또는 회사 이름에 해당 검색어를 포함하는 회사 전체 조회
   async searchKeyword(keyword: string) {
     const searchCompanies = await this.companyRepository
       .createQueryBuilder('company')
