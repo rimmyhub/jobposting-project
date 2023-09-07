@@ -53,9 +53,9 @@ export class CompanyController {
   }
 
   // 검색시 업무 또는 회사 이름에 해당 검색어를 포함하는 회사 전체 조회
-  @Get('search')
-  findSearchTag(@Body('title') title: string) {
-    return this.companyService.findSearchTag(title);
+  @Post('search')
+  searchKeyword(@Body('keyword') keyword: string) {
+    return this.companyService.searchKeyword(keyword);
   }
 
   // 회사 1개 조회
