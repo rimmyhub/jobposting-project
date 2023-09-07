@@ -197,7 +197,10 @@ export class JobpostingService {
 
   // 윤영 : 메인페이지에서 채용공고 클릭 시 해당 채용공고 내용 조회
   async getJobposting(jobpostingId: number) {
-    await this.jobpostingRepository.findOne({ where: { id: jobpostingId } });
+    const jobposting = await this.jobpostingRepository.findOne({
+      where: { id: jobpostingId },
+    });
+    return jobposting;
   }
 
   // 채용공고 1개 조회

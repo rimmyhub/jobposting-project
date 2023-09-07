@@ -53,6 +53,7 @@ async function getUserData() {
                             class="img-file"
                             type="file"
                             accept="image/jpeg, image/png"
+                            onerror="this.src='/img/userImg.jpg';"
                           />
                         </div>
                         `;
@@ -127,7 +128,7 @@ async function getUserData() {
 
   return jsonUserData.id;
 }
-
+// 모르겠다 내일 튜터님한테 가야할듯;
 // 유저 이미지 수정하기
 async function getUserImage() {
   const userImage = document.getElementById('image');
@@ -135,6 +136,11 @@ async function getUserImage() {
   const imageDeleteEl = document.getElementById('image-delete');
   const saveBtnEl = document.getElementById('save-btn');
   let imageUrl;
+
+  // 기본프로필 적용하기
+  imageDeleteEl.addEventListener('click', () => {
+    userImage.src = '/img/userImg.jpg';
+  });
 
   imageUploadEl.addEventListener('change', async (e) => {
     const selectedFile = e.target.files[0];
@@ -164,13 +170,28 @@ async function getUserImage() {
     userImage.setAttribute('src', imageUrl);
   });
 
-  // 기본프로필 적용하기
-  imageDeleteEl.addEventListener('click', () => {
-    userImage.src = '/img/userImg.jpg';
-  });
+  saveBtnEl.addEventListener('click', async () => {
+    const imageFormData = new FormData();
 
-  // 저장하기
-  saveBtnEl.addEventListener('click', () => {});
+    console.log(imageFormData);
+
+    imageFormData.append('image', imageUrl); // 이미지 URL을 FormData에 추가
+
+    const updateResponse = await fetch('/api/users/image', {
+      method: 'PUT',
+      body: imageFormData,
+    });
+    if (updateResponse.ok) {
+      // const newImage = userImage.getAttribute('src');
+
+      // console.log(newImage);
+
+      alert('이미지가 수정되었습니다.');
+      window.location.reload();
+    } else {
+      alert('이미지 수정에 실패했습니다.');
+    }
+  });
 }
 
 // 유저의 이력서를 불러오는 함수 로직
