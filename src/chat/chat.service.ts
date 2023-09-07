@@ -21,7 +21,7 @@ export class ChatService {
         .leftJoin('chat.chatContent', 'chatContent')
         .addSelect('COUNT(chatContent.isCheck) as isCheckCount')
         .where(`chat.user_id = ${id}`)
-        .andWhere(`chat.userId = ${id}`)
+        .andWhere('chatContent.is_check = 0')
         .andWhere(`chatContent.sender_id != ${id}`)
         .groupBy('chat.id')
         .getRawMany();

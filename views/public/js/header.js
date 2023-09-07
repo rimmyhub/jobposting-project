@@ -1,3 +1,4 @@
+let newMsgs;
 let messageList;
 let chatContainer;
 let chatBoxTitle;
@@ -5,7 +6,8 @@ let sent;
 let received;
 let chattingList;
 let chattingContainer;
-// let alarmIcon;
+let alarmIcon;
+let msgCard;
 const myApplyList = document.getElementById('my-apply-list');
 const socket = io('localhost:8080');
 const ejs = (window.onload = function () {
@@ -19,8 +21,8 @@ const ejs = (window.onload = function () {
   const sendMsgUser = document.getElementById('user-msg');
   const sendBtn = document.getElementById('send-btn');
   const logout = document.getElementById('logout');
-  const alarmIcon = document.getElementById('exclamation-icon');
 
+  alarmIcon = document.getElementById('exclamation-icon');
   chattingContainer = document.getElementById('chatting-container');
   chattingList = document.getElementById('chatting-list');
   received = document.getElementById('received');
@@ -51,6 +53,7 @@ const ejs = (window.onload = function () {
   if (message) {
     message.addEventListener('click', () => {
       messageBox.style.display = 'block';
+      alarmIcon.style.opacity = 0;
     });
   }
 
@@ -141,52 +144,28 @@ const ejs = (window.onload = function () {
     });
   }
   socket.on('receive-message', (message, userId, userType) => {
-    // const type = window.localStorage.getItem('type');
-    // console.log(message, userId, userType);
-    // if (type !== userType) {
-    //   alarmIcon.style.opacity = 1;
-    // }
+    console.log('receive-message');
+    const type = window.localStorage.getItem('type');
+    const myId = window.localStorage.getItem('id');
+    console.log('userId = ', userId, myId);
+    console.log('userType = ', userType, type);
+    if (type !== userType && myId !== userId) {
+      alarmIcon.style.opacity = 1;
+    }
+
     builNewMsg(userId, message, userType);
   });
 
   isLogin();
+  function isLogin() {
+    const id = window.localStorage.getItem('id');
+    if (id) {
+      checkNewMsg();
+      // 새로운 채팅이 있는지 확인하기
+      getChatRooms();
+    }
+  }
 });
-
-function isLogin() {
-  const id = window.localStorage.getItem('id');
-  if (id) {
-    // 새로운 채팅이 있는지 확인하기
-    getChatRooms();
-    checkNewMsg();
-  }
-}
-
-// 새로운 채팅메세지가 있는지 확인하기
-let newMsg;
-const checkNewMsg = async () => {
-  const type = window.localStorage.getItem('type');
-  if (type === 'user') {
-    await fetch(`/api/chats/check-message/user/${type}`)
-      .then((res) => res.json()) //json으로 받을 것을 명시
-      .then((datas) => {
-        newMsg = datas;
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  } else {
-    await fetch(`/api/chats/check-message/company/${type}`)
-      .then((res) => res.json()) //json으로 받을 것을 명시
-      .then((datas) => {
-        newMsg = datas;
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }
-
-  console.log('newMsg = datas = ', newMsg);
-};
 
 // 채팅리스트 가져오기
 async function getChatRooms() {
@@ -211,11 +190,13 @@ async function getChatRooms() {
         console.log(e);
       });
   }
-  appendMsgList(payload, type);
+
+  await appendMsgList(payload, type);
+  newMsgIcon();
 }
 
 // 메세지리스트 화면에 출력하기
-function appendMsgList(datas, type) {
+async function appendMsgList(datas, type) {
   if (type === 'company') {
     datas.forEach((el) => {
       const li = document.createElement('div');
@@ -228,7 +209,7 @@ function appendMsgList(datas, type) {
                           <div>메세지 확인</div>
                         </div>
                         <i
-                          id="exclamation-icon"
+                          id="exclamation-icon-${el.id}"
                           class="fa-solid fa-exclamation new-msg-alram-icon"
                         ></i>
                       </div>`;
@@ -237,7 +218,6 @@ function appendMsgList(datas, type) {
   } else {
     datas.forEach((el) => {
       const li = document.createElement('div');
-
       li.innerHTML = `<div id="message-card" class="message-card" onclick="chattingBox('${el.id}', '${el.company.email}')">
                         <div class="user-profile">
                           <img src="/img/userImg.jpg" alt="" srcset="" />
@@ -247,7 +227,7 @@ function appendMsgList(datas, type) {
                           <div>메세지 확인</div>
                         </div>
                         <i
-                          id="exclamation-icon"
+                          id="exclamation-icon-${el.id}"
                           class="fa-solid fa-exclamation new-msg-alram-icon"
                         ></i>
                       </div>`;
@@ -256,9 +236,55 @@ function appendMsgList(datas, type) {
   }
 }
 
+// 새메시지알람표시하기
+function newMsgIcon() {
+  console.log('newMsgs = ', newMsgs);
+  if (newMsgs.length !== 0) {
+    newMsgs.forEach((el) => {
+      msgCard = document.getElementById(`exclamation-icon-${el.chat_id}`);
+      msgCard.style.opacity = 1;
+    });
+  }
+}
+
+// 메세지읽음처리하기
+async function readMsg(chatId) {
+  const type = window.localStorage.getItem('type');
+  if (type === 'user') {
+    await fetch(`/api/chat-content/user/${chatId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  } else if (type === 'company') {
+    await fetch(`/api/chat-content/company/${chatId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+}
+
 let roomId;
 // 채팅창 열기
 async function chattingBox(id, email) {
+  await readMsg(id);
   const userName = document.createElement('h6');
   userName.innerText = `${email} 님`;
   chatBoxTitle.append(userName);
@@ -284,6 +310,7 @@ const handleNewMsg = (senderId, message) => {
   sent.appendChild(builNewMsg(senderId, message));
 };
 
+// 메세지뿌리기
 const builNewMsg = async (senderId, message, senderType) => {
   const type = window.localStorage.getItem('type');
   const myId = window.localStorage.getItem('id');
@@ -306,7 +333,7 @@ async function checkNewMsg() {
     await fetch(`/api/chats/check-message/user/${type}`)
       .then((res) => res.json()) //json으로 받을 것을 명시
       .then((datas) => {
-        console.log(datas);
+        newMsgs = datas;
       })
       .catch((e) => {
         console.log(e);
@@ -315,12 +342,13 @@ async function checkNewMsg() {
     await fetch(`/api/chats/check-message/company/${type}`)
       .then((res) => res.json()) //json으로 받을 것을 명시
       .then((datas) => {
-        console.log(datas);
+        newMsgs = datas;
       })
       .catch((e) => {
         console.log(e);
       });
   }
+  if (newMsgs.length) alarmIcon.style.opacity = 1;
 }
 
 // 채팅내용가져오기

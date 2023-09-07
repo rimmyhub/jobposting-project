@@ -332,6 +332,7 @@ body {
   padding-right: 5px;
   box-sizing: border-box;
   font-size: 22px;
+  opacity: 0;
 }
 
 .message-info > .user-name {

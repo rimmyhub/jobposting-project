@@ -29,4 +29,15 @@ export class ChatContentService {
     });
     return result;
   }
+
+  // 채팅내용 읽음 처리
+  async readChatContents(chat_id: number, sender_id: number) {
+    await this.chatContentRepository
+      .createQueryBuilder()
+      .update(ChatContent)
+      .set({ isCheck: true })
+      .where('chat_id = :chat_id', { chat_id }) // 쿼리빌더의 where에는 컬럼명과 변수명을 다 똑같이 해줘야한다..
+      .andWhere(' sender_id != :sender_id', { sender_id })
+      .execute();
+  }
 }
