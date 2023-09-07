@@ -163,7 +163,7 @@ function isLogin() {
 
 // 새로운 채팅메세지가 있는지 확인하기
 let newMsg;
-async function checkNewMsg() {
+const checkNewMsg = async () => {
   const type = window.localStorage.getItem('type');
   if (type === 'user') {
     await fetch(`/api/chats/check-message/user/${type}`)
@@ -186,7 +186,7 @@ async function checkNewMsg() {
   }
 
   console.log('newMsg = datas = ', newMsg);
-}
+};
 
 // 채팅리스트 가져오기
 async function getChatRooms() {
