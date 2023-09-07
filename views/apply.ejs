@@ -73,9 +73,16 @@
                   <% if (type === 'user') { %>
                   <button
                     type="button"
-                    class="btn btn-outline-primary apply-btn"
+                    class="btn btn-outline-danger apply-btn"
                   >
                     지원 취소
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-outline-primary jobposting-btn"
+                    style="margin-right: 10px"
+                  >
+                    지원한 채용 공고 보기
                   </button>
                   <% }else if (type === 'company'){ %>
                   <button

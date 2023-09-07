@@ -15,24 +15,40 @@ async function getAppliesUser() {
                    <h6>근무지 : ${applyUser.workArea}</h6>
                    <h6>마감일 : ${applyUser.dueDate}</h6>
                  </div>
-                   <button
+                 <button type="button"
+                 class="btn btn-outline-primary jobposting-btn"
+                 style="margin-right: 10px"
+                 data-id=${applyUser.id}
+                  >
+                   지원한 채용 공고 보기
+                 </button>
+                <button
                    type="button"
-                   class="btn btn-outline-primary apply-btn"
+                   class="btn btn-outline-danger apply-btn"
                    data-id=${applyUser.id}
                   >
                    지원 취소
-                  </button>
+                </button>
+
                   <hr>
                  `;
         })
         .join('');
       applyBox.innerHTML = temp;
 
+      const jobpostingBtns = document.querySelectorAll('.jobposting-btn');
+      jobpostingBtns.forEach((jobpostingBtn) => {
+        jobpostingBtn.addEventListener('click', async (event) => {
+          const jobpostingId = event.target.getAttribute('data-id');
+          window.location.href = `/jobposting/${jobpostingId}`;
+        });
+      });
+
       const applyBtns = document.querySelectorAll('.apply-btn');
       applyBtns.forEach((applyBtn) => {
         applyBtn.addEventListener('click', async (event) => {
           const jobpostingId = event.target.getAttribute('data-id');
-          console.log(jobpostingId);
+          // console.log(jobpostingId);
 
           const result = confirm('확인 버튼을 누르면 지원이 취소됩니다.');
           if (result === true) {
