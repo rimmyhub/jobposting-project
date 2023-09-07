@@ -92,6 +92,14 @@ export class CompanyService {
     });
   }
 
+  // 모든 회사의 주소 정보만 가져오기
+  async getAllCompanyAddresses() {
+    const companies = await this.companyRepository.find();
+    return companies.map((company) => ({
+      title: company.address,
+    }));
+  }
+
   // 검색시 업무 또는 회사 이름에 해당 검색어를 포함하는 회사 전체 조회
   async searchKeyword(keyword: string) {
     const searchCompanies = await this.companyRepository
@@ -127,7 +135,10 @@ export class CompanyService {
 
   // 회사 1개 조회
   async finOneCompany(id: number) {
-    return await this.companyRepository.findOne({ where: { uuid: id } });
+    const company = await this.companyRepository.findOne({
+      where: { id },
+    });
+    return company;
   }
 
   // 회사 수정
