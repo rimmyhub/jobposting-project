@@ -177,19 +177,19 @@ function goToCompanySubpage(companyId) {
   window.location.href = subPageUrl;
 }
 
-// 지도를 생성합니다
+// 지도를 생성
 var mapContainer = document.getElementById('map'); // 지도를 표시할 div
 var mapOption = {
   center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
   level: 3, // 지도의 확대 레벨
 };
 
-var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성
 
 var locImageSrc =
   'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png';
 
-// 주소와 마커 정보를 배열로 정의합니다
+// 주소와 마커 정보를 배열로 정의
 var address = [];
 
 // 마커 이미지 크기 설정
@@ -208,13 +208,13 @@ if (navigator.geolocation) {
       title: '현재 위치', // 마커의 타이틀
     });
 
-    // 인포윈도우로 내 위치를 표시합니다
+    // 인포윈도우로 내 위치를 표시
     var locInfowindow = new kakao.maps.InfoWindow({
       content: '<div style="padding:5px;">현재 위치</div>',
     });
     locInfowindow.open(map, locMarker);
 
-    // 지도의 중심을 내 위치로 변경합니다
+    // 지도의 중심을 내 위치로 변경
     map.setCenter(locPosition);
 
     // 서버에서 회사 정보를 가져오는 API 엔드포인트 URL
@@ -226,19 +226,19 @@ if (navigator.geolocation) {
       .then((addresses) => {
         console.log(addresses);
         address = addresses.map(function (addressInfo) {
-          // 주소를 좌표로 변환하는 Geocoder 객체를 생성합니다.
+          // 주소를 좌표로 변환하는 Geocoder 객체를 생성
           var geocoder = new kakao.maps.services.Geocoder();
 
-          // 주소로 좌표를 검색합니다.
+          // 주소로 좌표를 검색
           geocoder.addressSearch(addressInfo.title, function (result, status) {
             if (status === kakao.maps.services.Status.OK) {
               // 좌표를 얻어옵니다.
               var latlng = new kakao.maps.LatLng(result[0].y, result[0].x);
 
-              // 주소 정보와 좌표 정보를 함께 저장합니다.
+              // 주소 정보와 좌표 정보를 함께 저장
               addressInfo.latlng = latlng;
 
-              // 지도에 마커를 표시합니다.
+              // 지도에 마커를 표시
               var marker = new kakao.maps.Marker({
                 map: map,
                 position: latlng,
@@ -246,7 +246,7 @@ if (navigator.geolocation) {
                 image: new kakao.maps.MarkerImage(locImageSrc, imageSize),
               });
 
-              // 마커 클릭 이벤트를 설정합니다.
+              // 마커 클릭 이벤트를 설정
               kakao.maps.event.addListener(marker, 'click', function () {
                 var infowindow = new kakao.maps.InfoWindow({
                   content:
@@ -266,7 +266,7 @@ if (navigator.geolocation) {
   });
 }
 
-// HTML5의 geolocation으로 사용할 수 있는지 확인합니다
+// HTML5의 geolocation으로 사용할 수 있는지 확인
 if (navigator.geolocation) {
   // GeoLocation을 이용해서 접속 위치를 얻어옵니다
   navigator.geolocation.getCurrentPosition(function (position) {
@@ -280,13 +280,13 @@ if (navigator.geolocation) {
       title: '현재 위치', // 마커의 타이틀
     });
 
-    // 인포윈도우로 내 위치를 표시합니다
+    // 인포윈도우로 내 위치를 표시
     var locInfowindow = new kakao.maps.InfoWindow({
       content: '<div style="padding:5px;">현재 위치</div>',
     });
     locInfowindow.open(map, locMarker);
 
-    // 지도의 중심을 내 위치로 변경합니다
+    // 지도의 중심을 내 위치로 변경
     map.setCenter(locPosition);
   });
 }
