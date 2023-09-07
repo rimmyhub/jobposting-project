@@ -185,6 +185,16 @@ export class JobpostingService {
     });
   }
 
+  // 윤영 : 경력검색시 해당경력과 일치하는 채용 공고글 전체 조회
+  async searchCareer(career: string) {
+    if (career === '경력 전체') {
+      return await this.jobpostingRepository.find({});
+    }
+    return await this.jobpostingRepository.find({
+      where: { career: Like(`%${career}%`) },
+    });
+  }
+
   // 윤영 : 메인페이지에서 채용공고 클릭 시 해당 채용공고 내용 조회
   async getJobposting(jobpostingId: number) {
     await this.jobpostingRepository.findOne({ where: { id: jobpostingId } });
