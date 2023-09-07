@@ -1,0 +1,115 @@
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="chatgpt"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">
+          자소서 초안 생성 Chat GPT
+        </h1>
+
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body text-start">
+        <p class="text-secondary">
+          키워드를 입력하시면 직무경험 기반 자소서가 생성됩니다.
+        </p>
+        <!-- 제목 -->
+
+        <div class="mb-3">
+          <label for="exampleFormControlInput1" class="form-label">직무</label>
+          <input
+            type="email"
+            class="form-control"
+            id="addExampleFormControlInput1"
+            placeholder="직무를 1개 이상 입력해주세요"
+          />
+        </div>
+        <!-- 제목 -->
+        <!-- 내용 -->
+        <div class="mb-3">
+          <label for="exampleFormControlTextarea1" class="form-label"
+            >경험 및 이력</label
+          >
+          <textarea
+            class="form-control"
+            id="addExampleFormControlTextarea1"
+            rows="5"
+            placeholder="3개 이상 입력해주세요. 자세히 입력하면 완성도가 높아져요!"
+          ></textarea>
+          <div>
+            <button
+              type="button"
+              class="btn btn-primary"
+              style="margin-top: 10px; margin-bottom: 60px; float: right"
+            >
+              생성하기
+            </button>
+          </div>
+        </div>
+
+        <!-- 내용 -->
+
+        <!-- 내용 -->
+        <div class="mb-3">
+          <textarea
+            class="form-control"
+            id="addExampleFormControlTextarea1"
+            rows="15"
+            placeholder="이곳에 자기소개서가 생성됩니다."
+          ></textarea>
+        </div>
+        <!-- 내용 -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          취소
+        </button>
+        <button type="button" class="btn btn-primary" id="addAboutMeBtn">
+          복사하기
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  import OpenAI from 'openai';
+
+  const openai = new OpenAI({
+    apiKey: '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',
+  });
+
+  try {
+    const openFun = async () => {
+      const completion = await openai.chat.completions.create({
+        model: 'gpt-3.5-turbo',
+        prompt: 'This story begins',
+        max_tokens: 30,
+      });
+      console.log(completion.choices[0].text);
+      openFun();
+    };
+  } catch (error) {
+    if (error instanceof OpenAI.APIError) {
+      console.error(error.status); // e.g. 401오류
+      console.error(error.message); // e.g. 전달한 인증 토큰이 잘못되었습니다
+      console.error(error.code); // e.g. 잘못된 api키
+      console.error(error.type); // e.g. 잘못된 요청 오류
+    } else {
+      // api가 아닌 오류
+      console.log(error);
+    }
+  }
+</script>

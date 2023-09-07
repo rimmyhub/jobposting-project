@@ -498,6 +498,18 @@
           <p class="text-start fs-5 fw-semibold" style="margin: 10px">
             자기소개서
           </p>
+          <!-- 자기소개서 초안 생성 ChatGPT -->
+          <button
+            type="button"
+            class="btn btn-outline-primary"
+            style="margin: 10px"
+            data-bs-toggle="modal"
+            data-bs-target="#chatgpt"
+          >
+            자소서 초안 생성 ChatGPT
+          </button>
+          <%- include('includes/chatgpt') %>
+          <!-- 자기소개서 초안 생성 ChatGPT -->
         </div>
 
         <div class="col-8" id="aboutMeBox">
@@ -535,6 +547,7 @@
           </p>
           <!-- 수정 아이콘 -->
         </div>
+
         <div class="col-2" style="margin-top: 20px">
           <!-- 추가 모달 -->
           <button
