@@ -79,4 +79,23 @@ export class ChatController {
     const { chatContent, chatId, senderId, senderType } = req.Body;
     console.log('save = ', chatContent, chatId, senderId, senderType);
   }
+
+  // 유저 - 새로운 메세지 체크
+  @UseGuards(UserGuard)
+  @Get('/check-message/user/:type')
+  async userCheckMessage(@Request() req, @Param('type') type: string) {
+    const userId = req.user.id;
+    const result = await this.chatService.checkChat(userId, type);
+    console.log('result =', result);
+    return result;
+  }
+
+  // 회사 - 새로운 메세지 체크
+  @UseGuards(CompanyGuard)
+  @Get('/check-message/company/:type')
+  async companyCheckMessage(@Request() req, @Param('type') type: string) {
+    const companyId = req.company.id;
+    const result = await this.chatService.checkChat(companyId, type);
+    return result;
+  }
 }

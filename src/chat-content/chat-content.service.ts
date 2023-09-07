@@ -23,7 +23,7 @@ export class ChatContentService {
   // 채팅내용 불러오기
   async getChatContents(id: number) {
     const result = await this.chatContentRepository.find({
-      select: ['senderId', 'senderType', 'content', 'createdAt'],
+      select: ['senderId', 'senderType', 'content', 'isCheck', 'createdAt'],
       where: { chatId: id },
       order: { createdAt: 'ASC' },
     });
