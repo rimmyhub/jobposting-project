@@ -27,6 +27,12 @@ export class JobpostingController {
     return this.jobpostingService.searchKeyword(keyword);
   }
 
+  // 윤영 : 지역검색시 해당지역과 일치하는 채용 공고글 전체 조회
+  @Post('workArea')
+  searchRegion(@Body('workArea') workArea: string) {
+    return this.jobpostingService.searchRegion(workArea);
+  }
+
   // 채용공고 아이디 가져오기
   @Get('getId')
   getJobpostingId(@Query('id') id: string) {

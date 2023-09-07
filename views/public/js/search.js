@@ -1,15 +1,25 @@
 document.addEventListener('DOMContentLoaded', (e) => {
   e.preventDefault;
-  enter();
-  searchCompany();
-  searchJobposting();
+  searchInit();
+  selectInit();
 });
 
+// 검색바 설정 태그들
 const searchBar = document.querySelector('.search-input');
 const searchBtn = document.querySelector('#searchBtn');
 const companiesBar = document.querySelector('#companies-list');
 const jobPostingsBar = document.querySelector('#jobposting-list');
 
+// 조건검색 설정 태그들
+const regionSelect = document.getElementById('regionSelect');
+
+// 검색함수 모음
+function searchInit() {
+  enter();
+  searchCompany();
+  searchJobposting();
+}
+// 엔터이벤트리스너
 function enter() {
   searchBar.addEventListener('keyup', (e) => {
     if (e.key === 'Enter') {
@@ -17,7 +27,7 @@ function enter() {
     }
   });
 }
-
+// 회사검색
 function searchCompany() {
   // 이벤트 리스너
   searchBtn.addEventListener('click', async () => {
@@ -58,7 +68,7 @@ function searchCompany() {
     });
   });
 }
-
+// 채용공고검색
 function searchJobposting() {
   // 이벤트 리스너
   searchBtn.addEventListener('click', async () => {
@@ -75,6 +85,38 @@ function searchJobposting() {
     const resJP = await searchJP.json();
     jobPostingsBar.innerHTML = '';
     resJP.forEach((JP) => {
+      jobPostingsBar.innerHTML += `<div class="jobposting-card" id="jobposting-card" onclick="goToJobpostingSubpage(${JP.id})">
+                                    <div>
+                                        <div class="jobposting-title" id="jobposting-title">
+                                        ${JP.title}
+                                        </div>
+                                        <div class="jobposting-job" id="jobposting-job">${JP.dueDate}</div>
+                                        <p>${JP.workArea}</p>
+                                    </div>
+                                    </div>`;
+    });
+  });
+}
+
+// 조건검색 함수모음
+function selectInit() {
+  searchRegion();
+}
+// 지역별 검색
+function searchRegion() {
+  console.log(regionSelect);
+  regionSelect.addEventListener('change', async () => {
+    const workArea = regionSelect.value;
+    const searchRegion = await fetch(`/api/jobpostings/workArea`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ workArea }),
+    });
+
+    const resRegion = await searchRegion.json();
+
+    jobPostingsBar.innerHTML = '';
+    resRegion.forEach((JP) => {
       jobPostingsBar.innerHTML += `<div class="jobposting-card" id="jobposting-card" onclick="goToJobpostingSubpage(${JP.id})">
                                     <div>
                                         <div class="jobposting-title" id="jobposting-title">
