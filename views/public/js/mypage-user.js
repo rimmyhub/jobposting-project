@@ -129,12 +129,12 @@ async function getUserData() {
 }
 
 // 유저 이미지 수정하기
-let imageUrl;
 async function getUserImage() {
   const userImage = document.getElementById('image');
   const imageUploadEl = document.getElementById('user-image');
   const imageDeleteEl = document.getElementById('image-delete');
   const saveBtnEl = document.getElementById('save-btn');
+  let imageUrl;
 
   imageUploadEl.addEventListener('change', async (e) => {
     const selectedFile = e.target.files[0];
@@ -157,21 +157,20 @@ async function getUserImage() {
       method: 'POST',
       body: formData,
     });
+    const data = await response.json();
+    console.log(data);
+    imageUrl = data.url;
 
-    if (response.ok) {
-      const data = await response.json();
-      console.log(data);
-
-      imageUrl = data.url;
-
-      userImage.setAttribute('src', imageUrl);
-    }
+    userImage.setAttribute('src', imageUrl);
   });
 
   // 기본프로필 적용하기
   imageDeleteEl.addEventListener('click', () => {
     userImage.src = '/img/userImg.jpg';
   });
+
+  // 저장하기
+  saveBtnEl.addEventListener('click', () => {});
 }
 
 // 유저의 이력서를 불러오는 함수 로직
