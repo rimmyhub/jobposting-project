@@ -66,6 +66,7 @@ export class AppController {
   getSubpageCompany(@Request() req, @Param('companyId') companyId: string) {
     return { companyId };
   }
+
   // 채용공고 (로그인 없이 모든 공고 조회)
   @Get('jobposting/:jobpostingId')
   @Render('jobposting-user')

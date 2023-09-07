@@ -61,10 +61,16 @@ export class JobpostingController {
     return this.jobpostingService.findCompanyAllJobposting(req.company.id);
   }
 
-  // 검색시 해당 검색어를 포함하는 채용 공고글 전체 조회
+  // 윤영 : 검색시 해당 검색어를 포함하는 채용 공고글 전체 조회
   @Post('search')
   searchKeyword(@Body('keyword') keyword: string) {
     return this.jobpostingService.searchKeyword(keyword);
+  }
+
+  // 윤영 : 메인페이지에서 채용공고 클릭 시 해당 채용공고 내용 조회
+  @Get('/:jobpostingId')
+  getJobposting(@Param('jobpostingId') jobpostingId: number) {
+    return this.jobpostingService.getJobposting(jobpostingId);
   }
 
   // 회사별 채용공고 1개 조회

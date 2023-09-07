@@ -1,5 +1,17 @@
+document.addEventListener('DOMContentLoaded', (e) => {
+  e.preventDefault;
+  getJobposting();
+});
 const jobpostingId = window.location.pathname.split('/')[2];
 console.log(jobpostingId);
+
+// 해당 아이디의 채용공고 화면에 띄우기
+async function getJobposting() {
+  console.log('hi');
+  const JP = await fetch(`/api/jobpostings/${jobpostingId}`);
+  const resJP = await JP.json();
+  console.log(resJP);
+}
 
 const applyBtn = document.querySelector('.apply-btn');
 
