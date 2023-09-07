@@ -26,33 +26,22 @@
         <p class="text-secondary">
           키워드를 입력하시면 직무경험 기반 자소서가 생성됩니다.
         </p>
-        <!-- 제목 -->
 
-        <div class="mb-3">
-          <label for="exampleFormControlInput1" class="form-label">직무</label>
-          <input
-            type="email"
-            class="form-control"
-            id="addExampleFormControlInput1"
-            placeholder="직무를 1개 이상 입력해주세요"
-          />
-        </div>
-        <!-- 제목 -->
         <!-- 내용 -->
         <div class="mb-3">
-          <label for="exampleFormControlTextarea1" class="form-label"
-            >경험 및 이력</label
+          <label for="exampleFormControlTextarea1" class="form-label experience"
+            >직무 및 경험 작성</label
           >
           <textarea
             class="form-control"
             id="addExampleFormControlTextarea1"
             rows="5"
-            placeholder="3개 이상 입력해주세요. 자세히 입력하면 완성도가 높아져요!"
+            placeholder="키워드를 3개 이상 입력해주세요. 자세히 입력하면 완성도가 높아져요!"
           ></textarea>
           <div>
             <button
               type="button"
-              class="btn btn-primary"
+              class="btn btn-primary make-about-me-btn"
               style="margin-top: 10px; margin-bottom: 60px; float: right"
             >
               생성하기
@@ -61,11 +50,20 @@
         </div>
 
         <!-- 내용 -->
-
+        <!-- 제목 -->
+        <div class="mb-3">
+          <input
+            type="email"
+            class="form-control"
+            id="addExampleFormControlInput1"
+            placeholder="자기소개서 제목을 입력해주세요."
+          />
+        </div>
+        <!-- 제목 -->
         <!-- 내용 -->
         <div class="mb-3">
           <textarea
-            class="form-control"
+            class="form-control make-about-me"
             id="addExampleFormControlTextarea1"
             rows="15"
             placeholder="이곳에 자기소개서가 생성됩니다."
@@ -78,38 +76,30 @@
           취소
         </button>
         <button type="button" class="btn btn-primary" id="addAboutMeBtn">
-          복사하기
+          추가
         </button>
       </div>
     </div>
   </div>
 </div>
 <script>
-  import OpenAI from 'openai';
+  const experienceEl = document.querySelector('.experience'); //직무 경험 작성 인풋
+  const makeAboutMeEl = document.querySelector('.make-about-me'); // 생성되는 인풋
+  const makeAboutMeBtn = document.querySelector('.make-about-me-btn'); // 생성하기 버튼
 
-  const openai = new OpenAI({
-    apiKey: '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',
-  });
+  makeAboutMeBtn.addEventListener('click', async (event) => {
+    e.preventDefault();
 
-  try {
-    const openFun = async () => {
-      const completion = await openai.chat.completions.create({
-        model: 'gpt-3.5-turbo',
-        prompt: 'This story begins',
-        max_tokens: 30,
-      });
-      console.log(completion.choices[0].text);
-      openFun();
-    };
-  } catch (error) {
-    if (error instanceof OpenAI.APIError) {
-      console.error(error.status); // e.g. 401오류
-      console.error(error.message); // e.g. 전달한 인증 토큰이 잘못되었습니다
-      console.error(error.code); // e.g. 잘못된 api키
-      console.error(error.type); // e.g. 잘못된 요청 오류
+    const response = await fetch(`/api/chatgpt`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      makeAboutMeEl.textContent = data.message;
     } else {
-      // api가 아닌 오류
-      console.log(error);
+      makeAboutMeEl.textContent = 'Error submitting the form.';
     }
-  }
+  });
 </script>

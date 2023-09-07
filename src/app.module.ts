@@ -24,6 +24,7 @@ import { JobcrawlerModule } from './jobcrawler/jobcrawler.module';
 import { JobPostingSearchModule } from './search/search.module';
 import { MailModule } from './mail/mail.module';
 import { ChatContentModule } from './chat-content/chat-content.module';
+import { ChatgptModule } from './chatgpt/chatgpt.module';
 
 @Module({
   imports: [
@@ -50,6 +51,7 @@ import { ChatContentModule } from './chat-content/chat-content.module';
     JobcrawlerModule,
     JobPostingSearchModule,
     ChatContentModule,
+    ChatgptModule,
   ],
   controllers: [AppController],
   providers: [AppService, ChatGateway],
