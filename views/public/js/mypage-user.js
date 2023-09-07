@@ -129,7 +129,7 @@ async function getUserData() {
 }
 
 // 유저 이미지 수정하기
-let imageUrl = '';
+let imageUrl;
 async function getUserImage() {
   const userImage = document.getElementById('image');
   const imageUploadEl = document.getElementById('user-image');
@@ -157,24 +157,20 @@ async function getUserImage() {
       method: 'POST',
       body: formData,
     });
-    const data = await response.json();
-    console.log(data);
 
-    imageUrl = data.url;
+    if (response.ok) {
+      const data = await response.json();
+      console.log(data);
 
-    userImage.setAttribute('src', imageUrl);
+      imageUrl = data.url;
+
+      userImage.setAttribute('src', imageUrl);
+    }
   });
 
   // 기본프로필 적용하기
   imageDeleteEl.addEventListener('click', () => {
     userImage.src = '/img/userImg.jpg';
-  });
-
-  // 이미지 저장하기
-  saveBtnEl.addEventListener('click', async () => {
-    alert('저장되었습니다.');
-    if (response.ok) window.location.reload();
-    return imageUrl;
   });
 }
 
