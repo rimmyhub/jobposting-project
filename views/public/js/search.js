@@ -104,7 +104,6 @@ function selectInit() {
 }
 // 지역별 검색
 function searchRegion() {
-  console.log(regionSelect);
   regionSelect.addEventListener('change', async () => {
     const workArea = regionSelect.value;
     const searchRegion = await fetch(`/api/jobpostings/workArea`, {
