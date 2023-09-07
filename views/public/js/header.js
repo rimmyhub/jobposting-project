@@ -157,19 +157,18 @@ function isLogin() {
   if (id) {
     // 새로운 채팅이 있는지 확인하기
     getChatRooms();
-    checkNewMsg();
   }
 }
 
 // 새로운 채팅메세지가 있는지 확인하기
-let newMsg;
-const checkNewMsg = async () => {
+let newMsgs;
+async function checkNewMsg() {
   const type = window.localStorage.getItem('type');
   if (type === 'user') {
     await fetch(`/api/chats/check-message/user/${type}`)
       .then((res) => res.json()) //json으로 받을 것을 명시
       .then((datas) => {
-        newMsg = datas;
+        newMsgs = datas;
       })
       .catch((e) => {
         console.log(e);
@@ -178,15 +177,15 @@ const checkNewMsg = async () => {
     await fetch(`/api/chats/check-message/company/${type}`)
       .then((res) => res.json()) //json으로 받을 것을 명시
       .then((datas) => {
-        newMsg = datas;
+        newMsgs = datas;
       })
       .catch((e) => {
         console.log(e);
       });
   }
-
-  console.log('newMsg = datas = ', newMsg);
-};
+  console.log('newMsg = datas = ', newMsgs);
+  return newMsgs;
+}
 
 // 채팅리스트 가져오기
 async function getChatRooms() {
@@ -211,11 +210,13 @@ async function getChatRooms() {
         console.log(e);
       });
   }
-  appendMsgList(payload, type);
+
+  const newMsgs = checkNewMsg();
+  appendMsgList(payload, type, newMsgs);
 }
 
 // 메세지리스트 화면에 출력하기
-function appendMsgList(datas, type) {
+function appendMsgList(datas, type, newMsgs) {
   if (type === 'company') {
     datas.forEach((el) => {
       const li = document.createElement('div');
