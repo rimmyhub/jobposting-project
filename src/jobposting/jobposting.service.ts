@@ -147,6 +147,9 @@ export class JobpostingService {
 
   // 윤영 : 지역검색시 해당지역과 일치하는 채용 공고글 전체 조회
   async searchRegion(workArea: string) {
+    if (workArea === '지역 전국') {
+      return await this.jobpostingRepository.find({});
+    }
     if (workArea === '충청') {
       return await this.jobpostingRepository.find({
         where: [
