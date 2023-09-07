@@ -20,19 +20,20 @@ export class ChatService {
         .select('chat.id') // 채팅의 아이디
         .leftJoin('chat.chatContent', 'chatContent')
         .addSelect('COUNT(chatContent.isCheck) as isCheckCount')
-        .groupBy('chatContent.senderId')
-        .where(`chatContent.senderId != ${id}`)
-        .andWhere(`chat.userId = ${id}`)
+        .where(`chat.user_id = ${id}`)
+        .andWhere('chatContent.is_check = 0')
+        .andWhere(`chatContent.sender_id != ${id}`)
+        .groupBy('chat.id')
         .getRawMany();
     } else {
       result = await this.chatRepository
         .createQueryBuilder('chat')
         .select('chat.id') // 채팅의 아이디
         .leftJoin('chat.chatContent', 'chatContent')
-        // .addSelect('COUNT(chatContent.isCheck) as isCheckCount')
-        .where(`chat.companyId = ${id}`)
-        .andWhere(`chatContent.senderId != ${id}`)
-        // .andWhere(`chatContent.isCheck != 1`)
+        .addSelect('COUNT(chatContent.isCheck) as isCheckCount')
+        .where(`chat.company_uuid = ${id}`)
+        .andWhere('chatContent.is_check = 0')
+        .andWhere(`chatContent.sender_id != ${id}`)
         .groupBy('chat.id')
         .getRawMany();
     }
@@ -61,12 +62,10 @@ export class ChatService {
     if (isChatRoom.length !== 0) {
       throw new HttpException('이미 대화상대입니다.', HttpStatus.BAD_REQUEST);
     }
-
     const chat = await this.chatRepository.save({
       company: { uuid: id }, // company 가드로 회사 가져오기
       user: { id: userId }, // userid 외래키 찾기
     });
-
     console.log('chat = ', chat);
     return chat;
   }
