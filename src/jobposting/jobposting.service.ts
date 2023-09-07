@@ -115,7 +115,7 @@ export class JobpostingService {
     return await this.jobpostingRepository.find({ where: { companyId: id } });
   }
 
-  // 검색시 해당 검색어를 포함하는 채용 공고글 전체 조회
+  // 윤영 : 검색시 해당 검색어를 포함하는 채용 공고글 전체 조회
   async searchKeyword(keyword: string) {
     if (!keyword) {
       throw new HttpException('검색어를 입력해주세요', HttpStatus.NOT_FOUND);
@@ -142,6 +142,11 @@ export class JobpostingService {
     }
 
     return jobPostings;
+  }
+
+  // 윤영 : 메인페이지에서 채용공고 클릭 시 해당 채용공고 내용 조회
+  async getJobposting(jobpostingId: number) {
+    await this.jobpostingRepository.findOne({ where: { id: jobpostingId } });
   }
 
   // 채용공고 1개 조회

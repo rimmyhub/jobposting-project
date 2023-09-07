@@ -67,19 +67,20 @@ async function deleteCookie() {
 const jobpostingBox = document.querySelector('#jobposting-list');
 
 function jobpostingAppendTemp(data) {
+  console.log(data);
   const temp = data
     .map((jobposting) => {
       return `
-        <div class="jobposting-card" id="jobposting-card" onclick="goToJobpostingSubpage(${jobposting.id})">
-            <div>
-              <div class="jobposting-title" id="jobposting-title">
-              ${jobposting.title}
+              <div class="jobposting-card" id="jobposting-card" onclick="goToJobpostingSubpage(${jobposting.id})">
+                <div>
+                  <div class="jobposting-title" id="jobposting-title">
+                  ${jobposting.title}
+                  </div>
+                  <div class="jobposting-job" id="jobposting-job">${jobposting.dueDate}</div>
+                  <p>${jobposting.workArea}</p>
+                </div>
               </div>
-              <div class="jobposting-job" id="jobposting-job">${jobposting.dueDate}</div>
-              <p>${jobposting.workArea}</p>
-            </div>
-          </div>
-      `;
+              `;
     })
     .join('');
 
@@ -90,6 +91,7 @@ async function getJobposting() {
   try {
     const jobpostingData = await fetch(`/api/jobpostings?page=1`);
     const jobpostingsData = await jobpostingData.json();
+    console.log(jobpostingsData);
     jobpostingAppendTemp(jobpostingsData);
   } catch (error) {
     console.log(error);
@@ -114,6 +116,7 @@ addJobpostingBtn.addEventListener('click', async function () {
 });
 
 function goToJobpostingSubpage(jobpostingId) {
+  console.log(jobpostingId);
   const subPageUrl = `/jobposting/${jobpostingId}`;
   window.location.href = subPageUrl;
 }
