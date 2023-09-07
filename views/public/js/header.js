@@ -267,14 +267,25 @@ const builNewMsg = async (senderId, message, senderType) => {
 // 새로운 채팅메세지가 있는지 확인하기
 async function checkNewMsg() {
   const type = window.localStorage.getItem('type');
-  await fetch(`/api/chats/check-message/user/${type}`)
-    .then((res) => res.json()) //json으로 받을 것을 명시
-    .then((datas) => {
-      console.log(datas);
-    })
-    .catch((e) => {
-      console.log(e);
-    });
+  if (type === 'user') {
+    await fetch(`/api/chats/check-message/user/${type}`)
+      .then((res) => res.json()) //json으로 받을 것을 명시
+      .then((datas) => {
+        console.log(datas);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  } else {
+    await fetch(`/api/chats/check-message/company/${type}`)
+      .then((res) => res.json()) //json으로 받을 것을 명시
+      .then((datas) => {
+        console.log(datas);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
 }
 
 // 채팅내용가져오기

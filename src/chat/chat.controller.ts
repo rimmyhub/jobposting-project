@@ -86,7 +86,6 @@ export class ChatController {
   async userCheckMessage(@Request() req, @Param('type') type: string) {
     const userId = req.user.id;
     const result = await this.chatService.checkChat(userId, type);
-    console.log('result =', result);
     return result;
   }
 

@@ -17,25 +17,24 @@ export class ChatService {
     if (type === 'user') {
       result = await this.chatRepository
         .createQueryBuilder('chat')
-        .select([`chatContent.senderId`, `chatContent.isCheck`])
-        // .addSelect(`COUNT(chatContent.isCheck)`, 'isCheck')
-        .leftJoin(`chat.chatContent`, `chatContent`)
+        .select('chat.id') // 채팅의 아이디
+        .leftJoin('chat.chatContent', 'chatContent')
+        .addSelect('COUNT(chatContent.isCheck) as isCheckCount')
+        .groupBy('chatContent.senderId')
         .where(`chatContent.senderId != ${id}`)
-        // .andWhere(`chatContent.is_check != 1`)
-        .groupBy('chatContent.sender_id')
-        .getMany();
-
-      // .addSelect('chatContent.sender_id')
-      // .where(`chatContent.senderId != ${id}`)
-      // .andWhere(`chatContent.is_check = 0`)
+        .andWhere(`chat.userId = ${id}`)
+        .getRawMany();
     } else {
       result = await this.chatRepository
         .createQueryBuilder('chat')
-        .select(['COUNT(chatContent.content)'])
+        .select('chat.id') // 채팅의 아이디
         .leftJoin('chat.chatContent', 'chatContent')
+        // .addSelect('COUNT(chatContent.isCheck) as isCheckCount')
         .where(`chat.companyId = ${id}`)
-        .andWhere(`chatContent.isCheck = 0`)
-        .getMany();
+        .andWhere(`chatContent.senderId != ${id}`)
+        // .andWhere(`chatContent.isCheck != 1`)
+        .groupBy('chat.id')
+        .getRawMany();
     }
 
     return result;

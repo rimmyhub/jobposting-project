@@ -49,7 +49,8 @@ searchBtn.addEventListener('click', async () => {
   //   });
 
   // 채용공고 검색
-  const searchJP = await fetch(`/api/jobpostings/search`, {
+  console.log('채용공고 검색');
+  const searchJP = await fetch(`api/jobpostings/search`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ keyword }),

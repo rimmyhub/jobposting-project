@@ -128,7 +128,7 @@ export class JobpostingService {
         'jobposting.title',
         'company.title',
         'jobposting.workArea',
-        'jobposting.Deadline',
+        'jobposting.dueDate',
       ])
       .innerJoin('jobposting.company', 'company')
       .where('jobposting.title LIKE :title', { title: `%${keyword}%` })
