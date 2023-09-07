@@ -67,7 +67,6 @@ async function deleteCookie() {
 const jobpostingBox = document.querySelector('#jobposting-list');
 
 function jobpostingAppendTemp(data) {
-  console.log(data);
   const temp = data
     .map((jobposting) => {
       return `
@@ -91,7 +90,6 @@ async function getJobposting() {
   try {
     const jobpostingData = await fetch(`/api/jobpostings?page=1`);
     const jobpostingsData = await jobpostingData.json();
-    console.log(jobpostingsData);
     jobpostingAppendTemp(jobpostingsData);
   } catch (error) {
     console.log(error);
@@ -227,7 +225,6 @@ if (navigator.geolocation) {
     fetch(apiUrl)
       .then((response) => response.json())
       .then((addresses) => {
-        console.log(addresses);
         address = addresses.map(function (addressInfo) {
           // 주소를 좌표로 변환하는 Geocoder 객체를 생성
           var geocoder = new kakao.maps.services.Geocoder();
