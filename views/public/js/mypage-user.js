@@ -77,11 +77,31 @@ async function getResumeId() {
 // 유저 정보를 불러오는 함수 로직
 async function getUserData() {
   const userInfoBox = document.querySelector('#userInfoBox');
+  const userImage = document.querySelector('.profile-box');
+  console.log(userImage);
   // 메인로직
   const userData = await fetch(`/api/users/user-page`);
   // 데이터 가공
   const jsonUserData = await userData.json();
-  // 붙여넣기
+  console.log(jsonUserData);
+  // 프사
+  userImage.innerHTML = `<div class="profile-box">
+                          <img
+                            src="${jsonUserData.image}"
+                            id="image"
+                            class="user-img"
+                            alt="/img/userImg.jpg"
+                            srcset=""
+                          />
+                          <i class="fa-solid fa-pen edit-icon" style="color: #0d6efd">수정</i>
+                          <input
+                            id="user-image"
+                            class="img-file"
+                            type="file"
+                            accept="image/jpeg, image/png"
+                          />
+                        </div>`;
+  // 유저정보
   userInfoBox.innerHTML = `<div class="col-sm-8" id="userInfoBox" data-id="${jsonUserData.id}">
     <!-- 이름 -->
     <div class="row">
