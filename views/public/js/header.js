@@ -5,7 +5,7 @@ let sent;
 let received;
 let chattingList;
 let chattingContainer;
-
+// let alarmIcon;
 const myApplyList = document.getElementById('my-apply-list');
 const socket = io('localhost:8080');
 const ejs = (window.onload = function () {
@@ -19,6 +19,7 @@ const ejs = (window.onload = function () {
   const sendMsgUser = document.getElementById('user-msg');
   const sendBtn = document.getElementById('send-btn');
   const logout = document.getElementById('logout');
+  const alarmIcon = document.getElementById('exclamation-icon');
 
   chattingContainer = document.getElementById('chatting-container');
   chattingList = document.getElementById('chatting-list');
@@ -95,7 +96,7 @@ const ejs = (window.onload = function () {
           getUserId = res.userId;
         }
       });
-    console.log(':getUserId = ', getUserId);
+
     await fetch(`/api/users/get-email/${getUserId}`, {
       headers: {
         Accept: 'application / json',
@@ -140,6 +141,11 @@ const ejs = (window.onload = function () {
     });
   }
   socket.on('receive-message', (message, userId, userType) => {
+    // const type = window.localStorage.getItem('type');
+    // console.log(message, userId, userType);
+    // if (type !== userType) {
+    //   alarmIcon.style.opacity = 1;
+    // }
     builNewMsg(userId, message, userType);
   });
 
@@ -150,6 +156,8 @@ function isLogin() {
   const id = window.localStorage.getItem('id');
   if (id) {
     getChatRooms();
+    // 새로운 채팅이 있는지 확인하기
+    checkNewMsg();
   }
 }
 
@@ -166,8 +174,6 @@ async function getChatRooms() {
       .catch((e) => {
         console.log(e);
       });
-
-    appendMsgList(payload, type);
   } else if (type === 'company') {
     await fetch('/api/chats/company')
       .then((res) => res.json()) //json으로 받을 것을 명시
@@ -177,8 +183,8 @@ async function getChatRooms() {
       .catch((e) => {
         console.log(e);
       });
-    appendMsgList(payload, type);
   }
+  appendMsgList(payload, type);
 }
 
 // 메세지리스트 화면에 출력하기
@@ -186,7 +192,6 @@ function appendMsgList(datas, type) {
   if (type === 'company') {
     datas.forEach((el) => {
       const li = document.createElement('div');
-
       li.innerHTML = `<div id="message-card" class="message-card" onclick="chattingBox('${el.id}', '${el.user.email}')">
                         <div class="user-profile">
                           <img src="/img/userImg.jpg" alt="" srcset="" />
@@ -258,6 +263,19 @@ const builNewMsg = async (senderId, message, senderType) => {
 
   chattingContainer.scrollTop = chattingContainer.scrollHeight;
 };
+
+// 새로운 채팅메세지가 있는지 확인하기
+async function checkNewMsg() {
+  const type = window.localStorage.getItem('type');
+  await fetch(`/api/chats/check-message/user/${type}`)
+    .then((res) => res.json()) //json으로 받을 것을 명시
+    .then((datas) => {
+      console.log(datas);
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+}
 
 // 채팅내용가져오기
 async function getChatContents(id) {

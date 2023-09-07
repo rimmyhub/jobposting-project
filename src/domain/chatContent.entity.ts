@@ -14,6 +14,9 @@ export class ChatContent {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column({ name: 'chat_id' })
+  chatId: number;
+
   @Column({ name: 'sender_id', comment: '보낸유저의 ID' })
   senderId: number;
 
@@ -23,6 +26,9 @@ export class ChatContent {
   @Column({ name: 'content' })
   content: string;
 
+  @Column({ name: 'is_check' })
+  isCheck: boolean;
+
   @CreateDateColumn({ name: 'create_at', comment: '생성일' })
   createdAt: Date;
 
@@ -31,9 +37,6 @@ export class ChatContent {
 
   @DeleteDateColumn({ name: 'delete_at', comment: '삭제일' })
   deletedAt?: Date | null;
-
-  @Column({ name: 'chat_id' })
-  chatId: number;
 
   // 다대1 Chat --- ChatContent
   @ManyToOne(() => Chat, (chat) => chat.chatContent)
