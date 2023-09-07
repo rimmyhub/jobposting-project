@@ -3,6 +3,7 @@ import {
   FileTypeValidator,
   MaxFileSizeValidator,
   ParseFilePipe,
+  Patch,
   Post,
   UploadedFile,
   UseGuards,

@@ -5,9 +5,7 @@ import { get } from 'http';
 
 @Controller()
 export class AppController {
-  constructor(
-    private readonly appService: AppService,
-  ) {}
+  constructor(private readonly appService: AppService) {}
 
   @Get()
   @Render('index')
@@ -56,13 +54,6 @@ export class AppController {
     });
   }
 
-  @Get('chat')
-  @Render('chat')
-  getChat() {
-    return { title: 'Title' };
-  }
-
-  // 회사 정보 서브 페이지
   @Get('subpage/company/:companyId')
   @Render('subpage-company')
   async getSubpageCompany(
@@ -75,7 +66,7 @@ export class AppController {
     }
     return {
       isLogin: 0,
-     companyId,
+      companyId,
     };
   }
 
