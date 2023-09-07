@@ -155,11 +155,38 @@ const ejs = (window.onload = function () {
 function isLogin() {
   const id = window.localStorage.getItem('id');
   if (id) {
-    getChatRooms();
     // 새로운 채팅이 있는지 확인하기
+    getChatRooms();
     checkNewMsg();
   }
 }
+
+// 새로운 채팅메세지가 있는지 확인하기
+let newMsg;
+const checkNewMsg = async () => {
+  const type = window.localStorage.getItem('type');
+  if (type === 'user') {
+    await fetch(`/api/chats/check-message/user/${type}`)
+      .then((res) => res.json()) //json으로 받을 것을 명시
+      .then((datas) => {
+        newMsg = datas;
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  } else {
+    await fetch(`/api/chats/check-message/company/${type}`)
+      .then((res) => res.json()) //json으로 받을 것을 명시
+      .then((datas) => {
+        newMsg = datas;
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+
+  console.log('newMsg = datas = ', newMsg);
+};
 
 // 채팅리스트 가져오기
 async function getChatRooms() {
@@ -200,6 +227,10 @@ function appendMsgList(datas, type) {
                           <div class="user-name">${el.user.email}</div>
                           <div>메세지 확인</div>
                         </div>
+                        <i
+                          id="exclamation-icon"
+                          class="fa-solid fa-exclamation new-msg-alram-icon"
+                        ></i>
                       </div>`;
       messageList.append(li);
     });
@@ -215,6 +246,10 @@ function appendMsgList(datas, type) {
                           <div class="user-name">${el.company.email}</div>
                           <div>메세지 확인</div>
                         </div>
+                        <i
+                          id="exclamation-icon"
+                          class="fa-solid fa-exclamation new-msg-alram-icon"
+                        ></i>
                       </div>`;
       messageList.append(li);
     });
