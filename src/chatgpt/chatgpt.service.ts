@@ -5,7 +5,7 @@ import OpenAI from 'openai';
 export class ChatgptService {
   async createChatgpt(experience: string) {
     const openai = new OpenAI({
-      apiKey: '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',
+      apiKey: process.env.OPENAI_API_KEY,
     });
 
     const completion = await openai.chat.completions.create({
