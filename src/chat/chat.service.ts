@@ -17,14 +17,17 @@ export class ChatService {
     if (type === 'user') {
       result = await this.chatRepository
         .createQueryBuilder('chat')
-        .select(['chatContent.id'])
-        // .loadRelationCountAndMap('chatContent.isCheck', 'chatContent.isheck')
-        .leftJoin('chat.chatContent', 'chatContent')
-        .addSelect('COUNT(chatContent.isCheck)', 'isCheck')
-        // .where(`chat.user_id = ${id}`)
-        // .andWhere(`chatContent.is_check = 0`)
-        .groupBy('chatContent.senderId')
+        .select([`chatContent.senderId`, `chatContent.isCheck`])
+        // .addSelect(`COUNT(chatContent.isCheck)`, 'isCheck')
+        .leftJoin(`chat.chatContent`, `chatContent`)
+        .where(`chatContent.senderId != ${id}`)
+        // .andWhere(`chatContent.is_check != 1`)
+        .groupBy('chatContent.sender_id')
         .getMany();
+
+      // .addSelect('chatContent.sender_id')
+      // .where(`chatContent.senderId != ${id}`)
+      // .andWhere(`chatContent.is_check = 0`)
     } else {
       result = await this.chatRepository
         .createQueryBuilder('chat')
