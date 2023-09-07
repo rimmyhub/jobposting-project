@@ -27,55 +27,71 @@
           키워드를 입력하시면 직무경험 기반 자소서가 생성됩니다.
         </p>
 
-        <!-- 내용 -->
+        <!-- 직무 경험 작성란 (해당 내용 기반으로 챗 gpt 생성) -->
         <div class="mb-3">
-          <label for="exampleFormControlTextarea1" class="form-label experience"
+          <label for="exampleFormControlTextarea1" class="form-label"
             >직무 및 경험 작성</label
           >
           <textarea
             class="form-control"
-            id="addExampleFormControlTextarea1"
+            id="experienceInput"
             rows="5"
             placeholder="키워드를 3개 이상 입력해주세요. 자세히 입력하면 완성도가 높아져요!"
           ></textarea>
           <div>
             <button
               type="button"
-              class="btn btn-primary make-about-me-btn"
+              class="btn btn-primary"
+              id="generateButton"
               style="margin-top: 10px; margin-bottom: 60px; float: right"
             >
               생성하기
             </button>
           </div>
         </div>
+        <!-- 직무 경험 작성란 (해당 내용 기반으로 챗 gpt 생성) -->
 
-        <!-- 내용 -->
-        <!-- 제목 -->
+        <!-- 자기소개서 제목 -->
         <div class="mb-3">
           <input
             type="email"
-            class="form-control"
-            id="addExampleFormControlInput1"
+            class="form-control title-aboutme"
             placeholder="자기소개서 제목을 입력해주세요."
           />
         </div>
-        <!-- 제목 -->
-        <!-- 내용 -->
+        <!-- 자기소개서 제목 -->
+        <!-- 챗 gpt 생성 내용 -->
         <div class="mb-3">
           <textarea
-            class="form-control make-about-me"
-            id="addExampleFormControlTextarea1"
+            class="form-control content-aboutme"
+            id="generatedText"
             rows="15"
             placeholder="이곳에 자기소개서가 생성됩니다."
           ></textarea>
         </div>
-        <!-- 내용 -->
+        <!-- 로딩중 -->
+        <div class="d-flex align-items-center">
+          <div
+            class="spinner-border text-primary"
+            role="status"
+            aria-hidden="true"
+            id="loadingSpinner"
+            style="display: none"
+          ></div>
+        </div>
+        <!-- 로딩중 -->
+        <!-- 챗 gpt 생성 내용 -->
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          id="delete-btn"
+          data-bs-dismiss="modal"
+        >
           취소
         </button>
-        <button type="button" class="btn btn-primary" id="addAboutMeBtn">
+        <button type="button" class="btn btn-primary" id="add-aboutme-btn">
           추가
         </button>
       </div>
@@ -83,23 +99,69 @@
   </div>
 </div>
 <script>
-  const experienceEl = document.querySelector('.experience'); //직무 경험 작성 인풋
-  const makeAboutMeEl = document.querySelector('.make-about-me'); // 생성되는 인풋
-  const makeAboutMeBtn = document.querySelector('.make-about-me-btn'); // 생성하기 버튼
+  async function init() {
+    // 유저 이력서
+    await getUserResume();
+  }
 
-  makeAboutMeBtn.addEventListener('click', async (event) => {
-    e.preventDefault();
+  const generateButton = document.getElementById('generateButton'); // 생성하기 버튼
+  const experienceInput = document.getElementById('experienceInput'); // 경험작성하는 인풋
+  const generatedText = document.getElementById('generatedText'); // 생성되는 인풋
+  const loadingSpinner = document.getElementById('loadingSpinner'); //로딩중 이미지
 
-    const response = await fetch(`/api/chatgpt`, {
+  generateButton.addEventListener('click', async () => {
+    loadingSpinner.style.display = 'inline-block';
+    const experience = experienceInput.value;
+    if (experience.trim() === '') {
+      alert('직무 경험을 입력하세요.');
+      return;
+    }
+    try {
+      const response = await fetch(`/api/chatgpt`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ experience }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('data', data);
+        generatedText.value = data.message;
+        loadingSpinner.style.display = 'none';
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  });
+
+  // 자기소개서 "추가" 버튼 클릭 시 자기소개서 "작성" 로직 실행
+  const addAboutMeBtn = document.getElementById('add-aboutme-btn');
+
+  addAboutMeBtn.addEventListener('click', async () => {
+    // body값
+    const title = document.querySelector('.title-aboutme').value;
+    const content = document.querySelector('.content-aboutme').value;
+    // 유저 이력서 아이디
+    const resumeId = await getUserResume();
+    // 메인로직
+    const aboutMe = await fetch(`/api/aboutmes/${resumeId}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title, content }),
     });
-
-    if (response.ok) {
-      const data = await response.json();
-      makeAboutMeEl.textContent = data.message;
-    } else {
-      makeAboutMeEl.textContent = 'Error submitting the form.';
+    // 데이터 가공
+    const jsonAboutMe = await aboutMe.json();
+    // 예외처리
+    if (!title || !content) {
+      return alert('자기소개서의 제목과 내용 모두 입력해주세요.');
     }
+    // 반환값
+    alert(`"${jsonAboutMe.title}" 자기소개서가 추가되었습니다.`);
+    window.location.reload();
+  });
+
+  const deleteBtn = document.getElementById('delete-btn');
+  deleteBtn.addEventListener('click', () => {
+    location.reload(); // 페이지를 새로 고침
   });
 </script>
