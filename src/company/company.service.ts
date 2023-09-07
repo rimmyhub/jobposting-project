@@ -93,7 +93,7 @@ export class CompanyService {
   }
 
   // 검색시 업무 또는 회사 이름에 해당 검색어를 포함하는 회사 전체 조회
-  async findSearchTag(title: string) {
+  async searchKeyword(keyword: string) {
     const searchCompanies = await this.companyRepository
       .createQueryBuilder('company')
       .select([
@@ -103,7 +103,7 @@ export class CompanyService {
         'company.employees',
       ])
       .where('company.title LIKE :title OR company.business LIKE :title', {
-        title: `%${title}%`,
+        title: `%${keyword}%`,
       })
       .getMany();
 

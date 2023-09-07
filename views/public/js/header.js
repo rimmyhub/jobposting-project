@@ -5,7 +5,7 @@ let sent;
 let received;
 let chattingList;
 let chattingContainer;
-
+// let alarmIcon;
 const myApplyList = document.getElementById('my-apply-list');
 const socket = io('localhost:8080');
 const ejs = (window.onload = function () {
@@ -19,6 +19,7 @@ const ejs = (window.onload = function () {
   const sendMsgUser = document.getElementById('user-msg');
   const sendBtn = document.getElementById('send-btn');
   const logout = document.getElementById('logout');
+  const alarmIcon = document.getElementById('exclamation-icon');
 
   chattingContainer = document.getElementById('chatting-container');
   chattingList = document.getElementById('chatting-list');
@@ -39,7 +40,6 @@ const ejs = (window.onload = function () {
     // 회사가 유저에게 메세지
     sendMsgUser.addEventListener('click', async () => {
       sendMessageUser(userId);
-      chatContainer.style.display = 'flex';
     });
   }
   if (profile) {
@@ -74,6 +74,8 @@ const ejs = (window.onload = function () {
     // 1. DB에 나와 상대방의 ID와 방의 ID를 임시로 만들어서 저장한다.
     // 내 아이디
     const id = window.localStorage.getItem('id');
+    let userEmail;
+    let getUserId;
     // 2.
     await fetch(`/api/chats/company/${userId}`, {
       method: 'POST',
@@ -84,10 +86,34 @@ const ejs = (window.onload = function () {
         id: id,
       }),
     })
-      .then((res) => res.json()) //json으로 받을 것을 명시
       .then((res) => {
-        //실제 데이터를 상태변수에 업데이트
+        return res.json();
+      }) //json으로 받을 것을 명시
+      .then((res) => {
+        if (res.message) {
+          alert(res.message);
+        } else {
+          getUserId = res.userId;
+        }
       });
+
+    await fetch(`/api/users/get-email/${getUserId}`, {
+      headers: {
+        Accept: 'application / json',
+      },
+      method: 'GET',
+    })
+      .then((res) => {
+        return res.json();
+      }) //json으로 받을 것을 명시
+      .then((res) => {
+        console.log('res = ', res);
+        userEmail = res.email;
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+    chattingBox(getUserId, userEmail);
   };
 
   async function deleteCookie() {
@@ -115,6 +141,11 @@ const ejs = (window.onload = function () {
     });
   }
   socket.on('receive-message', (message, userId, userType) => {
+    // const type = window.localStorage.getItem('type');
+    // console.log(message, userId, userType);
+    // if (type !== userType) {
+    //   alarmIcon.style.opacity = 1;
+    // }
     builNewMsg(userId, message, userType);
   });
 
@@ -125,6 +156,8 @@ function isLogin() {
   const id = window.localStorage.getItem('id');
   if (id) {
     getChatRooms();
+    // 새로운 채팅이 있는지 확인하기
+    checkNewMsg();
   }
 }
 
@@ -141,8 +174,6 @@ async function getChatRooms() {
       .catch((e) => {
         console.log(e);
       });
-
-    appendMsgList(payload, type);
   } else if (type === 'company') {
     await fetch('/api/chats/company')
       .then((res) => res.json()) //json으로 받을 것을 명시
@@ -152,8 +183,8 @@ async function getChatRooms() {
       .catch((e) => {
         console.log(e);
       });
-    appendMsgList(payload, type);
   }
+  appendMsgList(payload, type);
 }
 
 // 메세지리스트 화면에 출력하기
@@ -161,7 +192,6 @@ function appendMsgList(datas, type) {
   if (type === 'company') {
     datas.forEach((el) => {
       const li = document.createElement('div');
-
       li.innerHTML = `<div id="message-card" class="message-card" onclick="chattingBox('${el.id}', '${el.user.email}')">
                         <div class="user-profile">
                           <img src="/img/userImg.jpg" alt="" srcset="" />
@@ -233,6 +263,19 @@ const builNewMsg = async (senderId, message, senderType) => {
 
   chattingContainer.scrollTop = chattingContainer.scrollHeight;
 };
+
+// 새로운 채팅메세지가 있는지 확인하기
+async function checkNewMsg() {
+  const type = window.localStorage.getItem('type');
+  await fetch(`/api/chats/check-message/user/${type}`)
+    .then((res) => res.json()) //json으로 받을 것을 명시
+    .then((datas) => {
+      console.log(datas);
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+}
 
 // 채팅내용가져오기
 async function getChatContents(id) {

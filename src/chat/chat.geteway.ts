@@ -36,7 +36,6 @@ export class ChatGateway {
     @ConnectedSocket() socket: Socket,
     @MessageBody() payload: Array<any>,
   ) {
-    console.log('payload = ', payload);
     // 채팅내용"을 저장"하기
     await this.chatContentService.saveChatContents(payload);
     // 룸에 있는 유저에게만 메세지 보내기

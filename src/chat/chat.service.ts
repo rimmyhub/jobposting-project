@@ -10,6 +10,34 @@ export class ChatService {
     private readonly chatRepository: Repository<Chat>,
   ) {}
 
+  // 해당유저가 받은 메세지 중에 isCkeck가 false인 chat-content가 있는지 확인하는 class
+  async checkChat(id: number, type: string): Promise<any> {
+    console.log('checkChat', id, type);
+    let result: any;
+    if (type === 'user') {
+      result = await this.chatRepository
+        .createQueryBuilder('chat')
+        .select(['chatContent.id'])
+        // .loadRelationCountAndMap('chatContent.isCheck', 'chatContent.isheck')
+        .leftJoin('chat.chatContent', 'chatContent')
+        .addSelect('COUNT(chatContent.isCheck)', 'isCheck')
+        // .where(`chat.user_id = ${id}`)
+        // .andWhere(`chatContent.is_check = 0`)
+        .groupBy('chatContent.senderId')
+        .getMany();
+    } else {
+      result = await this.chatRepository
+        .createQueryBuilder('chat')
+        .select(['COUNT(chatContent.content)'])
+        .leftJoin('chat.chatContent', 'chatContent')
+        .where(`chat.companyId = ${id}`)
+        .andWhere(`chatContent.isCheck = 0`)
+        .getMany();
+    }
+
+    return result;
+  }
+
   // 유저 -> 회사에게 채팅 신청
   // 유효성 검사 필요없나?.. 생각하기
   async createUserChat(id: number, companyId: number): Promise<Chat> {
@@ -36,6 +64,8 @@ export class ChatService {
       company: { uuid: id }, // company 가드로 회사 가져오기
       user: { id: userId }, // userid 외래키 찾기
     });
+
+    console.log('chat = ', chat);
     return chat;
   }
 
@@ -43,18 +73,8 @@ export class ChatService {
   async comGetAllChatRoom(id: number): Promise<Chat[]> {
     const chatRooms = await this.chatRepository
       .createQueryBuilder('chat')
-      .select([
-        'chat.id',
-        'chat.companyId',
-        'chat.userId',
-        'user.email',
-        // 'chatContent.senderId',
-        // 'chatContent.content',
-        // 'chatContent.createdAt',
-      ])
+      .select(['chat.id', 'chat.companyId', 'chat.userId', 'user.email'])
       .leftJoin('chat.user', 'user')
-
-      // .leftJoin('chat.chatContent', 'chatContent')
       .where(`chat.companyId = ${id}`)
       .getMany();
 
@@ -63,20 +83,10 @@ export class ChatService {
 
   // 일반 유저의 채팅리스트 불러오기
   async userGetAllChatRoom(id: number): Promise<Chat[]> {
-    console.log('id = ', id);
     const chatRooms = await this.chatRepository
       .createQueryBuilder('chat')
-      .select([
-        'chat.id',
-        'chat.companyId',
-        'chat.userId',
-        'company.email',
-        // 'chatContent.senderId',
-        // 'chatContent.content',
-        // 'chatContent.createdAt',
-      ])
+      .select(['chat.id', 'chat.companyId', 'chat.userId', 'company.email'])
       .leftJoin('chat.company', 'company')
-      // .leftJoin('chat.chatContent', 'chatContent')
       .where(`chat.userId = ${id}`)
       .getMany();
     return chatRooms;

@@ -27,6 +27,15 @@ export class UserController {
     private readonly mailService: MailService,
   ) {}
 
+  // email만 가져오기
+  @Get('/get-email/:id')
+  async getEmail(@Param('id') id: number): Promise<any> {
+    console.log('id', id);
+    const result = await this.userService.getEmail(id);
+    console.log('email만 가져오기 ', result);
+    return result;
+  }
+
   // 회원가입
   @UsePipes(ValidationPipe)
   @Post('/signup')

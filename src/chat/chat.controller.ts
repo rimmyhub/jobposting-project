@@ -10,7 +10,6 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ChatService } from './chat.service';
-import { CreateRoomDto } from './dto/create-room.dto';
 import { Chat } from 'src/domain/chat.entity';
 import { UserGuard } from '../auth/jwt/jwt.user.guard';
 import { CompanyGuard } from '../auth/jwt/jwt.company.guard';
@@ -35,7 +34,6 @@ export class ChatController {
   async createCompanyChat(
     @Request() req,
     @Param('userId') userId: string,
-    // @Body() createChatDto: CreateChatDto,
   ): Promise<Chat> {
     const result = await this.chatService.createCompanyChat(
       req.company.id,
@@ -80,5 +78,24 @@ export class ChatController {
   saveChatContent(@Request() req) {
     const { chatContent, chatId, senderId, senderType } = req.Body;
     console.log('save = ', chatContent, chatId, senderId, senderType);
+  }
+
+  // 유저 - 새로운 메세지 체크
+  @UseGuards(UserGuard)
+  @Get('/check-message/user/:type')
+  async userCheckMessage(@Request() req, @Param('type') type: string) {
+    const userId = req.user.id;
+    const result = await this.chatService.checkChat(userId, type);
+    console.log('result =', result);
+    return result;
+  }
+
+  // 회사 - 새로운 메세지 체크
+  @UseGuards(CompanyGuard)
+  @Get('/check-message/company/:type')
+  async companyCheckMessage(@Request() req, @Param('type') type: string) {
+    const companyId = req.company.id;
+    const result = await this.chatService.checkChat(companyId, type);
+    return result;
   }
 }

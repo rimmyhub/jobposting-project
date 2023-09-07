@@ -96,7 +96,7 @@ export class AuthService {
     await this.validatePassword(password, clientInfo.password);
 
     const payload = {
-      id: clientInfo.id,
+      id: clientInfo.id ? clientInfo.id : clientInfo.uuid,
       email: clientInfo.email,
       role: role,
     };

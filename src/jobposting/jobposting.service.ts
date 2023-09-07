@@ -116,8 +116,8 @@ export class JobpostingService {
   }
 
   // 검색시 해당 검색어를 포함하는 채용 공고글 전체 조회
-  async findJobPostings(title: string) {
-    if (!title) {
+  async searchKeyword(keyword: string) {
+    if (!keyword) {
       throw new HttpException('검색어를 입력해주세요', HttpStatus.NOT_FOUND);
     }
 
@@ -131,7 +131,7 @@ export class JobpostingService {
         'jobposting.Deadline',
       ])
       .innerJoin('jobposting.company', 'company')
-      .where('jobposting.title LIKE :title', { title: `%${title}%` })
+      .where('jobposting.title LIKE :title', { title: `%${keyword}%` })
       .getMany();
 
     if (jobPostings.length === 0) {

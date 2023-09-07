@@ -18,6 +18,15 @@ export class UserService {
     private userRepository: Repository<User>,
   ) {}
 
+  // 이메일 가져오기
+  async getEmail(id: number) {
+    const result = await this.userRepository.findOne({
+      select: ['email'],
+      where: { id: id },
+    });
+    return result;
+  }
+
   // 유저정보상세조회
   async findOne(id: number) {
     const userInfo = await this.userRepository.findOne({
