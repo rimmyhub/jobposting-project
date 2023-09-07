@@ -5,7 +5,9 @@ import { get } from 'http';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(
+    private readonly appService: AppService,
+  ) {}
 
   @Get()
   @Render('index')
@@ -60,12 +62,23 @@ export class AppController {
     return { title: 'Title' };
   }
 
-  // 회사 정보 서브 페이지 (로그인 없이 모든 공고 조회)
+  // 회사 정보 서브 페이지
   @Get('subpage/company/:companyId')
   @Render('subpage-company')
-  getSubpageCompany(@Request() req, @Param('companyId') companyId: string) {
-    return { companyId };
+  async getSubpageCompany(
+    @Request() req,
+    @Param('companyId') companyId: string,
+  ) {
+    const cookie: string = await req.cookies['authorization'];
+    if (cookie) {
+      return { isLogin: 1, companyId };
+    }
+    return {
+      isLogin: 0,
+     companyId,
+    };
   }
+
   // 채용공고 (로그인 없이 모든 공고 조회)
   @Get('jobposting/:jobpostingId')
   @Render('jobposting-user')

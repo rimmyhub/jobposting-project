@@ -52,6 +52,12 @@ export class CompanyController {
     return this.companyService.findAllCompany({ page: Number(page) });
   }
 
+  // 모든 회사의 주소 정보만 가져오기
+  @Get('/addresses')
+  async getAllCompanyAddresses() {
+    return this.companyService.getAllCompanyAddresses();
+  }
+
   // 검색시 업무 또는 회사 이름에 해당 검색어를 포함하는 회사 전체 조회
   @Post('search')
   searchKeyword(@Body('keyword') keyword: string) {

@@ -22,6 +22,7 @@
       }
     </style>
     <title>Document</title>
+    <script src="/js/subpage-company.js"></script>
   </head>
   <body>
     <%- include('includes/header', {isLogin: 0, type: "user"}) %>
@@ -40,18 +41,9 @@
       <!-- 최상단 영역 메세지보내기까지 -->
       <div class="row">
         <div class="col">
-          <img
-            src="/img/userImg.jpg"
-            class="rounded-circle border border-secondary"
-            alt="..."
-            style="width: 150px"
-          />
-          <p class="fs-2 fw-semibold" style="margin: 10px">스파르타 주식회사</p>
-
-          <p class="fw-normal" style="margin: 10px">
-            Dreaming AI World by Developing AI Packs for Everyone to Make AI
-            Beneficial!
-          </p>
+          <img class="image" style="max-width: 150px; height: auto" />
+          <p class="fs-2 fw-semibold" style="margin: 10px"></p>
+          <p class="fw-normal" style="margin: 10px"></p>
         </div>
 
         <div class="container">
@@ -72,7 +64,6 @@
             회사 정보
           </p>
         </div>
-
         <div class="col-8">
           <!-- 웹사이트 -->
           <div class="row">
@@ -80,7 +71,7 @@
               <p class="text-start text-body-secondary">웹사이트</p>
             </div>
             <div class="col-8">
-              <p class="text-start">https://www.amazon.com/</p>
+              <p class="text-start website"></p>
             </div>
           </div>
           <!-- 웹사이트 -->
@@ -91,7 +82,7 @@
               <p class="text-start text-body-secondary">업계</p>
             </div>
             <div class="col-8">
-              <p class="text-start">IT</p>
+              <p class="text-start business"></p>
             </div>
           </div>
           <!-- 업계 -->
@@ -102,7 +93,7 @@
               <p class="text-start text-body-secondary">직원 수</p>
             </div>
             <div class="col-8">
-              <p class="text-start">829,381</p>
+              <p class="text-start employees"></p>
             </div>
           </div>
           <!-- 직원수 -->
@@ -112,56 +103,11 @@
               <p class="text-start text-body-secondary">본사 주소</p>
             </div>
             <div class="col-8">
-              <p class="text-start">서울특별시 천호대로 1077</p>
+              <p class="text-start address"></p>
             </div>
           </div>
           <!-- 지도 카카오 API 영역 -->
           <div id="map" style="width: 100%; height: 350px"></div>
-
-          <script
-            type="text/javascript"
-            src="//dapi.kakao.com/v2/maps/sdk.js?appkey=9e25fdfe19d6860c0e4399dad49b60dd&libraries=services"
-          ></script>  
-          <script>
-            var mapContainer = document.getElementById('map'), // 지도를 표시할 div
-              mapOption = {
-                center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-                level: 3, // 지도의 확대 레벨
-              };
-
-            // 지도를 생성합니다
-            var map = new kakao.maps.Map(mapContainer, mapOption);
-
-            // 주소-좌표 변환 객체를 생성합니다
-            var geocoder = new kakao.maps.services.Geocoder();
-
-            // 주소로 좌표를 검색합니다
-            geocoder.addressSearch(
-              '서울특별시 천호대로 1077',
-              function (result, status) {
-                // 정상적으로 검색이 완료됐으면
-                if (status === kakao.maps.services.Status.OK) {
-                  var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-
-                  // 결과값으로 받은 위치를 마커로 표시합니다
-                  var marker = new kakao.maps.Marker({
-                    map: map,
-                    position: coords,
-                  });
-
-                  // 인포윈도우로 장소에 대한 설명을 표시합니다
-                  var infowindow = new kakao.maps.InfoWindow({
-                    content:
-                      '<div style="width:150px;text-align:center;padding:6px 0;">회사 위치</div>',
-                  });
-                  infowindow.open(map, marker);
-
-                  // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
-                  map.setCenter(coords);
-                }
-              },
-            );
-          </script>
         </div>
       </div>
       <hr />
@@ -264,6 +210,10 @@
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
       crossorigin="anonymous"
+    ></script>
+    <script
+      type="text/javascript"
+      src="//dapi.kakao.com/v2/maps/sdk.js?appkey=9e25fdfe19d6860c0e4399dad49b60dd&libraries=services"
     ></script>
   </body>
 </html>
