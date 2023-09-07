@@ -1,21 +1,44 @@
-document.addEventListener('DOMContentLoaded', (e) => {
-  e.preventDefault;
-  getJobposting();
-});
 const jobpostingId = window.location.pathname.split('/')[2];
-console.log(jobpostingId);
+
+// 채용공고 데이터를 HTML에 추가
+const titleEl = document.querySelector('.jobposting-title'); // 채용공고 제목
+const careerEl = document.querySelector('.jobposting-career'); // 경력 정보
+const salaryEl = document.querySelector('.jobposting-salary'); // 급여 정보
+const educationEl = document.querySelector('.jobposting-education'); // 학력 정보
+const workAreaEl = document.querySelector('.jobposting-work-area'); // 근무지 정보
+const workTypeEl = document.querySelector('.jobposting-work-type'); // 근무형태 정보
+const contentEl = document.querySelector('.jobposting-content'); // 채용공고 설명
 
 // 해당 아이디의 채용공고 화면에 띄우기
 async function getJobposting() {
-  console.log('hi');
-  const JP = await fetch(`/api/jobpostings/${jobpostingId}`);
-  const resJP = await JP.json();
-  console.log(resJP);
-}
+  try {
+    const response = await fetch(`/api/jobpostings/${jobpostingId}`);
+    const data = await response.json();
+    console.log(data);
 
-const applyBtn = document.querySelector('.apply-btn');
+    // 기업 정보 보기 버튼
+    const companyInfo = document.querySelector('.company-info');
+
+    companyInfo.addEventListener('click', () => {
+      const companyId = data.companyId;
+      window.location.href = `/subpage/company/${companyId}`;
+    });
+
+    titleEl.textContent = data.title;
+    careerEl.textContent = data.career;
+    salaryEl.textContent = data.salary;
+    educationEl.textContent = data.education;
+    workAreaEl.textContent = data.workArea;
+    workTypeEl.textContent = data.workType;
+    contentEl.textContent = data.content;
+  } catch (error) {
+    console.error(error);
+  }
+}
+getJobposting();
 
 // 지원하기 버튼
+const applyBtn = document.querySelector('.apply-btn');
 applyBtn.addEventListener('click', async (event) => {
   try {
     const response = await fetch(`/api/applications/${jobpostingId}`, {

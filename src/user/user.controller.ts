@@ -12,6 +12,7 @@ import {
   ValidationPipe,
   Request,
   Put,
+  Patch,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { MailService } from '../mail/mail.service';
@@ -75,6 +76,13 @@ export class UserController {
   @Put()
   update(@Request() req, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(req.user.id, updateUserDto);
+  }
+
+  // 유저 이미지 수정
+  @UseGuards(UserGuard)
+  @Put('/image')
+  updateUserImage(@Request() req, @Body('image') image: string) {
+    return this.userService.updateUserImage(req.user.id, image);
   }
 
   // 회원탈퇴 (softDelete)

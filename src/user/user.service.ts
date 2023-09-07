@@ -98,6 +98,20 @@ export class UserService {
     return { message: `수정이 완료되었습니다.` };
   }
 
+  // 유저 이미지 수정
+  async updateUserImage(id: number, image: string) {
+    const isUser = await this.userRepository.findOne({ where: { id } });
+    if (!isUser) {
+      throw new HttpException(
+        '유저를 찾을 수 없습니다.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    isUser.image = image;
+    await this.userRepository.save(isUser);
+    return isUser;
+  }
+
   // 유저 탈퇴 deleteAt에 삭제시간 넣기
   async remove(id: number) {
     // 유저가 있는지 확인

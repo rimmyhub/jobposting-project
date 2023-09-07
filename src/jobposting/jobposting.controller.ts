@@ -81,8 +81,8 @@ export class JobpostingController {
 
   // 윤영 : 메인페이지에서 채용공고 클릭 시 해당 채용공고 내용 조회
   @Get('/:jobpostingId')
-  getJobposting(@Param('jobpostingId') jobpostingId: number) {
-    return this.jobpostingService.getJobposting(jobpostingId);
+  getJobposting(@Param('jobpostingId') jobpostingId: string) {
+    return this.jobpostingService.getJobposting(+jobpostingId);
   }
 
   // 회사별 채용공고 1개 조회

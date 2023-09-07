@@ -123,9 +123,10 @@ imageUploadEl.addEventListener('change', async (e) => {
     method: 'POST',
     body: formData,
   });
-  console.log(response);
+  console.log(formData);
+  // console.log(response);
   const data = await response.json();
-  console.log(data);
+  // console.log(data);
   imageUrl = data.url;
   userImage.setAttribute('src', imageUrl);
 });
