@@ -8,7 +8,10 @@
           </a>
         </div>
         <div class="search-box">
-          <i class="fa-solid fa-magnifying-glass search-font"></i>
+          <i
+            class="fa-solid fa-magnifying-glass search-font"
+            id="searchBtn"
+          ></i>
           <input class="search-input" type="text" />
         </div>
         <% if(isLogin === 1) { %>
@@ -89,6 +92,7 @@
   </nav>
 
   <script src="/js/header.js" defer></script>
+  <script src="/js/search.js" defer></script>
   <script
     src="https://cdn.socket.io/4.4.0/socket.io.min.js"
     integrity="sha384-1fOn6VtTq3PWwfsOrk45LnYcGosJwzMHv+Xh/Jx5303FVOXzEnw0EpLv30mtjmlj"

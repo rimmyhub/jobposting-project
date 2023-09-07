@@ -78,12 +78,10 @@ async function getResumeId() {
 async function getUserData() {
   const userInfoBox = document.querySelector('#userInfoBox');
   const userImage = document.querySelector('.profile-box');
-  console.log(userImage);
   // 메인로직
   const userData = await fetch(`/api/users/user-page`);
   // 데이터 가공
   const jsonUserData = await userData.json();
-  console.log(jsonUserData);
   // 프사
   userImage.innerHTML = `<div class="profile-box">
                           <img
