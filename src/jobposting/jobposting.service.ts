@@ -145,7 +145,7 @@ export class JobpostingService {
     return jobPostings;
   }
 
-  // 윤영 : 경력 + 모집 일치하는 채용 공고글 전체 조회
+  // 윤영 : 지역 + 경력 일치하는 채용 공고글 전체 조회
   async searchSelectJobposting(career: string, workArea: string) {
     // 모든 지역 + 경력 옵션
     if (workArea === '지역 전국' && career === '경력 전체') {
@@ -218,7 +218,7 @@ export class JobpostingService {
         ],
       });
     }
-    // 전락도 옵션
+    // 전라도 옵션
     if (workArea === '전라') {
       if (career === '경력 전체') {
         return await this.jobpostingRepository.find({
