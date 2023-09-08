@@ -28,12 +28,12 @@ export class JobpostingController {
   }
 
   // 윤영 : 지역 + 경력 일치하는 채용 공고글 전체 조회
-  @Post('select')
-  searchSelect(
+  @Post('selectJobposting')
+  searchSelectJobposting(
     @Body('career') career: string,
     @Body('workArea') workArea: string,
   ) {
-    return this.jobpostingService.searchSelect(career, workArea);
+    return this.jobpostingService.searchSelectJobposting(career, workArea);
   }
 
   // // 윤영 : 지역검색시 해당지역과 일치하는 채용 공고글 전체 조회
