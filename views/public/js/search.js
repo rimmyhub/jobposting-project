@@ -5,16 +5,20 @@ document.addEventListener('DOMContentLoaded', (e) => {
 });
 
 // 검색바 설정 태그들
-const searchBar = document.querySelector('.search-input');
-const searchBtn = document.querySelector('#searchBtn');
-const companiesBar = document.querySelector('#companies-list');
-const jobPostingsBar = document.querySelector('#jobposting-list');
+const searchBar = document.querySelector('.search-input'); // 검색 바
+const searchBtn = document.querySelector('#searchBtn'); // 검색버튼 (돋보기)
 
 // 조건검색 설정 태그들
-const regionSelect = document.getElementById('regionSelect');
-const experienceSelect = document.getElementById('experienceSelect');
+const regionSelect = document.getElementById('regionSelect'); // 지역 옵션
+const experienceSelect = document.getElementById('experienceSelect'); // 경력 옵션
+const occupationSelect = document.getElementById('occupationSelect'); // 직군 옵션
+const subOptionsDiv = document.getElementById('subOptions'); // 직군 세부옵션
 
-// 검색함수 모음
+// innerHTML 태그들
+const jobPostingsBar = document.querySelector('#jobposting-list'); // 채용공고 태그
+const companiesBar = document.querySelector('#companies-list'); // 회사 태그
+
+// 검색 함수모음
 function searchInit() {
   enter();
   searchCompany();
@@ -100,9 +104,72 @@ function searchJobposting() {
 function selectInit() {
   // searchRegion();
   // searchExperience();
+  jobOptionSelect();
   selectJobposting();
   selectCompany();
 }
+
+// 직군 옵션 검색
+function jobOptionSelect() {
+  // 메인 선택 상자의 값이 변경될 때 호출되는 이벤트 핸들러
+  occupationSelect.addEventListener('change', function () {
+    const selectedOption = occupationSelect.value;
+
+    // 세부 옵션을 초기화
+    subOptionsDiv.innerHTML = '';
+
+    // 선택한 직군에 따라 세부 옵션 추가
+    switch (selectedOption) {
+      case '사무':
+        subOptionsDiv.innerHTML = `
+                                  <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                    <label class="form-check-label" for="defaultCheck1">
+                                      Default checkbox
+                                    </label>
+                                  </div>
+                                  <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
+                                    <label class="form-check-label" for="defaultCheck2">
+                                      Disabled checkbox
+                                    </label>
+                                  </div>
+                                  `;
+        break;
+      case '영업':
+        subOptionsDiv.innerHTML = `
+                                  <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                    <label class="form-check-label" for="defaultCheck1">
+                                      Default checkbox
+                                    </label>
+                                  </div>
+                                  <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
+                                    <label class="form-check-label" for="defaultCheck2">
+                                      Disabled checkbox
+                                    </label>
+                                  </div>
+                                  `;
+        break;
+      // 다른 직군에 대한 경우 추가
+      default:
+        subOptionsDiv.style.display = 'none';
+        break;
+    }
+
+    const a = document.getElementById('defaultCheck1');
+    console.log(a.checked);
+
+    // 세부 옵션을 표시
+    if (selectedOption !== '직군') {
+      subOptionsDiv.style.display = 'block';
+    } else {
+      subOptionsDiv.style.display = 'none';
+    }
+  });
+}
+
 // (모집+지역)별 채용공고 검색
 function selectJobposting() {
   regionSelect.addEventListener('change', async () => {
@@ -134,13 +201,14 @@ function selectJobposting() {
     const career = experienceSelect.value;
     const workArea = regionSelect.value;
 
-    const selectExperience = await fetch(`/api/jobpostings/select`, {
+    const selectExperience = await fetch(`/api/jobpostings/selectJobposting`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ workArea, career }),
     });
 
     const resExp = await selectExperience.json();
+    console.log(resExp);
     jobPostingsBar.innerHTML = '';
     resExp.forEach((EP) => {
       jobPostingsBar.innerHTML += `<div class="jobposting-card" id="jobposting-card" onclick="goToJobpostingSubpage(${EP.id})">
@@ -155,6 +223,7 @@ function selectJobposting() {
     });
   });
 }
+
 // 지역별 회사 검색
 function selectCompany() {
   regionSelect.addEventListener('change', async () => {
