@@ -46,7 +46,6 @@ export class ChatController {
   @UseGuards(CompanyGuard)
   @Get('/company')
   async comGetChatRoom(@Request() req): Promise<Chat[]> {
-    console.log('getChatRoom = ', req.company.id);
     const chatRooms = await this.chatService.comGetAllChatRoom(req.company.id);
     return chatRooms;
   }
@@ -55,7 +54,6 @@ export class ChatController {
   @UseGuards(UserGuard)
   @Get('/user')
   async userGetChatRoom(@Request() req): Promise<Chat[]> {
-    console.log('getChatRoom = ', req.user.id);
     const chatRooms = await this.chatService.userGetAllChatRoom(req.user.id);
     return chatRooms;
   }

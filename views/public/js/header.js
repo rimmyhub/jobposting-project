@@ -162,6 +162,11 @@ const ejs = (window.onload = function () {
     builNewMsg(userId, message, userType);
   });
 
+  // socket.on('msg-notification', (userId) => {
+  //   console.log('msgNotification', userId);
+  //   msgCard.style.opacity = 1;
+  // });
+
   isLogin();
   function isLogin() {
     const id = window.localStorage.getItem('id');
@@ -171,11 +176,6 @@ const ejs = (window.onload = function () {
       getChatRooms();
     }
   }
-});
-
-socket.on('msgNotification', (userId) => {
-  console.log('msgNotification', userId);
-  msgCard.style.opacity = 1;
 });
 
 // 채팅리스트 가져오기
@@ -208,6 +208,7 @@ async function getChatRooms() {
 
 // 메세지리스트 화면에 출력하기
 async function appendMsgList(datas, type) {
+  messageList.innerHTML = '';
   if (type === 'company') {
     datas.forEach((el) => {
       const li = document.createElement('div');
@@ -247,8 +248,17 @@ async function appendMsgList(datas, type) {
   }
 }
 
-// 새메시지알람표시하기
+socket.on('msg-notification', async (userId) => {
+  console.log('msgNotification', userId);
+  const exclamationIcon = document.getElementById('exclamation-icon');
+  exclamationIcon.style.opacity = 1;
+  await checkNewMsg();
+  newMsgIcon();
+});
+
+// 채팅리스트안의 새메시지알람표시하기
 function newMsgIcon() {
+  console.log(newMsgs);
   if (newMsgs.length !== 0) {
     newMsgs.forEach((el) => {
       msgCard = document.getElementById(`exclamation-icon-${el.chat_id}`);
@@ -380,7 +390,6 @@ function leaveRoom() {
 async function sendMessage() {
   const userId = window.localStorage.getItem('id');
   const userType = window.localStorage.getItem('type');
-
   const payload = {
     userId,
     userType,
@@ -390,7 +399,7 @@ async function sendMessage() {
   await socket.emit('message', chatContent.value, payload);
 
   // 소켓 상대방에게 메세지알림 보내기
-  socket.emit('msgNotification', reciId);
+  socket.emit('msg-notification', reciId);
   chatContent.value = '';
 }
 
