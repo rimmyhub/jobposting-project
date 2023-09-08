@@ -30,7 +30,6 @@ export class JobpostingService {
 
   // 회사별 채용공고 생성 (회사 연결)
   async createJobposting(
-    id: number,
     companyId: number,
     createJobpostingDto: CreateJobpostingDto,
   ): Promise<Jobposting> {
@@ -48,10 +47,10 @@ export class JobpostingService {
         );
       }
 
-      // 로그인된 회사 ID와 채용공고의 회사 ID 비교
-      if (companyId !== id) {
-        throw new HttpException('권한이 없습니다.', HttpStatus.FORBIDDEN);
-      }
+      // // 로그인된 회사 ID와 채용공고의 회사 ID 비교
+      // if (companyId !== id) {
+      //   throw new HttpException('권한이 없습니다.', HttpStatus.FORBIDDEN);
+      // }
 
       const {
         title,
@@ -65,7 +64,11 @@ export class JobpostingService {
         dueDate,
       } = createJobpostingDto;
 
-      const jobposting = this.jobpostingRepository.create({
+      console.log(companyId);
+
+      console.log('hi');
+
+      const jobposting = await this.jobpostingRepository.create({
         companyId,
         title,
         career,
@@ -77,6 +80,10 @@ export class JobpostingService {
         content,
         dueDate,
       });
+
+      console.log(jobposting);
+
+      console.log('hi');
 
       await this.jobpostingRepository.save(jobposting);
       return jobposting;
@@ -347,9 +354,10 @@ export class JobpostingService {
       );
     }
 
-    return await this.jobpostingRepository.findOne({
+    const jobposting = await this.jobpostingRepository.findOne({
       where: { companyId, id: jobpostingId },
     });
+    return jobposting;
   }
 
   // 채용공고 수정

@@ -35,5 +35,6 @@ export class CreateJobpostingDto {
   content: string;
 
   @IsNotEmpty()
-  dueDate: Date;
+  @IsString()
+  dueDate: string;
 }

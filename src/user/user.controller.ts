@@ -82,6 +82,7 @@ export class UserController {
   @UseGuards(UserGuard)
   @Put('/image')
   updateUserImage(@Request() req, @Body('image') image: string) {
+    console.log(image);
     return this.userService.updateUserImage(req.user.id, image);
   }
 

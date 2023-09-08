@@ -50,7 +50,17 @@
           <p class="text-start fs-5 fw-semibold" style="margin-top: 30px">
             내가 작성한 공고
           </p>
-          <% } %>
+          <button
+            type="button"
+            class="btn btn-outline-primary fa-plus"
+            data-bs-toggle="modal"
+            data-bs-target="#jobposting-add"
+            style="width: 130px"
+            ;
+          >
+            채용공고 추가
+          </button>
+          <%- include('includes/jobposting-add') %> <% } %>
         </div>
         <div class="col-10">
           <div class="row">
@@ -82,22 +92,24 @@
                     class="btn btn-outline-primary jobposting-btn"
                     style="margin-right: 10px"
                   >
-                    지원한 채용 공고 보기
+                    채용공고 보기
                   </button>
                   <% }else if (type === 'company'){ %>
-                  <button
-                    type="button"
-                    class="btn btn-outline-primary apply-btn"
-                  >
-                    수정
-                  </button>
                   <button
                     type="button"
                     class="btn btn-outline-danger delet-btn"
                   >
                     삭제
                   </button>
-                  <% } %>
+                  <button
+                    type="button"
+                    class="btn btn-outline-primary"
+                    data-bs-toggle="modal"
+                    data-bs-target="#jobposting"
+                  >
+                    수정
+                  </button>
+                  <%- include('includes/jobposting') %> <% } %>
                 </div>
                 <hr />
               </div>

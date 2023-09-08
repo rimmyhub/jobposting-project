@@ -56,15 +56,14 @@ export class JobpostingController {
 
   // 회사별 채용공고 생성 (회사 연결)
   @UseGuards(CompanyGuard)
-  @Post(':companyId')
+  @Post()
   createJobposting(
     @Request() req,
-    @Param('companyId') companyId: string,
     @Body() createJobpostingDto: CreateJobpostingDto,
   ): Promise<Jobposting> {
+    const companyId = req.company.id;
     return this.jobpostingService.createJobposting(
-      req.company.id,
-      +companyId,
+      companyId,
       createJobpostingDto,
     );
   }
@@ -94,13 +93,15 @@ export class JobpostingController {
     return this.jobpostingService.getJobposting(+jobpostingId);
   }
 
-  // 회사별 채용공고 1개 조회
-  @Get(':companyId/:jobpostingId')
+  // 채용공고 1개 조회 - 회사
+  @UseGuards(CompanyGuard)
+  @Get('/company/:jobpostingId')
   findOneJobposting(
-    @Param('companyId') companyId: string,
+    @Request() req,
     @Param('jobpostingId') jobpostingId: string,
   ) {
-    return this.jobpostingService.findOneJobposting(+companyId, +jobpostingId);
+    const companyId = req.company.id;
+    return this.jobpostingService.findOneJobposting(companyId, +jobpostingId);
   }
 
   // 채용공고 수정

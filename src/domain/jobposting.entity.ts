@@ -45,7 +45,7 @@ export class Jobposting {
   content: string;
 
   @Column({ type: 'varchar', comment: '채용 마감일' })
-  dueDate: Date;
+  dueDate: string;
 
   @CreateDateColumn({ name: 'create_at', comment: '생성일' })
   createdAt: Date;

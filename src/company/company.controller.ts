@@ -71,9 +71,11 @@ export class CompanyController {
   }
 
   // 회사 1개 조회
-  @Get(':id')
-  finOneCompany(@Param() { id }: ParamDto) {
-    return this.companyService.finOneCompany(id); //string 으로 가져와서 숫자로 변환
+  @UseGuards(CompanyGuard)
+  @Get('/company')
+  findOneCompanyByRequest(@Request() req) {
+    const companyId = req.company.id;
+    return this.companyService.findOneCompanyById(companyId);
   }
 
   // 회사 수정 (회사 연결)

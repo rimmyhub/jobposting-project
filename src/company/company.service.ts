@@ -234,9 +234,9 @@ export class CompanyService {
   }
 
   // 회사 1개 조회
-  async finOneCompany(id: number) {
+  async findOneCompanyById(companyId: number) {
     const company = await this.companyRepository.findOne({
-      where: { id },
+      where: { uuid: companyId },
     });
     return company;
   }

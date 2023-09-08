@@ -51,7 +51,13 @@ const ejs = (window.onload = function () {
   }
   if (profile) {
     profile.addEventListener('click', () => {
-      location.href = '/mypage';
+      let type = window.localStorage.getItem('type');
+      if (type === 'user') {
+        location.href = '/mypage';
+      } else if (type === 'company') {
+        location.href = '/mypage/company';
+      }
+      console.error('Invalid type:', type);
     });
   }
 

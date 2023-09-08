@@ -100,6 +100,7 @@ export class UserService {
 
   // 유저 이미지 수정
   async updateUserImage(id: number, image: string) {
+    console.log(image);
     const isUser = await this.userRepository.findOne({ where: { id } });
     if (!isUser) {
       throw new HttpException(

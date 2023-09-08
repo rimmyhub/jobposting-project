@@ -128,70 +128,94 @@ async function getUserData() {
 
   return jsonUserData.id;
 }
-// 모르겠다 내일 튜터님한테 가야할듯;
-// 유저 이미지 수정하기
 async function getUserImage() {
   const userImage = document.getElementById('image');
   const imageUploadEl = document.getElementById('user-image');
   const imageDeleteEl = document.getElementById('image-delete');
   const saveBtnEl = document.getElementById('save-btn');
-  let imageUrl;
+  let imageUrl = userImage.src; // 기존 이미지 URL 가져오기
 
-  // 기본프로필 적용하기
+  // 기본 프로필 적용하기
   imageDeleteEl.addEventListener('click', () => {
-    userImage.src = '/img/userImg.jpg';
+    imageUrl = '/img/userImg.jpg'; // 이미지 삭제 시 URL 업데이트
+    userImage.src = imageUrl; // 이미지 보여주기
   });
 
   imageUploadEl.addEventListener('change', async (e) => {
     const selectedFile = e.target.files[0];
     console.log(selectedFile);
-    if (selectedFile.size > 1 * 1024 * 1024) {
-      alert('파일용량은 최대 1MB입니다.');
-      return;
-    }
-    console.log(selectedFile.size);
-    if (
-      !selectedFile.type.includes('jpeg') &&
-      !selectedFile.type.includes('png')
-    ) {
-      alert('jpeg 또는 png 파일만 업로드 가능합니다!');
-      return;
-    }
-    const formData = new FormData();
-    formData.append('file', selectedFile);
-    const response = await fetch('/api/upload', {
-      method: 'POST',
-      body: formData,
-    });
-    const data = await response.json();
-    console.log(data);
-    imageUrl = data.url;
+    // 파일 유효성 검사
+    if (selectedFile) {
+      if (selectedFile.size > 1 * 1024 * 1024) {
+        alert('파일 용량은 최대 1MB입니다.');
+        return;
+      }
 
-    userImage.setAttribute('src', imageUrl);
+      if (
+        !selectedFile.type.includes('jpeg') &&
+        !selectedFile.type.includes('png')
+      ) {
+        alert('jpeg 또는 png 파일만 업로드 가능합니다!');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('file', selectedFile);
+
+      try {
+        const response = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData,
+        });
+        if (response.ok) {
+          const data = await response.json();
+          imageUrl = data.url; // 업로드된 이미지 URL 업데이트
+          userImage.src = imageUrl; // 이미지 보여주기
+
+          console.log(data);
+        } else {
+          throw new Error('이미지 업로드에 실패했습니다.');
+        }
+      } catch (error) {
+        console.error(error);
+        alert('이미지 업로드에 실패했습니다.');
+      }
+    }
   });
 
   saveBtnEl.addEventListener('click', async () => {
-    const imageFormData = new FormData();
-
-    console.log(imageFormData);
-
-    imageFormData.append('image', imageUrl); // 이미지 URL을 FormData에 추가
-
-    const updateResponse = await fetch('/api/users/image', {
-      method: 'PUT',
-      body: imageFormData,
-    });
-    if (updateResponse.ok) {
-      // const newImage = userImage.getAttribute('src');
-
-      // console.log(newImage);
-
-      alert('이미지가 수정되었습니다.');
-      window.location.reload();
+    if (imageUrl) {
+      try {
+        await saveUserImage(imageUrl);
+        alert('이미지가 저장되었습니다.');
+        window.location.reload();
+      } catch (error) {
+        console.error('이미지 저장 오류:', error);
+        alert('이미지 저장에 실패했습니다.');
+      }
     } else {
-      alert('이미지 수정에 실패했습니다.');
+      alert('이미지를 먼저 업로드하세요.');
     }
   });
+
+  async function saveUserImage(imageUrl) {
+    try {
+      const response = await fetch('/api/users/image', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ image: imageUrl }),
+      });
+
+      if (!response.ok) {
+        throw new Error('이미지 저장 실패');
+      }
+    } catch (error) {
+      console.error('이미지 저장 오류:', error);
+      throw error;
+    }
+  }
 }
 
 // 유저의 이력서를 불러오는 함수 로직
