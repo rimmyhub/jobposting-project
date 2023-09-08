@@ -70,12 +70,18 @@ export class CompanyController {
     return this.companyService.searchSelectCompany(address);
   }
 
-  // 회사 1개 조회
+  // 회사 1개 조회 - 마이페이지용
   @UseGuards(CompanyGuard)
   @Get('/company')
   findOneCompanyByRequest(@Request() req) {
     const companyId = req.company.id;
     return this.companyService.findOneCompanyById(companyId);
+  }
+
+  // 회사 1개 조회- 상세페이지용
+  @Get(':uuid')
+  finOneCompany(@Param() { uuid }: ParamDto) {
+    return this.companyService.finOneCompany(uuid); //string 으로 가져와서 숫자로 변환
   }
 
   // 회사 수정 (회사 연결)

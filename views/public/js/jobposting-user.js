@@ -21,7 +21,7 @@ async function getJobposting() {
 
     companyInfo.addEventListener('click', () => {
       const companyId = data.companyId;
-      window.location.href = `/subpage/company/${companyId}`;
+      window.location.href = `/company/${companyId}`;
     });
 
     titleEl.textContent = data.title;

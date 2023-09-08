@@ -327,6 +327,7 @@ export class JobpostingService {
   async getJobposting(jobpostingId: number) {
     const jobposting = await this.jobpostingRepository.findOne({
       where: { id: jobpostingId },
+      relations: ['company'], // 채용공고 정보를 함께 가져오기 위해 관계 설정
     });
     return jobposting;
   }

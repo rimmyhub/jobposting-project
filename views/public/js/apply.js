@@ -6,7 +6,7 @@ async function getAppliesUser() {
     if (type === 'user') {
       const response = await fetch('/api/applications/user');
       const applyUserData = await response.json();
-
+      console.log(applyUserData);
       const temp = applyUserData
         .map((applyUser) => {
           return `
@@ -18,6 +18,7 @@ async function getAppliesUser() {
                  <button type="button"
                  class="btn btn-outline-primary jobposting-btn"
                  style="margin-right: 10px"
+                 data-id=${applyUser.id}
                   >
                    지원한 채용 공고 보기
                  </button>
@@ -40,6 +41,7 @@ async function getAppliesUser() {
       jobpostingBtns.forEach((jobpostingBtn) => {
         jobpostingBtn.addEventListener('click', async (event) => {
           const jobpostingId = event.target.getAttribute('data-id');
+          console.log(jobpostingId);
           window.location.href = `/jobposting/${jobpostingId}`;
         });
       });
@@ -256,7 +258,7 @@ async function getAppliesUser() {
 
                <button
                    type="button"
-                   class="btn btn-outline-primary jobposting-btn"
+                   class="btn btn-outline-primary jobposting-company-btn"
                    onclick="goToUrl(${applyCompany.id})"
                  >
                    채용공고 보기
@@ -268,7 +270,7 @@ async function getAppliesUser() {
       applyBox.innerHTML = temp;
 
       // 채용공고 보기 버튼
-      const applyBtns = document.querySelectorAll('.jobposting-btn');
+      const applyBtns = document.querySelectorAll('.jobposting-company-btn');
       applyBtns.forEach((applyBtn) => {
         applyBtn.addEventListener('click', () => {
           const subPageUrl = `/jobposting/company`; //링크 추후 수정 예정!

@@ -173,7 +173,7 @@ addCompaniesBtn.addEventListener('click', async function () {
 });
 
 function goToCompanySubpage(companyId) {
-  const subPageUrl = `/subpage/company/${companyId}`;
+  const subPageUrl = `/company/${companyId}`;
   window.location.href = subPageUrl;
 }
 

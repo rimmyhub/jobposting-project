@@ -54,19 +54,18 @@ export class AppController {
     });
   }
 
-  @Get('subpage/company/:companyId')
+  // 회사 정보
+  // uuid값을 가져올 순 없을까?
+  @Get('company/:uuid')
   @Render('subpage-company')
-  async getSubpageCompany(
-    @Request() req,
-    @Param('companyId') companyId: string,
-  ) {
+  async getSubpageCompany(@Request() req, @Param('uuid') uuid: number) {
     const cookie: string = await req.cookies['authorization'];
     if (cookie) {
-      return { isLogin: 1, companyId };
+      return { isLogin: 1, uuid };
     }
     return {
       isLogin: 0,
-      companyId,
+      uuid,
     };
   }
 

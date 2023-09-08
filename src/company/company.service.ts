@@ -12,6 +12,7 @@ import { CreateCompanyDto } from './dto/create-company.dto';
 import * as bcrypt from 'bcrypt';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 import { Cron } from '@nestjs/schedule';
+import { Console } from 'console';
 
 @Injectable()
 export class CompanyService {
@@ -233,11 +234,20 @@ export class CompanyService {
     return isEmail;
   }
 
-  // 회사 1개 조회
+  // 회사 1개 조회 - 마이페이지용
   async findOneCompanyById(companyId: number) {
     const company = await this.companyRepository.findOne({
       where: { uuid: companyId },
     });
+    return company;
+  }
+
+  // 회사 1개 조회- 상세페이지용
+  async finOneCompany(uuid: number) {
+    const company = await this.companyRepository.findOne({
+      where: { uuid },
+    });
+
     return company;
   }
 
@@ -352,8 +362,8 @@ export class CompanyService {
   }
 
   // 회사를 생성할 때, 기존 사용자의 정보를 update한다.
-  async updateCompanyInfo(updateCompanyDto: CreateCompanyDto): Promise<any> {
-    const { email, password } = updateCompanyDto;
+  async updateCompanyInfo(createCompanyDto: CreateCompanyDto): Promise<any> {
+    const { email, password } = createCompanyDto;
 
     const existingCompany = await this.companyRepository.findOne({
       where: { email },
@@ -368,13 +378,13 @@ export class CompanyService {
 
     // 인증된 사용자인 경우에만 정보 업데이트
     if (existingCompany.isVerified) {
-      existingCompany.title = updateCompanyDto.title;
-      existingCompany.introduction = updateCompanyDto.introduction;
-      existingCompany.website = updateCompanyDto.website;
-      existingCompany.address = updateCompanyDto.address;
-      existingCompany.business = updateCompanyDto.business;
-      existingCompany.employees = updateCompanyDto.employees;
-      existingCompany.image = updateCompanyDto.image;
+      existingCompany.title = createCompanyDto.title;
+      existingCompany.introduction = createCompanyDto.introduction;
+      existingCompany.website = createCompanyDto.website;
+      existingCompany.address = createCompanyDto.address;
+      existingCompany.business = createCompanyDto.business;
+      existingCompany.employees = createCompanyDto.employees;
+      existingCompany.image = createCompanyDto.image;
 
       if (password) {
         // 새로운 비밀번호가 제공된 경우에만 업데이트
