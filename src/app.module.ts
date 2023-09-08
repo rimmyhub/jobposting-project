@@ -25,9 +25,11 @@ import { JobPostingSearchModule } from './search/search.module';
 import { MailModule } from './mail/mail.module';
 import { ChatContentModule } from './chat-content/chat-content.module';
 import { ChatgptModule } from './chatgpt/chatgpt.module';
+import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
   imports: [
+    CacheModule.register(),
     TypeOrmModule.forRootAsync({ useFactory: ormConfig }),
     UploadModule,
     ConfigModule.forRoot({
