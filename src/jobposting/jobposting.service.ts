@@ -145,55 +145,176 @@ export class JobpostingService {
     return jobPostings;
   }
 
-  // 윤영 : 지역검색시 해당지역과 일치하는 채용 공고글 전체 조회
-  async searchRegion(workArea: string) {
+  // 윤영 : 경력 + 모집 일치하는 채용 공고글 전체 조회
+  async searchSelect(career: string, workArea: string) {
+    // 모든 지역 + 경력 옵션
+    if (workArea === '지역 전국' && career === '경력 전체') {
+      return this.jobpostingRepository.find();
+    }
+    // 지역전국 옵션
     if (workArea === '지역 전국') {
-      return await this.jobpostingRepository.find({});
+      return await this.jobpostingRepository.find({
+        where: {
+          career: Like(`%${career}%`),
+        },
+      });
     }
+    // 경력전체 옵션
+    if (career === '경력 전체') {
+      if (workArea === '충청') {
+        return await this.jobpostingRepository.find({
+          where: [
+            { workArea: Like(`%충남%`) },
+            { workArea: Like(`%충북%`) },
+            { workArea: Like(`%대전%`) },
+            { workArea: Like(`%세종%`) },
+          ],
+        });
+      }
+      if (workArea === '전라') {
+        return await this.jobpostingRepository.find({
+          where: [
+            { workArea: Like(`%전북%`) },
+            { workArea: Like(`%전남%`) },
+            { workArea: Like(`%광주%`) },
+          ],
+        });
+      }
+      if (workArea === '경상') {
+        return await this.jobpostingRepository.find({
+          where: [
+            { workArea: Like(`%경북%`) },
+            { workArea: Like(`%경남%`) },
+            { workArea: Like(`%대구%`) },
+            { workArea: Like(`%울산%`) },
+            { workArea: Like(`%부산%`) },
+          ],
+        });
+      }
+      return await this.jobpostingRepository.find({
+        where: {
+          workArea: Like(`%${workArea}%`),
+        },
+      });
+    }
+    // 충청도 옵션
     if (workArea === '충청') {
+      if (career === '경력 전체') {
+        return await this.jobpostingRepository.find({
+          where: [
+            { workArea: Like(`%충남%`) },
+            { workArea: Like(`%충북%`) },
+            { workArea: Like(`%대전%`) },
+            { workArea: Like(`%세종%`) },
+          ],
+        });
+      }
       return await this.jobpostingRepository.find({
         where: [
-          { workArea: Like(`%충남%`) },
-          { workArea: Like(`%충북%`) },
-          { workArea: Like(`%대전%`) },
-          { workArea: Like(`%세종%`) },
+          { workArea: Like(`%충남%`), career: Like(`%${career}%`) },
+          { workArea: Like(`%충북%`), career: Like(`%${career}%`) },
+          { workArea: Like(`%대전%`), career: Like(`%${career}%`) },
+          { workArea: Like(`%세종%`), career: Like(`%${career}%`) },
         ],
       });
     }
+    // 전락도 옵션
     if (workArea === '전라') {
+      if (career === '경력 전체') {
+        return await this.jobpostingRepository.find({
+          where: [
+            { workArea: Like(`%전북%`) },
+            { workArea: Like(`%전남%`) },
+            { workArea: Like(`%광주%`) },
+          ],
+        });
+      }
       return await this.jobpostingRepository.find({
         where: [
-          { workArea: Like(`%전북%`) },
-          { workArea: Like(`%전남%`) },
-          { workArea: Like(`%광주%`) },
+          { workArea: Like(`%전북%`), career: Like(`%${career}%`) },
+          { workArea: Like(`%전남%`), career: Like(`%${career}%`) },
+          { workArea: Like(`%광주%`), career: Like(`%${career}%`) },
         ],
       });
     }
+    // 경상도 옵션
     if (workArea === '경상') {
+      if (career === '경력 전체') {
+        return await this.jobpostingRepository.find({
+          where: [
+            { workArea: Like(`%경북%`) },
+            { workArea: Like(`%경남%`) },
+            { workArea: Like(`%대구%`) },
+            { workArea: Like(`%울산%`) },
+            { workArea: Like(`%부산%`) },
+          ],
+        });
+      }
       return await this.jobpostingRepository.find({
         where: [
-          { workArea: Like(`%경북%`) },
-          { workArea: Like(`%경남%`) },
-          { workArea: Like(`%대구%`) },
-          { workArea: Like(`%울산%`) },
-          { workArea: Like(`%부산%`) },
+          { workArea: Like(`%경북%`), career: Like(`%${career}%`) },
+          { workArea: Like(`%경남%`), career: Like(`%${career}%`) },
+          { workArea: Like(`%대구%`), career: Like(`%${career}%`) },
+          { workArea: Like(`%울산%`), career: Like(`%${career}%`) },
+          { workArea: Like(`%부산%`), career: Like(`%${career}%`) },
         ],
       });
     }
-    return await this.jobpostingRepository.find({
-      where: { workArea: Like(`%${workArea}%`) },
+    // 리턴값
+    return this.jobpostingRepository.find({
+      where: { workArea: Like(`%${workArea}%`), career: Like(`%${career}%`) },
     });
   }
 
-  // 윤영 : 경력검색시 해당경력과 일치하는 채용 공고글 전체 조회
-  async searchCareer(career: string) {
-    if (career === '경력 전체') {
-      return await this.jobpostingRepository.find({});
-    }
-    return await this.jobpostingRepository.find({
-      where: { career: Like(`%${career}%`) },
-    });
-  }
+  // // 윤영 : 지역검색시 해당지역과 일치하는 채용 공고글 전체 조회
+  // async searchRegion(workArea: string) {
+  //   if (workArea === '지역 전국') {
+  //     return await this.jobpostingRepository.find({});
+  //   }
+  //   if (workArea === '충청') {
+  //     return await this.jobpostingRepository.find({
+  //       where: [
+  //         { workArea: Like(`%충남%`) },
+  //         { workArea: Like(`%충북%`) },
+  //         { workArea: Like(`%대전%`) },
+  //         { workArea: Like(`%세종%`) },
+  //       ],
+  //     });
+  //   }
+  //   if (workArea === '전라') {
+  //     return await this.jobpostingRepository.find({
+  //       where: [
+  //         { workArea: Like(`%전북%`) },
+  //         { workArea: Like(`%전남%`) },
+  //         { workArea: Like(`%광주%`) },
+  //       ],
+  //     });
+  //   }
+  //   if (workArea === '경상') {
+  //     return await this.jobpostingRepository.find({
+  //       where: [
+  //         { workArea: Like(`%경북%`) },
+  //         { workArea: Like(`%경남%`) },
+  //         { workArea: Like(`%대구%`) },
+  //         { workArea: Like(`%울산%`) },
+  //         { workArea: Like(`%부산%`) },
+  //       ],
+  //     });
+  //   }
+  //   return await this.jobpostingRepository.find({
+  //     where: { workArea: Like(`%${workArea}%`) },
+  //   });
+  // }
+
+  // // 윤영 : 경력검색시 해당경력과 일치하는 채용 공고글 전체 조회
+  // async searchCareer(career: string) {
+  //   if (career === '경력 전체') {
+  //     return await this.jobpostingRepository.find({});
+  //   }
+  //   return await this.jobpostingRepository.find({
+  //     where: { career: Like(`%${career}%`) },
+  //   });
+  // }
 
   // 윤영 : 메인페이지에서 채용공고 클릭 시 해당 채용공고 내용 조회
   async getJobposting(jobpostingId: number) {

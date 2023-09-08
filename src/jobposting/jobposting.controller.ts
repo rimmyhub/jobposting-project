@@ -27,17 +27,26 @@ export class JobpostingController {
     return this.jobpostingService.searchKeyword(keyword);
   }
 
-  // 윤영 : 지역검색시 해당지역과 일치하는 채용 공고글 전체 조회
-  @Post('workArea')
-  searchRegion(@Body('workArea') workArea: string) {
-    return this.jobpostingService.searchRegion(workArea);
+  // 윤영 : 지역 + 경력 일치하는 채용 공고글 전체 조회
+  @Post('select')
+  searchSelect(
+    @Body('career') career: string,
+    @Body('workArea') workArea: string,
+  ) {
+    return this.jobpostingService.searchSelect(career, workArea);
   }
 
-  // 윤영 : 지역검색시 해당지역과 일치하는 채용 공고글 전체 조회
-  @Post('career')
-  searchCareer(@Body('career') career: string) {
-    return this.jobpostingService.searchCareer(career);
-  }
+  // // 윤영 : 지역검색시 해당지역과 일치하는 채용 공고글 전체 조회
+  // @Post('workArea')
+  // searchRegion(@Body('workArea') workArea: string) {
+  //   return this.jobpostingService.searchRegion(workArea);
+  // }
+
+  // // 윤영 : 경력검색시 해당경력과 일치하는 채용 공고글 전체 조회
+  // @Post('career')
+  // searchCareer(@Body('career') career: string) {
+  //   return this.jobpostingService.searchCareer(career);
+  // }
 
   // 채용공고 아이디 가져오기
   @Get('getId')

@@ -101,17 +101,20 @@ function searchJobposting() {
 
 // 조건검색 함수모음
 function selectInit() {
-  searchRegion();
-  searchExperience();
+  // searchRegion();
+  // searchExperience();
+  select();
 }
-// 지역별 검색
-function searchRegion() {
+// 모집 + 지역 검색
+function select() {
   regionSelect.addEventListener('change', async () => {
+    const career = experienceSelect.value;
     const workArea = regionSelect.value;
-    const searchRegion = await fetch(`/api/jobpostings/workArea`, {
+
+    const searchRegion = await fetch(`/api/jobpostings/select`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ workArea }),
+      body: JSON.stringify({ workArea, career }),
     });
 
     const resRegion = await searchRegion.json();
@@ -129,34 +132,81 @@ function searchRegion() {
                                     </div>`;
     });
   });
-}
-// 모집경력별 검색
-function searchExperience() {
-  console.log('hi');
   experienceSelect.addEventListener('change', async () => {
     const career = experienceSelect.value;
-    console.log(career);
+    const workArea = regionSelect.value;
 
-    const selectExperience = await fetch(`/api/jobpostings/career`, {
+    const selectExperience = await fetch(`/api/jobpostings/select`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ career }),
+      body: JSON.stringify({ workArea, career }),
     });
 
     const resExp = await selectExperience.json();
-    console.log(resExp);
-
     jobPostingsBar.innerHTML = '';
-    resExp.forEach((JP) => {
-      jobPostingsBar.innerHTML += `<div class="jobposting-card" id="jobposting-card" onclick="goToJobpostingSubpage(${JP.id})">
+    resExp.forEach((EP) => {
+      jobPostingsBar.innerHTML += `<div class="jobposting-card" id="jobposting-card" onclick="goToJobpostingSubpage(${EP.id})">
                                     <div>
                                         <div class="jobposting-title" id="jobposting-title">
-                                        ${JP.title}
+                                        ${EP.title}
                                         </div>
-                                        <div class="jobposting-job" id="jobposting-job">${JP.dueDate}</div>
-                                        <p>${JP.workArea}</p>
+                                        <div class="jobposting-job" id="jobposting-job">${EP.dueDate}</div>
+                                        <p>${EP.workArea}</p>
                                     </div>
                                     </div>`;
     });
   });
 }
+// // 지역별 검색
+// function searchRegion() {
+//   regionSelect.addEventListener('change', async () => {
+//     const workArea = regionSelect.value;
+//     const searchRegion = await fetch(`/api/jobpostings/workArea`, {
+//       method: 'POST',
+//       headers: { 'Content-Type': 'application/json' },
+//       body: JSON.stringify({ workArea }),
+//     });
+
+//     const resRegion = await searchRegion.json();
+
+//     jobPostingsBar.innerHTML = '';
+//     resRegion.forEach((JP) => {
+//       jobPostingsBar.innerHTML += `<div class="jobposting-card" id="jobposting-card" onclick="goToJobpostingSubpage(${JP.id})">
+//                                     <div>
+//                                         <div class="jobposting-title" id="jobposting-title">
+//                                         ${JP.title}
+//                                         </div>
+//                                         <div class="jobposting-job" id="jobposting-job">${JP.dueDate}</div>
+//                                         <p>${JP.workArea}</p>
+//                                     </div>
+//                                     </div>`;
+//     });
+//   });
+// }
+// // 모집경력별 검색
+// function searchExperience() {
+//   experienceSelect.addEventListener('change', async () => {
+//     const career = experienceSelect.value;
+
+//     const selectExperience = await fetch(`/api/jobpostings/career`, {
+//       method: 'POST',
+//       headers: { 'Content-Type': 'application/json' },
+//       body: JSON.stringify({ career }),
+//     });
+
+//     const resExp = await selectExperience.json();
+
+//     jobPostingsBar.innerHTML = '';
+//     resExp.forEach((JP) => {
+//       jobPostingsBar.innerHTML += `<div class="jobposting-card" id="jobposting-card" onclick="goToJobpostingSubpage(${JP.id})">
+//                                     <div>
+//                                         <div class="jobposting-title" id="jobposting-title">
+//                                         ${JP.title}
+//                                         </div>
+//                                         <div class="jobposting-job" id="jobposting-job">${JP.dueDate}</div>
+//                                         <p>${JP.workArea}</p>
+//                                     </div>
+//                                     </div>`;
+//     });
+//   });
+// }
