@@ -150,11 +150,9 @@ const ejs = (window.onload = function () {
   }
   // 메세지받기
   socket.on('receive-message', (message, userId, userType) => {
-    console.log('receive-message');
     const type = window.localStorage.getItem('type');
     const myId = window.localStorage.getItem('id');
-    console.log('userId = ', userId, myId);
-    console.log('userType = ', userType, type);
+
     if (type !== userType && myId !== userId) {
       alarmIcon.style.opacity = 1;
     }
@@ -162,16 +160,11 @@ const ejs = (window.onload = function () {
     builNewMsg(userId, message, userType);
   });
 
-  // socket.on('msg-notification', (userId) => {
-  //   console.log('msgNotification', userId);
-  //   msgCard.style.opacity = 1;
-  // });
-
   isLogin();
-  function isLogin() {
+  async function isLogin() {
     const id = window.localStorage.getItem('id');
     if (id) {
-      checkNewMsg();
+      await checkNewMsg();
       // 새로운 채팅이 있는지 확인하기
       getChatRooms();
     }
@@ -212,7 +205,7 @@ async function appendMsgList(datas, type) {
   if (type === 'company') {
     datas.forEach((el) => {
       const li = document.createElement('div');
-      li.innerHTML = `<div id="message-card" class="message-card" onclick="chattingBox('${el.id}', '${el.user.email}', '${el.userId}')">
+      li.innerHTML = `<div id="message-card-${el.id}" class="message-card" onclick="chattingBox('${el.id}', '${el.user.email}', '${el.userId}')">
                         <div class="user-profile">
                           <img src="/img/userImg.jpg" alt="" srcset="" />
                         </div>
@@ -230,7 +223,7 @@ async function appendMsgList(datas, type) {
   } else {
     datas.forEach((el) => {
       const li = document.createElement('div');
-      li.innerHTML = `<div id="message-card" class="message-card" onclick="chattingBox('${el.id}', '${el.company.email}', '${el.companyId}')">
+      li.innerHTML = `<div id="message-card-${el.id}" class="message-card" onclick="chattingBox('${el.id}', '${el.company.email}', '${el.companyId}')">
                         <div class="user-profile">
                           <img src="/img/userImg.jpg" alt="" srcset="" />
                         </div>
@@ -251,21 +244,22 @@ async function appendMsgList(datas, type) {
 socket.on('msg-notification', async (userId) => {
   console.log('msgNotification', userId);
   const exclamationIcon = document.getElementById('exclamation-icon');
-  exclamationIcon.style.opacity = 1;
   await checkNewMsg();
   newMsgIcon();
+  exclamationIcon.style.opacity = 1;
 });
 
 // 채팅리스트안의 새메시지알람표시하기
 function newMsgIcon() {
-  console.log(newMsgs);
-  if (newMsgs.length !== 0) {
+  if (newMsgs) {
     newMsgs.forEach((el) => {
       msgCard = document.getElementById(`exclamation-icon-${el.chat_id}`);
       msgCard.style.opacity = 1;
     });
   }
 }
+
+function removeExclamation() {}
 
 // 메세지읽음처리하기
 async function readMsg(chatId) {
@@ -294,7 +288,14 @@ async function readMsg(chatId) {
 let roomId;
 let reciId;
 // 채팅창 열기
-async function chattingBox(getRoomId, email, recipientId) {
+async function chattingBox(getRoomId, email, recipientId, $event) {
+  const messageCard = document.getElementById(
+    `${event.target.parentElement.parentElement.id}`,
+  );
+  const exclamationIcon = messageCard.children[2];
+  exclamationIcon.style.opacity = 0;
+
+  console.log('messageCard = ', messageCard);
   reciId = recipientId;
   await readMsg(getRoomId);
   const userName = document.createElement('h6');
@@ -362,6 +363,7 @@ async function checkNewMsg() {
         console.log(e);
       });
   }
+  // 유저가 로그인 했을 때 새메세지가 왔음을 알 수 있게 한다.
   if (newMsgs.length) alarmIcon.style.opacity = 1;
 }
 
@@ -379,6 +381,7 @@ async function getChatContents(id) {
     });
 }
 
+// 채팅방에서 나나기
 function leaveRoom() {
   chatContainer.style.display = 'none';
   socket.emit('leave', roomId);
@@ -404,7 +407,9 @@ async function sendMessage() {
 }
 
 // 마이채용공고리스트
-myApplyList.addEventListener('click', () => {
-  const type = window.localStorage.getItem('type');
-  location.href = `apply/${type}`;
-});
+if (myApplyList) {
+  myApplyList.addEventListener('click', () => {
+    const type = window.localStorage.getItem('type');
+    location.href = `apply/${type}`;
+  });
+}

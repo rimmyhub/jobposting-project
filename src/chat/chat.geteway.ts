@@ -51,8 +51,6 @@ export class ChatGateway {
     // 알림을 보내고자하는 userId가 포함된 키값의 socketId를 가져온다.
 
     const getsocketId: string = await this.cacheManager.store.get(`${userId}`);
-    console.log('userId = ', userId);
-    console.log('getsocketId = ', getsocketId);
     if (getsocketId) {
       this.io.to(getsocketId).emit('msg-notification', userId);
       // this.io.to(`'${getsocketId}'`).emit('msg-notification', userId);
