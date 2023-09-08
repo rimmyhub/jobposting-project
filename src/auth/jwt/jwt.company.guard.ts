@@ -59,7 +59,11 @@ export class CompanyGuard
   }
 
   private extractTokenFromHeader(request: Request): string | undefined {
-    const [type, token] = request.cookies.authorization.split(' ') ?? [];
-    return type === 'Bearer' ? token : undefined;
+    const authorization = request.cookies.authorization;
+    if (authorization) {
+      const [type, token] = authorization.split(' ') ?? [];
+
+      return type === 'Bearer' ? token : undefined;
+    }
   }
 }
