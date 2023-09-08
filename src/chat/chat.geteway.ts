@@ -1,3 +1,4 @@
+import { Inject } from '@nestjs/common';
 import {
   ConnectedSocket,
   MessageBody,
@@ -7,6 +8,8 @@ import {
 } from '@nestjs/websockets';
 import { Socket, Namespace } from 'socket.io';
 import { ChatContentService } from 'src/chat-content/chat-content.service';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 
 // 소켓IO
 @WebSocketGateway(8080, {
@@ -17,10 +20,44 @@ import { ChatContentService } from 'src/chat-content/chat-content.service';
 export class ChatGateway {
   @WebSocketServer() io: Namespace;
 
-  constructor(private readonly chatContentService: ChatContentService) {}
+  constructor(
+    private readonly chatContentService: ChatContentService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+  ) {}
 
   @SubscribeMessage('createRoom')
   createRoom() {}
+
+  // 로그인을 했을 때 redis에 유저의 id와 socket의 id를 저장한다.
+  @SubscribeMessage('saveClientId')
+  async loginClientId(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody() userId: number,
+  ) {
+    await this.cacheManager.store.set(`${userId}`, socket.id, 100000);
+
+    const result = await this.cacheManager.store.keys();
+    // 키의 이름에 userId를 넣어준다.
+    console.log('saveClientId = ', result);
+  }
+
+  // 실시간으로 메세지수신을 알려주는 socket
+  @SubscribeMessage('msg-notification')
+  async msgNotification(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody() userId: number,
+  ) {
+    // 메세지수신알림을 보낼 유저id와 socketId를 가져온다
+    // 알림을 보내고자하는 userId가 포함된 키값의 socketId를 가져온다.
+
+    const getsocketId: string = await this.cacheManager.store.get(`${userId}`);
+    console.log('userId = ', userId);
+    console.log('getsocketId = ', getsocketId);
+    if (getsocketId) {
+      this.io.to(getsocketId).emit('msg-notification', userId);
+      // this.io.to(`'${getsocketId}'`).emit('msg-notification', userId);
+    }
+  }
 
   @SubscribeMessage('join')
   joinChatRoom(

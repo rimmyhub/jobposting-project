@@ -29,7 +29,7 @@ import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
   imports: [
-    CacheModule.register(),
+    CacheModule.register({ isGlobal: true }),
     TypeOrmModule.forRootAsync({ useFactory: ormConfig }),
     UploadModule,
     ConfigModule.forRoot({
