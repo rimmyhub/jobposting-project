@@ -32,6 +32,11 @@ const ejs = (window.onload = function () {
   messageList = document.getElementById('message-list');
   chatContent = document.getElementById('chat-content');
 
+  const id = window.localStorage.getItem('id');
+  if (id) {
+    socket.emit('saveClientId', id);
+  }
+
   if (logout) {
     logout.addEventListener('click', async () => {
       deleteCookie();
@@ -143,6 +148,7 @@ const ejs = (window.onload = function () {
       sendMessage();
     });
   }
+  // 메세지받기
   socket.on('receive-message', (message, userId, userType) => {
     console.log('receive-message');
     const type = window.localStorage.getItem('type');
@@ -165,6 +171,11 @@ const ejs = (window.onload = function () {
       getChatRooms();
     }
   }
+});
+
+socket.on('msgNotification', (userId) => {
+  console.log('msgNotification', userId);
+  msgCard.style.opacity = 1;
 });
 
 // 채팅리스트 가져오기
@@ -200,7 +211,7 @@ async function appendMsgList(datas, type) {
   if (type === 'company') {
     datas.forEach((el) => {
       const li = document.createElement('div');
-      li.innerHTML = `<div id="message-card" class="message-card" onclick="chattingBox('${el.id}', '${el.user.email}')">
+      li.innerHTML = `<div id="message-card" class="message-card" onclick="chattingBox('${el.id}', '${el.user.email}', '${el.userId}')">
                         <div class="user-profile">
                           <img src="/img/userImg.jpg" alt="" srcset="" />
                         </div>
@@ -218,7 +229,7 @@ async function appendMsgList(datas, type) {
   } else {
     datas.forEach((el) => {
       const li = document.createElement('div');
-      li.innerHTML = `<div id="message-card" class="message-card" onclick="chattingBox('${el.id}', '${el.company.email}')">
+      li.innerHTML = `<div id="message-card" class="message-card" onclick="chattingBox('${el.id}', '${el.company.email}', '${el.companyId}')">
                         <div class="user-profile">
                           <img src="/img/userImg.jpg" alt="" srcset="" />
                         </div>
@@ -238,7 +249,6 @@ async function appendMsgList(datas, type) {
 
 // 새메시지알람표시하기
 function newMsgIcon() {
-  console.log('newMsgs = ', newMsgs);
   if (newMsgs.length !== 0) {
     newMsgs.forEach((el) => {
       msgCard = document.getElementById(`exclamation-icon-${el.chat_id}`);
@@ -256,35 +266,27 @@ async function readMsg(chatId) {
       headers: {
         'Content-Type': 'application/json',
       },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    }).catch((e) => {
+      console.log(e);
+    });
   } else if (type === 'company') {
     await fetch(`/api/chat-content/company/${chatId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    }).catch((e) => {
+      console.log(e);
+    });
   }
 }
 
 let roomId;
+let reciId;
 // 채팅창 열기
-async function chattingBox(id, email) {
-  await readMsg(id);
+async function chattingBox(getRoomId, email, recipientId) {
+  reciId = recipientId;
+  await readMsg(getRoomId);
   const userName = document.createElement('h6');
   userName.innerText = `${email} 님`;
   chatBoxTitle.append(userName);
@@ -299,9 +301,11 @@ async function chattingBox(id, email) {
   icon.onclick = leaveRoom;
 
   chatBoxTitle.append(icon);
-  await getChatContents(id);
-  socket.emit('join', id);
-  roomId = id;
+  await getChatContents(getRoomId);
+  // 소켓룸 조인하기
+  socket.emit('join', getRoomId);
+
+  roomId = getRoomId;
   chatContainer.style.display = 'flex';
   chattingContainer.scrollTop = chattingContainer.scrollHeight;
 }
@@ -384,6 +388,9 @@ async function sendMessage() {
   };
   // 메세지 내용 저장하기
   await socket.emit('message', chatContent.value, payload);
+
+  // 소켓 상대방에게 메세지알림 보내기
+  socket.emit('msgNotification', reciId);
   chatContent.value = '';
 }
 
