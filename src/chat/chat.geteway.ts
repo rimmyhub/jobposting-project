@@ -34,19 +34,13 @@ export class ChatGateway {
     @ConnectedSocket() socket: Socket,
     @MessageBody() userId: number,
   ) {
-    const result = await this.cacheManager.get(`socket_client_${userId}`);
-    if (!result) {
-      await this.cacheManager.set(`socket_client_${userId}`, {
-        socketId: socket.id,
-      });
-    } else {
-      // await this.cacheManager.reset(`socket_client_${userId}`, {
-      //   socketId: socket.id,
-      // });
-    }
+    await this.cacheManager.set(`${userId}`, {
+      socketId: socket.id,
+    });
 
+    const result = await this.cacheManager.get(`${userId}`);
     // 키의 이름에 userId를 넣어준다.
-    console.log('saveClientId = ', result['socketId']);
+    console.log('saveClientId = ', result);
   }
 
   // 실시간으로 메세지수신을 알려주는 socket
@@ -58,7 +52,7 @@ export class ChatGateway {
     // 메세지수신알림을 보낼 유저id와 socketId를 가져온다
     // 알림을 보내고자하는 userId가 포함된 키값의 socketId를 가져온다.
 
-    const getsocketId = await this.cacheManager.get(`socket_client_${userId}`);
+    const getsocketId = await this.cacheManager.get(`${userId}`);
     console.log('socket.id = ', socket.id);
     console.log('getsocketId = ', getsocketId);
     if (getsocketId) {
