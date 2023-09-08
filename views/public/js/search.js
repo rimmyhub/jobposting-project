@@ -201,9 +201,9 @@ function selectJobposting() {
     const career = experienceSelect.value;
     const workArea = regionSelect.value;
 
-    const selectExperience = await fetch(`/api/jobpostings/select`, {
+    const selectExperience = await fetch(`/api/jobpostings/selectJobposting`, {
       method: 'POST',
-      // headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ workArea, career }),
     });
 
