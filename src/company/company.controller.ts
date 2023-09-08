@@ -58,10 +58,16 @@ export class CompanyController {
     return this.companyService.getAllCompanyAddresses();
   }
 
-  // 검색시 업무 또는 회사 이름에 해당 검색어를 포함하는 회사 전체 조회
+  // 윤영 : 검색시 업무 또는 회사 이름에 해당 검색어를 포함하는 회사 전체 조회
   @Post('search')
   searchKeyword(@Body('keyword') keyword: string) {
     return this.companyService.searchKeyword(keyword);
+  }
+
+  // 윤영 : 주소가 일치하는 회사 전체 조회
+  @Post('selectCompany')
+  searchSelectCompany(@Body('address') address: string) {
+    return this.companyService.searchSelectCompany(address);
   }
 
   // 회사 1개 조회

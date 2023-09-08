@@ -114,7 +114,6 @@ addJobpostingBtn.addEventListener('click', async function () {
 });
 
 function goToJobpostingSubpage(jobpostingId) {
-  console.log(jobpostingId);
   const subPageUrl = `/jobposting/${jobpostingId}`;
   window.location.href = subPageUrl;
 }

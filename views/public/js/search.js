@@ -32,7 +32,6 @@ function enter() {
 function searchCompany() {
   // 이벤트 리스너
   searchBtn.addEventListener('click', async () => {
-    console.log(searchBar.value);
     // 검색어
     const keyword = searchBar.value;
 
@@ -44,11 +43,9 @@ function searchCompany() {
     });
     // 회사검색데이터 가공
     const resCP = await searchCP.json();
-    console.log(resCP);
 
     companiesBar.innerHTML = '';
     resCP.forEach((CP) => {
-      console.log(CP);
       companiesBar.innerHTML += `<div class="jobposting-card" id="companies-card" onclick="goToCompanySubpage(${CP.id})">
                                 <img
                                     class="jobposting-img"
@@ -103,15 +100,16 @@ function searchJobposting() {
 function selectInit() {
   // searchRegion();
   // searchExperience();
-  select();
+  selectJobposting();
+  selectCompany();
 }
-// 모집 + 지역 검색
-function select() {
+// (모집+지역)별 채용공고 검색
+function selectJobposting() {
   regionSelect.addEventListener('change', async () => {
     const career = experienceSelect.value;
     const workArea = regionSelect.value;
 
-    const searchRegion = await fetch(`/api/jobpostings/select`, {
+    const searchRegion = await fetch(`/api/jobpostings/selectJobposting`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ workArea, career }),
@@ -157,6 +155,41 @@ function select() {
     });
   });
 }
+// 지역별 회사 검색
+function selectCompany() {
+  regionSelect.addEventListener('change', async () => {
+    const address = regionSelect.value;
+
+    const searchRegion = await fetch(`/api/companies/selectCompany`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ address }),
+    });
+
+    const resRegion = await searchRegion.json();
+    companiesBar.innerHTML = '';
+    resRegion.forEach((CP) => {
+      companiesBar.innerHTML += `<div class="jobposting-card" id="companies-card" onclick="goToCompanySubpage(${CP.id})">
+                                <img
+                                    class="jobposting-img"
+                                    id="companies-img"
+                                    src="${CP.image}"
+                                    alt=""
+                                    srcset=""
+                                    onerror="this.src='/img/company.jpg';"
+                                />
+                                <div>
+                                    <div class="jobposting-title" id="companies-title">
+                                    ${CP.title}
+                                    </div>
+                                    <div class="jobposting-job" id="companies-job">${CP.business}</div>
+                                    <p>${CP.employees}</p>
+                                </div>
+                                </div>`;
+    });
+  });
+}
+
 // // 지역별 검색
 // function searchRegion() {
 //   regionSelect.addEventListener('change', async () => {

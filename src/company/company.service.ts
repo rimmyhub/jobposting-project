@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Company } from '../domain/company.entity';
-import { IsNull, LessThanOrEqual, Not, Repository } from 'typeorm';
+import { IsNull, LessThanOrEqual, Like, Not, Repository } from 'typeorm';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import * as bcrypt from 'bcrypt';
 import { UpdateCompanyDto } from './dto/update-company.dto';
@@ -122,6 +122,106 @@ export class CompanyService {
       );
     }
     return searchCompanies;
+  }
+
+  // 윤영 : 일치주소 회사 전체 조회
+  async searchSelectCompany(address: string) {
+    // 모든 지역
+    if (address === '지역 전국') {
+      return this.companyRepository.find();
+    }
+    // 경력전체 옵션
+    if (address === '충청') {
+      return await this.companyRepository.find({
+        where: [
+          { address: Like(`%충남%`) },
+          { address: Like(`%충북%`) },
+          { address: Like(`%대전%`) },
+          { address: Like(`%세종%`) },
+        ],
+      });
+    }
+    if (address === '전라') {
+      return await this.companyRepository.find({
+        where: [
+          { address: Like(`%전북%`) },
+          { address: Like(`%전남%`) },
+          { address: Like(`%광주%`) },
+        ],
+      });
+    }
+    if (address === '경상') {
+      return await this.companyRepository.find({
+        where: [
+          { address: Like(`%경북%`) },
+          { address: Like(`%경남%`) },
+          { address: Like(`%대구%`) },
+          { address: Like(`%울산%`) },
+          { address: Like(`%부산%`) },
+        ],
+      });
+    }
+    // // 충청도 옵션
+    // if (address === '충청') {
+    //   return await this.companyRepository.find({
+    //     where: [
+    //       { address: Like(`%충남%`) },
+    //       { address: Like(`%충북%`) },
+    //       { address: Like(`%대전%`) },
+    //       { address: Like(`%세종%`) },
+    //     ],
+    //   });
+    // }
+    // return await this.companyRepository.find({
+    //   where: [
+    //     { address: Like(`%충남%`) },
+    //     { address: Like(`%충북%`) },
+    //     { address: Like(`%대전%`) },
+    //     { address: Like(`%세종%`) },
+    //   ],
+    // });
+    // // 전라도 옵션
+    // if (address === '전라') {
+    //   return await this.companyRepository.find({
+    //     where: [
+    //       { address: Like(`%전북%`) },
+    //       { address: Like(`%전남%`) },
+    //       { address: Like(`%광주%`) },
+    //     ],
+    //   });
+    // }
+    // return await this.companyRepository.find({
+    //   where: [
+    //     { address: Like(`%전북%`) },
+    //     { address: Like(`%전남%`) },
+    //     { address: Like(`%광주%`) },
+    //   ],
+    // });
+    // // 경상도 옵션
+    // if (address === '경상') {
+    //   return await this.companyRepository.find({
+    //     where: [
+    //       { address: Like(`%경북%`) },
+    //       { address: Like(`%경남%`) },
+    //       { address: Like(`%대구%`) },
+    //       { address: Like(`%울산%`) },
+    //       { address: Like(`%부산%`) },
+    //     ],
+    //   });
+    //   return await this.companyRepository.find({
+    //     where: [
+    //       { address: Like(`%경북%`) },
+    //       { address: Like(`%경남%`) },
+    //       { address: Like(`%대구%`) },
+    //       { address: Like(`%울산%`) },
+    //       { address: Like(`%부산%`) },
+    //     ],
+    //   });
+    // }
+    // 리턴값
+    return this.companyRepository.find({
+      where: { address: Like(`%${address}%`) },
+    });
   }
 
   // 가입된 이메일이 있는지 확인
