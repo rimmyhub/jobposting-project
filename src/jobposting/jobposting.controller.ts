@@ -27,6 +27,12 @@ export class JobpostingController {
     return this.jobpostingService.searchKeyword(keyword);
   }
 
+  // 윤영 : 직군 선택시 채용공고 직군과 일치한 회사 전체 조회
+  @Post('job')
+  searchOccupation(@Body('job') job: string) {
+    return this.jobpostingService.searchOccupation(job);
+  }
+
   // 윤영 : 지역 + 경력 일치하는 채용 공고글 전체 조회
   @Post('selectJobposting')
   searchSelectJobposting(
