@@ -47,7 +47,9 @@ function searchCompany() {
     });
     // 회사검색데이터 가공
     const resCP = await searchCP.json();
-
+    if (resCP.message) {
+      return (companiesBar.innerHTML = `<ul>"${keyword}"에 해당하는 ${resCP.message}</ul>`);
+    }
     companiesBar.innerHTML = '';
     resCP.forEach((CP) => {
       companiesBar.innerHTML += `<div class="jobposting-card" id="companies-card" onclick="goToCompanySubpage(${CP.id})">
@@ -85,6 +87,9 @@ function searchJobposting() {
     });
     // 채용공고데이터 가공
     const resJP = await searchJP.json();
+    if (resJP.message) {
+      return (jobPostingsBar.innerHTML = `<ul>"${keyword}"에 해당하는 ${resJP.message}</ul>`);
+    }
     jobPostingsBar.innerHTML = '';
     resJP.forEach((JP) => {
       jobPostingsBar.innerHTML += `<div class="jobposting-card" id="jobposting-card" onclick="goToJobpostingSubpage(${JP.id})">
@@ -109,64 +114,66 @@ function selectInit() {
   selectCompany();
 }
 
-// 직군 옵션 검색
+// 직군별 회사 + 채용공고 검색
 function jobOptionSelect() {
   // 메인 선택 상자의 값이 변경될 때 호출되는 이벤트 핸들러
-  occupationSelect.addEventListener('change', function () {
+  occupationSelect.addEventListener('change', async () => {
+    // 선택 직군 값
     const selectedOption = occupationSelect.value;
+    // 직군별 채용공고 검색
+    const searchJobposting = await fetch(`/api/jobpostings/job`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ job: selectedOption }),
+    });
+    const resJP = await searchJobposting.json();
+    if (resJP.message) {
+      return (jobPostingsBar.innerHTML = `"${selectedOption}"에 해당하는 ${resJP.message}`);
+    }
+    jobPostingsBar.innerHTML = '';
+    resJP.forEach((JP) => {
+      jobPostingsBar.innerHTML += `<div class="jobposting-card" id="jobposting-card" onclick="goToJobpostingSubpage(${JP.id})">
+                                    <div>
+                                        <div class="jobposting-title" id="jobposting-title">
+                                        ${JP.title}
+                                        </div>
+                                        <div class="jobposting-job" id="jobposting-job">${JP.dueDate}</div>
+                                        <p>${JP.workArea}</p>
+                                    </div>
+                                    </div>`;
+    });
 
-    // 세부 옵션을 초기화
-    subOptionsDiv.innerHTML = '';
-
-    // 선택한 직군에 따라 세부 옵션 추가
-    switch (selectedOption) {
-      case '사무':
-        subOptionsDiv.innerHTML = `
-                                  <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                                    <label class="form-check-label" for="defaultCheck1">
-                                      Default checkbox
-                                    </label>
-                                  </div>
-                                  <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
-                                    <label class="form-check-label" for="defaultCheck2">
-                                      Disabled checkbox
-                                    </label>
-                                  </div>
-                                  `;
-        break;
-      case '영업':
-        subOptionsDiv.innerHTML = `
-                                  <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                                    <label class="form-check-label" for="defaultCheck1">
-                                      Default checkbox
-                                    </label>
-                                  </div>
-                                  <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
-                                    <label class="form-check-label" for="defaultCheck2">
-                                      Disabled checkbox
-                                    </label>
-                                  </div>
-                                  `;
-        break;
-      // 다른 직군에 대한 경우 추가
-      default:
-        subOptionsDiv.style.display = 'none';
-        break;
+    // 직군별 회사 검색
+    const searchCompany = await fetch(`/api/companies/business`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ business: selectedOption }),
+    });
+    const resCP = await searchCompany.json();
+    if (resCP.message) {
+      return (companiesBar.innerHTML = `<ul>"${selectedOption}"에 해당하는 ${resCP.message}</ul>`);
     }
 
-    const a = document.getElementById('defaultCheck1');
-    console.log(a.checked);
-
-    // 세부 옵션을 표시
-    if (selectedOption !== '직군') {
-      subOptionsDiv.style.display = 'block';
-    } else {
-      subOptionsDiv.style.display = 'none';
-    }
+    companiesBar.innerHTML = '';
+    resCP.forEach((CP) => {
+      companiesBar.innerHTML += `<div class="jobposting-card" id="companies-card" onclick="goToCompanySubpage(${CP.id})">
+                                <img
+                                    class="jobposting-img"
+                                    id="companies-img"
+                                    src="${CP.image}"
+                                    alt=""
+                                    srcset=""
+                                    onerror="this.src='/img/company.jpg';"
+                                />
+                                <div>
+                                    <div class="jobposting-title" id="companies-title">
+                                    ${CP.title}
+                                    </div>
+                                    <div class="jobposting-job" id="companies-job">${CP.business}</div>
+                                    <p>${CP.employees}</p>
+                                </div>
+                                </div>`;
+    });
   });
 }
 
@@ -183,6 +190,9 @@ function selectJobposting() {
     });
 
     const resRegion = await searchRegion.json();
+    if (resRegion.message) {
+      return (jobPostingsBar.innerHTML = `<ul>"${workArea}"${resRegion.message}</ul>`);
+    }
 
     jobPostingsBar.innerHTML = '';
     resRegion.forEach((JP) => {
@@ -208,7 +218,10 @@ function selectJobposting() {
     });
 
     const resExp = await selectExperience.json();
-    console.log(resExp);
+    if (resExp.message) {
+      return (jobPostingsBar.innerHTML = `<ul>"${workArea}"${resExp.message}</ul>`);
+    }
+
     jobPostingsBar.innerHTML = '';
     resExp.forEach((EP) => {
       jobPostingsBar.innerHTML += `<div class="jobposting-card" id="jobposting-card" onclick="goToJobpostingSubpage(${EP.id})">
@@ -236,6 +249,10 @@ function selectCompany() {
     });
 
     const resRegion = await searchRegion.json();
+    if (resRegion.message) {
+      return (companiesBar.innerHTML = `<ul>"${address}" ${resRegion.message}</ul>`);
+    }
+
     companiesBar.innerHTML = '';
     resRegion.forEach((CP) => {
       companiesBar.innerHTML += `<div class="jobposting-card" id="companies-card" onclick="goToCompanySubpage(${CP.id})">
@@ -311,4 +328,58 @@ function selectCompany() {
 //                                     </div>`;
 //     });
 //   });
+// }
+
+// 세부옵션
+// // 세부 옵션을 초기화
+// subOptionsDiv.innerHTML = '';
+
+// // 선택한 직군에 따라 세부 옵션 추가
+// switch (selectedOption) {
+//   case '사무':
+//     subOptionsDiv.innerHTML = `
+//                               <div class="form-check">
+//                                 <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+//                                 <label class="form-check-label" for="defaultCheck1">
+//                                   Default checkbox
+//                                 </label>
+//                               </div>
+//                               <div class="form-check">
+//                                 <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
+//                                 <label class="form-check-label" for="defaultCheck2">
+//                                   Disabled checkbox
+//                                 </label>
+//                               </div>
+//                               `;
+//     break;
+//   case '영업':
+//     subOptionsDiv.innerHTML = `
+//                               <div class="form-check">
+//                                 <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+//                                 <label class="form-check-label" for="defaultCheck1">
+//                                   Default checkbox
+//                                 </label>
+//                               </div>
+//                               <div class="form-check">
+//                                 <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
+//                                 <label class="form-check-label" for="defaultCheck2">
+//                                   Disabled checkbox
+//                                 </label>
+//                               </div>
+//                               `;
+//     break;
+//   // 다른 직군에 대한 경우 추가
+//   default:
+//     subOptionsDiv.style.display = 'none';
+//     break;
+// }
+
+// const a = document.getElementById('defaultCheck1');
+// console.log(a.checked);
+
+// // 세부 옵션을 표시
+// if (selectedOption !== '직군') {
+//   subOptionsDiv.style.display = 'block';
+// } else {
+//   subOptionsDiv.style.display = 'none';
 // }
