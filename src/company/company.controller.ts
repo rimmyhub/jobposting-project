@@ -64,7 +64,13 @@ export class CompanyController {
     return this.companyService.searchKeyword(keyword);
   }
 
-  // 윤영 : 주소가 일치하는 회사 전체 조회
+  // 윤영 : 직군 선택시 회사 사업과 일치한 회사 전체 조회
+  @Post('business')
+  searchOccupation(@Body('business') business: string) {
+    return this.companyService.searchOccupation(business);
+  }
+
+  // 윤영 : 선택한 지역과 주소가 일치하는 회사 전체 조회
   @Post('selectCompany')
   searchSelectCompany(@Body('address') address: string) {
     return this.companyService.searchSelectCompany(address);

@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Company } from '../domain/company.entity';
-import { IsNull, LessThanOrEqual, Like, Not, Repository } from 'typeorm';
+import { In, IsNull, LessThanOrEqual, Like, Not, Repository } from 'typeorm';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import * as bcrypt from 'bcrypt';
 import { UpdateCompanyDto } from './dto/update-company.dto';
@@ -106,6 +106,7 @@ export class CompanyService {
     const searchCompanies = await this.companyRepository
       .createQueryBuilder('company')
       .select([
+        'company.id',
         'company.title',
         'company.image',
         'company.business',
@@ -118,41 +119,81 @@ export class CompanyService {
 
     if (searchCompanies.length === 0) {
       throw new HttpException(
-        '검색하신 항목이 존재하지 않습니다.',
+        '검색 결과가 존재하지 않습니다.',
         HttpStatus.NOT_FOUND,
       );
     }
     return searchCompanies;
   }
 
-  // 윤영 : 일치주소 회사 전체 조회
+  // 윤영 : 직군 선택시 회사 사업과 일치한 회사 전체 조회
+  async searchOccupation(business: string) {
+    if (business === '직군 전체') {
+      return await this.companyRepository.find();
+    }
+    const splitBusiness = business.split('·');
+
+    const splitData = await this.companyRepository.find({
+      where: [
+        { business: Like(`%${splitBusiness[0]}%`) },
+        { business: Like(`%${splitBusiness[1]}%`) },
+        { business: Like(`%${splitBusiness[2]}%`) },
+      ],
+    });
+    if (splitData.length === 0) {
+      throw new HttpException(
+        '검색결과가 존재하지 않습니다.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    return splitData;
+  }
+
+  // 윤영 : 지역별 회사 전체 조회
   async searchSelectCompany(address: string) {
     // 모든 지역
     if (address === '지역 전국') {
       return this.companyRepository.find();
     }
-    // 경력전체 옵션
     if (address === '충청') {
-      return await this.companyRepository.find({
+      const resData = await this.companyRepository.find({
         where: [
-          { address: Like(`%충남%`) },
           { address: Like(`%충북%`) },
+          { address: Like(`%충남%`) },
           { address: Like(`%대전%`) },
           { address: Like(`%세종%`) },
         ],
       });
+
+      if (resData.length === 0) {
+        throw new HttpException(
+          '지역에 해당하는 회사가 없습니다.',
+          HttpStatus.GONE,
+        );
+      }
+
+      return resData;
     }
     if (address === '전라') {
-      return await this.companyRepository.find({
+      const resData = await this.companyRepository.find({
         where: [
           { address: Like(`%전북%`) },
           { address: Like(`%전남%`) },
           { address: Like(`%광주%`) },
         ],
       });
+
+      if (resData.length === 0) {
+        throw new HttpException(
+          '지역에 해당하는 회사가 없습니다.',
+          HttpStatus.GONE,
+        );
+      }
+
+      return resData;
     }
     if (address === '경상') {
-      return await this.companyRepository.find({
+      const resData = await this.companyRepository.find({
         where: [
           { address: Like(`%경북%`) },
           { address: Like(`%경남%`) },
@@ -161,6 +202,15 @@ export class CompanyService {
           { address: Like(`%부산%`) },
         ],
       });
+
+      if (resData.length === 0) {
+        throw new HttpException(
+          '지역에 해당하는 회사가 없습니다.',
+          HttpStatus.GONE,
+        );
+      }
+
+      return resData;
     }
     // // 충청도 옵션
     // if (address === '충청') {
@@ -220,9 +270,18 @@ export class CompanyService {
     //   });
     // }
     // 리턴값
-    return this.companyRepository.find({
+    const resData = await this.companyRepository.find({
       where: { address: Like(`%${address}%`) },
     });
+
+    if (resData.length === 0) {
+      throw new HttpException(
+        '지역에 해당하는 회사가 없습니다.',
+        HttpStatus.GONE,
+      );
+    }
+
+    return resData;
   }
 
   // 가입된 이메일이 있는지 확인

@@ -134,7 +134,7 @@ export class JobpostingService {
     const jobPostings = await this.jobpostingRepository
       .createQueryBuilder('jobposting')
       .select([
-        'jobposting.companyId',
+        'jobposting.id',
         'jobposting.title',
         'jobposting.workArea',
         'jobposting.dueDate',
@@ -144,12 +144,35 @@ export class JobpostingService {
 
     if (jobPostings.length === 0) {
       throw new HttpException(
-        '검색하신 항목이 존재하지 않습니다.',
+        '검색 결과가 존재하지 않습니다.',
         HttpStatus.NOT_FOUND,
       );
     }
 
     return jobPostings;
+  }
+
+  // 윤영 : 직군 선택시 채용공고 직군과 일치한 회사 전체 조회
+  async searchOccupation(job: string) {
+    if (job === '직군 전체') {
+      return await this.jobpostingRepository.find();
+    }
+    const splitJob = job.split('·');
+
+    const splitData = await this.jobpostingRepository.find({
+      where: [
+        { job: Like(`%${splitJob[0]}%`) },
+        { job: Like(`%${splitJob[1]}%`) },
+        { job: Like(`%${splitJob[2]}%`) },
+      ],
+    });
+    if (splitData.length === 0) {
+      throw new HttpException(
+        '검색결과가 존재하지 않습니다.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    return splitData;
   }
 
   // 윤영 : 지역 + 경력 일치하는 채용 공고글 전체 조회
@@ -169,26 +192,44 @@ export class JobpostingService {
     // 경력전체 옵션
     if (career === '경력 전체') {
       if (workArea === '충청') {
-        return await this.jobpostingRepository.find({
+        const resData = await this.jobpostingRepository.find({
           where: [
-            { workArea: Like(`%충남%`) },
             { workArea: Like(`%충북%`) },
+            { workArea: Like(`%충남%`) },
             { workArea: Like(`%대전%`) },
             { workArea: Like(`%세종%`) },
           ],
         });
+
+        if (resData.length === 0) {
+          throw new HttpException(
+            '지역에 해당하는 채용공고가 없습니다.',
+            HttpStatus.GONE,
+          );
+        }
+
+        return resData;
       }
       if (workArea === '전라') {
-        return await this.jobpostingRepository.find({
+        const resData = await this.jobpostingRepository.find({
           where: [
             { workArea: Like(`%전북%`) },
             { workArea: Like(`%전남%`) },
             { workArea: Like(`%광주%`) },
           ],
         });
+
+        if (resData.length === 0) {
+          throw new HttpException(
+            '지역에 해당하는 채용공고가 없습니다.',
+            HttpStatus.GONE,
+          );
+        }
+
+        return resData;
       }
       if (workArea === '경상') {
-        return await this.jobpostingRepository.find({
+        const resData = await this.jobpostingRepository.find({
           where: [
             { workArea: Like(`%경북%`) },
             { workArea: Like(`%경남%`) },
@@ -197,26 +238,53 @@ export class JobpostingService {
             { workArea: Like(`%부산%`) },
           ],
         });
+
+        if (resData.length === 0) {
+          throw new HttpException(
+            '지역에 해당하는 채용공고가 없습니다.',
+            HttpStatus.GONE,
+          );
+        }
+
+        return resData;
       }
-      return await this.jobpostingRepository.find({
-        where: {
-          workArea: Like(`%${workArea}%`),
-        },
+
+      const resData = await this.jobpostingRepository.find({
+        where: { workArea: Like(`%${workArea}%`) },
       });
+
+      if (resData.length === 0) {
+        throw new HttpException(
+          '지역에 해당하는 채용공고가 없습니다.',
+          HttpStatus.GONE,
+        );
+      }
+
+      return resData;
     }
     // 충청도 옵션
     if (workArea === '충청') {
       if (career === '경력 전체') {
-        return await this.jobpostingRepository.find({
+        const resData = await this.jobpostingRepository.find({
           where: [
-            { workArea: Like(`%충남%`) },
             { workArea: Like(`%충북%`) },
+            { workArea: Like(`%충남%`) },
             { workArea: Like(`%대전%`) },
             { workArea: Like(`%세종%`) },
           ],
         });
+
+        if (resData.length === 0) {
+          throw new HttpException(
+            '지역에 해당하는 채용공고가 없습니다.',
+            HttpStatus.GONE,
+          );
+        }
+
+        return resData;
       }
-      return await this.jobpostingRepository.find({
+
+      const resData = await this.jobpostingRepository.find({
         where: [
           { workArea: Like(`%충남%`), career: Like(`%${career}%`) },
           { workArea: Like(`%충북%`), career: Like(`%${career}%`) },
@@ -224,30 +292,57 @@ export class JobpostingService {
           { workArea: Like(`%세종%`), career: Like(`%${career}%`) },
         ],
       });
+
+      if (resData.length === 0) {
+        throw new HttpException(
+          '지역에 해당하는 채용공고가 없습니다.',
+          HttpStatus.GONE,
+        );
+      }
+
+      return resData;
     }
     // 전라도 옵션
     if (workArea === '전라') {
       if (career === '경력 전체') {
-        return await this.jobpostingRepository.find({
+        const resData = await this.jobpostingRepository.find({
           where: [
             { workArea: Like(`%전북%`) },
             { workArea: Like(`%전남%`) },
             { workArea: Like(`%광주%`) },
           ],
         });
+
+        if (resData.length === 0) {
+          throw new HttpException(
+            '지역에 해당하는 채용공고가 없습니다.',
+            HttpStatus.GONE,
+          );
+        }
+
+        return resData;
       }
-      return await this.jobpostingRepository.find({
+      const resData = await this.jobpostingRepository.find({
         where: [
           { workArea: Like(`%전북%`), career: Like(`%${career}%`) },
           { workArea: Like(`%전남%`), career: Like(`%${career}%`) },
           { workArea: Like(`%광주%`), career: Like(`%${career}%`) },
         ],
       });
+
+      if (resData.length === 0) {
+        throw new HttpException(
+          '지역에 해당하는 채용공고가 없습니다.',
+          HttpStatus.GONE,
+        );
+      }
+
+      return resData;
     }
     // 경상도 옵션
     if (workArea === '경상') {
       if (career === '경력 전체') {
-        return await this.jobpostingRepository.find({
+        const resData = await this.jobpostingRepository.find({
           where: [
             { workArea: Like(`%경북%`) },
             { workArea: Like(`%경남%`) },
@@ -256,8 +351,17 @@ export class JobpostingService {
             { workArea: Like(`%부산%`) },
           ],
         });
+
+        if (resData.length === 0) {
+          throw new HttpException(
+            '지역에 해당하는 채용공고가 없습니다.',
+            HttpStatus.GONE,
+          );
+        }
+
+        return resData;
       }
-      return await this.jobpostingRepository.find({
+      const resData = await this.jobpostingRepository.find({
         where: [
           { workArea: Like(`%경북%`), career: Like(`%${career}%`) },
           { workArea: Like(`%경남%`), career: Like(`%${career}%`) },
@@ -266,11 +370,29 @@ export class JobpostingService {
           { workArea: Like(`%부산%`), career: Like(`%${career}%`) },
         ],
       });
+
+      if (resData.length === 0) {
+        throw new HttpException(
+          '지역에 해당하는 채용공고가 없습니다.',
+          HttpStatus.GONE,
+        );
+      }
+
+      return resData;
     }
     // 리턴값
-    return this.jobpostingRepository.find({
+    const resData = await this.jobpostingRepository.find({
       where: { workArea: Like(`%${workArea}%`), career: Like(`%${career}%`) },
     });
+
+    if (resData.length === 0) {
+      throw new HttpException(
+        '지역에 해당하는 채용공고가 없습니다.',
+        HttpStatus.GONE,
+      );
+    }
+
+    return resData;
   }
 
   // // 윤영 : 지역검색시 해당지역과 일치하는 채용 공고글 전체 조회
