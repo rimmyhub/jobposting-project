@@ -60,11 +60,11 @@ export class AppController {
   @Render('subpage-company')
   async getSubpageCompany(@Request() req, @Param('id') id: string) {
     const cookie: string = await req.cookies['authorization'];
+    console.log('id = ', id);
     if (cookie) {
       return { isLogin: 1, id };
     }
 
-    console.log(cookie);
     return {
       isLogin: 0,
       id,

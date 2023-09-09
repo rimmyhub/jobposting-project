@@ -87,6 +87,7 @@ export class CompanyController {
   // 회사 1개 조회- 상세페이지용
   @Get(':id')
   finOneCompany(@Param() { id }: ParamDto) {
+    console.log('finOneCompany= ', id);
     return this.companyService.finOneCompany(id); //string 으로 가져와서 숫자로 변환
   }
 

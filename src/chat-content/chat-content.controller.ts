@@ -47,7 +47,6 @@ export class ChatContentController {
   @Put('/company/:id')
   async comReadChat(@Param('id') id: number, @Request() req) {
     try {
-      console.log('req.company.id = ', req.company.id);
       await this.chatContentService.readChatContents(id, req.company.id);
     } catch (e) {
       return {

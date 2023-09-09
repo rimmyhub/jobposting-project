@@ -1,10 +1,8 @@
 // 회사 정보를 가져오는 함수
 async function fetchCompanyData(companyId) {
-  console.log(companyId);
   try {
     // 서버 API로 데이터를 요청
     const response = await fetch(`/api/companies/${companyId}`);
-    console.log(response);
     if (response.ok) {
       const companyData = await response.json();
 

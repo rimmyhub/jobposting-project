@@ -14,30 +14,33 @@ export class ChatService {
   async checkChat(id: string, type: string): Promise<any> {
     console.log('checkChat', id, type);
     let result: any;
-    if (type === 'user') {
-      result = await this.chatRepository
-        .createQueryBuilder('chat')
-        .select('chat.id') // 채팅의 아이디
-        .leftJoin('chat.chatContent', 'chatContent')
-        .addSelect('COUNT(chatContent.isCheck) as isCheckCount')
-        .where(`chat.user_id = ${id}`)
-        .andWhere('chatContent.is_check = 0')
-        .andWhere(`chatContent.sender_id != ${id}`)
-        .groupBy('chat.id')
-        .getRawMany();
-    } else {
-      result = await this.chatRepository
-        .createQueryBuilder('chat')
-        .select('chat.id') // 채팅의 아이디
-        .leftJoin('chat.chatContent', 'chatContent')
-        .addSelect('COUNT(chatContent.isCheck) as isCheckCount')
-        .where(`chat.company_id = ${id}`)
-        .andWhere('chatContent.is_check = 0')
-        .andWhere(`chatContent.sender_id != ${id}`)
-        .groupBy('chat.id')
-        .getRawMany();
+    try {
+      if (type === 'user') {
+        result = await this.chatRepository
+          .createQueryBuilder('chat')
+          .select('chat.id') // 채팅의 아이디
+          .leftJoin('chat.chatContent', 'chatContent')
+          .addSelect('COUNT(chatContent.isCheck) as isCheckCount')
+          .where(`chat.user_id = :user_id`, { user_id: id })
+          .andWhere('chatContent.is_check = 0')
+          .andWhere(`chatContent.sender_id = :sender_id`, { sender_id: id })
+          .groupBy('chat.id')
+          .getRawMany();
+      } else {
+        result = await this.chatRepository
+          .createQueryBuilder('chat')
+          .select('chat.id') // 채팅의 아이디
+          .leftJoin('chat.chatContent', 'chatContent')
+          .addSelect('COUNT(chatContent.isCheck) as isCheckCount')
+          .where(`chat.company_id = :company_id`, { company_id: id })
+          .andWhere('chatContent.is_check = 0')
+          .andWhere(`chatContent.sender_id = :sender_id`, { sender_id: id })
+          .groupBy('chat.id')
+          .getRawMany();
+      }
+    } catch (error) {
+      console.log(error);
     }
-
     return result;
   }
 
@@ -71,24 +74,24 @@ export class ChatService {
   }
 
   // 회사유저의 채팅리스트 불러오기
-  async comGetAllChatRoom(id: number): Promise<Chat[]> {
+  async comGetAllChatRoom(id: string): Promise<Chat[]> {
     const chatRooms = await this.chatRepository
       .createQueryBuilder('chat')
       .select(['chat.id', 'chat.companyId', 'chat.userId', 'user.email'])
       .leftJoin('chat.user', 'user')
-      .where(`chat.companyId = ${id}`)
+      .where(`chat.company_id = :company_id`, { company_id: id })
       .getMany();
 
     return chatRooms;
   }
 
   // 일반 유저의 채팅리스트 불러오기
-  async userGetAllChatRoom(id: number): Promise<Chat[]> {
+  async userGetAllChatRoom(id: string): Promise<Chat[]> {
     const chatRooms = await this.chatRepository
       .createQueryBuilder('chat')
       .select(['chat.id', 'chat.companyId', 'chat.userId', 'company.email'])
       .leftJoin('chat.company', 'company')
-      .where(`chat.userId = ${id}`)
+      .where(`chat.user_id = :user_id`, { user_id: id })
       .getMany();
     return chatRooms;
   }
