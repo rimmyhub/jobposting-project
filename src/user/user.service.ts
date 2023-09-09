@@ -19,7 +19,7 @@ export class UserService {
   ) {}
 
   // 이메일 가져오기
-  async getEmail(id: number) {
+  async getEmail(id: string) {
     const result = await this.userRepository.findOne({
       select: ['email'],
       where: { id: id },
@@ -28,7 +28,7 @@ export class UserService {
   }
 
   // 유저정보상세조회
-  async findOne(id: number) {
+  async findOne(id: string) {
     const userInfo = await this.userRepository.findOne({
       select: {
         id: true,
@@ -91,7 +91,7 @@ export class UserService {
   }
 
   // 유저정보 수정
-  async update(id: number, updateUserDto: UpdateUserDto) {
+  async update(id: string, updateUserDto: UpdateUserDto) {
     // 먼저 유저가 있는지 확인한다.
     await this.findOne(id);
     this.userRepository.update(id, updateUserDto);
@@ -99,7 +99,8 @@ export class UserService {
   }
 
   // 유저 이미지 수정
-  async updateUserImage(id: number, image: string) {
+  async updateUserImage(id: string, image: string) {
+    console.log(image);
     const isUser = await this.userRepository.findOne({ where: { id } });
     if (!isUser) {
       throw new HttpException(
@@ -113,7 +114,7 @@ export class UserService {
   }
 
   // 유저 탈퇴 deleteAt에 삭제시간 넣기
-  async remove(id: number) {
+  async remove(id: string) {
     // 유저가 있는지 확인
     const isUser = await this.userRepository.findOne({
       select: {
@@ -156,7 +157,7 @@ export class UserService {
   }
 
   // getUserRefTokenMatch
-  async getUserRefTokenMatch(refreToken: string, id: number): Promise<User> {
+  async getUserRefTokenMatch(refreToken: string, id: string): Promise<User> {
     const user: User = await this.userRepository.findOne({
       select: {
         email: true,

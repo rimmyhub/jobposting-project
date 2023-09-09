@@ -124,7 +124,7 @@ function companiesAppendTemp(data) {
   const temp = data
     .map((company) => {
       return `
-              <div class="jobposting-card" id="companies-card" onclick="goToCompanySubpage(${company.id})">
+              <div class="jobposting-card" id="companies-card" onclick="goToCompanySubpage('${company.id}')">
               <img
                 class="jobposting-img"
                 id="companies-img"
@@ -173,7 +173,8 @@ addCompaniesBtn.addEventListener('click', async function () {
 });
 
 function goToCompanySubpage(companyId) {
-  const subPageUrl = `/subpage/company/${companyId}`;
+  console.log('goToCompanySubpage = ', companyId);
+  const subPageUrl = `/company/${companyId}`;
   window.location.href = subPageUrl;
 }
 

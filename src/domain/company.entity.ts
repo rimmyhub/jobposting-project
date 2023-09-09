@@ -14,11 +14,8 @@ import { Chat } from './chat.entity';
 
 @Entity()
 export class Company {
-  @PrimaryGeneratedColumn()
-  uuid: number;
-
-  @Column()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column({ type: 'varchar', comment: '이메일' })
   email: string;

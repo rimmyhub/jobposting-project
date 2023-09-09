@@ -25,7 +25,7 @@ export class ChatController {
     @Request() req,
     @Param('companyId') companyId: string,
   ): Promise<Chat> {
-    return this.chatService.createUserChat(req.user.id, +companyId);
+    return this.chatService.createUserChat(req.user.id, companyId);
   }
 
   // 회사 -> 유저 채팅 신청
@@ -37,7 +37,7 @@ export class ChatController {
   ): Promise<Chat> {
     const result = await this.chatService.createCompanyChat(
       req.company.id,
-      Number(userId),
+      userId,
     );
     return result;
   }
@@ -75,7 +75,6 @@ export class ChatController {
   @Post('save')
   saveChatContent(@Request() req) {
     const { chatContent, chatId, senderId, senderType } = req.Body;
-    console.log('save = ', chatContent, chatId, senderId, senderType);
   }
 
   // 유저 - 새로운 메세지 체크

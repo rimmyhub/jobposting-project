@@ -32,28 +32,28 @@ export class ChatGateway {
   @SubscribeMessage('saveClientId')
   async loginClientId(
     @ConnectedSocket() socket: Socket,
-    @MessageBody() userId: number,
+    @MessageBody() userId: string,
   ) {
     await this.cacheManager.store.set(`${userId}`, socket.id, 100000);
 
     const result = await this.cacheManager.store.keys();
     // 키의 이름에 userId를 넣어준다.
-    console.log('saveClientId = ', result);
   }
 
   // 실시간으로 메세지수신을 알려주는 socket
   @SubscribeMessage('msg-notification')
   async msgNotification(
     @ConnectedSocket() socket: Socket,
-    @MessageBody() userId: number,
+    @MessageBody() payload: Array<any>,
   ) {
     // 메세지수신알림을 보낼 유저id와 socketId를 가져온다
-    // 알림을 보내고자하는 userId가 포함된 키값의 socketId를 가져온다.
-
-    const getsocketId: string = await this.cacheManager.store.get(`${userId}`);
+    // 알림을 보내고자하는 payload가 포함된 키값의 socketId를 가져온다.
+    console.log(payload);
+    const getsocketId: string = await this.cacheManager.store.get(
+      `${payload[0]}`,
+    );
     if (getsocketId) {
-      this.io.to(getsocketId).emit('msg-notification', userId);
-      // this.io.to(`'${getsocketId}'`).emit('msg-notification', userId);
+      this.io.to(getsocketId).emit('msg-notification', payload[1]);
     }
   }
 

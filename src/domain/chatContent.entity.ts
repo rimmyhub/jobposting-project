@@ -18,7 +18,7 @@ export class ChatContent {
   chatId: number;
 
   @Column({ name: 'sender_id', comment: '보낸유저의 ID' })
-  senderId: number;
+  senderId: string;
 
   @Column({ name: 'sender_type' })
   senderType: string;

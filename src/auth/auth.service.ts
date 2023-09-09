@@ -88,7 +88,6 @@ export class AuthService {
       // 해당 이메일의 회사관리자정보가 있는지 확인
       clientInfo = await this.companyService.findEmail(email);
     }
-    console.log('validateClient = ', clientInfo);
 
     // 로그인한 회사의 id email password를 result에 담는다.
     // 패스워드일치 확인
@@ -107,7 +106,6 @@ export class AuthService {
   // 로그인
   async login(id: number, email: string, role: string) {
     let payload: object;
-    console.log('login = ', id, email, role);
     // accessToken 생성
     const accessToken = await this.generateToken.generateAccessToken(
       id,

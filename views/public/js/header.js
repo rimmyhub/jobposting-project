@@ -51,7 +51,13 @@ const ejs = (window.onload = function () {
   }
   if (profile) {
     profile.addEventListener('click', () => {
-      location.href = '/mypage';
+      let type = window.localStorage.getItem('type');
+      if (type === 'user') {
+        location.href = '/mypage';
+      } else if (type === 'company') {
+        location.href = '/mypage/company';
+      }
+      console.error('Invalid type:', type);
     });
   }
 
@@ -164,9 +170,9 @@ const ejs = (window.onload = function () {
   async function isLogin() {
     const id = window.localStorage.getItem('id');
     if (id) {
-      await checkNewMsg();
       // 새로운 채팅이 있는지 확인하기
-      getChatRooms();
+      await getChatRooms();
+      await checkNewMsg();
     }
   }
 });
@@ -201,49 +207,54 @@ async function getChatRooms() {
 
 // 메세지리스트 화면에 출력하기
 async function appendMsgList(datas, type) {
-  messageList.innerHTML = '';
-  if (type === 'company') {
-    datas.forEach((el) => {
-      const li = document.createElement('div');
-      li.innerHTML = `<div id="message-card-${el.id}" class="message-card" onclick="chattingBox('${el.id}', '${el.user.email}', '${el.userId}')">
-                        <div class="user-profile">
-                          <img src="/img/userImg.jpg" alt="" srcset="" />
-                        </div>
-                        <div class="message-info">
-                          <div class="user-name">${el.user.email}</div>
-                          <div>메세지 확인</div>
-                        </div>
-                        <i
-                          id="exclamation-icon-${el.id}"
-                          class="fa-solid fa-exclamation new-msg-alram-icon"
-                        ></i>
-                      </div>`;
-      messageList.append(li);
-    });
-  } else {
-    datas.forEach((el) => {
-      const li = document.createElement('div');
-      li.innerHTML = `<div id="message-card-${el.id}" class="message-card" onclick="chattingBox('${el.id}', '${el.company.email}', '${el.companyId}')">
-                        <div class="user-profile">
-                          <img src="/img/userImg.jpg" alt="" srcset="" />
-                        </div>
-                        <div class="message-info">
-                          <div class="user-name">${el.company.email}</div>
-                          <div>메세지 확인</div>
-                        </div>
-                        <i
-                          id="exclamation-icon-${el.id}"
-                          class="fa-solid fa-exclamation new-msg-alram-icon"
-                        ></i>
-                      </div>`;
-      messageList.append(li);
-    });
+  if (messageList !== null) {
+    messageList.innerHTML = '';
+    if (type === 'company') {
+      datas.forEach((el) => {
+        const li = document.createElement('div');
+        console.log(el.userId);
+        li.innerHTML = `<div id="message-card-${el.id}" class="message-card" onclick="chattingBox('${el.id}', '${el.user.email}', '${el.userId}')">
+                          <div class="user-profile">
+                            <img src="/img/userImg.jpg" alt="" srcset="" />
+                          </div>
+                          <div class="message-info">
+                            <div class="user-name">${el.user.email}</div>
+                            <div>메세지 확인</div>
+                          </div>
+                          <i
+                            id="${el.userId}"
+                            class="fa-solid fa-exclamation new-msg-alram-icon"
+                          ></i>
+                        </div>`;
+        messageList.append(li);
+      });
+    } else {
+      datas.forEach((el) => {
+        console.log(el.companyId);
+        const li = document.createElement('div');
+        li.innerHTML = `<div id="message-card-${el.id}" class="message-card" onclick="chattingBox('${el.id}', '${el.company.email}', '${el.companyId}')">
+                          <div class="user-profile">
+                            <img src="/img/userImg.jpg" alt="" srcset="" />
+                          </div>
+                          <div class="message-info">
+                            <div class="user-name">${el.company.email}</div>
+                            <div>메세지 확인</div>
+                          </div>
+                          <i
+                            id="${el.companyId}"
+                            class="fa-solid fa-exclamation new-msg-alram-icon"
+                          ></i>
+                        </div>`;
+        messageList.append(li);
+      });
+    }
   }
 }
 
 socket.on('msg-notification', async (userId) => {
-  console.log('msgNotification', userId);
-  const exclamationIcon = document.getElementById('exclamation-icon');
+  console.log('msg-notification = ', userId);
+  const exclamationIcon = document.getElementById(`${userId}`);
+  // console.log('exclamationIcon = ', exclamationIcon);
   await checkNewMsg();
   newMsgIcon();
   exclamationIcon.style.opacity = 1;
@@ -295,7 +306,6 @@ async function chattingBox(getRoomId, email, recipientId, $event) {
   const exclamationIcon = messageCard.children[2];
   exclamationIcon.style.opacity = 0;
 
-  console.log('messageCard = ', messageCard);
   reciId = recipientId;
   await readMsg(getRoomId);
   const userName = document.createElement('h6');
@@ -364,7 +374,7 @@ async function checkNewMsg() {
       });
   }
   // 유저가 로그인 했을 때 새메세지가 왔음을 알 수 있게 한다.
-  if (newMsgs.length) alarmIcon.style.opacity = 1;
+  if (newMsgs.length && alarmIcon) alarmIcon.style.opacity = 1;
 }
 
 // 채팅내용가져오기
@@ -391,18 +401,18 @@ function leaveRoom() {
 
 // 메세지 보내기
 async function sendMessage() {
-  const userId = window.localStorage.getItem('id');
-  const userType = window.localStorage.getItem('type');
+  const myId = window.localStorage.getItem('id');
+  const myType = window.localStorage.getItem('type');
   const payload = {
-    userId,
-    userType,
+    userId: myId,
+    userType: myType,
     roomId,
   };
   // 메세지 내용 저장하기
   await socket.emit('message', chatContent.value, payload);
 
   // 소켓 상대방에게 메세지알림 보내기
-  socket.emit('msg-notification', reciId);
+  socket.emit('msg-notification', reciId, myId);
   chatContent.value = '';
 }
 

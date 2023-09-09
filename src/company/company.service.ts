@@ -12,6 +12,7 @@ import { CreateCompanyDto } from './dto/create-company.dto';
 import * as bcrypt from 'bcrypt';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 import { Cron } from '@nestjs/schedule';
+import { Console } from 'console';
 
 @Injectable()
 export class CompanyService {
@@ -24,7 +25,7 @@ export class CompanyService {
   // getUserRefTokenMatch
   async getCompanyRefTokenMatch(
     refreToken: string,
-    id: number,
+    id: string,
   ): Promise<Company> {
     const company: Company = await this.companyRepository.findOne({
       select: {
@@ -32,7 +33,7 @@ export class CompanyService {
         currentRefreshToken: true,
         currentRefreshTokenExp: true,
       },
-      where: { uuid: id },
+      where: { id: id },
     });
 
     // 유저 테이블 내에 정의된 암호화된 refresh_token값과
@@ -286,24 +287,33 @@ export class CompanyService {
   // 가입된 이메일이 있는지 확인
   async findEmail(email: string) {
     const isEmail = await this.companyRepository.findOne({
-      select: { uuid: true, email: true, password: true, isVerified: true },
+      select: { id: true, email: true, password: true, isVerified: true },
       where: { email },
     });
     return isEmail;
   }
 
-  // 회사 1개 조회
-  async finOneCompany(id: number) {
+  // 회사 1개 조회 - 마이페이지용
+  async findOneCompanyById(companyId: string) {
     const company = await this.companyRepository.findOne({
-      where: { id },
+      where: { id: companyId },
     });
     return company;
   }
 
-  // 회사 수정
-  async updateCompany(id: number, updateCompanyDto: UpdateCompanyDto) {
+  // 회사 1개 조회- 상세페이지용
+  async finOneCompany(id: string) {
     const company = await this.companyRepository.findOne({
-      where: { uuid: id },
+      where: { id },
+    });
+
+    return company;
+  }
+
+  // 회사 수정
+  async updateCompany(id: string, updateCompanyDto: UpdateCompanyDto) {
+    const company = await this.companyRepository.findOne({
+      where: { id },
     });
     if (!company) {
       throw new HttpException(
@@ -343,9 +353,9 @@ export class CompanyService {
   }
 
   // 회사 삭제
-  async removeCompany(id: number) {
+  async removeCompany(id: string) {
     const company = await this.companyRepository.findOne({
-      where: { uuid: id },
+      where: { id },
     });
 
     if (!company) {
@@ -411,8 +421,8 @@ export class CompanyService {
   }
 
   // 회사를 생성할 때, 기존 사용자의 정보를 update한다.
-  async updateCompanyInfo(updateCompanyDto: CreateCompanyDto): Promise<any> {
-    const { email, password } = updateCompanyDto;
+  async updateCompanyInfo(createCompanyDto: CreateCompanyDto): Promise<any> {
+    const { email, password } = createCompanyDto;
 
     const existingCompany = await this.companyRepository.findOne({
       where: { email },
@@ -427,13 +437,13 @@ export class CompanyService {
 
     // 인증된 사용자인 경우에만 정보 업데이트
     if (existingCompany.isVerified) {
-      existingCompany.title = updateCompanyDto.title;
-      existingCompany.introduction = updateCompanyDto.introduction;
-      existingCompany.website = updateCompanyDto.website;
-      existingCompany.address = updateCompanyDto.address;
-      existingCompany.business = updateCompanyDto.business;
-      existingCompany.employees = updateCompanyDto.employees;
-      existingCompany.image = updateCompanyDto.image;
+      existingCompany.title = createCompanyDto.title;
+      existingCompany.introduction = createCompanyDto.introduction;
+      existingCompany.website = createCompanyDto.website;
+      existingCompany.address = createCompanyDto.address;
+      existingCompany.business = createCompanyDto.business;
+      existingCompany.employees = createCompanyDto.employees;
+      existingCompany.image = createCompanyDto.image;
 
       if (password) {
         // 새로운 비밀번호가 제공된 경우에만 업데이트

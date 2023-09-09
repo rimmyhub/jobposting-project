@@ -3,7 +3,6 @@ async function fetchCompanyData(companyId) {
   try {
     // 서버 API로 데이터를 요청
     const response = await fetch(`/api/companies/${companyId}`);
-
     if (response.ok) {
       const companyData = await response.json();
 

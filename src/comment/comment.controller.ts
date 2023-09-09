@@ -25,10 +25,10 @@ export class CommentController {
   @Post(':companyId')
   createComment(
     @Body() createCommentDto: CreateCommentDto,
-    @Param('companyId') companyId: number,
+    @Param('companyId') companyId: string,
   ) {
     const comment = this.commentService.createComment(
-      +companyId,
+      companyId,
       createCommentDto,
     );
     return comment;
@@ -36,14 +36,14 @@ export class CommentController {
 
   // 리뷰 전체 조회
   @Get(':companyId')
-  findAllComment(@Param('companyId') companyId: number) {
-    return this.commentService.findAllComment(+companyId);
+  findAllComment(@Param('companyId') companyId: string) {
+    return this.commentService.findAllComment(companyId);
   }
 
   // 리뷰 상세 조회
   @Get(':companyId/:commentId')
   findOneComment(
-    @Param('companyId') companyId: number, // companyId 파라미터 추가
+    @Param('companyId') companyId: string, // companyId 파라미터 추가
     @Param('commentId') commentId: number, // commentId 파라미터 추가
   ) {
     return this.commentService.findOneComment(companyId, commentId); // 수정된 파라미터 전달
