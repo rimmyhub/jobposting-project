@@ -35,7 +35,33 @@ export class JobcrawlerService {
       throw error;
     }
   }
-  tasks = [];
+
+  // 직무 정보 파싱
+  taskParsing(page) {
+    const $ = cheerio.load(page);
+    const $jobList = $('.c_row');
+    const tasks = [];
+    $jobList.each((idx, node) => {
+      const taskText = $(node).find('.cl_btm > span').text().trim();
+      const taskWithoutDate = taskText.replace(/~\d{2}.\d{2}.*?\)/, '').trim();
+      const taskWithoutDateAndExtra = taskWithoutDate
+        .replace(/\([^)]+\)$/gm, '')
+        .trim();
+      const task = taskWithoutDateAndExtra || '기타';
+      tasks.push(task);
+
+      //   const jobText = $(node).find('.cl_btm > span').text().trim();
+      //   const jobWithoutDate = jobText.replace(/~\d{2}.\d{2}.*?\)/, '').trim();
+      //   const jobWithoutDateAndExtra = jobWithoutDate
+      //     .replace(/\([^)]+\)$/gm, '')
+      //     .trim();
+      //   const job = jobWithoutDateAndExtra || '기타';
+      // });
+    });
+    console.log('tasks=============', tasks);
+    return tasks;
+  }
+
   // 회사 정보 파싱
   companyParsing(page) {
     const $ = cheerio.load(page);
@@ -87,15 +113,16 @@ export class JobcrawlerService {
         const image =
           'http:' + $(node).find('div.jcinfo_logo img').attr('src') || '';
 
-        const taskText = $(node).find('.cl_btm > span').text().trim();
-        const taskWithoutDate = taskText
-          .replace(/~\d{2}.\d{2}.*?\)/, '')
-          .trim();
-        const taskWithoutDateAndExtra = taskWithoutDate
-          .replace(/\([^)]+\)$/gm, '')
-          .trim();
-        const task = taskWithoutDateAndExtra || '기타';
-        this.tasks.push(task);
+        // const $jobList = $('.c_row');
+        // const taskText = $(node).find('.cl_btm > span').text().trim();
+        // const taskWithoutDate = taskText
+        //   .replace(/~\d{2}.\d{2}.*?\)/, '')
+        //   .trim();
+        // const taskWithoutDateAndExtra = taskWithoutDate
+        //   .replace(/\([^)]+\)$/gm, '')
+        //   .trim();
+        // const task = taskWithoutDateAndExtra || '기타';
+        // tasks.push(task);
 
         // 컴퍼니를 변수에 할당
         const company = {
@@ -119,7 +146,7 @@ export class JobcrawlerService {
   }
 
   // 채용공고 파싱
-  jobParsing(page) {
+  jobParsing(page, task) {
     const $ = cheerio.load(page);
     const $jobList = $('.job_info_detail');
     const jobs = [];
@@ -156,6 +183,7 @@ export class JobcrawlerService {
 
       // const dueDate = faker.date.future();
       let dueDate;
+
       const $dueDate = $('.fleft');
       $dueDate.each((idx, node) => {
         dueDate = $(node).find('.day:eq(1) em').text().trim() || '상시 채용';
@@ -164,6 +192,7 @@ export class JobcrawlerService {
 
       const jobposting = {
         companyId: Number(companyId),
+        job: task,
         title,
         career,
         salary,
@@ -196,7 +225,13 @@ export class JobcrawlerService {
 
       // Cheerio를 사용하여 페이지의 HTML을 파싱하고, jobLinks선택하여 채용공고의 링크를 제공
       const $ = cheerio.load(jobpostingContent);
+
+      const tasksContent = await this.getAxiosData(jobpostingUrl);
+      const tasks = this.taskParsing(tasksContent);
+      console.log(tasks);
+
       const jobLinks = $('li.c_col .cell_mid .cl_top a');
+      let count = 0;
       for (const jobLink of jobLinks) {
         // 채용공고의 링크를 순회해서 상세페이지의 HTML을 가져오고
 
@@ -207,14 +242,16 @@ export class JobcrawlerService {
         const companyContent = await this.getAxiosData(jobDetailUrl);
 
         const jobContent = await this.getAxiosData(jobDetailUrl);
+
         const companies = this.companyParsing(companyContent);
-        const jobs = this.jobParsing(jobContent);
+
+        const jobs = this.jobParsing(jobContent, tasks[count]);
         companyInfo.push(companies);
         jobInfo.push(jobs);
-
+        count++;
         // [[company, company], [company, company], [company, company], []]
 
-        await this.delay(10000); // 각페이지 크롤링 후 5초 대기
+        await this.delay(1000); // 각페이지 크롤링 후 1초 대기
       }
     }
     // 코드 실행시간을 측정
@@ -260,12 +297,13 @@ export class JobcrawlerService {
         const jobEntity = this.jobpostingRepository.create({
           // 생성하고
           companyId: job.companyId,
-          // company: { id: company.id },
+          company: { id: job.companyId },
           // companyId: company.id,
           title: job.title,
           career: job.career,
           salary: job.salary,
           education: job.education,
+          job: job.job,
           workType: job.workType,
           workArea: job.workArea,
           content: job.content,

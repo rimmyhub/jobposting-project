@@ -11,7 +11,7 @@ export class ChatService {
   ) {}
 
   // 해당유저가 받은 메세지 중에 isCkeck가 false인 chat-content가 있는지 확인하는 class
-  async checkChat(id: number, type: string): Promise<any> {
+  async checkChat(id: string, type: string): Promise<any> {
     console.log('checkChat', id, type);
     let result: any;
     if (type === 'user') {
@@ -31,7 +31,7 @@ export class ChatService {
         .select('chat.id') // 채팅의 아이디
         .leftJoin('chat.chatContent', 'chatContent')
         .addSelect('COUNT(chatContent.isCheck) as isCheckCount')
-        .where(`chat.company_uuid = ${id}`)
+        .where(`chat.company_id = ${id}`)
         .andWhere('chatContent.is_check = 0')
         .andWhere(`chatContent.sender_id != ${id}`)
         .groupBy('chat.id')
@@ -43,16 +43,16 @@ export class ChatService {
 
   // 유저 -> 회사에게 채팅 신청
   // 유효성 검사 필요없나?.. 생각하기
-  async createUserChat(id: number, companyId: number): Promise<Chat> {
+  async createUserChat(id: string, companyId: string): Promise<Chat> {
     const chat = await this.chatRepository.save({
       user: { id }, // 외래키 가져오는 방법
-      company: { uuid: companyId }, // 외래키 가져오는 방법
+      company: { id: companyId }, // 외래키 가져오는 방법
     });
     return chat;
   }
 
   // 회사 -> 유저에게 채팅신청
-  async createCompanyChat(id: number, userId: number): Promise<Chat> {
+  async createCompanyChat(id: string, userId: string): Promise<Chat> {
     const isChatRoom = await this.chatRepository.find({
       where: {
         userId: userId,
@@ -63,7 +63,7 @@ export class ChatService {
       throw new HttpException('이미 대화상대입니다.', HttpStatus.BAD_REQUEST);
     }
     const chat = await this.chatRepository.save({
-      company: { uuid: id }, // company 가드로 회사 가져오기
+      company: { id: id }, // company 가드로 회사 가져오기
       user: { id: userId }, // userid 외래키 찾기
     });
     console.log('chat = ', chat);
@@ -94,7 +94,7 @@ export class ChatService {
   }
 
   // 유저가 -> 회사 채팅 삭제
-  async removeUserChat(id: number, chatId: number) {
+  async removeUserChat(id: string, chatId: number) {
     const chat = await this.chatRepository.findOne({
       where: { id: chatId },
     });
@@ -115,7 +115,7 @@ export class ChatService {
   }
 
   // 회사가 -> 유저 채팅 삭제
-  async removeCompanyChat(id: number, chatId: number) {
+  async removeCompanyChat(id: string, chatId: number) {
     const chat = await this.chatRepository.findOne({
       where: { id: chatId },
     });

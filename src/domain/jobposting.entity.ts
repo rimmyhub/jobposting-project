@@ -18,7 +18,7 @@ export class Jobposting {
   id: number;
 
   @Column({ name: 'company_id' })
-  companyId: number;
+  companyId: string;
 
   @Column({ type: 'varchar', comment: '채용 공고 제목' })
   title: string;
@@ -45,7 +45,7 @@ export class Jobposting {
   content: string;
 
   @Column({ type: 'varchar', comment: '채용 마감일' })
-  dueDate: string;
+  dueDate: Date | string;
 
   @CreateDateColumn({ name: 'create_at', comment: '생성일' })
   createdAt: Date;

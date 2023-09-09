@@ -18,7 +18,7 @@ export class ApplicantService {
   ) {}
 
   // 내가 지원한 공고 가져오기
-  async getJobpostingById(id: number) {
+  async getJobpostingById(id: string) {
     const applications = await this.applicantRepository.find({
       where: { userId: id },
       relations: ['jobposting'], // 채용공고 정보를 함께 가져오기 위해 관계 설정
@@ -32,7 +32,7 @@ export class ApplicantService {
   }
 
   // 지원하기
-  async createApply(id: number, jobpostingId: number): Promise<Applicant> {
+  async createApply(id: string, jobpostingId: number): Promise<Applicant> {
     // 사용자 조회
     const existingUser = await this.userRepository.findOne({ where: { id } });
 
@@ -84,7 +84,7 @@ export class ApplicantService {
 
   // 회사지원 유저
   async findAllUserApply(
-    id: number,
+    id: string,
     jobpostingId: number,
   ): Promise<Jobposting> {
     const existingApplicant = await this.applicantRepository.findOne({
@@ -104,7 +104,7 @@ export class ApplicantService {
 
   // 채용별 회사 지원 전체 조회 - 회사만
   async findAllCompanyApply(
-    id: number,
+    id: string,
     jobpostingId: number,
   ): Promise<Applicant[]> {
     const existingApplicant = await this.applicantRepository.findOne({
@@ -136,7 +136,7 @@ export class ApplicantService {
     });
   }
 
-  async removeApply(id: number, jobpostingId: number) {
+  async removeApply(id: string, jobpostingId: number) {
     const existingJobposting = await this.applicantRepository.findOne({
       where: { jobpostingId },
     });

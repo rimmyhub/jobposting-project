@@ -5,5 +5,5 @@ import { IsInt } from 'class-validator';
 export class ParamDto {
   @Transform((param) => Number(param.value))
   @IsInt()
-  uuid: number;
+  id: string;
 }

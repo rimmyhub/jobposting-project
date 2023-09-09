@@ -25,7 +25,7 @@ export class CompanyService {
   // getUserRefTokenMatch
   async getCompanyRefTokenMatch(
     refreToken: string,
-    id: number,
+    id: string,
   ): Promise<Company> {
     const company: Company = await this.companyRepository.findOne({
       select: {
@@ -235,7 +235,7 @@ export class CompanyService {
   }
 
   // 회사 1개 조회 - 마이페이지용
-  async findOneCompanyById(companyId: number) {
+  async findOneCompanyById(companyId: string) {
     const company = await this.companyRepository.findOne({
       where: { id: companyId },
     });
@@ -243,18 +243,18 @@ export class CompanyService {
   }
 
   // 회사 1개 조회- 상세페이지용
-  async finOneCompany(uuid: number) {
+  async finOneCompany(id: string) {
     const company = await this.companyRepository.findOne({
-      where: [{ id: uuid }],
+      where: { id },
     });
 
     return company;
   }
 
   // 회사 수정
-  async updateCompany(id: number, updateCompanyDto: UpdateCompanyDto) {
+  async updateCompany(id: string, updateCompanyDto: UpdateCompanyDto) {
     const company = await this.companyRepository.findOne({
-      where: { id: id },
+      where: { id },
     });
     if (!company) {
       throw new HttpException(
@@ -294,9 +294,9 @@ export class CompanyService {
   }
 
   // 회사 삭제
-  async removeCompany(id: number) {
+  async removeCompany(id: string) {
     const company = await this.companyRepository.findOne({
-      where: { id: id },
+      where: { id },
     });
 
     if (!company) {

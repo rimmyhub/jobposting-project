@@ -18,10 +18,10 @@ export class Chat {
   id: number;
 
   @Column({ name: 'user_id' })
-  userId: number;
+  userId: string;
 
-  @Column({ name: 'company_uuid' })
-  companyId: number;
+  @Column({ name: 'company_id' })
+  companyId: string;
 
   @CreateDateColumn({ name: 'create_at', comment: '생성일' })
   createdAt: Date;

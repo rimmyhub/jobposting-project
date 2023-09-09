@@ -30,7 +30,7 @@ export class JobpostingService {
 
   // 회사별 채용공고 생성 (회사 연결)
   async createJobposting(
-    companyId: number,
+    companyId: string,
     createJobpostingDto: CreateJobpostingDto,
   ): Promise<Jobposting> {
     // 회사에 아이디가 생성되있는지 찾기
@@ -118,7 +118,7 @@ export class JobpostingService {
   // }
 
   // 회사별 채용공고 전체 조회
-  async findCompanyAllJobposting(id: number): Promise<Jobposting[]> {
+  async findCompanyAllJobposting(id: string): Promise<Jobposting[]> {
     return await this.jobpostingRepository.find({ where: { companyId: id } });
   }
 
@@ -334,7 +334,7 @@ export class JobpostingService {
 
   // 채용공고 1개 조회
   async findOneJobposting(
-    companyId: number,
+    companyId: string,
     jobpostingId: number,
   ): Promise<Jobposting> {
     // 회사 아이디가 있는지 확인
@@ -364,7 +364,7 @@ export class JobpostingService {
   // 채용공고 수정
   async updateJobposting(
     jobpostingId: number,
-    id: number,
+    id: string,
     updateJobpostingDto: UpdateJobpostingDto,
   ) {
     const jobposting = await this.jobpostingRepository.findOne({
@@ -390,7 +390,7 @@ export class JobpostingService {
   }
 
   // 채용공고 삭제
-  async removeJobposting(jobpostingId: number, id: number) {
+  async removeJobposting(jobpostingId: number, id: string) {
     const jobposting = await this.jobpostingRepository.findOne({
       where: { id: jobpostingId },
     });

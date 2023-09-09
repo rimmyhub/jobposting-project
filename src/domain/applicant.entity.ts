@@ -17,7 +17,7 @@ export class Applicant {
   id: number;
 
   @Column({ name: 'user_id' })
-  userId: number;
+  userId: string;
 
   @Column({ name: 'jobposting_id' })
   jobpostingId: number;

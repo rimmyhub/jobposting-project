@@ -21,7 +21,7 @@ export class Comment {
 
   // @Column을 통해 comment의 각 항목의 속성을 정의.
   @Column({ type: 'int', comment: '회사 ID' })
-  companyId: number; // 회사 ID 외래키
+  companyId: string; // 회사 ID 외래키
 
   @Column({ type: 'varchar', comment: '제목' })
   title: string;
