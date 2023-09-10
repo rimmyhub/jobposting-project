@@ -27,7 +27,7 @@
           <div class="mb-3 row">
             <label class="col-sm-3 col-form-label">회사명</label>
             <div class="col-sm-9">
-              <input class="form-control" id="userNameTag" />
+              <input class="form-control" id="modify-company-title" />
             </div>
           </div>
           <!-- 회사명 -->
@@ -35,7 +35,7 @@
           <div class="mb-3 row">
             <label class="col-sm-3 col-form-label">소개</label>
             <div class="col-sm-9">
-              <input class="form-control" id="userEmailTag" />
+              <input class="form-control" id="modify-company-introduction" />
             </div>
           </div>
           <!-- 소개 -->
@@ -43,7 +43,7 @@
           <div class="mb-3 row">
             <label class="col-sm-3 col-form-label">웹사이트</label>
             <div class="col-sm-9">
-              <input class="form-control" id="userPhoneTag" />
+              <input class="form-control" id="modify-company-website" />
             </div>
           </div>
           <!-- 웹사이트 -->
@@ -51,7 +51,7 @@
           <div class="mb-3 row">
             <label class="col-sm-3 col-form-label">업계</label>
             <div class="col-sm-9">
-              <input class="form-control" id="userGenderTag" />
+              <input class="form-control" id="modify-company-business" />
             </div>
           </div>
           <!-- 업계 -->
@@ -59,7 +59,7 @@
           <div class="mb-3 row">
             <label class="col-sm-3 col-form-label">직원수</label>
             <div class="col-sm-9">
-              <input class="form-control" id="userAddressTag" />
+              <input class="form-control" id="modify-company-employees" />
             </div>
           </div>
           <!-- 직원수 -->
@@ -67,20 +67,88 @@
           <div class="mb-2 row">
             <label class="col-sm-3 col-form-label">본사주소</label>
             <div class="col-sm-9">
-              <input class="form-control" id="userBirthTag" />
+              <input class="form-control" id="modify-company-address" />
             </div>
           </div>
           <!-- 본사주소 -->
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+          id="delete-button"
+        >
           취소
         </button>
-        <button type="button" class="btn btn-primary" id="userUpdateBtn">
+        <button type="button" class="btn btn-primary" id="company-save-button">
           저장
         </button>
       </div>
     </div>
   </div>
 </div>
+<script>
+  const saveBtn = document.querySelector('#company-save-button'); // 저장 버튼
+  const deleteBtn = document.querySelector('#delete-button'); // 취소 버튼
+
+  const titleInput = document.querySelector('#modify-company-title'); // 회사명
+  const introductionInput = document.querySelector(
+    '#modify-company-introduction',
+  ); // 소개
+  const websiteInput = document.querySelector('#modify-company-website'); // 웹사이트
+  const businessInput = document.querySelector('#modify-company-business'); // 업계
+  const employeesInput = document.querySelector('#modify-company-employees'); // 직원 수
+  const addressInput = document.querySelector('#modify-company-address'); // 본사 주소
+
+  // 수정 내용 불러오기
+  const getCompanyData = async () => {
+    const response = await fetch(`/api/companies/company`);
+    const data = await response.json();
+    // console.log(data);
+
+    const { title, introduction, website, business, employees, address } = data;
+    titleInput.value = title;
+    introductionInput.value = introduction;
+    websiteInput.value = website;
+    businessInput.value = business;
+    employeesInput.value = employees;
+    addressInput.value = address;
+  };
+  getCompanyData();
+
+  // 버튼 선택 시 수정 내용 저장
+  saveBtn.addEventListener('click', async (event) => {
+    event.preventDefault();
+
+    const companyData = {
+      title: titleInput.value,
+      introduction: introductionInput.value,
+      website: websiteInput.value,
+      business: businessInput.value,
+      employees: employeesInput.value,
+      address: addressInput.value,
+    };
+
+    try {
+      const response = await fetch(`/api/companies`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(companyData),
+      });
+
+      if (response.ok) {
+        alert('회사 정보가 수정되었습니다.');
+        window.location.reload();
+      } else {
+        console.error(
+          '회사 정보를 수정하는 동안 오류가 발생했습니다.',
+          response,
+        );
+      }
+    } catch (error) {
+      console.error('요청을 보내는 중 오류가 발생했습니다:', error);
+    }
+  });
+</script>

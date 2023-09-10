@@ -82,7 +82,7 @@ export class ApplicantService {
   //   });
   // }
 
-  // 회사지원 유저
+  // 회사지원 조회 하기 - 유저
   async findAllUserApply(
     id: string,
     jobpostingId: number,
@@ -134,6 +134,22 @@ export class ApplicantService {
     return await this.applicantRepository.find({
       where: { jobpostingId },
     });
+  }
+
+  // 채용공고에 지원한 모든 유저 조회
+  async findApplyUser(id: string, jobpostingId: number) {
+    const applicants = await this.applicantRepository.find({
+      where: { jobpostingId },
+      relations: ['user'], // User 관계 로드
+    });
+    if (!applicants) {
+      throw new HttpException(
+        '지원한 구직자가 없습니다.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    return applicants;
   }
 
   async removeApply(id: string, jobpostingId: number) {

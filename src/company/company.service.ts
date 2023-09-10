@@ -334,6 +334,22 @@ export class CompanyService {
     return await this.companyRepository.save(company);
   }
 
+  // 회사 이미지 수정
+  async updateCompanyImage(id: string, image: string) {
+    const isCompany = await this.companyRepository.findOne({ where: { id } });
+    console.log(isCompany);
+    if (!isCompany) {
+      throw new HttpException(
+        '회사를 찾을 수 없습니다.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    isCompany.image = image;
+
+    await this.companyRepository.save(isCompany);
+    return isCompany;
+  }
+
   // 소프트 리무브
   // 윤영님꺼랑 똑같이 했는데 될지모르겠다
   @Cron('0 0 * * *')

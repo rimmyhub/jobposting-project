@@ -16,7 +16,7 @@
       crossorigin="anonymous"
     ></script>
 
-    <title>Document</title>
+    <title>WINNER</title>
     <style>
       /* 추가 수정버튼 마진값 */
       .fa-solid {
@@ -81,6 +81,7 @@
           class="user-img"
           alt=""
           srcset=""
+          onerror="this.src='/img/userImg.jpg';"
         />
         <i class="fa-solid fa-pen edit-icon" style="color: #0d6efd">수정</i>
         <input
@@ -88,7 +89,6 @@
           class="img-file"
           type="file"
           accept="image/jpeg, image/png"
-          onerror="this.src='/img/userImg.jpg';"
         />
       </div>
       <button class="btn btn-outline-secondary" id="image-delete">
