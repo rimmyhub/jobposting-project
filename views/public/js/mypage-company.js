@@ -7,11 +7,12 @@ const companyBusiness = document.getElementById('company-business'); // 업계
 const companyEmployees = document.getElementById('company-employees'); // 직원수
 const companyAddress = document.getElementById('company-address'); // 본사 주소
 
+// 회사 정보 보여주기
 async function getCompany() {
   try {
     const response = await fetch('/api/companies/company');
     const data = await response.json();
-    console.log(data);
+    // console.log(data);
 
     const {
       title,
@@ -30,7 +31,7 @@ async function getCompany() {
     companyAddress.textContent = address;
     companyImage.src = image;
   } catch (error) {
-    console.error('An error occurred:', error);
+    console.error(error);
   }
 }
 getCompany();
@@ -108,7 +109,7 @@ async function getCompanyImage() {
 
   async function saveCompanyImage(imageUrl) {
     try {
-      const response = await fetch('/api/users/image', {
+      const response = await fetch('/api/companies/image', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -127,4 +128,70 @@ async function getCompanyImage() {
 }
 getCompanyImage();
 
-// 채용 정보 불러오기
+// 채용공고 불러오기
+async function getJobpostingData() {
+  const jobposting = document.querySelector('.jobposting-list');
+  const response = await fetch('/api/jobpostings/company');
+  const data = await response.json();
+
+  const temp = data
+    .map((data) => {
+      return `
+              <div class="jobposting-card"
+              >
+              <h4 class="fw-semibold"
+              id="jobposting-title"
+              style="cursor: pointer;
+              text-decoration: underline"
+              data-id=${data.id}>
+                ${data.title}
+              </h4>
+              <h6 id="jobposting-job">
+              ${data.job}
+              </h6>
+              <h6 id="jobposting-duedate">${data.dueDate}</h6>
+            </div>
+            <button
+              type="button"
+              class="btn btn-outline-primary text-start"
+              id="apply-user-button"
+              style="margin-left: 0%"
+              data-id=${data.id}
+            >
+              지원자 확인
+            </button>
+            </div>
+            <hr />
+            `;
+    })
+    .join('');
+
+  jobposting.innerHTML = temp;
+
+  // 채용공고 타이틀 선택 시 해당 채용 공고 화면으로 이동
+  const titleInfo = document.querySelectorAll('#jobposting-title');
+  // console.log(titleInfo);
+  titleInfo.forEach((jobCardEl) => {
+    jobCardEl.addEventListener('click', async (event) => {
+      const jobpostingId = event.target.getAttribute('data-id');
+      console.log(jobpostingId);
+      window.location.href = `/jobposting/${jobpostingId}`;
+    });
+  });
+
+  // 지원자 확인
+  const applyUserBtn = document.querySelectorAll('#apply-user-button');
+  applyUserBtn.forEach((applyUser) => {
+    applyUser.addEventListener('click', async (event) => {
+      const jobpostingId = event.target.getAttribute('data-id');
+      window.location.href = `/applyuser/${jobpostingId}`;
+    });
+  });
+
+  // 공고 편집 버튼 선택 시 공고 영역으로 화면 이동
+  const applyEditBtn = document.querySelector('#apply-edit-button');
+  applyEditBtn.addEventListener('click', async () => {
+    window.location.href = `/apply/company`;
+  });
+}
+getJobpostingData();

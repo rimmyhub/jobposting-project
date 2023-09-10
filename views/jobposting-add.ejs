@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://kit.fontawesome.com/9021aeec94.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="/js/jobposting-add.js" defer></script>
+    <title>WINNER</title>
+    <style>
+      .col-2 {
+        padding: 0px;
+      }
+      .col-10 {
+        padding: 0px;
+      }
+    </style>
+  </head>
+  <body>
+    <%- include('includes/header', {isLogin: isLogin, type: "user"}) %>
+    <div class="container">
+      <!-- 브레드크롬 -->
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item active" aria-current="page">
+            jobposting / company / add
+          </li>
+        </ol>
+      </nav>
+      <!-- 브레드크롬 -->
+      <div class="company-info-box">
+        <h1>채용공고 추가</h1>
+      </div>
+      <!-- 채용공고명 -->
+
+      <div class="mb-2 row">
+        <label class="col-sm-3 col-form-label">채용공고명</label>
+        <div class="col-12">
+          <input
+            class="form-control"
+            id="add-title-info"
+            placeholder="공고명을 입력해주세요."
+          />
+        </div>
+      </div>
+      <!-- 채용공고명 -->
+      <!-- 경력 -->
+      <div class="mb-2 row">
+        <label class="col-sm-3 col-form-label">경력</label>
+        <div class="col-12">
+          <input
+            class="form-control"
+            id="add-career-info"
+            placeholder="예) 신입/경력"
+          />
+        </div>
+      </div>
+      <!-- 경력 -->
+      <!-- 급여 -->
+      <div class="mb-2 row">
+        <label class="col-sm-3 col-form-label">급여</label>
+        <div class="col-12">
+          <input
+            class="form-control"
+            id="add-salary-info"
+            placeholder="예) 회사 내규"
+          />
+        </div>
+      </div>
+      <!-- 급여 -->
+      <!-- 학력 -->
+      <div class="mb-2 row">
+        <label class="col-sm-3 col-form-label">학력</label>
+        <div class="col-12">
+          <input
+            class="form-control"
+            id="add-education-info"
+            placeholder="예) 학력 무관"
+          />
+        </div>
+      </div>
+      <!-- 학력 -->
+      <!-- 직무 -->
+      <div class="mb-2 row">
+        <label class="col-sm-3 col-form-label">직무</label>
+        <div class="col-12">
+          <input class="form-control" id="add-job-info" placeholder="예) IT" />
+        </div>
+      </div>
+      <!-- 직무 -->
+      <!-- 근무지역 -->
+      <div class="mb-2 row">
+        <label class="col-sm-3 col-form-label">근무지역</label>
+        <div class="col-12">
+          <input
+            class="form-control"
+            id="add-workarea-info"
+            placeholder="예) 서울 > 중구"
+          />
+        </div>
+      </div>
+      <!-- 근무지역 -->
+      <!-- 근무형태 -->
+      <div class="mb-2 row">
+        <label class="col-sm-3 col-form-label">근무형태</label>
+        <div class="col-12">
+          <input
+            class="form-control"
+            id="add-worktype-info"
+            placeholder="예) 계약직/정규직 [수습기간: 3개월]"
+          />
+        </div>
+      </div>
+      <!-- 근무형태 -->
+      <!-- 채용 마감일 -->
+      <div class="mb-2 row">
+        <label class="col-sm-3 col-form-label">채용 마감일</label>
+        <div class="col-12">
+          <input
+            class="form-control"
+            id="add-duedate-info"
+            placeholder="예) 상시"
+          />
+        </div>
+      </div>
+      <!-- 채용마감일 -->
+      <!-- 내용 -->
+      <div class="mb-3">
+        <label
+          for="exampleFormControlTextarea1"
+          class="form-label"
+          style="margin-top: 10px"
+          >채용공고 설명</label
+        >
+        <textarea
+          class="form-control"
+          id="add-content-info"
+          rows="15"
+          placeholder="채용공고 내용을 10자 이상 입력해주세요."
+        ></textarea>
+      </div>
+
+      <!-- 내용 -->
+
+      <button type="button" class="btn btn-primary" id="jobposting-update-btn">
+        저장
+      </button>
+    </div>
+  </body>
+  <div class="p-4"></div>
+  <%- include('includes/footer') %>
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+    crossorigin="anonymous"
+  ></script>
+</html>

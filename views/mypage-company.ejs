@@ -16,16 +16,10 @@
       crossorigin="anonymous"
     ></script>
     <style>
-      .text-start {
-        margin: 10px;
-      }
-
       /* 추가 수정버튼 마진값 */
       .fa-solid {
         margin: 10px;
       }
-
-      /* 이력서 텍스트 시작 마진값 */
       .text-start {
         margin: 10px;
       }
@@ -61,7 +55,7 @@
         cursor: pointer;
       }
     </style>
-    <title>Document</title>
+    <title>WINNER</title>
   </head>
   <body>
     <%- include('includes/header', {isLogin: isLogin, type: "user"}) %>
@@ -85,14 +79,14 @@
             class="company-img"
             alt=""
             srcset=""
+            onerror="this.src='/img/userImg.jpg';"
           />
           <i class="fa-solid fa-pen edit-icon" style="color: #0d6efd">수정</i>
           <input
-            id="user-image"
+            id="company-image"
             class="img-file"
             type="file"
             accept="image/jpeg, image/png"
-            onerror="this.src='/img/userImg.jpg';"
           />
         </div>
         <button class="btn btn-outline-secondary" id="image-delete">
@@ -202,30 +196,24 @@
 
         <!-- 채용 공고 리스트 -->
         <div class="col-8">
-          <p
-            class="fs-3 fw-semibold text-start information"
-            style="margin: 10px"
-          >
-            Cloud Support Associate
-          </p>
-          <p class="text-start">항공우주/기계, 전기전자, 생산기술</p>
-          <div>
-            <button type="button" class="btn btn-outline-primary text-start">
-              채용공고 보기
-            </button>
-            <button type="button" class="btn btn-outline-primary text-start">
+          <div class="jobposting-list text-start">
+            <div class="jobposting-card">
+              <h4 class="fs-2 fw-semibold" id="jobposting-title">
+                cloud support associate
+              </h4>
+              <h6 id="jobposting-job">
+                직무 : 항공우주/기계,전기전자,생산기술
+              </h6>
+              <h6 id="jobposting-duedate">마감일 : 2023-01-03</h6>
+            </div>
+            <button
+              type="button"
+              class="btn btn-outline-primary text-start"
+              style="margin-left: 0%"
+            >
               지원자 확인
             </button>
           </div>
-          <!-- 구분선 -->
-          <hr />
-          <p
-            class="fs-3 fw-semibold text-start information"
-            style="margin: 10px"
-          >
-            Cloud Support Associate
-          </p>
-          <p class="text-start">항공우주/기계, 전기전자, 생산기술</p>
           <!-- 구분선 -->
         </div>
         <div class="col-2">
@@ -233,19 +221,16 @@
           <button
             type="button"
             class="btn btn-primary fa-solid fa-pen"
+            id="apply-edit-button"
             style="margin-top: 20px"
           >
             공고 편집
           </button>
           <!-- 내가 올린 공고 편집하기 버튼  -->
         </div>
-        <!-- 채용공고 리스트 -->
       </div>
-      <hr />
     </div>
-    <!-- 학력 정보 영역 -->
 
-    <!-- 포트폴리오 영역 -->
     <div class="p-4"></div>
     <%- include('includes/footer') %>
     <script

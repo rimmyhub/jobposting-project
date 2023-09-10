@@ -13,6 +13,7 @@ import {
   HttpStatus,
   HttpException,
   Query,
+  Put,
 } from '@nestjs/common';
 import { CompanyService } from './company.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
@@ -21,6 +22,7 @@ import { CompanyGuard } from '../auth/jwt/jwt.company.guard';
 import { ParamDto } from 'src/utils/param.dto';
 import { MailService } from '../mail/mail.service';
 import { VerifyCodeDto } from './dto/verify-code.dto';
+import { UserGuard } from 'src/auth/jwt/jwt.user.guard';
 
 @Controller('api/companies')
 export class CompanyController {
@@ -96,6 +98,13 @@ export class CompanyController {
   @Patch()
   updateCompany(@Request() req, @Body() updateCompanyDto: UpdateCompanyDto) {
     return this.companyService.updateCompany(req.company.id, updateCompanyDto);
+  }
+
+  // 회사 이미지 수정
+  @UseGuards(CompanyGuard)
+  @Put('/image')
+  updateCompanyImage(@Request() req, @Body('image') image: string) {
+    return this.companyService.updateCompanyImage(req.company.id, image);
   }
 
   // 회사 회원 탈퇴 (회사 연결)

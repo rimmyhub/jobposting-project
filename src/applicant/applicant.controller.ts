@@ -13,6 +13,7 @@ import { ApplicantService } from './applicant.service';
 import { Applicant } from 'src/domain/applicant.entity';
 import { UserGuard } from '../auth/jwt/jwt.user.guard';
 import { CompanyGuard } from '../auth/jwt/jwt.company.guard';
+import { Jobposting } from 'src/domain/jobposting.entity';
 
 @Controller('api/applications')
 export class ApplicantController {
@@ -56,6 +57,13 @@ export class ApplicantController {
       req.company.id,
       +JobpostingId,
     );
+  }
+
+  // 채용공고에 지원한 모든 유저 조회
+  @UseGuards(CompanyGuard)
+  @Get('applyuser/:jobpostingId')
+  findApplyUsers(@Request() req, @Param('jobpostingId') jobpostingId: number) {
+    return this.applicantService.findApplyUser(req.company.id, +jobpostingId);
   }
 
   // 회사지원 취소 - 로그인한 유저만
