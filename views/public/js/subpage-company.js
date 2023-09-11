@@ -7,7 +7,7 @@ async function fetchCompanyData(companyId) {
     if (response.ok) {
       const companyData = await response.json();
 
-      // 나머지 회사 정보 업데이트
+      // 회사 정보 업데이트
       const imageElement = document.querySelector('.image');
       const titleElement = document.querySelector('.fs-2.fw-semibold');
       const introductionElement = document.querySelector('.fw-normal');
@@ -79,3 +79,22 @@ document.addEventListener('DOMContentLoaded', function () {
   const companyId = window.location.pathname.split('/').pop();
   fetchCompanyData(companyId);
 });
+
+// 채용공고 정보를 가져오는 함수
+async function fetchCompanyData(company) {
+  try {
+    // 서버 API로 데이터를 요청
+    const response = await fetch(`/api/jobpostings/${company}`);
+
+    if (response.ok) {
+      const jobpostingData = await response.json();
+
+      // 채용공고 정보 업데이트
+      const websiteElement = document.querySelector('.website');
+      websiteElement.textContent = companyData.website;
+    }
+  } catch (error) {
+    console.error('Error fetching company data:', error);
+    throw error;
+  }
+}
