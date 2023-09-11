@@ -88,6 +88,7 @@ export class ResumeService {
         'resume.userId',
         'resume.content',
         'user.name',
+        'user.image',
         'user.id',
       ]) // user테이블의 name만 가져오기
       .innerJoin('resume.user', 'user') // user테이블과 join

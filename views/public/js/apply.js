@@ -23,7 +23,7 @@ async function getAppliesUser() {
 
                 <button
                    type="button"
-                   class="btn btn-outline-danger apply-btn"
+                   class="btn btn-outline-danger apply-delete-btn"
                    data-id=${applyUser.id}
                   >
                    지원 취소
@@ -35,6 +35,7 @@ async function getAppliesUser() {
         .join('');
       applyBox.innerHTML = temp;
 
+      // 채용공고 내용 보기
       const jobpostingBtns = document.querySelectorAll('.jobposting-btn');
       jobpostingBtns.forEach((jobpostingBtn) => {
         jobpostingBtn.addEventListener('click', async (event) => {
@@ -44,9 +45,10 @@ async function getAppliesUser() {
         });
       });
 
-      const applyBtns = document.querySelectorAll('.apply-btn');
-      applyBtns.forEach((applyBtn) => {
-        applyBtn.addEventListener('click', async (event) => {
+      // 지원 취소
+      const applyDeleteBtns = document.querySelectorAll('.apply-delete-btn');
+      applyDeleteBtns.forEach((applyDeleteBtn) => {
+        applyDeleteBtn.addEventListener('click', async (event) => {
           const jobpostingId = event.target.getAttribute('data-id');
           // console.log(jobpostingId);
 

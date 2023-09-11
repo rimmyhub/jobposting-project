@@ -30,7 +30,7 @@ function init() {
 function hideBtn() {
   const type = window.localStorage.getItem('type');
   if (type === 'user') {
-    console.log('버튼 숨기기', btnContainer);
+    // console.log('버튼 숨기기', btnContainer);
     btnContainer.style.display = 'none';
   }
 }
@@ -89,6 +89,8 @@ function hideBtn() {
 // }
 // 유저의 이력서를 불러오는 함수 로직
 async function getUserResume() {
+  // 이미지 태그
+  const userBox = document.querySelector('#userBox');
   // 이력서태그
   const resumeTitleTag = document.querySelector('#resumeTitle');
   const resumeDescTag = document.querySelector('#resumeDesc');
@@ -119,11 +121,25 @@ async function getUserResume() {
   // 유저 정보 조회 fetch
   const userData = await fetch(`/api/users/user/${userId}`);
   const jsonUserData = await userData.json();
+  console.log('jsonUserData', jsonUserData);
   // 예외처리
   if (jsonUserData.message) {
     return console.log(jsonUserData.message);
   }
+
   // innerHTML
+  userBox.innerHTML = `
+                    <div class="col" id="userBox">
+                    <img
+                      src="${jsonUserData.image}"
+                      class="rounded-circle border border-secondary"
+                      alt="..."
+                      style="width: 150px"
+                    />
+                    <p class="fs-2 fw-semibold" style="margin: 10px">${jsonUserData.name}</p>
+                  </div>
+                    `;
+
   userInfoBox.innerHTML = `<div id="userInfoBox">
                               <div class="row">
                                 <div class="col-sm-4">

@@ -12,9 +12,9 @@ const contentEl = document.querySelector('.jobposting-content'); // 채용공고
 // 해당 아이디의 채용공고 화면에 띄우기
 async function getJobposting() {
   try {
+    // 회사 정보 가져오기
     const response = await fetch(`/api/jobpostings/${jobpostingId}`);
     const data = await response.json();
-    console.log(data);
 
     // 기업 정보 보기 버튼
     const companyInfo = document.querySelector('.company-info');
