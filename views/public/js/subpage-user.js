@@ -119,6 +119,7 @@ async function getUserResume() {
   // 유저 정보 조회 fetch
   const userData = await fetch(`/api/users/user/${userId}`);
   const jsonUserData = await userData.json();
+  console.log(jsonUserData);
   // 예외처리
   if (jsonUserData.message) {
     return console.log(jsonUserData.message);

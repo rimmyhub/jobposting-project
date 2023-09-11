@@ -23,10 +23,10 @@ export class Education {
   schoolTitle: string;
 
   @Column({ type: 'varchar', length: 10, comment: '입학년도' })
-  admissionYear: string;
+  admissionYear: string | Date;
 
   @Column({ type: 'varchar', length: 10, comment: '졸업년도' })
-  graduationYear: string;
+  graduationYear: string | Date;
 
   @Column({ type: 'varchar', length: 50, comment: '전공/계열' })
   major: string;

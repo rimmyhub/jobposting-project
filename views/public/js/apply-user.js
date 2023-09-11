@@ -24,6 +24,17 @@
 
 const jobpostingId = window.location.pathname.split('/')[2];
 
+// // 유저의 이력서ID 값만 가져오는 함수
+// async function getResumeId() {
+//   const userId = await getUserData();
+
+//   const resumeId = await fetch(`/api/resumes/user/${userId}`);
+//   const res = await resumeId.json();
+//   return res;
+// }
+
+// getResumeId();
+
 async function getApplyUser() {
   const applyUser = document.getElementById('apply-user-list');
 
@@ -82,7 +93,7 @@ async function getApplyUser() {
 
   resumeButton.addEventListener('click', function () {
     const resumeId = 1; // resumeId 값 설정 // 수정필요!!!!
-    window.location.href = `/subpage/${jobpostingId}/1?id=${jobpostingId}&resumeId=${resumeId}`;
+    window.location.href = `/subpage/${jobpostingId}/${resumeId}?id=${jobpostingId}&resumeId=${resumeId}`;
   });
 }
 
