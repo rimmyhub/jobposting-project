@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Jobposting } from 'src/domain/jobposting.entity';
 import { Repository } from 'typeorm';
 import cheerio from 'cheerio';
-import { Job } from 'src/utils/job.interface';
 import { faker } from '@faker-js/faker';
 import { Company } from 'src/domain/company.entity';
 import * as iconv from 'iconv-lite';
@@ -176,7 +175,7 @@ export class JobcrawlerService {
     return jobs;
   }
 
-  @Cron('0 8 * * *') // 매일 오전 8시에 실행
+  @Cron('0 0 * * *') // 매일 자정에 실행
   async incruitCrawling() {
     console.time('코드 실행시간');
     // 코드 실행시간을 구해줌
@@ -215,9 +214,8 @@ export class JobcrawlerService {
     // 코드 실행시간을 측정
     console.log(timeEnd);
 
-    console.log('===========companyInfo===========', companyInfo);
-    console.log('==========jobInfo================', jobInfo);
-    // companyEntities에 담을 초기화 배열
+    // console.log('===========companyInfo===========', companyInfo);
+    // console.log('==========jobInfo================', jobInfo);
 
     for (const companys of companyInfo) {
       for (const company of companys) {
