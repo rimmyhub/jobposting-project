@@ -1,0 +1,5 @@
+.review-container {
+  border: 1px solid #ccc; /* 리뷰 컨테이너 주위에 선을 추가합니다. */
+  margin-bottom: 10px; /* 각 리뷰 사이의 간격을 조절합니다. */
+  padding: 10px; /* 리뷰 컨테이너 내부 여백을 추가합니다. */
+}
