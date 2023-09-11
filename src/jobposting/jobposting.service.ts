@@ -1,7 +1,7 @@
 import { CreateJobpostingDto } from './dto/create-jobposting.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Jobposting } from 'src/domain/jobposting.entity';
-import { LessThan, Like, Repository } from 'typeorm';
+import { IsNull, LessThan, Like, Not, Repository } from 'typeorm';
 import { UpdateJobpostingDto } from './dto/update-jobposting.dto';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { Company } from 'src/domain/company.entity';
@@ -102,25 +102,17 @@ export class JobpostingService {
     });
   }
 
-  // // 회사별 채용공고 전체 조회
-  // async findCompanyAllJobposting(companyId: number): Promise<Jobposting[]> {
-  //   const existingCompany = await this.jobpostingRepository.findOne({
-  //     where: { companyId },
-  //   });
-
-  //   if (!existingCompany) {
-  //     throw new HttpException(
-  //       '채용공고를 찾을 수 없습니다.',
-  //       HttpStatus.BAD_REQUEST,
-  //     );
-  //   }
-
-  //   return await this.jobpostingRepository.find({ where: { companyId } });
-  // }
-
   // 회사별 채용공고 전체 조회
   async findCompanyAllJobposting(id: string): Promise<Jobposting[]> {
     return await this.jobpostingRepository.find({ where: { companyId: id } });
+  }
+
+  // 회사별 채용공고 전체 조회 (소프트 딜리트된 데이터만 조회)
+  async findCompanyAllJobpostingDelete(id: string): Promise<Jobposting[]> {
+    return await this.jobpostingRepository.find({
+      where: { companyId: id, deletedAt: Not(IsNull()) },
+      withDeleted: true,
+    });
   }
 
   // 특정 회사 ID를 기준으로 해당 companyId를 가진 모든 채용 공고 조회
@@ -537,14 +529,32 @@ export class JobpostingService {
       throw new HttpException('권한이 없습니다.', HttpStatus.FORBIDDEN);
     }
 
-    const currentTime = new Date();
-    const jobpostings = await this.jobpostingRepository.find({
-      withDeleted: true, // 소프트 삭제된 항목도 검색
-      where: { dueDate: LessThan(currentTime) }, // 현재 시간보다 이전의 채용 마감일을 가진 공고 찾기
+    const currentDate = new Date(); // 현재 날짜
+    const threeMonthsAgo = new Date(); // 석달 전
+    threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 1); // 1달전이전의 데이터
+    // threeMonthsAgo.setMinutes(threeMonthsAgo.getMinutes() - 10); // 10분전 데이터 (테스트용)
+
+    // 현재 시간보다 이전의 채용마감일을 가진 공고를 찾아 소프트 딜리트하기
+    const expiredJobpostings = await this.jobpostingRepository.find({
+      where: { dueDate: LessThan(currentDate) },
+      //이 옵션은 특정 값보다 작은 값을 가진 레코드를 조회할 때 사용. 예를 들어, LessThan(currentDate)는 현재 날짜보다 이전의 날짜를 가진 레코드를 조회
     });
 
-    for (const jobposting of jobpostings) {
-      return this.jobpostingRepository.remove(jobposting);
+    // 만료된(expiredJobpostings)걸 가지고 소프트 리무브
+    for (const jobposting of expiredJobpostings) {
+      await this.jobpostingRepository.softRemove(jobposting);
+    }
+
+    // 소프트 리무브로 삭제한 뒤 일정 시간(1개월)이 지난 후 완전히 삭제하기
+    const oldJobpostings = await this.jobpostingRepository.find({
+      where: { deletedAt: LessThan(threeMonthsAgo) },
+      withDeleted: true, //TypeORM은 소프트 딜리트된 레코드를 제외하고 데이터를 조회. 그러나 withDeleted: true 옵션을 사용하면 소프트 딜리트된 레코드도 조회 결과에 포함
+    });
+
+    for (const jobposting of oldJobpostings) {
+      await this.jobpostingRepository.remove(jobposting);
     }
   }
+
+  // return await this.jobpostingRepository.remove(jobposting); 기존 코드
 }

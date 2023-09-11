@@ -80,17 +80,20 @@ export class JobpostingController {
     return this.jobpostingService.findAllJobposting({ page: Number(page) });
   }
 
-  // // 회사별 채용공고 전체 조회
-  // @Get(':companyId')
-  // findCompanyAllJobposting(@Param('companyId') companyId: string) {
-  //   return this.jobpostingService.findCompanyAllJobposting(+companyId);
-  // }
-
   // 회사별 채용공고 전체 조회
   @UseGuards(CompanyGuard)
   @Get('company')
   findCompanyAllJobposting(@Request() req) {
     return this.jobpostingService.findCompanyAllJobposting(req.company.id);
+  }
+
+  // 회사별 채용공고 전체 조회 (소프트 딜리트된 데이터만 조회)
+  @UseGuards(CompanyGuard)
+  @Get('company/delete')
+  findCompanyAllDeletedJobposting(@Request() req) {
+    return this.jobpostingService.findCompanyAllJobpostingDelete(
+      req.company.id,
+    );
   }
 
   // 특정 회사 ID를 기준으로 해당 companyId를 가진 모든 채용 공고 조회

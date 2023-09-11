@@ -69,9 +69,11 @@ async function getAppliesUser() {
       const response = await fetch('/api/jobpostings/company');
       const applyCompanyData = await response.json();
       // console.log(applyCompanyData);
+
       const temp = applyCompanyData
         .map((applyCompany) => {
           return `
+
                  <div class="apply-card">
                    <h4    
                    class="jobposting-company-btn"
@@ -103,6 +105,27 @@ async function getAppliesUser() {
         })
         .join('');
       applyBox.innerHTML = temp;
+
+      // 삭제된 채용공고 불러오기
+      const deleteResponse = await fetch('/api/jobpostings/company/delete');
+      const deleteData = await deleteResponse.json();
+      console.log(deleteData);
+      const deletedDataBox = document.getElementById('deleted-data-box');
+      console.log(deletedDataBox);
+      const deletedDataHtml = deleteData
+        .map((deletedItem) => {
+          return `
+            <div class="deleted-item">
+              <h4>${deletedItem.title}</h4>
+              <h6>${deletedItem.job}</h6>
+              <h6>${deletedItem.dueDate}</h6>
+            </div>
+            <hr/>
+          `;
+        })
+        .join('');
+
+      deletedDataBox.innerHTML = deletedDataHtml;
 
       // 채용공고 보기 버튼
       const applyBtns = document.querySelectorAll('.jobposting-company-btn');
@@ -147,6 +170,7 @@ async function getAppliesUser() {
       modifyBtn.addEventListener('click', (event) => {
         const jobpostingId = event.target.getAttribute('data-id');
         const jobpostingModifyUrl = `/jobposting/edit/${jobpostingId}`;
+        console.log(jobpostingModifyUrl);
         window.location.href = jobpostingModifyUrl;
       });
     }
