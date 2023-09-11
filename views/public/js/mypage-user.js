@@ -29,7 +29,6 @@ async function getResumeId() {
   const res = await resumeId.json();
   return res;
 }
-
 // 유저 정보를 불러오는 함수 로직
 async function getUserData() {
   const userInfoBox = document.querySelector('#userInfoBox');
@@ -217,7 +216,6 @@ async function getUserImage() {
     }
   }
 }
-
 // 유저의 이력서를 불러오는 함수 로직
 async function getUserResume() {
   const resumeBox = document.querySelector('#resumeBox');
@@ -627,6 +625,7 @@ function resumeDelete() {
 // 학력정보 불러오기
 const dropdownItems = document.querySelectorAll('.item');
 const selectedValueElement = document.getElementById('selectedValue');
+console.log(selectedValueElement);
 const selectedValueElement2 = document.getElementById('selectedValue2');
 let aEducation = '추가';
 let bEducation = '수정';
@@ -634,8 +633,8 @@ dropdownItems.forEach((item) => {
   item.addEventListener('click', () => {
     selectedValueElement.textContent = item.textContent;
     selectedValueElement2.textContent = item.textContent;
-    a = selectedValueElement.textContent;
-    b = selectedValueElement2.textContent;
+    aEducation = selectedValueElement.textContent;
+    bEducation = selectedValueElement2.textContent;
   });
 });
 
