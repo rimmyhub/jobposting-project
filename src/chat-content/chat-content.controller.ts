@@ -1,7 +1,16 @@
-import { Get, Controller, Param } from '@nestjs/common';
+import {
+  Get,
+  Controller,
+  Param,
+  Put,
+  UseGuards,
+  Request,
+} from '@nestjs/common';
 import { ChatContentService } from './chat-content.service';
 import { CreateChatContentDto } from './dto/create-chat-content.dto';
 import { UpdateChatContentDto } from './dto/update-chat-content.dto';
+import { UserGuard } from 'src/auth/jwt/jwt.user.guard';
+import { CompanyGuard } from 'src/auth/jwt/jwt.company.guard';
 
 @Controller('api/chat-content')
 export class ChatContentController {
@@ -15,6 +24,31 @@ export class ChatContentController {
       return result;
     } catch (e) {
       console.log(e);
+      return {
+        message: e.message,
+      };
+    }
+  }
+
+  // 채팅내용 읽음처리
+  @UseGuards(UserGuard)
+  @Put('/user/:id')
+  async userReadChat(@Param('id') chatId: number, @Request() req) {
+    try {
+      await this.chatContentService.readChatContents(chatId, req.user.id);
+    } catch (e) {
+      return {
+        message: e.message,
+      };
+    }
+  }
+
+  @UseGuards(CompanyGuard)
+  @Put('/company/:id')
+  async comReadChat(@Param('id') id: number, @Request() req) {
+    try {
+      await this.chatContentService.readChatContents(id, req.company.id);
+    } catch (e) {
       return {
         message: e.message,
       };

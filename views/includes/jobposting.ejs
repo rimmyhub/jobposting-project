@@ -10,9 +10,7 @@
   <div class="modal-dialog modal-fullscreen">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="staticBackdropLabel">
-          채용 공고 수정
-        </h1>
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">채용공고 추가</h1>
         <button
           type="button"
           class="btn-close"
@@ -26,25 +24,24 @@
           <div class="container">
             <div class="mb-2 row">
               <label class="col-sm-3 col-form-label">채용공고명</label>
-              <div class="col-10">
-                <input class="form-control" id="userAddressTag" />
-              </div>
-            </div>
-
-            <!-- 채용공고명 -->
-            <!-- 회사명 -->
-            <div class="mb-2 row">
-              <label class="col-sm-3 col-form-label">회사명</label>
               <div class="col-12">
-                <input class="form-control" id="userBirthTag" />
+                <input
+                  class="form-control"
+                  id="modify-title-info"
+                  placeholder="공고명을 입력해주세요."
+                />
               </div>
             </div>
-            <!-- 회사명 -->
+            <!-- 채용공고명 -->
             <!-- 경력 -->
             <div class="mb-2 row">
               <label class="col-sm-3 col-form-label">경력</label>
               <div class="col-12">
-                <input class="form-control" id="userBirthTag" />
+                <input
+                  class="form-control"
+                  id="modify-career-info"
+                  placeholder="예) 신입/경력"
+                />
               </div>
             </div>
             <!-- 경력 -->
@@ -52,7 +49,11 @@
             <div class="mb-2 row">
               <label class="col-sm-3 col-form-label">급여</label>
               <div class="col-12">
-                <input class="form-control" id="userBirthTag" />
+                <input
+                  class="form-control"
+                  id="modify-salary-info"
+                  placeholder="예) 회사 내규"
+                />
               </div>
             </div>
             <!-- 급여 -->
@@ -60,15 +61,35 @@
             <div class="mb-2 row">
               <label class="col-sm-3 col-form-label">학력</label>
               <div class="col-12">
-                <input class="form-control" id="userBirthTag" />
+                <input
+                  class="form-control"
+                  id="modify-education-info"
+                  placeholder="예) 학력 무관"
+                />
               </div>
             </div>
             <!-- 학력 -->
+            <!-- 직무 -->
+            <div class="mb-2 row">
+              <label class="col-sm-3 col-form-label">직무</label>
+              <div class="col-12">
+                <input
+                  class="form-control"
+                  id="modify-job-info"
+                  placeholder="예) IT"
+                />
+              </div>
+            </div>
+            <!-- 직무 -->
             <!-- 근무지역 -->
             <div class="mb-2 row">
               <label class="col-sm-3 col-form-label">근무지역</label>
               <div class="col-12">
-                <input class="form-control" id="userBirthTag" />
+                <input
+                  class="form-control"
+                  id="modify-workarea-info"
+                  placeholder="예) 서울 > 중구"
+                />
               </div>
             </div>
             <!-- 근무지역 -->
@@ -76,10 +97,26 @@
             <div class="mb-2 row">
               <label class="col-sm-3 col-form-label">근무형태</label>
               <div class="col-12">
-                <input class="form-control" id="userBirthTag" />
+                <input
+                  class="form-control"
+                  id="modify-worktype-info"
+                  placeholder="예) 계약직/정규직 [수습기간: 3개월]"
+                />
               </div>
             </div>
             <!-- 근무형태 -->
+            <!-- 채용 마감일 -->
+            <div class="mb-2 row">
+              <label class="col-sm-3 col-form-label">채용 마감일</label>
+              <div class="col-12">
+                <input
+                  class="form-control"
+                  id="modify-duedate-info"
+                  placeholder="예) 상시"
+                />
+              </div>
+            </div>
+            <!-- 채용마감일 -->
             <!-- 내용 -->
             <div class="mb-3">
               <label
@@ -90,8 +127,9 @@
               >
               <textarea
                 class="form-control"
-                id="exampleFormControlTextarea1"
-                rows="20"
+                id="modify-content-info"
+                rows="15"
+                placeholder="채용공고 내용을 10자 이상 입력해주세요."
               ></textarea>
             </div>
 
@@ -100,17 +138,14 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-outline-secondary"
-          id="deleteResumeBtn"
-        >
-          삭제
-        </button>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
           취소
         </button>
-        <button type="button" class="btn btn-primary" id="userUpdateBtn">
+        <button
+          type="button"
+          class="btn btn-primary"
+          id="jobposting-modify-update-btn"
+        >
           저장
         </button>
       </div>

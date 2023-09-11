@@ -18,7 +18,7 @@ export class ApplicantService {
   ) {}
 
   // 내가 지원한 공고 가져오기
-  async getJobpostingById(id: number) {
+  async getJobpostingById(id: string) {
     const applications = await this.applicantRepository.find({
       where: { userId: id },
       relations: ['jobposting'], // 채용공고 정보를 함께 가져오기 위해 관계 설정
@@ -32,7 +32,7 @@ export class ApplicantService {
   }
 
   // 지원하기
-  async createApply(id: number, jobpostingId: number): Promise<Applicant> {
+  async createApply(id: string, jobpostingId: number): Promise<Applicant> {
     // 사용자 조회
     const existingUser = await this.userRepository.findOne({ where: { id } });
 
@@ -82,9 +82,9 @@ export class ApplicantService {
   //   });
   // }
 
-  // 회사지원 유저
+  // 회사지원 조회 하기 - 유저
   async findAllUserApply(
-    id: number,
+    id: string,
     jobpostingId: number,
   ): Promise<Jobposting> {
     const existingApplicant = await this.applicantRepository.findOne({
@@ -104,7 +104,7 @@ export class ApplicantService {
 
   // 채용별 회사 지원 전체 조회 - 회사만
   async findAllCompanyApply(
-    id: number,
+    id: string,
     jobpostingId: number,
   ): Promise<Applicant[]> {
     const existingApplicant = await this.applicantRepository.findOne({
@@ -136,7 +136,23 @@ export class ApplicantService {
     });
   }
 
-  async removeApply(id: number, jobpostingId: number) {
+  // 채용공고에 지원한 모든 유저 조회
+  async findApplyUser(id: string, jobpostingId: number) {
+    const applicants = await this.applicantRepository.find({
+      where: { jobpostingId },
+      relations: ['user'], // User 관계 로드
+    });
+    if (!applicants) {
+      throw new HttpException(
+        '지원한 구직자가 없습니다.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    return applicants;
+  }
+
+  async removeApply(id: string, jobpostingId: number) {
     const existingJobposting = await this.applicantRepository.findOne({
       where: { jobpostingId },
     });

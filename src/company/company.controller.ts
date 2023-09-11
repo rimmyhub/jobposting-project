@@ -13,6 +13,7 @@ import {
   HttpStatus,
   HttpException,
   Query,
+  Put,
 } from '@nestjs/common';
 import { CompanyService } from './company.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
@@ -21,6 +22,7 @@ import { CompanyGuard } from '../auth/jwt/jwt.company.guard';
 import { ParamDto } from 'src/utils/param.dto';
 import { MailService } from '../mail/mail.service';
 import { VerifyCodeDto } from './dto/verify-code.dto';
+import { UserGuard } from 'src/auth/jwt/jwt.user.guard';
 
 @Controller('api/companies')
 export class CompanyController {
@@ -58,15 +60,36 @@ export class CompanyController {
     return this.companyService.getAllCompanyAddresses();
   }
 
-  // 검색시 업무 또는 회사 이름에 해당 검색어를 포함하는 회사 전체 조회
+  // 윤영 : 검색시 업무 또는 회사 이름에 해당 검색어를 포함하는 회사 전체 조회
   @Post('search')
   searchKeyword(@Body('keyword') keyword: string) {
     return this.companyService.searchKeyword(keyword);
   }
 
-  // 회사 1개 조회
+  // 윤영 : 직군 선택시 회사 사업과 일치한 회사 전체 조회
+  @Post('business')
+  searchOccupation(@Body('business') business: string) {
+    return this.companyService.searchOccupation(business);
+  }
+
+  // 윤영 : 선택한 지역과 주소가 일치하는 회사 전체 조회
+  @Post('selectCompany')
+  searchSelectCompany(@Body('address') address: string) {
+    return this.companyService.searchSelectCompany(address);
+  }
+
+  // 회사 1개 조회 - 마이페이지용
+  @UseGuards(CompanyGuard)
+  @Get('/company')
+  findOneCompanyByRequest(@Request() req) {
+    const companyId = req.company.id;
+    return this.companyService.findOneCompanyById(companyId);
+  }
+
+  // 회사 1개 조회- 상세페이지용
   @Get(':id')
   finOneCompany(@Param() { id }: ParamDto) {
+    console.log('finOneCompany= ', id);
     return this.companyService.finOneCompany(id); //string 으로 가져와서 숫자로 변환
   }
 
@@ -75,6 +98,13 @@ export class CompanyController {
   @Patch()
   updateCompany(@Request() req, @Body() updateCompanyDto: UpdateCompanyDto) {
     return this.companyService.updateCompany(req.company.id, updateCompanyDto);
+  }
+
+  // 회사 이미지 수정
+  @UseGuards(CompanyGuard)
+  @Put('/image')
+  updateCompanyImage(@Request() req, @Body('image') image: string) {
+    return this.companyService.updateCompanyImage(req.company.id, image);
   }
 
   // 회사 회원 탈퇴 (회사 연결)

@@ -1,54 +1,9 @@
 // 페이지 로드시 실행 함수
 document.addEventListener('DOMContentLoaded', async (e) => {
   e.preventDefault();
-  init();
+  await init();
   init2();
-});
-
-// 유저 이미지 수정하기
-const userImage = document.getElementById('image');
-const imageUploadEl = document.getElementById('user-image');
-const imageDeleteEl = document.getElementById('image-delete');
-
-console.dir(userImage);
-console.dir(imageUploadEl);
-console.dir(imageDeleteEl);
-
-imageUploadEl.addEventListener('change', async (e) => {
-  const selectedFile = e.target.files[0];
-
-  console.log(selectedFile);
-
-  if (selectedFile.size > 1 * 1024 * 1024) {
-    alert('파일용량은 최대 1MB입니다.');
-    return;
-  }
-  console.log(selectedFile.size);
-  if (
-    !selectedFile.type.includes('jpeg') &&
-    !selectedFile.type.includes('png')
-  ) {
-    alert('jpeg 또는 png 파일만 업로드 가능합니다!');
-    return;
-  }
-  const formData = new FormData();
-  formData.append('file', selectedFile);
-  const response = await fetch('/api/upload', {
-    method: 'POST',
-    body: formData,
-  });
-  const data = await response.json();
-  console.log(data);
-
-  imageUrl = data.url;
-
-  userImage.setAttribute('src', imageUrl);
-});
-
-// 기본프로필 적용하기
-imageDeleteEl.addEventListener('click', () => {
-  url = '';
-  userImage.setAttribute('src', '/img/profile.jpg');
+  getUserImage();
 });
 
 // init
@@ -97,8 +52,10 @@ async function getUserData() {
                             class="img-file"
                             type="file"
                             accept="image/jpeg, image/png"
+                            onerror="this.src='/img/userImg.jpg';"
                           />
-                        </div>`;
+                        </div>
+                        `;
   // 유저정보
   userInfoBox.innerHTML = `<div class="col-sm-8" id="userInfoBox" data-id="${jsonUserData.id}">
     <!-- 이름 -->
@@ -167,27 +124,97 @@ async function getUserData() {
     </div>
     <!-- 생년월일 -->
   </div>`;
-  return jsonUserData.id;
 
-  // 이미지 보여주기
-  profileBox.innerHTML = `
-  <div class="profile-box">
-     <img
-       src="${jsonUserData.image}"
-       id="image"
-       class="user-img"
-       alt=""
-       srcset=""
-     />
-     <i class="fa-solid fa-pen edit-icon" style="color: #0d6efd">수정</i>
-     <input
-       id="user-image"
-       class="img-file"
-       type="file"
-       accept="image/jpeg, image/png"
-     />
-  </div>
-`;
+  return jsonUserData.id;
+}
+async function getUserImage() {
+  const userImage = document.getElementById('image');
+  const imageUploadEl = document.getElementById('user-image');
+  const imageDeleteEl = document.getElementById('image-delete');
+  const saveBtnEl = document.getElementById('save-btn');
+  let imageUrl = userImage.src; // 기존 이미지 URL 가져오기
+
+  // 기본 프로필 적용하기
+  imageDeleteEl.addEventListener('click', () => {
+    imageUrl = '/img/userImg.jpg'; // 이미지 삭제 시 URL 업데이트
+    userImage.src = imageUrl; // 이미지 보여주기
+  });
+
+  imageUploadEl.addEventListener('change', async (e) => {
+    const selectedFile = e.target.files[0];
+    console.log(selectedFile);
+    // 파일 유효성 검사
+    if (selectedFile) {
+      if (selectedFile.size > 1 * 1024 * 1024) {
+        alert('파일 용량은 최대 1MB입니다.');
+        return;
+      }
+
+      if (
+        !selectedFile.type.includes('jpeg') &&
+        !selectedFile.type.includes('png')
+      ) {
+        alert('jpeg 또는 png 파일만 업로드 가능합니다!');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('file', selectedFile);
+
+      try {
+        const response = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData,
+        });
+        if (response.ok) {
+          const data = await response.json();
+          imageUrl = data.url; // 업로드된 이미지 URL 업데이트
+          userImage.src = imageUrl; // 이미지 보여주기
+
+          console.log(data);
+        } else {
+          throw new Error('이미지 업로드에 실패했습니다.');
+        }
+      } catch (error) {
+        console.error(error);
+        alert('이미지 업로드에 실패했습니다.');
+      }
+    }
+  });
+
+  saveBtnEl.addEventListener('click', async () => {
+    if (imageUrl) {
+      try {
+        await saveUserImage(imageUrl);
+        alert('이미지가 저장되었습니다.');
+        window.location.reload();
+      } catch (error) {
+        console.error('이미지 저장 오류:', error);
+        alert('이미지 저장에 실패했습니다.');
+      }
+    } else {
+      alert('이미지를 먼저 업로드하세요.');
+    }
+  });
+
+  async function saveUserImage(imageUrl) {
+    try {
+      const response = await fetch('/api/users/image', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ image: imageUrl }),
+      });
+
+      if (!response.ok) {
+        throw new Error('이미지 저장 실패');
+      }
+    } catch (error) {
+      console.error('이미지 저장 오류:', error);
+      throw error;
+    }
+  }
 }
 // 유저의 이력서를 불러오는 함수 로직
 async function getUserResume() {
@@ -598,6 +625,7 @@ function resumeDelete() {
 // 학력정보 불러오기
 const dropdownItems = document.querySelectorAll('.item');
 const selectedValueElement = document.getElementById('selectedValue');
+console.log(selectedValueElement);
 const selectedValueElement2 = document.getElementById('selectedValue2');
 let aEducation = '추가';
 let bEducation = '수정';
@@ -605,8 +633,8 @@ dropdownItems.forEach((item) => {
   item.addEventListener('click', () => {
     selectedValueElement.textContent = item.textContent;
     selectedValueElement2.textContent = item.textContent;
-    a = selectedValueElement.textContent;
-    b = selectedValueElement2.textContent;
+    aEducation = selectedValueElement.textContent;
+    bEducation = selectedValueElement2.textContent;
   });
 });
 

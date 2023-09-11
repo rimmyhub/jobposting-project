@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>WINNER</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -50,6 +50,15 @@
           <p class="text-start fs-5 fw-semibold" style="margin-top: 30px">
             내가 작성한 공고
           </p>
+          <button
+            type="button"
+            class="btn btn-outline-primary fa-plus"
+            id="jobposting-add-btn"
+            style="width: 130px"
+            ;
+          >
+            채용공고 추가
+          </button>
           <% } %>
         </div>
         <div class="col-10">
@@ -73,23 +82,28 @@
                   <% if (type === 'user') { %>
                   <button
                     type="button"
-                    class="btn btn-outline-primary apply-btn"
+                    class="btn btn-outline-danger apply-btn"
                   >
                     지원 취소
                   </button>
-                  <% }else if (type === 'company'){ %>
                   <button
                     type="button"
-                    class="btn btn-outline-primary apply-btn"
+                    class="btn btn-outline-primary jobposting-btn"
+                    style="margin-right: 10px"
                   >
-                    수정
+                    채용공고 보기
                   </button>
+                  <% }else if (type === 'company'){ %>
                   <button
                     type="button"
                     class="btn btn-outline-danger delet-btn"
                   >
                     삭제
                   </button>
+                  <button type="button" class="btn btn-outline-primary">
+                    수정
+                  </button>
+
                   <% } %>
                 </div>
                 <hr />

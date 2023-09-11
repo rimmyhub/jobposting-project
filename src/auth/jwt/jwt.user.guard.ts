@@ -61,8 +61,11 @@ export class UserGuard
   }
 
   private extractTokenFromHeader(request: Request): string | undefined {
-    const [type, token] = request.cookies.authorization.split(' ') ?? [];
+    const authorization = request.cookies.authorization;
+    if (authorization) {
+      const [type, token] = authorization.split(' ') ?? [];
 
-    return type === 'Bearer' ? token : undefined;
+      return type === 'Bearer' ? token : undefined;
+    }
   }
 }

@@ -25,8 +25,9 @@
 
     <link rel="stylesheet" href="/css/index.css" />
     <link rel="stylesheet" href="/css/container.css" />
-    <title>Document</title>
+    <title>WINNER</title>
     <script src="/js/index.js" defer></script>
+    <script src="/js/search.js" defer></script>
     <script
       type="text/javascript"
       src="//dapi.kakao.com/v2/maps/sdk.js?appkey=9e25fdfe19d6860c0e4399dad49b60dd&libraries=services"
@@ -38,31 +39,54 @@
       <div class="mainpage-dropdown-box">
         <div class="select-box">
           <!-- <span>직군</span> -->
-          <select name="직군 선택" id="">
-            <option disabled selected>직군 전체</option>
-            <option>옵션1</option>
-            <option>옵션2</option>
-            <option>옵션3</option>
+          <select name="직군 선택" id="occupationSelect">
+            <option selected>직군 전체</option>
+            <option>석유·화학</option>
+            <option>디자인·마케팅·광고</option>
+            <option>보험·연금</option>
+            <option>사무·회계</option>
+            <option>게임·소프트웨어</option>
+            <option>서버·네트워크</option>
+            <option>전기·설비</option>
+            <option>기계·철강·설계</option>
+            <option>연구·개발</option>
+            <option>금융·은행</option>
+            <option>의약·제약·바이오</option>
+            <option>제조·생산</option>
+            <option>물류·무역·유통</option>
+            <option>식·음료</option>
+            <option>의복·쇼핑</option>
+            <option>공공·복지·보건</option>
+            <option>건설·건축·시설</option>
+            <option>정부·교육·단체</option>
           </select>
           <i class="fa-solid fa-caret-down caret-down"></i>
         </div>
+        <!-- 세부 옵션을 나타낼 div -->
+        <div id="subOptions" style="display: none">
+          <!-- 세부 옵션을 여기에 동적으로 추가 -->
+        </div>
         <div class="select-box">
           <!-- <span>경기</span> -->
-          <select name="지역 선택" id="">
+          <select name="지역 선택" id="regionSelect">
             <option selected>지역 전국</option>
-            <option>옵션1</option>
-            <option>옵션2</option>
-            <option>옵션3</option>
+            <option>서울</option>
+            <option>경기</option>
+            <option>인천</option>
+            <option>강원</option>
+            <option>충청</option>
+            <option>전라</option>
+            <option>경상</option>
+            <option>제주</option>
           </select>
           <i class="fa-solid fa-caret-down caret-down"></i>
         </div>
         <div class="select-box">
           <!-- <span>경력</span> -->
-          <select name="경력 선택" id="">
+          <select name="경력 선택" id="experienceSelect">
             <option selected>경력 전체</option>
-            <option>옵션1</option>
-            <option>옵션2</option>
-            <option>옵션3</option>
+            <option>신입</option>
+            <option>경력</option>
           </select>
           <i class="fa-solid fa-caret-down caret-down"></i>
         </div>

@@ -6,33 +6,49 @@ async function getAppliesUser() {
     if (type === 'user') {
       const response = await fetch('/api/applications/user');
       const applyUserData = await response.json();
-
+      console.log(applyUserData);
       const temp = applyUserData
         .map((applyUser) => {
           return `
                  <div class="apply-card">
-                   <h4>${applyUser.title}</h4>
+                   <h4
+                   class="jobposting-btn"
+                   style="cursor: pointer;
+                   text-decoration: underline;"
+                   data-id=${applyUser.id}
+                   >${applyUser.title}</h4>
                    <h6>근무지 : ${applyUser.workArea}</h6>
                    <h6>마감일 : ${applyUser.dueDate}</h6>
                  </div>
-                   <button
+
+                <button
                    type="button"
-                   class="btn btn-outline-primary apply-btn"
+                   class="btn btn-outline-danger apply-btn"
                    data-id=${applyUser.id}
                   >
                    지원 취소
-                  </button>
+                </button>
+
                   <hr>
                  `;
         })
         .join('');
       applyBox.innerHTML = temp;
 
+      const jobpostingBtns = document.querySelectorAll('.jobposting-btn');
+      jobpostingBtns.forEach((jobpostingBtn) => {
+        jobpostingBtn.addEventListener('click', async (event) => {
+          const jobpostingId = event.target.getAttribute('data-id');
+          console.log(jobpostingId);
+          window.location.href = `/jobposting/${jobpostingId}`;
+        });
+      });
+
       const applyBtns = document.querySelectorAll('.apply-btn');
       applyBtns.forEach((applyBtn) => {
         applyBtn.addEventListener('click', async (event) => {
           const jobpostingId = event.target.getAttribute('data-id');
-          console.log(jobpostingId);
+          // console.log(jobpostingId);
 
           const result = confirm('확인 버튼을 누르면 지원이 취소됩니다.');
           if (result === true) {
@@ -50,39 +66,48 @@ async function getAppliesUser() {
     } else if (type === 'company') {
       const response = await fetch('/api/jobpostings/company');
       const applyCompanyData = await response.json();
+      // console.log(applyCompanyData);
       const temp = applyCompanyData
         .map((applyCompany) => {
           return `
                  <div class="apply-card">
-                   <h4>${applyCompany.title}</h4>
-                   <h6>근무지 :${applyCompany.workArea}</h6>
-                   <h6>마감일 :${applyCompany.dueDate}</h6>
-                 </div>
-                <button
-                   type="button"
-                   class="btn btn-outline-primary apply-btn"
+                   <h4    
+                   class="jobposting-company-btn"
                    onclick="goToUrl(${applyCompany.id})"
-                 >
-                   수정
-                  </button>
-                  <button
-                  type="button"
-                  class="btn btn-outline-danger delete-btn"
-                  data-id=${applyCompany.id}
-                >
-                  삭제
-                </button>
+                   data-id=${applyCompany.id}
+                   style="cursor: pointer;
+                   text-decoration: underline"           
+                   >${applyCompany.title}</h4>
+                   <h6>${applyCompany.job}</h6>
+                   <h6>${applyCompany.dueDate}</h6>
+                 </div>
+                 <button
+                 type="button"
+                 class="btn btn-outline-danger delete-btn"
+                 data-id=${applyCompany.id}
+               >
+                 삭제
+               </button>
+               <button
+               type="button"
+               class="btn btn-outline-primary"
+               id="jobposting-modify-btn"
+               data-id=${applyCompany.id}
+             >
+               수정
+             </button>
                   <hr>
                `;
         })
         .join('');
       applyBox.innerHTML = temp;
 
-      // 수정 버튼
-      const applyBtns = document.querySelectorAll('.apply-btn');
+      // 채용공고 보기 버튼
+      const applyBtns = document.querySelectorAll('.jobposting-company-btn');
       applyBtns.forEach((applyBtn) => {
-        applyBtn.addEventListener('click', () => {
-          const subPageUrl = `/jobposting/company`; //링크 추후 수정 예정!
+        applyBtn.addEventListener('click', (event) => {
+          const jobpostingId = event.target.getAttribute('data-id');
+          const subPageUrl = `/jobposting/${jobpostingId}`; //링크 추후 수정 예정!
           window.location.href = subPageUrl;
         });
       });
@@ -106,6 +131,21 @@ async function getAppliesUser() {
             alert('취소되었습니다.');
           }
         });
+      });
+
+      // 채용 공고 추가 버튼
+      const jobpostingAddBtn = document.getElementById('jobposting-add-btn');
+      jobpostingAddBtn.addEventListener('click', () => {
+        const jobpostingAddUrl = `/jobposting/add`;
+        window.location.href = jobpostingAddUrl;
+      });
+
+      // 채용공고 수정 버튼
+      const modifyBtn = document.getElementById('jobposting-modify-btn');
+      modifyBtn.addEventListener('click', (event) => {
+        const jobpostingId = event.target.getAttribute('data-id');
+        const jobpostingModifyUrl = `/jobposting/edit/${jobpostingId}`;
+        window.location.href = jobpostingModifyUrl;
       });
     }
   } catch (error) {

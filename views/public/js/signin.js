@@ -36,6 +36,7 @@ const login = async (type) => {
       .then((result) => {
         errMsg = result.message;
         window.localStorage.setItem('id', result.id);
+        socket.emit('saveClientId', result.id);
         window.localStorage.setItem('type', 'user');
       })
       .catch((e) => {
@@ -60,6 +61,7 @@ const login = async (type) => {
       .then((result) => {
         errMsg = result.message;
         window.localStorage.setItem('id', result.id);
+        socket.emit('saveClientId', result.id);
         window.localStorage.setItem('type', 'company');
       })
       .catch((e) => {

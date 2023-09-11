@@ -1,16 +1,11 @@
 import {
   Controller,
-  FileTypeValidator,
-  MaxFileSizeValidator,
-  ParseFilePipe,
   Post,
   UploadedFile,
-  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadService } from './upload.service';
-import { UserGuard } from 'src/auth/jwt/jwt.user.guard';
 
 @Controller('/api/upload')
 export class UploadController {

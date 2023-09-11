@@ -52,7 +52,7 @@ export class SearchService {
 
   // 검색 기능
   async searchJobs(text: string) {
-    console.log('hi'); // 콘솔 확인 OK
+    // console.log('hi'); // 콘솔 확인 OK
     // const indexes = await this.client.search({
     //   index: 'winner',
     //   body: {
@@ -63,7 +63,6 @@ export class SearchService {
     // });
     // console.log('123');
     // console.log(indexes);
-
     // return indexes;
   }
 }

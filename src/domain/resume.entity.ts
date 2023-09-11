@@ -24,7 +24,7 @@ export class Resume {
     name: 'user_id',
     comment: '해당 이력서의 유저 아이디',
   })
-  userId: number;
+  userId: string;
 
   @Column({ type: 'varchar', length: 100, comment: '이력서제목' })
   title: string;

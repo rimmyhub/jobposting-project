@@ -40,7 +40,7 @@ export class ResumeService {
 
   // 이력서 - 작성 로직
   async createResume(
-    id: number,
+    id: string,
     createResumeDto: CreateResumeDto,
   ): Promise<Resume> {
     // Body
@@ -117,7 +117,7 @@ export class ResumeService {
   }
 
   // 이력서 - 유저의 이력서 ID조회
-  async findResumeId(userId: number) {
+  async findResumeId(userId: string) {
     const resume = await this.resumeRepository.findOne({ where: { userId } });
     if (!resume) resume.id = 0;
     return resume.id;

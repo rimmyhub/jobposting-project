@@ -7,11 +7,12 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Company } from '../domain/company.entity';
-import { IsNull, LessThanOrEqual, Not, Repository } from 'typeorm';
+import { In, IsNull, LessThanOrEqual, Like, Not, Repository } from 'typeorm';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import * as bcrypt from 'bcrypt';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 import { Cron } from '@nestjs/schedule';
+import { Console } from 'console';
 
 @Injectable()
 export class CompanyService {
@@ -24,7 +25,7 @@ export class CompanyService {
   // getUserRefTokenMatch
   async getCompanyRefTokenMatch(
     refreToken: string,
-    id: number,
+    id: string,
   ): Promise<Company> {
     const company: Company = await this.companyRepository.findOne({
       select: {
@@ -32,7 +33,7 @@ export class CompanyService {
         currentRefreshToken: true,
         currentRefreshTokenExp: true,
       },
-      where: { uuid: id },
+      where: { id: id },
     });
 
     // 유저 테이블 내에 정의된 암호화된 refresh_token값과
@@ -100,11 +101,12 @@ export class CompanyService {
     }));
   }
 
-  // 검색시 업무 또는 회사 이름에 해당 검색어를 포함하는 회사 전체 조회
+  // 윤영 : 검색시 업무 또는 회사 이름에 해당 검색어를 포함하는 회사 전체 조회
   async searchKeyword(keyword: string) {
     const searchCompanies = await this.companyRepository
       .createQueryBuilder('company')
       .select([
+        'company.id',
         'company.title',
         'company.image',
         'company.business',
@@ -117,34 +119,201 @@ export class CompanyService {
 
     if (searchCompanies.length === 0) {
       throw new HttpException(
-        '검색하신 항목이 존재하지 않습니다.',
+        '검색 결과가 존재하지 않습니다.',
         HttpStatus.NOT_FOUND,
       );
     }
     return searchCompanies;
   }
 
+  // 윤영 : 직군 선택시 회사 사업과 일치한 회사 전체 조회
+  async searchOccupation(business: string) {
+    if (business === '직군 전체') {
+      return await this.companyRepository.find();
+    }
+    const splitBusiness = business.split('·');
+
+    const splitData = await this.companyRepository.find({
+      where: [
+        { business: Like(`%${splitBusiness[0]}%`) },
+        { business: Like(`%${splitBusiness[1]}%`) },
+        { business: Like(`%${splitBusiness[2]}%`) },
+      ],
+    });
+    if (splitData.length === 0) {
+      throw new HttpException(
+        '검색결과가 존재하지 않습니다.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    return splitData;
+  }
+
+  // 윤영 : 지역별 회사 전체 조회
+  async searchSelectCompany(address: string) {
+    // 모든 지역
+    if (address === '지역 전국') {
+      return this.companyRepository.find();
+    }
+    if (address === '충청') {
+      const resData = await this.companyRepository.find({
+        where: [
+          { address: Like(`%충북%`) },
+          { address: Like(`%충남%`) },
+          { address: Like(`%대전%`) },
+          { address: Like(`%세종%`) },
+        ],
+      });
+
+      if (resData.length === 0) {
+        throw new HttpException(
+          '지역에 해당하는 회사가 없습니다.',
+          HttpStatus.GONE,
+        );
+      }
+
+      return resData;
+    }
+    if (address === '전라') {
+      const resData = await this.companyRepository.find({
+        where: [
+          { address: Like(`%전북%`) },
+          { address: Like(`%전남%`) },
+          { address: Like(`%광주%`) },
+        ],
+      });
+
+      if (resData.length === 0) {
+        throw new HttpException(
+          '지역에 해당하는 회사가 없습니다.',
+          HttpStatus.GONE,
+        );
+      }
+
+      return resData;
+    }
+    if (address === '경상') {
+      const resData = await this.companyRepository.find({
+        where: [
+          { address: Like(`%경북%`) },
+          { address: Like(`%경남%`) },
+          { address: Like(`%대구%`) },
+          { address: Like(`%울산%`) },
+          { address: Like(`%부산%`) },
+        ],
+      });
+
+      if (resData.length === 0) {
+        throw new HttpException(
+          '지역에 해당하는 회사가 없습니다.',
+          HttpStatus.GONE,
+        );
+      }
+
+      return resData;
+    }
+    // // 충청도 옵션
+    // if (address === '충청') {
+    //   return await this.companyRepository.find({
+    //     where: [
+    //       { address: Like(`%충남%`) },
+    //       { address: Like(`%충북%`) },
+    //       { address: Like(`%대전%`) },
+    //       { address: Like(`%세종%`) },
+    //     ],
+    //   });
+    // }
+    // return await this.companyRepository.find({
+    //   where: [
+    //     { address: Like(`%충남%`) },
+    //     { address: Like(`%충북%`) },
+    //     { address: Like(`%대전%`) },
+    //     { address: Like(`%세종%`) },
+    //   ],
+    // });
+    // // 전라도 옵션
+    // if (address === '전라') {
+    //   return await this.companyRepository.find({
+    //     where: [
+    //       { address: Like(`%전북%`) },
+    //       { address: Like(`%전남%`) },
+    //       { address: Like(`%광주%`) },
+    //     ],
+    //   });
+    // }
+    // return await this.companyRepository.find({
+    //   where: [
+    //     { address: Like(`%전북%`) },
+    //     { address: Like(`%전남%`) },
+    //     { address: Like(`%광주%`) },
+    //   ],
+    // });
+    // // 경상도 옵션
+    // if (address === '경상') {
+    //   return await this.companyRepository.find({
+    //     where: [
+    //       { address: Like(`%경북%`) },
+    //       { address: Like(`%경남%`) },
+    //       { address: Like(`%대구%`) },
+    //       { address: Like(`%울산%`) },
+    //       { address: Like(`%부산%`) },
+    //     ],
+    //   });
+    //   return await this.companyRepository.find({
+    //     where: [
+    //       { address: Like(`%경북%`) },
+    //       { address: Like(`%경남%`) },
+    //       { address: Like(`%대구%`) },
+    //       { address: Like(`%울산%`) },
+    //       { address: Like(`%부산%`) },
+    //     ],
+    //   });
+    // }
+    // 리턴값
+    const resData = await this.companyRepository.find({
+      where: { address: Like(`%${address}%`) },
+    });
+
+    if (resData.length === 0) {
+      throw new HttpException(
+        '지역에 해당하는 회사가 없습니다.',
+        HttpStatus.GONE,
+      );
+    }
+
+    return resData;
+  }
+
   // 가입된 이메일이 있는지 확인
   async findEmail(email: string) {
     const isEmail = await this.companyRepository.findOne({
-      select: { uuid: true, email: true, password: true, isVerified: true },
+      select: { id: true, email: true, password: true, isVerified: true },
       where: { email },
     });
     return isEmail;
   }
 
-  // 회사 1개 조회
-  async finOneCompany(id: number) {
+  // 회사 1개 조회 - 마이페이지용
+  async findOneCompanyById(companyId: string) {
     const company = await this.companyRepository.findOne({
-      where: { id },
+      where: { id: companyId },
     });
     return company;
   }
 
-  // 회사 수정
-  async updateCompany(id: number, updateCompanyDto: UpdateCompanyDto) {
+  // 회사 1개 조회- 상세페이지용
+  async finOneCompany(id: string) {
     const company = await this.companyRepository.findOne({
-      where: { uuid: id },
+      where: { id },
+    });
+
+    return company;
+  }
+
+  // 회사 수정
+  async updateCompany(id: string, updateCompanyDto: UpdateCompanyDto) {
+    const company = await this.companyRepository.findOne({
+      where: { id },
     });
     if (!company) {
       throw new HttpException(
@@ -163,6 +332,22 @@ export class CompanyService {
 
     Object.assign(company, updateCompanyDto);
     return await this.companyRepository.save(company);
+  }
+
+  // 회사 이미지 수정
+  async updateCompanyImage(id: string, image: string) {
+    const isCompany = await this.companyRepository.findOne({ where: { id } });
+    console.log(isCompany);
+    if (!isCompany) {
+      throw new HttpException(
+        '회사를 찾을 수 없습니다.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    isCompany.image = image;
+
+    await this.companyRepository.save(isCompany);
+    return isCompany;
   }
 
   // 소프트 리무브
@@ -184,9 +369,9 @@ export class CompanyService {
   }
 
   // 회사 삭제
-  async removeCompany(id: number) {
+  async removeCompany(id: string) {
     const company = await this.companyRepository.findOne({
-      where: { uuid: id },
+      where: { id },
     });
 
     if (!company) {
@@ -252,8 +437,8 @@ export class CompanyService {
   }
 
   // 회사를 생성할 때, 기존 사용자의 정보를 update한다.
-  async updateCompanyInfo(updateCompanyDto: CreateCompanyDto): Promise<any> {
-    const { email, password } = updateCompanyDto;
+  async updateCompanyInfo(createCompanyDto: CreateCompanyDto): Promise<any> {
+    const { email, password } = createCompanyDto;
 
     const existingCompany = await this.companyRepository.findOne({
       where: { email },
@@ -268,13 +453,13 @@ export class CompanyService {
 
     // 인증된 사용자인 경우에만 정보 업데이트
     if (existingCompany.isVerified) {
-      existingCompany.title = updateCompanyDto.title;
-      existingCompany.introduction = updateCompanyDto.introduction;
-      existingCompany.website = updateCompanyDto.website;
-      existingCompany.address = updateCompanyDto.address;
-      existingCompany.business = updateCompanyDto.business;
-      existingCompany.employees = updateCompanyDto.employees;
-      existingCompany.image = updateCompanyDto.image;
+      existingCompany.title = createCompanyDto.title;
+      existingCompany.introduction = createCompanyDto.introduction;
+      existingCompany.website = createCompanyDto.website;
+      existingCompany.address = createCompanyDto.address;
+      existingCompany.business = createCompanyDto.business;
+      existingCompany.employees = createCompanyDto.employees;
+      existingCompany.image = createCompanyDto.image;
 
       if (password) {
         // 새로운 비밀번호가 제공된 경우에만 업데이트

@@ -70,16 +70,16 @@ function jobpostingAppendTemp(data) {
   const temp = data
     .map((jobposting) => {
       return `
-        <div class="jobposting-card" id="jobposting-card" onclick="goToJobpostingSubpage(${jobposting.id})">
-            <div>
-              <div class="jobposting-title" id="jobposting-title">
-              ${jobposting.title}
+              <div class="jobposting-card" id="jobposting-card" onclick="goToJobpostingSubpage(${jobposting.id})">
+                <div>
+                  <div class="jobposting-title" id="jobposting-title">
+                  ${jobposting.title}
+                  </div>
+                  <div class="jobposting-job" id="jobposting-job">${jobposting.dueDate}</div>
+                  <p>${jobposting.workArea}</p>
+                </div>
               </div>
-              <div class="jobposting-job" id="jobposting-job">${jobposting.dueDate}</div>
-              <p>${jobposting.workArea}</p>
-            </div>
-          </div>
-      `;
+              `;
     })
     .join('');
 
@@ -124,7 +124,7 @@ function companiesAppendTemp(data) {
   const temp = data
     .map((company) => {
       return `
-              <div class="jobposting-card" id="companies-card" onclick="goToCompanySubpage(${company.id})">
+              <div class="jobposting-card" id="companies-card" onclick="goToCompanySubpage('${company.id}')">
               <img
                 class="jobposting-img"
                 id="companies-img"
@@ -173,7 +173,8 @@ addCompaniesBtn.addEventListener('click', async function () {
 });
 
 function goToCompanySubpage(companyId) {
-  const subPageUrl = `/subpage/company/${companyId}`;
+  console.log('goToCompanySubpage = ', companyId);
+  const subPageUrl = `/company/${companyId}`;
   window.location.href = subPageUrl;
 }
 
@@ -224,7 +225,6 @@ if (navigator.geolocation) {
     fetch(apiUrl)
       .then((response) => response.json())
       .then((addresses) => {
-        console.log(addresses);
         address = addresses.map(function (addressInfo) {
           // 주소를 좌표로 변환하는 Geocoder 객체를 생성
           var geocoder = new kakao.maps.services.Geocoder();

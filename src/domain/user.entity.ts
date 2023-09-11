@@ -16,8 +16,8 @@ import { Resume } from './resume.entity';
 import { Comment } from './comment.entity';
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column({ type: 'varchar', length: 50, comment: '유저아이디' })
   email: string;

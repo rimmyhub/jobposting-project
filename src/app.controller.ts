@@ -5,9 +5,7 @@ import { get } from 'http';
 
 @Controller()
 export class AppController {
-  constructor(
-    private readonly appService: AppService,
-  ) {}
+  constructor(private readonly appService: AppService) {}
 
   @Get()
   @Render('index')
@@ -56,38 +54,61 @@ export class AppController {
     });
   }
 
-  @Get('chat')
-  @Render('chat')
-  getChat() {
-    return { title: 'Title' };
+  // 회사 정보
+  @Get('company/:id')
+  @Render('subpage-company')
+  async getSubpageCompany(@Request() req, @Param('id') id: string) {
+    const cookie: string = await req.cookies['authorization'];
+    console.log('id = ', id);
+    if (cookie) {
+      return { isLogin: 1, id };
+    }
+
+    return {
+      isLogin: 0,
+      id,
+    };
   }
 
-  // 회사 정보 서브 페이지
-  @Get('subpage/company/:companyId')
-  @Render('subpage-company')
-  async getSubpageCompany(
-    @Request() req,
-    @Param('companyId') companyId: string,
-  ) {
+  // 채용공고 추가
+  @Get('jobposting/add')
+  @Render('jobposting-add')
+  async getJobpstingAdd(@Request() req) {
     const cookie: string = await req.cookies['authorization'];
     if (cookie) {
-      return { isLogin: 1, companyId };
+      return { isLogin: 1 };
     }
     return {
       isLogin: 0,
-     companyId,
     };
   }
 
   // 채용공고 (로그인 없이 모든 공고 조회)
   @Get('jobposting/:jobpostingId')
-  @Render('jobposting-user')
+  @Render('jobposting')
   async getJobpstingUser(
     @Request() req,
     @Param('jobpostingId') jobpostingId: string,
   ) {
     // 그냥 authorization가 들어가 있으면 통과해버림
     // 다른 방법 생각해보자
+    const cookie: string = await req.cookies['authorization'];
+    if (cookie) {
+      return { isLogin: 1, jobpostingId };
+    }
+    return {
+      isLogin: 0,
+      jobpostingId,
+    };
+  }
+
+  // 채용공고 수정
+  @Get('jobposting/edit/:jobpostingId')
+  @Render('jobposting-edit')
+  async getJobpstingEdit(
+    @Request() req,
+    @Param('jobpostingId') jobpostingId: string,
+  ) {
     const cookie: string = await req.cookies['authorization'];
     if (cookie) {
       return { isLogin: 1, jobpostingId };
@@ -145,6 +166,22 @@ export class AppController {
     }
     return res.render('mypage-company', {
       type,
+      isLogin: 1,
+    });
+  }
+
+  // 회사 - 지원자 확인
+  @Get('applyuser/:jobpostingId')
+  getApplyUser(
+    @Request() req,
+    @Res() res: Response,
+    @Param('jobpostingId') jobpostingId: string,
+  ) {
+    const cookie: string = req.cookies['authorization'];
+    if (!cookie) {
+      return res.redirect('/signin/company'); // 만약 로그인 되어있으면 진입 금지
+    }
+    return res.render('apply-user', {
       isLogin: 1,
     });
   }

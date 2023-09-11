@@ -25,7 +25,7 @@ export class ChatController {
     @Request() req,
     @Param('companyId') companyId: string,
   ): Promise<Chat> {
-    return this.chatService.createUserChat(req.user.id, +companyId);
+    return this.chatService.createUserChat(req.user.id, companyId);
   }
 
   // 회사 -> 유저 채팅 신청
@@ -37,7 +37,7 @@ export class ChatController {
   ): Promise<Chat> {
     const result = await this.chatService.createCompanyChat(
       req.company.id,
-      Number(userId),
+      userId,
     );
     return result;
   }
@@ -46,7 +46,6 @@ export class ChatController {
   @UseGuards(CompanyGuard)
   @Get('/company')
   async comGetChatRoom(@Request() req): Promise<Chat[]> {
-    console.log('getChatRoom = ', req.company.id);
     const chatRooms = await this.chatService.comGetAllChatRoom(req.company.id);
     return chatRooms;
   }
@@ -55,7 +54,6 @@ export class ChatController {
   @UseGuards(UserGuard)
   @Get('/user')
   async userGetChatRoom(@Request() req): Promise<Chat[]> {
-    console.log('getChatRoom = ', req.user.id);
     const chatRooms = await this.chatService.userGetAllChatRoom(req.user.id);
     return chatRooms;
   }
@@ -77,7 +75,6 @@ export class ChatController {
   @Post('save')
   saveChatContent(@Request() req) {
     const { chatContent, chatId, senderId, senderType } = req.Body;
-    console.log('save = ', chatContent, chatId, senderId, senderType);
   }
 
   // 유저 - 새로운 메세지 체크
@@ -86,7 +83,6 @@ export class ChatController {
   async userCheckMessage(@Request() req, @Param('type') type: string) {
     const userId = req.user.id;
     const result = await this.chatService.checkChat(userId, type);
-    console.log('result =', result);
     return result;
   }
 

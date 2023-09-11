@@ -12,6 +12,7 @@ import {
   ValidationPipe,
   Request,
   Put,
+  Patch,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { MailService } from '../mail/mail.service';
@@ -29,7 +30,7 @@ export class UserController {
 
   // email만 가져오기
   @Get('/get-email/:id')
-  async getEmail(@Param('id') id: number): Promise<any> {
+  async getEmail(@Param('id') id: string): Promise<any> {
     console.log('id', id);
     const result = await this.userService.getEmail(id);
     console.log('email만 가져오기 ', result);
@@ -66,7 +67,7 @@ export class UserController {
   }
   // 유저정보 조회
   @Get('/user/:id')
-  findUser(@Param('id') id: number) {
+  findUser(@Param('id') id: string) {
     return this.userService.findOne(id);
   }
 
@@ -75,6 +76,14 @@ export class UserController {
   @Put()
   update(@Request() req, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(req.user.id, updateUserDto);
+  }
+
+  // 유저 이미지 수정
+  @UseGuards(UserGuard)
+  @Put('/image')
+  updateUserImage(@Request() req, @Body('image') image: string) {
+    console.log(image);
+    return this.userService.updateUserImage(req.user.id, image);
   }
 
   // 회원탈퇴 (softDelete)

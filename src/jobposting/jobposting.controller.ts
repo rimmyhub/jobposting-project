@@ -21,6 +21,39 @@ import { ParamDto } from 'src/utils/param.dto';
 export class JobpostingController {
   constructor(private readonly jobpostingService: JobpostingService) {}
 
+  // 윤영 : 검색시 해당 검색어를 포함하는 채용 공고글 전체 조회
+  @Post('search')
+  searchKeyword(@Body('keyword') keyword: string) {
+    return this.jobpostingService.searchKeyword(keyword);
+  }
+
+  // 윤영 : 직군 선택시 채용공고 직군과 일치한 회사 전체 조회
+  @Post('job')
+  searchOccupation(@Body('job') job: string) {
+    return this.jobpostingService.searchOccupation(job);
+  }
+
+  // 윤영 : 지역 + 경력 일치하는 채용 공고글 전체 조회
+  @Post('selectJobposting')
+  searchSelectJobposting(
+    @Body('career') career: string,
+    @Body('workArea') workArea: string,
+  ) {
+    return this.jobpostingService.searchSelectJobposting(career, workArea);
+  }
+
+  // // 윤영 : 지역검색시 해당지역과 일치하는 채용 공고글 전체 조회
+  // @Post('workArea')
+  // searchRegion(@Body('workArea') workArea: string) {
+  //   return this.jobpostingService.searchRegion(workArea);
+  // }
+
+  // // 윤영 : 경력검색시 해당경력과 일치하는 채용 공고글 전체 조회
+  // @Post('career')
+  // searchCareer(@Body('career') career: string) {
+  //   return this.jobpostingService.searchCareer(career);
+  // }
+
   // 채용공고 아이디 가져오기
   @Get('getId')
   getJobpostingId(@Query('id') id: string) {
@@ -29,15 +62,14 @@ export class JobpostingController {
 
   // 회사별 채용공고 생성 (회사 연결)
   @UseGuards(CompanyGuard)
-  @Post(':companyId')
+  @Post()
   createJobposting(
     @Request() req,
-    @Param('companyId') companyId: string,
     @Body() createJobpostingDto: CreateJobpostingDto,
   ): Promise<Jobposting> {
+    const companyId = req.company.id;
     return this.jobpostingService.createJobposting(
-      req.company.id,
-      +companyId,
+      companyId,
       createJobpostingDto,
     );
   }
@@ -61,19 +93,21 @@ export class JobpostingController {
     return this.jobpostingService.findCompanyAllJobposting(req.company.id);
   }
 
-  // 검색시 해당 검색어를 포함하는 채용 공고글 전체 조회
-  @Post('search')
-  searchKeyword(@Body('keyword') keyword: string) {
-    return this.jobpostingService.searchKeyword(keyword);
+  // 윤영 : 메인페이지에서 채용공고 클릭 시 해당 채용공고 내용 조회
+  @Get('/:jobpostingId')
+  getJobposting(@Param('jobpostingId') jobpostingId: string) {
+    return this.jobpostingService.getJobposting(+jobpostingId);
   }
 
-  // 회사별 채용공고 1개 조회
-  @Get(':companyId/:jobpostingId')
+  // 채용공고 1개 조회 - 회사
+  @UseGuards(CompanyGuard)
+  @Get('/company/:jobpostingId')
   findOneJobposting(
-    @Param('companyId') companyId: string,
+    @Request() req,
     @Param('jobpostingId') jobpostingId: string,
   ) {
-    return this.jobpostingService.findOneJobposting(+companyId, +jobpostingId);
+    const companyId = req.company.id;
+    return this.jobpostingService.findOneJobposting(companyId, +jobpostingId);
   }
 
   // 채용공고 수정
