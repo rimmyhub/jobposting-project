@@ -152,6 +152,26 @@ export class ApplicantService {
     return applicants;
   }
 
+  // ===========
+
+  // async findAllResume(): Promise<Resume[]> {
+  // const result = await this.resumeRepository
+  // .createQueryBuilder('resume')
+  // .select([
+  // 'resume.id',
+  // 'resume.title',
+  // 'resume.userId',
+  // 'resume.content',
+  // 'user.name',
+  // 'user.id',
+  // ]) // user테이블의 name만 가져오기
+  // .innerJoin('resume.user', 'user') // user테이블과 join
+  // .where('resume.deletedAt IS NULL') // deleteAt에 null값이 들어있는 데이터만 가져오기
+  // .getMany();
+
+  // return result;
+  // }
+
   async removeApply(id: string, jobpostingId: number) {
     const existingJobposting = await this.applicantRepository.findOne({
       where: { jobpostingId },

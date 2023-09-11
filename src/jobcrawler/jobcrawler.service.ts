@@ -181,7 +181,7 @@ export class JobcrawlerService {
     console.time('코드 실행시간');
     // 코드 실행시간을 구해줌
 
-    const totalPage = 1; // 크롤링할 갯수
+    const totalPage = 1; // 크롤링할 페이지
     const jobInfo = [];
     const companyInfo = [];
 

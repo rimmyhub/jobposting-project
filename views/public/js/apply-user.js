@@ -1,47 +1,12 @@
-// 유저정보 불러오기
-// const userImage = document.getElementById('image'); // 유저 이미지
-// const userName = document.getElementById('user-name'); // 유저 이름
-// const userPhone = document.getElementById('user-phone'); // 유저 전화번호
-// const userEmail = document.getElementById('user-email'); // 유저 이메일
-
-// async function getApplyUser() {
-//   try {
-//     const response = await fetch(`/api/applications/applyuser/${jobpostingId}`);
-//     const data = await response.json();
-//     console.log(data);
-
-//     const { image, name, phone, email } = data;
-
-//     userImage.src = image;
-//     userName.textContent = name;
-//     userPhone.textContent = phone;
-//     userEmail.textContent = email;
-//   } catch (error) {
-//     console.error(error);
-//   }
-// }
-// getApplyUser();
-
 const jobpostingId = window.location.pathname.split('/')[2];
-
-// // 유저의 이력서ID 값만 가져오는 함수
-// async function getResumeId() {
-//   const userId = await getUserData();
-
-//   const resumeId = await fetch(`/api/resumes/user/${userId}`);
-//   const res = await resumeId.json();
-//   return res;
-// }
-
-// getResumeId();
 
 async function getApplyUser() {
   const applyUser = document.getElementById('apply-user-list');
 
   const response = await fetch(`/api/applications/applyuser/${jobpostingId}`);
   const data = await response.json();
-  console.log(data);
 
+  console.log(data);
   const temp = data
     .map((data) => {
       return `
@@ -72,6 +37,7 @@ async function getApplyUser() {
                           type="button"
                           class="btn btn-outline-primary"
                           id="resume-btn"
+                          data-id=${data.user.id}
                           style="margin-right: 10px"
                         >
                           이력서 보기
@@ -89,11 +55,20 @@ async function getApplyUser() {
 
   applyUser.innerHTML = temp;
 
-  const resumeButton = document.getElementById('resume-btn');
+  //resumeId 가져오기
+  async function getResumeId(event) {
+    const userId = event.target.getAttribute('data-id');
+    const resumeIdResponse = await fetch(`/api/resumes/user/${userId}`);
+    const resumeId = await resumeIdResponse.json();
+    return resumeId;
+  }
 
-  resumeButton.addEventListener('click', function () {
-    const resumeId = 1; // resumeId 값 설정 // 수정필요!!!!
-    window.location.href = `/subpage/${jobpostingId}/${resumeId}?id=${jobpostingId}&resumeId=${resumeId}`;
+  const resumeButton = document.getElementById('resume-btn');
+  resumeButton.addEventListener('click', async (event) => {
+    const userId = event.target.getAttribute('data-id');
+    const resumeId = await getResumeId(event);
+
+    window.location.href = `/subpage/${userId}/${resumeId}?id=${userId}&resumeId=${resumeId}`;
   });
 }
 
