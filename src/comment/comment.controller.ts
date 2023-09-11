@@ -51,7 +51,7 @@ export class CommentController {
 
   // 리뷰 수정
   // @UseGuards(UserGuard)
-  @Patch(':commentId')
+  @Patch(':companyId/:commentId')
   updateComment(
     @Param('commentId') id: string,
     @Body() updateCommentDto: UpdateCommentDto,
@@ -61,7 +61,7 @@ export class CommentController {
 
   // 리뷰 삭제
   // @UseGuards(UserGuard)
-  @Delete(':commentId')
+  @Delete(':companyId/:commentId')
   removeComment(@Param('commentId') id: string) {
     return this.commentService.removeComment(+id);
   }
