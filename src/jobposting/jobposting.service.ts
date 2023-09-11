@@ -1,10 +1,11 @@
 import { CreateJobpostingDto } from './dto/create-jobposting.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Jobposting } from 'src/domain/jobposting.entity';
-import { Like, Repository } from 'typeorm';
+import { LessThan, Like, Repository } from 'typeorm';
 import { UpdateJobpostingDto } from './dto/update-jobposting.dto';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { Company } from 'src/domain/company.entity';
+import { Cron } from '@nestjs/schedule';
 
 export class JobpostingService {
   constructor(
@@ -518,7 +519,8 @@ export class JobpostingService {
     return await this.jobpostingRepository.save(jobposting);
   }
 
-  // 채용공고 삭제
+  // 채용공고 삭제, 진행중
+  @Cron('0 0 * * *') // 매일 자정에 실행
   async removeJobposting(jobpostingId: number, id: string) {
     const jobposting = await this.jobpostingRepository.findOne({
       where: { id: jobpostingId },
@@ -534,6 +536,15 @@ export class JobpostingService {
     if (jobposting.companyId !== id) {
       throw new HttpException('권한이 없습니다.', HttpStatus.FORBIDDEN);
     }
-    return await this.jobpostingRepository.remove(jobposting);
+
+    const currentTime = new Date();
+    const jobpostings = await this.jobpostingRepository.find({
+      withDeleted: true, // 소프트 삭제된 항목도 검색
+      where: { dueDate: LessThan(currentTime) }, // 현재 시간보다 이전의 채용 마감일을 가진 공고 찾기
+    });
+
+    for (const jobposting of jobpostings) {
+      return this.jobpostingRepository.remove(jobposting);
+    }
   }
 }

@@ -212,7 +212,7 @@ async function appendMsgList(datas, type) {
     if (type === 'company') {
       datas.forEach((el) => {
         const li = document.createElement('div');
-        console.log(el.userId);
+        // console.log(el.user);
         li.innerHTML = `<div id="message-card-${el.id}" class="message-card" onclick="chattingBox('${el.id}', '${el.user.email}', '${el.userId}')">
                           <div class="user-profile">
                             <img src="/img/userImg.jpg" alt="" srcset="" />

@@ -23,7 +23,7 @@ const getResumes = async () => {
       column.innerHTML = `<div id="${el.id}" OnClick="location.href='/subpage/${el.user.id}/${el.id}?id=${el.user.id}&resumeId=${el.id}'" class="jobseeker-card">
                           <img
                             class="jobseeker-img"
-                            src="/img/userImg.jpg"
+                            src="${el.user.image}"
                             alt=""
                             srcset=""
                           />
