@@ -52,7 +52,7 @@ function searchCompany() {
     }
     companiesBar.innerHTML = '';
     resCP.forEach((CP) => {
-      companiesBar.innerHTML += `<div class="jobposting-card" id="companies-card" onclick="goToCompanySubpage(${CP.id})">
+      companiesBar.innerHTML += `<div class="jobposting-card" id="companies-card" onclick="goToCompanySubpage('${CP.id}')">
                                 <img
                                     class="jobposting-img"
                                     id="companies-img"
@@ -109,9 +109,183 @@ function searchJobposting() {
 function selectInit() {
   // searchRegion();
   // searchExperience();
-  jobOptionSelect();
-  selectJobposting();
-  selectCompany();
+  // jobOptionSelect();
+  // selectJobposting();
+  // selectCompany();
+  searchOptionJP();
+  searchOptionCP();
+}
+
+// 옵션에 따른 채용공고 검색
+function searchOptionJP() {
+  // 직군
+  occupationSelect.addEventListener('change', async () => {
+    // 바디값
+    const occupation = occupationSelect.value; // 직군
+    const workArea = regionSelect.value; // 지역
+    const experience = experienceSelect.value; // 경력
+
+    // 데이터 전송
+    const searchJobposting = await fetch(`/api/jobpostings/option`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ occupation, workArea, experience }),
+    });
+    const resJP = await searchJobposting.json();
+    if (resJP.message) {
+      return (jobPostingsBar.innerHTML = `<ul>${resJP.message}</ul>`);
+    }
+    jobPostingsBar.innerHTML = '';
+    resJP.forEach((JP) => {
+      jobPostingsBar.innerHTML += `<div class="jobposting-card" id="jobposting-card" onclick="goToJobpostingSubpage(${JP.id})">
+                                    <div>
+                                        <div class="jobposting-title" id="jobposting-title">
+                                        ${JP.title}
+                                        </div>
+                                        <div class="jobposting-job" id="jobposting-job">${JP.dueDate}</div>
+                                        <p>${JP.workArea}</p>
+                                    </div>
+                                    </div>`;
+    });
+  });
+  // 지역
+  regionSelect.addEventListener('change', async () => {
+    // 바디값
+    const occupation = occupationSelect.value; // 직군
+    const workArea = regionSelect.value; // 지역
+    const experience = experienceSelect.value; // 경력
+
+    // 데이터 전송
+    const searchJobposting = await fetch(`/api/jobpostings/option`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ occupation, workArea, experience }),
+    });
+    const resJP = await searchJobposting.json();
+    if (resJP.message) {
+      return (jobPostingsBar.innerHTML = `<ul>${resJP.message}</ul>`);
+    }
+    jobPostingsBar.innerHTML = '';
+    resJP.forEach((JP) => {
+      jobPostingsBar.innerHTML += `<div class="jobposting-card" id="jobposting-card" onclick="goToJobpostingSubpage(${JP.id})">
+                                    <div>
+                                        <div class="jobposting-title" id="jobposting-title">
+                                        ${JP.title}
+                                        </div>
+                                        <div class="jobposting-job" id="jobposting-job">${JP.dueDate}</div>
+                                        <p>${JP.workArea}</p>
+                                    </div>
+                                    </div>`;
+    });
+  });
+  // 경력
+  experienceSelect.addEventListener('change', async () => {
+    // 바디값
+    const occupation = occupationSelect.value; // 직군
+    const workArea = regionSelect.value; // 지역
+    const experience = experienceSelect.value; // 경력
+
+    // 데이터 전송
+    const searchJobposting = await fetch(`/api/jobpostings/option`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ occupation, workArea, experience }),
+    });
+    const resJP = await searchJobposting.json();
+    if (resJP.message) {
+      return (jobPostingsBar.innerHTML = `<ul>${resJP.message}</ul>`);
+    }
+    jobPostingsBar.innerHTML = '';
+    resJP.forEach((JP) => {
+      jobPostingsBar.innerHTML += `<div class="jobposting-card" id="jobposting-card" onclick="goToJobpostingSubpage(${JP.id})">
+                                    <div>
+                                        <div class="jobposting-title" id="jobposting-title">
+                                        ${JP.title}
+                                        </div>
+                                        <div class="jobposting-job" id="jobposting-job">${JP.dueDate}</div>
+                                        <p>${JP.workArea}</p>
+                                    </div>
+                                    </div>`;
+    });
+  });
+}
+
+// 옵션에 따른 회사 검색
+function searchOptionCP() {
+  // 직군
+  occupationSelect.addEventListener('change', async () => {
+    // 바디값
+    const occupation = occupationSelect.value; // 직군
+    const workArea = regionSelect.value; // 지역
+
+    // 데이터 전송
+    const searchCompany = await fetch(`/api/companies/option`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ occupation, workArea }),
+    });
+    const resCP = await searchCompany.json();
+    if (resCP.message) {
+      return (companiesBar.innerHTML = `<ul>${resCP.message}</ul>`);
+    }
+    companiesBar.innerHTML = '';
+    resCP.forEach((CP) => {
+      companiesBar.innerHTML += `<div class="jobposting-card" id="companies-card" onclick="goToCompanySubpage('${CP.id}')">
+                                <img
+                                    class="jobposting-img"
+                                    id="companies-img"
+                                    src="${CP.image}"
+                                    alt=""
+                                    srcset=""
+                                    onerror="this.src='/img/company.jpg';"
+                                />
+                                <div>
+                                    <div class="jobposting-title" id="companies-title">
+                                    ${CP.title}
+                                    </div>
+                                    <div class="jobposting-job" id="companies-job">${CP.business}</div>
+                                    <p>${CP.employees}</p>
+                                </div>
+                                </div>`;
+    });
+  });
+  // 지역
+  regionSelect.addEventListener('change', async () => {
+    // 바디값
+    const occupation = occupationSelect.value; // 직군
+    const workArea = regionSelect.value; // 지역
+
+    // 데이터 전송
+    const searchCompany = await fetch(`/api/companies/option`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ occupation, workArea }),
+    });
+    const resCP = await searchCompany.json();
+    if (resCP.message) {
+      return (companiesBar.innerHTML = `<ul>${resCP.message}</ul>`);
+    }
+    companiesBar.innerHTML = '';
+    resCP.forEach((CP) => {
+      companiesBar.innerHTML += `<div class="jobposting-card" id="companies-card" onclick="goToCompanySubpage('${CP.id}')">
+                                <img
+                                    class="jobposting-img"
+                                    id="companies-img"
+                                    src="${CP.image}"
+                                    alt=""
+                                    srcset=""
+                                    onerror="this.src='/img/company.jpg';"
+                                />
+                                <div>
+                                    <div class="jobposting-title" id="companies-title">
+                                    ${CP.title}
+                                    </div>
+                                    <div class="jobposting-job" id="companies-job">${CP.business}</div>
+                                    <p>${CP.employees}</p>
+                                </div>
+                                </div>`;
+    });
+  });
 }
 
 // 직군별 회사 + 채용공고 검색
@@ -120,6 +294,7 @@ function jobOptionSelect() {
   occupationSelect.addEventListener('change', async () => {
     // 선택 직군 값
     const selectedOption = occupationSelect.value;
+
     // 직군별 채용공고 검색
     const searchJobposting = await fetch(`/api/jobpostings/job`, {
       method: 'POST',

@@ -7,7 +7,15 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Company } from '../domain/company.entity';
-import { In, IsNull, LessThanOrEqual, Like, Not, Repository } from 'typeorm';
+import {
+  Brackets,
+  In,
+  IsNull,
+  LessThanOrEqual,
+  Like,
+  Not,
+  Repository,
+} from 'typeorm';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import * as bcrypt from 'bcrypt';
 import { UpdateCompanyDto } from './dto/update-company.dto';
@@ -124,6 +132,62 @@ export class CompanyService {
       );
     }
     return searchCompanies;
+  }
+
+  // 윤영 : 옵션설정시 해당 옵션을 포함하는 채용공고글 전체 조회
+  async searchOption(occupation: string, workArea: string) {
+    const queryBuilder = this.companyRepository.createQueryBuilder('company');
+
+    // 3가지 옵션이 "전체"값일 때 예외처리
+    if (occupation === '직군 전체' && workArea === '지역 전국') {
+      const resData = await queryBuilder.getMany();
+      // 예외처리
+      if (resData.length === 0) {
+        throw new HttpException(
+          '선택 옵션에 해당하는 회사가 없습니다.',
+          HttpStatus.GONE,
+        );
+      }
+      // 반환값
+      return resData;
+    }
+
+    // 직군 설정
+    if (occupation !== '직군 전체') {
+      const occupations = occupation.split('·');
+
+      queryBuilder.andWhere(
+        new Brackets((qb) => {
+          qb.where(
+            'company.business LIKE :business OR company.business LIKE :business1 OR company.business LIKE :business2',
+            {
+              business: `%${occupations[0]}%`,
+              business1: `%${occupations[1]}%`,
+              business2: `%${occupations[2]}%`,
+            },
+          );
+        }),
+      );
+    }
+
+    // 지역 설정
+    if (workArea !== '지역 전국') {
+      queryBuilder.andWhere('company.address LIKE :workArea', {
+        workArea: `%${workArea}%`,
+      });
+    }
+
+    // 반환값
+    const resData = await queryBuilder.getMany();
+    // 예외처리
+    if (resData.length === 0) {
+      throw new HttpException(
+        '선택 옵션에 해당하는 회사가 없습니다.',
+        HttpStatus.GONE,
+      );
+    }
+    // 반환값
+    return resData;
   }
 
   // 윤영 : 직군 선택시 회사 사업과 일치한 회사 전체 조회
@@ -478,3 +542,69 @@ export class CompanyService {
     }
   }
 }
+
+// // 옵션 설정 빈 배열
+// let selectOption = {};
+
+// // 옵션이 전체를 나타낼 때 예외처리
+// if (occupation === '직군 전체' && workArea === '지역 전국') {
+//   const resData = await this.companyRepository.find();
+//   // 예외처리
+//   if (resData.length === 0) {
+//     throw new HttpException(
+//       '선택옵션에 해당하는 회사가 없습니다.',
+//       HttpStatus.GONE,
+//     );
+//   }
+//   // 반환값
+//   return resData;
+// }
+// // 직군 설정
+// const occupations = occupation.split('·'); // 디자인, 마케팅, 광고
+// const businessFilters = occupations.map((occ) => ({
+//   business: Like(`%${occ}%`),
+// }));
+// // console.log(businessFilters);
+// // const business =
+// //   (businessFilters[0].business,
+// //   businessFilters[1].business,
+// //   businessFilters[2].business);
+// // console.log(business);
+// // selectOption['business'] = business;
+
+// // 지역 설정
+// if (workArea !== '지역 전국') {
+//   selectOption['address'] = Like(`%${workArea}%`);
+// }
+// // 옵션 적용
+// const searchOptions = { where: selectOption };
+// console.log(searchOptions);
+// // 반환값
+// const resData = await this.companyRepository.find(searchOptions);
+// // 예외처리
+// if (resData.length === 0) {
+//   throw new HttpException(
+//     '선택옵션에 해당하는 회사가 없습니다.',
+//     HttpStatus.GONE,
+//   );
+// }
+// // 반환값
+// return resData;
+
+// 직군 설정
+// if (occupation !== '직군 전체') {
+//   const occupations = occupation.split('·');
+
+//   console.log(occupations[0]);
+
+//   console.log(occupations); // [ '디자인', '마케팅', '광고' ]
+
+//   queryBuilder.andWhere(
+//     'company.business LIKE :business OR company.business LIKE :business1 OR company.business LIKE :business2',
+//     {
+//       business: `%${occupations[0]}%`,
+//       business1: `%${occupations[1]}%`,
+//       business2: `%${occupations[2]}%`,
+//     },
+//   );
+// }
