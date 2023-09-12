@@ -1,7 +1,7 @@
 import { CreateJobpostingDto } from './dto/create-jobposting.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Jobposting } from 'src/domain/jobposting.entity';
-import { IsNull, LessThan, Like, Not, Repository } from 'typeorm';
+import { Brackets, In, Like, Repository } from 'typeorm';
 import { UpdateJobpostingDto } from './dto/update-jobposting.dto';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { Company } from 'src/domain/company.entity';
@@ -139,7 +139,9 @@ export class JobpostingService {
         'jobposting.workArea',
         'jobposting.dueDate',
       ])
-      .where('jobposting.title LIKE :title', { title: `%${keyword}%` })
+      .where('jobposting.title LIKE :title OR jobposting.job LIKE :title', {
+        title: `%${keyword}%`,
+      })
       .getMany();
 
     if (jobPostings.length === 0) {
@@ -152,7 +154,75 @@ export class JobpostingService {
     return jobPostings;
   }
 
-  // 윤영 : 직군 선택시 채용공고 직군과 일치한 회사 전체 조회
+  // 윤영 : 옵션설정시 해당 옵션을 포함하는 채용공고글 전체 조회
+  async searchOption(occupation: string, workArea: string, experience: string) {
+    const queryBuilder =
+      this.jobpostingRepository.createQueryBuilder('jobposting');
+
+    // 3가지 옵션이 "전체"값일 때 예외처리
+    if (
+      occupation === '직군 전체' &&
+      workArea === '지역 전국' &&
+      experience === '경력 전체'
+    ) {
+      const resData = await queryBuilder.getMany();
+      // 예외처리
+      if (resData.length === 0) {
+        throw new HttpException(
+          '선택 옵션에 해당하는 채용 공고가 없습니다.',
+          HttpStatus.GONE,
+        );
+      }
+      // 반환값
+      return resData;
+    }
+
+    // 직군 설정
+    if (occupation !== '직군 전체') {
+      const occupations = occupation.split('·');
+
+      queryBuilder.andWhere(
+        new Brackets((qb) => {
+          qb.where(
+            'jobposting.job LIKE :job OR jobposting.job LIKE :job1 OR jobposting.job LIKE :job2',
+            {
+              job: `%${occupations[0]}%`,
+              job1: `%${occupations[1]}%`,
+              job2: `%${occupations[2]}%`,
+            },
+          );
+        }),
+      );
+    }
+
+    // 지역 설정
+    if (workArea !== '지역 전국') {
+      queryBuilder.andWhere('jobposting.workArea LIKE :workArea', {
+        workArea: `%${workArea}%`,
+      });
+    }
+
+    // 경력 설정
+    if (experience !== '경력 전체') {
+      queryBuilder.andWhere('jobposting.career LIKE :experience', {
+        experience: `%${experience}%`,
+      });
+    }
+
+    // 반환값
+    const resData = await queryBuilder.getMany();
+    // 예외처리
+    if (resData.length === 0) {
+      throw new HttpException(
+        '선택 옵션에 해당하는 채용 공고가 없습니다.',
+        HttpStatus.GONE,
+      );
+    }
+    // 반환값
+    return resData;
+  }
+
+  // 윤영 : 직군 선택시 채용공고 직군과 일치한 채용공고 전체 조회
   async searchOccupation(job: string) {
     if (job === '직군 전체') {
       return await this.jobpostingRepository.find();
@@ -395,7 +465,7 @@ export class JobpostingService {
     return resData;
   }
 
-  // // 윤영 : 지역검색시 해당지역과 일치하는 채용 공고글 전체 조회
+  // 윤영 : 지역검색시 해당지역과 일치하는 채용 공고글 전체 조회
   // async searchRegion(workArea: string) {
   //   if (workArea === '지역 전국') {
   //     return await this.jobpostingRepository.find({});
@@ -435,7 +505,7 @@ export class JobpostingService {
   //   });
   // }
 
-  // // 윤영 : 경력검색시 해당경력과 일치하는 채용 공고글 전체 조회
+  // 윤영 : 경력검색시 해당경력과 일치하는 채용 공고글 전체 조회
   // async searchCareer(career: string) {
   //   if (career === '경력 전체') {
   //     return await this.jobpostingRepository.find({});
@@ -528,33 +598,77 @@ export class JobpostingService {
     if (jobposting.companyId !== id) {
       throw new HttpException('권한이 없습니다.', HttpStatus.FORBIDDEN);
     }
-
-    const currentDate = new Date(); // 현재 날짜
-    const threeMonthsAgo = new Date(); // 석달 전
-    threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 1); // 1달전이전의 데이터
-    // threeMonthsAgo.setMinutes(threeMonthsAgo.getMinutes() - 10); // 10분전 데이터 (테스트용)
-
-    // 현재 시간보다 이전의 채용마감일을 가진 공고를 찾아 소프트 딜리트하기
-    const expiredJobpostings = await this.jobpostingRepository.find({
-      where: { dueDate: LessThan(currentDate) },
-      //이 옵션은 특정 값보다 작은 값을 가진 레코드를 조회할 때 사용. 예를 들어, LessThan(currentDate)는 현재 날짜보다 이전의 날짜를 가진 레코드를 조회
-    });
-
-    // 만료된(expiredJobpostings)걸 가지고 소프트 리무브
-    for (const jobposting of expiredJobpostings) {
-      await this.jobpostingRepository.softRemove(jobposting);
-    }
-
-    // 소프트 리무브로 삭제한 뒤 일정 시간(1개월)이 지난 후 완전히 삭제하기
-    const oldJobpostings = await this.jobpostingRepository.find({
-      where: { deletedAt: LessThan(threeMonthsAgo) },
-      withDeleted: true, //TypeORM은 소프트 딜리트된 레코드를 제외하고 데이터를 조회. 그러나 withDeleted: true 옵션을 사용하면 소프트 딜리트된 레코드도 조회 결과에 포함
-    });
-
-    for (const jobposting of oldJobpostings) {
-      await this.jobpostingRepository.remove(jobposting);
-    }
+    return await this.jobpostingRepository.remove(jobposting);
   }
-
-  // return await this.jobpostingRepository.remove(jobposting); 기존 코드
 }
+
+// // 옵션 설정 빈 배열
+// let selectOption = {};
+
+// // 3가지 옵션이 "전체"값일 때 예외처리
+// if (
+//   occupation === '직군 전체' &&
+//   workArea === '지역 전국' &&
+//   experience === '경력 전체'
+// ) {
+//   const resData = await this.jobpostingRepository.find();
+//   // 예외처리
+//   if (resData.length === 0) {
+//     throw new HttpException(
+//       '선택옵션에 해당하는 채용공고가 없습니다.',
+//       HttpStatus.GONE,
+//     );
+//   }
+//   // 반환값
+//   return resData;
+// }
+// let arr = [];
+// // 직군 설정
+// const occupations = occupation.split('·'); // 디자인, 마케팅, 광고
+// // const jobFilters = occupations.map((occ) => ({
+// //   job: Like(`%${occ}%`),
+// // }));
+// occupations.forEach((occ) => {
+//   arr.push({ job: Like(`%${occ}%`) });
+// });
+// console.log(arr);
+// // console.log(jobFilters); // [{{디자인} {마케팅} {광고}}]
+// // const job = (jobFilters[0].job, jobFilters[1].job, jobFilters[2].job);
+// // console.log(job); // [{디자인} {마케팅} {광고}]
+// selectOption['job'] = arr;
+
+// // 지역 설정
+// if (workArea !== '지역 전국') {
+//   selectOption['workArea'] = Like(`%${workArea}%`);
+// }
+
+// // 경력 설정
+// if (experience !== '경력 전체') {
+//   selectOption['career'] = Like(`%${experience}%`);
+// }
+
+// console.log(selectOption); // { job: [ {undefined}, {undefined}, {undefined} ]
+
+// // 옵션 적용
+// const searchOptions = { where: selectOption };
+// console.log(searchOptions); // { where: { job: [ [Object], [Object], [Object] ] } }
+// // 반환값
+// const resData = await this.jobpostingRepository.find(searchOptions);
+// // 예외처리
+// if (resData.length === 0) {
+//   throw new HttpException(
+//     '선택옵션에 해당하는 채용공고가 없습니다.',
+//     HttpStatus.GONE,
+//   );
+// }
+// // 반환값
+// return resData;
+
+// queryBuilder.andWhere(
+//   'jobposting.job LIKE :job OR jobposting.job LIKE :job1 OR jobposting.job LIKE :job2',
+//   {
+//     job: `%${occupations[0]}%`,
+//     job1: `%${occupations[1]}%`,
+//     job2: `%${occupations[2]}%`,
+//   },
+// );

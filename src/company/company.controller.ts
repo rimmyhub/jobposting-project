@@ -66,6 +66,15 @@ export class CompanyController {
     return this.companyService.searchKeyword(keyword);
   }
 
+  // 윤영 : 옵션설정시 해당 옵션을 포함하는 채용공고글 전체 조회
+  @Post('option')
+  searchOption(
+    @Body('occupation') occupation: string,
+    @Body('workArea') workArea: string,
+  ) {
+    return this.companyService.searchOption(occupation, workArea);
+  }
+
   // 윤영 : 직군 선택시 회사 사업과 일치한 회사 전체 조회
   @Post('business')
   searchOccupation(@Body('business') business: string) {
