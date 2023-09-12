@@ -1,7 +1,7 @@
 import { CreateJobpostingDto } from './dto/create-jobposting.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Jobposting } from 'src/domain/jobposting.entity';
-import { Brackets, In, IsNull, Like, Not, Repository } from 'typeorm';
+import { Brackets, In, IsNull, LessThan, Like, Not, Repository } from 'typeorm';
 import { UpdateJobpostingDto } from './dto/update-jobposting.dto';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { Company } from 'src/domain/company.entity';
@@ -589,7 +589,7 @@ export class JobpostingService {
     return await this.jobpostingRepository.save(jobposting);
   }
 
-  // 채용공고 삭제, 진행중
+  // 채용공고 삭제
   @Cron('0 0 * * *') // 매일 자정에 실행
   async removeJobposting(jobpostingId: number, id: string) {
     const jobposting = await this.jobpostingRepository.findOne({
@@ -606,8 +606,34 @@ export class JobpostingService {
     if (jobposting.companyId !== id) {
       throw new HttpException('권한이 없습니다.', HttpStatus.FORBIDDEN);
     }
-    return await this.jobpostingRepository.remove(jobposting);
+    const currentDate = new Date(); // 현재 날짜
+    const threeMonthsAgo = new Date(); // 석달 전
+    threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 1); // 1달전이전의 데이터
+    // threeMonthsAgo.setMinutes(threeMonthsAgo.getMinutes() - 10); // 10분전 데이터 (테스트용)
+
+    // 현재 시간보다 이전의 채용마감일을 가진 공고를 찾아 소프트 딜리트하기
+    const expiredJobpostings = await this.jobpostingRepository.find({
+      where: { dueDate: LessThan(currentDate) },
+      //이 옵션은 특정 값보다 작은 값을 가진 레코드를 조회할 때 사용. 예를 들어, LessThan(currentDate)는 현재 날짜보다 이전의 날짜를 가진 레코드를 조회
+    });
+
+    // 만료된(expiredJobpostings)걸 가지고 소프트 리무브
+    for (const jobposting of expiredJobpostings) {
+      await this.jobpostingRepository.softRemove(jobposting);
+    }
+
+    // 소프트 리무브로 삭제한 뒤 일정 시간(1개월)이 지난 후 완전히 삭제하기
+    const oldJobpostings = await this.jobpostingRepository.find({
+      where: { deletedAt: LessThan(threeMonthsAgo) },
+      withDeleted: true, //TypeORM은 소프트 딜리트된 레코드를 제외하고 데이터를 조회. 그러나 withDeleted: true 옵션을 사용하면 소프트 딜리트된 레코드도 조회 결과에 포함
+    });
+
+    for (const jobposting of oldJobpostings) {
+      await this.jobpostingRepository.remove(jobposting);
+    }
   }
+
+  // return await this.jobpostingRepository.remove(jobposting); 기존 코드
 }
 
 // // 옵션 설정 빈 배열
