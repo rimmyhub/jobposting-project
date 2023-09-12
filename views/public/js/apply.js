@@ -73,7 +73,6 @@ async function getAppliesUser() {
       const temp = applyCompanyData
         .map((applyCompany) => {
           return `
-
                  <div class="apply-card">
                    <h4    
                    class="jobposting-company-btn"
@@ -166,12 +165,14 @@ async function getAppliesUser() {
       });
 
       // 채용공고 수정 버튼
-      const modifyBtn = document.getElementById('jobposting-modify-btn');
-      modifyBtn.addEventListener('click', (event) => {
-        const jobpostingId = event.target.getAttribute('data-id');
-        const jobpostingModifyUrl = `/jobposting/edit/${jobpostingId}`;
-        console.log(jobpostingModifyUrl);
-        window.location.href = jobpostingModifyUrl;
+      const modifyBtns = document.querySelectorAll('#jobposting-modify-btn');
+      modifyBtns.forEach((modifyBtn) => {
+        modifyBtn.addEventListener('click', (event) => {
+          const jobpostingId = event.target.getAttribute('data-id');
+          const jobpostingModifyUrl = `/jobposting/edit/${jobpostingId}`;
+          console.log(jobpostingModifyUrl);
+          window.location.href = jobpostingModifyUrl;
+        });
       });
     }
   } catch (error) {

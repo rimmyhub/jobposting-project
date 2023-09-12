@@ -110,11 +110,18 @@ export class JobpostingController {
     );
   }
 
-  // 특정 회사 ID를 기준으로 해당 companyId를 가진 모든 채용 공고 조회
-  @Get('company/:companyId')
-  findJobpostingsByCompanyId(@Param('companyId') companyId: string) {
-    return this.jobpostingService.findJobpostingsByCompanyId(companyId);
-  }
+  // // 특정 회사 ID를 기준으로 해당 companyId를 가진 모든 채용 공고 조회
+  // @UseGuards(CompanyGuard)
+  // @Get('company/:jobpostingId')
+  // findJobpostingsByCompanyId(
+  //   @Request() req,
+  //   @Param('jobpostingId') jobpostingId: string,
+  // ) {
+  //   return this.jobpostingService.findJobpostingsByCompanyId(
+  //     req.company.id,
+  //     +jobpostingId,
+  //   );
+  // }
 
   // 윤영 : 메인페이지에서 채용공고 클릭 시 해당 채용공고 내용 조회
   @Get('/:jobpostingId')

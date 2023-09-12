@@ -17,7 +17,7 @@ const contentInfo = document.querySelector('#modify-content-info');
 // 채용공고 정보 보여주기
 async function getJobposting() {
   try {
-    const response = await fetch(`/api/jobpostings/company/${jobpostingId}`);
+    const response = await fetch(`/api/jobpostings/${jobpostingId}`);
     const data = await response.json();
     console.log(data);
 
@@ -40,7 +40,7 @@ async function getJobposting() {
     jobInfo.value = job;
     workareaInfo.value = workArea;
     worktypeInfo.value = workType;
-    duedateInfo.value = dueDate;
+    duedateInfo.value = new Date(dueDate);
     contentInfo.value = content;
   } catch (error) {
     console.log(error);
