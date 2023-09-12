@@ -109,7 +109,7 @@ export class JobcrawlerService {
         companies.push(company);
       }
     });
-    // console.log('================companies===============', companies);
+    console.log('================companies===============', companies);
     return companies;
   }
 
@@ -171,7 +171,7 @@ export class JobcrawlerService {
 
       jobs.push(jobposting);
     });
-    // console.log('================jobs===============', jobs);
+    console.log('================jobs===============', jobs);
     return jobs;
   }
 
