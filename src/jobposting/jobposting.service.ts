@@ -1,7 +1,7 @@
 import { CreateJobpostingDto } from './dto/create-jobposting.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Jobposting } from 'src/domain/jobposting.entity';
-import { Brackets, In, Like, Repository } from 'typeorm';
+import { Brackets, In, IsNull, Like, Not, Repository } from 'typeorm';
 import { UpdateJobpostingDto } from './dto/update-jobposting.dto';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { Company } from 'src/domain/company.entity';
