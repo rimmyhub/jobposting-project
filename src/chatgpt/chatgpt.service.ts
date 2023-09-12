@@ -15,7 +15,7 @@ export class ChatgptService {
         { role: 'user', content: '자기소개서를 작성해주세요.' },
         { role: 'assistant', content: experience },
       ],
-      max_tokens: 100,
+      max_tokens: 2000,
     });
 
     const responseData = {
