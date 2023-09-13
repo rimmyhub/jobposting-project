@@ -115,20 +115,16 @@ export class JobpostingService {
     });
   }
 
-  // // 특정 회사 ID를 기준으로 해당 companyId를 가진 모든 채용 공고 조회
-  // async findJobpostingsByCompanyId(
-  //   jobpostingId: number,
-  //   id: string,
-  // ): Promise<Jobposting[]> {
-  //   console.log(id);
-  //   console.log(jobpostingId);
+  // 특정 회사 ID를 기준으로 해당 companyId를 가진 모든 채용 공고 조회
+  async findJobpostingsByCompanyId(companyId: string): Promise<Jobposting[]> {
+    console.log(companyId);
 
-  //   const jobposting = await this.jobpostingRepository.find({
-  //     where: { id: jobpostingId, companyId: id },
-  //   });
+    const jobposting = await this.jobpostingRepository.find({
+      where: { companyId },
+    });
 
-  //   return jobposting;
-  // }
+    return jobposting;
+  }
 
   // 윤영 : 검색시 해당 검색어를 포함하는 채용 공고글 전체 조회
   async searchKeyword(keyword: string) {
