@@ -158,12 +158,16 @@ export class JobpostingController {
     return this.jobpostingService.findJobpostingsByCompanyId(companyId);
   }
 
-  // // 윤영 : 메인페이지에서 채용공고 클릭 시 해당 채용공고 내용 조회
-  // @Get('/:jobpostingId')
-
-  // getJobposting(@Param('jobpostingId') jobpostingId: string) {
-  //   return this.jobpostingService.getJobposting(+jobpostingId);
-  // }
+  // 윤영 : 메인페이지에서 채용공고 클릭 시 해당 채용공고 내용 조회
+  @Get('/:jobpostingId')
+  @ApiOperation({
+    summary: '채용공고 1개조회 API',
+    description: '채용공고 1개조회',
+  })
+  @ApiCreatedResponse({ description: '채용공고 1개조회' })
+  getJobposting(@Param('jobpostingId') jobpostingId: string) {
+    return this.jobpostingService.getJobposting(+jobpostingId);
+  }
 
   // 채용공고 1개 조회 - 회사
   @UseGuards(CompanyGuard)
