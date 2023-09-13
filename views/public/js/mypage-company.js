@@ -12,7 +12,7 @@ async function getCompany() {
   try {
     const response = await fetch('/api/companies/company');
     const data = await response.json();
-    // console.log(data);
+    console.log(data);
 
     const {
       title,
