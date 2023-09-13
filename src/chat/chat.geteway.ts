@@ -14,7 +14,11 @@ import { Cache } from 'cache-manager';
 // 소켓IO
 @WebSocketGateway(8080, {
   cors: {
-    origin: 'http://localhost:3000',
+    origin: [
+      'http://localhost:3000',
+      'http://w1nner.site/',
+      'https://w1nner.site/',
+    ],
   },
 })
 export class ChatGateway {
