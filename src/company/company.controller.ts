@@ -23,8 +23,10 @@ import { ParamDto } from 'src/utils/param.dto';
 import { MailService } from '../mail/mail.service';
 import { VerifyCodeDto } from './dto/verify-code.dto';
 import { UserGuard } from 'src/auth/jwt/jwt.user.guard';
+import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @Controller('api/companies')
+@ApiTags('회사 API')
 export class CompanyController {
   constructor(
     private readonly companyService: CompanyService,
@@ -34,6 +36,8 @@ export class CompanyController {
   // 회사 회원가입
   @UsePipes(ValidationPipe)
   @Post('/signup')
+  @ApiOperation({ summary: '회사 회원가입 API', description: '회사 회원가입' })
+  @ApiCreatedResponse({ description: '회사 회원가입' })
   async createCompany(@Body() createCompanyDto: CreateCompanyDto) {
     if (createCompanyDto.isVerified !== true) {
       throw new HttpException(
@@ -50,24 +54,32 @@ export class CompanyController {
 
   // 회사 전체 조회
   @Get()
+  @ApiOperation({ summary: '회사 전체조회 API', description: '회사 전체조회' })
+  @ApiCreatedResponse({ description: '회사 전체조회' })
   findAllCompany(@Query('page') page: string) {
     return this.companyService.findAllCompany({ page: Number(page) });
   }
 
   // 모든 회사의 주소 정보만 가져오기
   @Get('/addresses')
+  @ApiOperation({ summary: '회사 주소조회 API', description: '회사 주소조회' })
+  @ApiCreatedResponse({ description: '회사 주소조회' })
   async getAllCompanyAddresses() {
     return this.companyService.getAllCompanyAddresses();
   }
 
   // 윤영 : 검색시 업무 또는 회사 이름에 해당 검색어를 포함하는 회사 전체 조회
   @Post('search')
+  @ApiOperation({ summary: '회사 검색 API', description: '회사 검색' })
+  @ApiCreatedResponse({ description: '회사 검색' })
   searchKeyword(@Body('keyword') keyword: string) {
     return this.companyService.searchKeyword(keyword);
   }
 
-  // 윤영 : 옵션설정시 해당 옵션을 포함하는 채용공고글 전체 조회
+  // 윤영 : 옵션설정시 해당 옵션을 포함하는 회사 전체 조회
   @Post('option')
+  @ApiOperation({ summary: '회사 옵션조회 API', description: '회사 옵션조회' })
+  @ApiCreatedResponse({ description: '회사 옵션조회' })
   searchOption(
     @Body('occupation') occupation: string,
     @Body('workArea') workArea: string,
@@ -75,21 +87,28 @@ export class CompanyController {
     return this.companyService.searchOption(occupation, workArea);
   }
 
-  // 윤영 : 직군 선택시 회사 사업과 일치한 회사 전체 조회
-  @Post('business')
-  searchOccupation(@Body('business') business: string) {
-    return this.companyService.searchOccupation(business);
-  }
+  // // 윤영 : 직군 선택시 회사 사업과 일치한 회사 전체 조회
+  // @Post('business')
+  // @ApiOperation({summary : "회사 회원가입 API", description : "회사 회원가입"})
+  // @ApiCreatedResponse({description : "회사 회원가입"})
+  // searchOccupation(@Body('business') business: string) {
+  //   return this.companyService.searchOccupation(business);
+  // }
 
-  // 윤영 : 선택한 지역과 주소가 일치하는 회사 전체 조회
-  @Post('selectCompany')
-  searchSelectCompany(@Body('address') address: string) {
-    return this.companyService.searchSelectCompany(address);
-  }
+  // // 윤영 : 선택한 지역과 주소가 일치하는 회사 전체 조회
+  // @Post('selectCompany')
+  // searchSelectCompany(@Body('address') address: string) {
+  //   return this.companyService.searchSelectCompany(address);
+  // }
 
   // 회사 1개 조회 - 마이페이지용
   @UseGuards(CompanyGuard)
   @Get('/company')
+  @ApiOperation({
+    summary: '회사 상세조회 API',
+    description: '(마이페이지)회사 상세조회',
+  })
+  @ApiCreatedResponse({ description: '회사 상세조회' })
   findOneCompanyByRequest(@Request() req) {
     const companyId = req.company.id;
     return this.companyService.findOneCompanyById(companyId);
@@ -97,6 +116,11 @@ export class CompanyController {
 
   // 회사 1개 조회- 상세페이지용
   @Get(':id')
+  @ApiOperation({
+    summary: '회사 상세조회 API',
+    description: '(상세페이지)회사 상세조회',
+  })
+  @ApiCreatedResponse({ description: '회사 상세조회' })
   finOneCompany(@Param('id') id: string) {
     console.log('finOneCompany= ', id);
     return this.companyService.finOneCompany(id);
@@ -105,6 +129,8 @@ export class CompanyController {
   // 회사 수정 (회사 연결)
   @UseGuards(CompanyGuard)
   @Patch()
+  @ApiOperation({ summary: '회사 수정 API', description: '회사 수정' })
+  @ApiCreatedResponse({ description: '회사 수정' })
   updateCompany(@Request() req, @Body() updateCompanyDto: UpdateCompanyDto) {
     return this.companyService.updateCompany(req.company.id, updateCompanyDto);
   }
@@ -112,6 +138,11 @@ export class CompanyController {
   // 회사 이미지 수정
   @UseGuards(CompanyGuard)
   @Put('/image')
+  @ApiOperation({
+    summary: '회사 이미지 수정 API',
+    description: '회사 이미지 수정',
+  })
+  @ApiCreatedResponse({ description: '회사 이미지 수정' })
   updateCompanyImage(@Request() req, @Body('image') image: string) {
     return this.companyService.updateCompanyImage(req.company.id, image);
   }
@@ -119,12 +150,19 @@ export class CompanyController {
   // 회사 회원 탈퇴 (회사 연결)
   @UseGuards(CompanyGuard)
   @Delete()
+  @ApiOperation({ summary: '회사 회원탈퇴 API', description: '회사 회원탈퇴' })
+  @ApiCreatedResponse({ description: '회사 회원탈퇴' })
   removeCompany(@Request() req) {
     return this.companyService.removeCompany(req.company.id);
   }
 
   // 인증번호 전송
   @Post('/send-verification')
+  @ApiOperation({
+    summary: '회사 인증번호 전송 API',
+    description: '회사 인증번호 전송',
+  })
+  @ApiCreatedResponse({ description: '회사 인증번호 전송' })
   async sendVerification(@Body('email') email: string) {
     const existingCompany = await this.companyService.findEmail(email);
 
@@ -163,6 +201,8 @@ export class CompanyController {
   }
 
   @Post('/verify')
+  @ApiOperation({ summary: '회사 코드인증 API', description: '회사 코드인증' })
+  @ApiCreatedResponse({ description: '회사 코드인증' })
   async verifyCode(@Body() verifyCodeDto: VerifyCodeDto) {
     const { email, code } = verifyCodeDto;
     const isValid = await this.companyService.verifyCode(email, code);

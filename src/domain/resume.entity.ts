@@ -14,22 +14,27 @@ import { Portfolio } from './portfolio.entity';
 import { Career } from './career.entity';
 import { Education } from './education.entity';
 import { User } from './user.entity';
+import { ApiProperty } from '@nestjs/swagger';
 
 @Entity()
 export class Resume {
   @PrimaryGeneratedColumn()
+  @ApiProperty({ description: '이력서Id' })
   id: number;
 
   @Column({
     name: 'user_id',
     comment: '해당 이력서의 유저 아이디',
   })
+  @ApiProperty({ description: '유저Id' })
   userId: string;
 
   @Column({ type: 'varchar', length: 100, comment: '이력서제목' })
+  @ApiProperty({ description: '이력서 제목' })
   title: string;
 
   @Column({ type: 'varchar', length: 100, comment: '이력서내용' })
+  @ApiProperty({ description: '이력서 내용' })
   content: string;
 
   @CreateDateColumn({ name: 'create_at', comment: '생성일' })
