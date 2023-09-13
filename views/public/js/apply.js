@@ -110,7 +110,7 @@ async function getAppliesUser() {
       const deleteData = await deleteResponse.json();
       console.log(deleteData);
       const deletedDataBox = document.getElementById('deleted-data-box');
-      console.log(deletedDataBox);
+      // console.log(deletedDataBox);
       const deletedDataHtml = deleteData
         .map((deletedItem) => {
           return `
