@@ -5,26 +5,32 @@
 // 시스템 또는 어플리케이션의 예상된 형태와 일치하는지 확인한다.
 // 데이터의 무결성과 안전성을 보장해줄 수 있다!
 
+import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsDateString, IsString } from 'class-validator';
 
 export class CreateCareerDto {
   @IsNotEmpty()
   @IsString()
+  @ApiProperty({ description: '회사 이름' })
   companyTitle: string;
 
   @IsNotEmpty()
   @IsString()
+  @ApiProperty({ description: '직무' })
   job: string;
 
   @IsNotEmpty()
   @IsDateString()
+  @ApiProperty({ description: '입사날짜' })
   joiningDate: string;
 
   @IsNotEmpty()
   @IsDateString()
+  @ApiProperty({ description: '퇴사날짜' })
   resignationDate: string;
 
   @IsNotEmpty()
   @IsString()
+  @ApiProperty({ description: '직책' })
   position: string;
 }

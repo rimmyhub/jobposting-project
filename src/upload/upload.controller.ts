@@ -6,12 +6,16 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadService } from './upload.service';
+import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @Controller('/api/upload')
+@ApiTags('이미지 업로드 API')
 export class UploadController {
   constructor(private readonly uploadService: UploadService) {}
 
   @Post()
+  @ApiOperation({ summary: '이미지 업로드 API', description: '이미지 업로드' })
+  @ApiCreatedResponse({ description: '이미지 업로드' })
   @UseInterceptors(FileInterceptor('file'))
   async uploadFile(
     @UploadedFile()

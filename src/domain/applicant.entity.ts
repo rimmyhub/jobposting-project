@@ -10,16 +10,20 @@ import {
 } from 'typeorm';
 import { Jobposting } from './jobposting.entity';
 import { User } from './user.entity';
+import { ApiProperty } from '@nestjs/swagger';
 
 @Entity()
 export class Applicant {
   @PrimaryGeneratedColumn()
+  @ApiProperty({ description: 'applicantId' })
   id: number;
 
   @Column({ name: 'user_id' })
+  @ApiProperty({ description: 'userId' })
   userId: string;
 
   @Column({ name: 'jobposting_id' })
+  @ApiProperty({ description: 'jobpostingId' })
   jobpostingId: number;
 
   @CreateDateColumn({ name: 'create_at', comment: '생성일' })

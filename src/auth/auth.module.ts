@@ -3,7 +3,6 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 // TypeOrmModule과 entity를 가져와서 등록하자
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Auth } from '../domain/auth.entity';
 import { UserModule } from 'src/user/user.module';
 import { UserService } from '../user/user.service';
 import { PassportModule } from '@nestjs/passport';
@@ -23,7 +22,7 @@ const configService = new ConfigService();
     CompanyModule,
     UserModule,
     CompanyModule,
-    TypeOrmModule.forFeature([Auth]),
+    TypeOrmModule.forFeature([]),
     // jwt설정
     PassportModule.register({ defaultStrategy: 'jwt', session: true }),
     JwtModule.register({

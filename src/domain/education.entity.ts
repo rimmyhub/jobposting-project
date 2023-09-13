@@ -10,25 +10,32 @@ import {
 import { User } from './user.entity';
 import { Resume } from './resume.entity';
 import { educationType } from 'commons/education.enums';
+import { ApiProperty } from '@nestjs/swagger';
 
 @Entity()
 export class Education {
   @PrimaryGeneratedColumn()
+  @ApiProperty({ description: '학력ID' })
   id: number;
 
   @Column({ name: 'resume_id' })
+  @ApiProperty({ description: '이력서ID' })
   resumeId: number;
 
   @Column({ type: 'varchar', length: 100, comment: '학교이름' })
+  @ApiProperty({ description: '학교이름' })
   schoolTitle: string;
 
   @Column({ type: 'varchar', length: 10, comment: '입학년도' })
+  @ApiProperty({ description: '입학년도' })
   admissionYear: string;
 
   @Column({ type: 'varchar', length: 10, comment: '졸업년도' })
+  @ApiProperty({ description: '졸업년도' })
   graduationYear: string;
 
   @Column({ type: 'varchar', length: 50, comment: '전공/계열' })
+  @ApiProperty({ description: '전공/계열' })
   major: string;
 
   @Column({
@@ -36,6 +43,7 @@ export class Education {
     enum: educationType,
     comment: '학력구분',
   })
+  @ApiProperty({ description: '학력구분' })
   education: educationType;
 
   @CreateDateColumn({ name: 'create_at', comment: '생성일' })
