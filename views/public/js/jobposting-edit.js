@@ -75,7 +75,7 @@ modifyBtn.addEventListener('click', async () => {
       },
       body: JSON.stringify(jobData),
     });
-    // console.log('jobData', jobData);
+    console.log('jobData', jobData);
 
     if (response.ok) {
       alert('채용 공고가 수정되었습니다.');
