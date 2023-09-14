@@ -19,7 +19,6 @@ import { ChatModule } from './chat/chat.module';
 import { ChatGateway } from './chat/chat.geteway';
 import { UploadModule } from './upload/upload.module';
 import { ScheduleModule } from '@nestjs/schedule';
-import { EventsModule } from './events/events.module';
 import { JobcrawlerModule } from './jobcrawler/jobcrawler.module';
 import { JobPostingSearchModule } from './search/search.module';
 import { MailModule } from './mail/mail.module';
@@ -49,7 +48,6 @@ import { CacheModule } from '@nestjs/cache-manager';
     CommentModule,
     ChatModule,
     MailModule,
-    EventsModule,
     JobcrawlerModule,
     JobPostingSearchModule,
     ChatContentModule,

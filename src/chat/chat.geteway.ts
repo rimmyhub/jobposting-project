@@ -29,9 +29,53 @@ export class ChatGateway {
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
-  @SubscribeMessage('createRoom')
-  createRoom() {}
+  // 상대방에게 면접을 신청interview-call
+  @SubscribeMessage('interview-call')
+  async createRoom(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody() payload: object,
+  ) {
+    const getSocketId: string = await this.cacheManager.store.get(
+      `${payload['reciId']}`,
+    );
+    socket.to(getSocketId).emit('inteview-received', payload);
+  }
 
+  // 상대가 화상면접에 응했을 때 socket room을 join한다.
+  @SubscribeMessage('interview-join')
+  interviewJoin(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody() roomId: string,
+  ): void {
+    socket.join(roomId);
+    socket.to(roomId).emit('welcome', roomId);
+  }
+
+  // 내가 상대방에게 offer를 보낸다.
+  @SubscribeMessage('send-offer')
+  sendOffer(@ConnectedSocket() socket: Socket, @MessageBody() payload: object) {
+    socket.to(payload['roomId']).emit('offer-received', payload);
+  }
+
+  // 상대방이 보낸 answer를 받는다.
+  @SubscribeMessage('send-answer')
+  sendAnswer(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody() payload: object,
+  ) {
+    socket.to(payload['roomId']).emit('answer-received', payload);
+  }
+
+  // icecandidate를 받음
+  @SubscribeMessage('send-ice')
+  sendIceCandidate(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody() payload: object,
+  ) {
+    socket.to(payload['roomId']).emit('ice-received', payload);
+  }
+
+  /////////////////////////////////////////////////
   // 로그인을 했을 때 redis에 유저의 id와 socket의 id를 저장한다.
   @SubscribeMessage('saveClientId')
   async loginClientId(
@@ -40,7 +84,7 @@ export class ChatGateway {
   ) {
     await this.cacheManager.store.set(`${userId}`, socket.id, 100000);
 
-    const result = await this.cacheManager.store.keys();
+    await this.cacheManager.store.keys();
     // 키의 이름에 userId를 넣어준다.
   }
 
@@ -52,7 +96,6 @@ export class ChatGateway {
   ) {
     // 메세지수신알림을 보낼 유저id와 socketId를 가져온다
     // 알림을 보내고자하는 payload가 포함된 키값의 socketId를 가져온다.
-    console.log(payload);
     const getsocketId: string = await this.cacheManager.store.get(
       `${payload[0]}`,
     );
@@ -61,6 +104,7 @@ export class ChatGateway {
     }
   }
 
+  // chat ID로 join하기
   @SubscribeMessage('join')
   joinChatRoom(
     @ConnectedSocket() socket: Socket,

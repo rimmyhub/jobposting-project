@@ -1,5 +1,27 @@
 <body>
   <nav>
+    <div id="interview-container" class="interview-container">
+      <header class="interview-header">
+        <i id="close-interview" class="fa-solid fa-x close-interview"></i>
+      </header>
+      <div class="video-container">
+        <div class="peer-video-box">
+          <video id="peer-video" class="peer-video" src="" autoplay></video>
+        </div>
+        <div class="my-video-box">
+          <div>
+            <select name="" id="video-select" class="video-select"></select>
+            <div class="option-box">
+              <div class="btns">
+                <button id="mute-on-off">Mute on</button>
+                <button id="camera-on-off">Camera on</button>
+              </div>
+            </div>
+          </div>
+          <video id="my-video" class="my-video">??</video>
+        </div>
+      </div>
+    </div>
     <div>
       <div class="container-header">
         <div>
@@ -96,14 +118,15 @@
   </nav>
 
   <script src="/js/header.js" defer></script>
+  <script src="/js/interview.js" defer></script>
   <script
     src="https://cdn.socket.io/4.4.0/socket.io.min.js"
     integrity="sha384-1fOn6VtTq3PWwfsOrk45LnYcGosJwzMHv+Xh/Jx5303FVOXzEnw0EpLv30mtjmlj"
     crossorigin="anonymous"
   ></script>
 </body>
-<link rel="stylesheet" href="/css/chat.css" />
 <link rel="stylesheet" href="/css/header.css" />
+<link rel="stylesheet" href="/css/interview.css" />
 <link
   rel="stylesheet"
   href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"

@@ -23,7 +23,7 @@ export class ChatService {
           .addSelect('COUNT(chatContent.isCheck) as isCheckCount')
           .where(`chat.user_id = :user_id`, { user_id: id })
           .andWhere('chatContent.is_check = 0')
-          .andWhere(`chatContent.sender_id = :sender_id`, { sender_id: id })
+          .andWhere(`chatContent.sender_id != :sender_id`, { sender_id: id })
           .groupBy('chat.id')
           .getRawMany();
       } else {
@@ -34,7 +34,7 @@ export class ChatService {
           .addSelect('COUNT(chatContent.isCheck) as isCheckCount')
           .where(`chat.company_id = :company_id`, { company_id: id })
           .andWhere('chatContent.is_check = 0')
-          .andWhere(`chatContent.sender_id = :sender_id`, { sender_id: id })
+          .andWhere(`chatContent.sender_id != :sender_id`, { sender_id: id })
           .groupBy('chat.id')
           .getRawMany();
       }

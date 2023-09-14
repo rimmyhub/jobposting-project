@@ -8,6 +8,7 @@ let chattingList;
 let chattingContainer;
 let alarmIcon;
 let msgCard;
+let offer;
 const myApplyList = document.getElementById('my-apply-list');
 const socket = io('localhost:8080');
 const ejs = (window.onload = function () {
@@ -121,7 +122,6 @@ const ejs = (window.onload = function () {
         return res.json();
       }) //json으로 받을 것을 명시
       .then((res) => {
-        console.log('res = ', res);
         userEmail = res.email;
       })
       .catch((e) => {
@@ -212,7 +212,6 @@ async function appendMsgList(datas, type) {
     if (type === 'company') {
       datas.forEach((el) => {
         const li = document.createElement('div');
-        // console.log(el.user);
         li.innerHTML = `<div id="message-card-${el.id}" class="message-card" onclick="chattingBox('${el.id}', '${el.user.email}', '${el.userId}')">
                           <div class="user-profile">
                             <img src="/img/userImg.jpg" alt="" srcset="" />
@@ -222,7 +221,7 @@ async function appendMsgList(datas, type) {
                             <div>메세지 확인</div>
                           </div>
                           <i
-                            id="${el.userId}"
+                            id="${el.id}"
                             class="fa-solid fa-exclamation new-msg-alram-icon"
                           ></i>
                         </div>`;
@@ -230,7 +229,6 @@ async function appendMsgList(datas, type) {
       });
     } else {
       datas.forEach((el) => {
-        console.log(el.companyId);
         const li = document.createElement('div');
         li.innerHTML = `<div id="message-card-${el.id}" class="message-card" onclick="chattingBox('${el.id}', '${el.company.email}', '${el.companyId}')">
                           <div class="user-profile">
@@ -241,7 +239,7 @@ async function appendMsgList(datas, type) {
                             <div>메세지 확인</div>
                           </div>
                           <i
-                            id="${el.companyId}"
+                            id="${el.id}"
                             class="fa-solid fa-exclamation new-msg-alram-icon"
                           ></i>
                         </div>`;
@@ -252,25 +250,22 @@ async function appendMsgList(datas, type) {
 }
 
 socket.on('msg-notification', async (userId) => {
-  console.log('msg-notification = ', userId);
-  const exclamationIcon = document.getElementById(`${userId}`);
-  // console.log('exclamationIcon = ', exclamationIcon);
+  const exclamationIcon = document.getElementById('exclamation-icon');
   await checkNewMsg();
-  newMsgIcon();
   exclamationIcon.style.opacity = 1;
 });
 
 // 채팅리스트안의 새메시지알람표시하기
-function newMsgIcon() {
-  if (newMsgs) {
-    newMsgs.forEach((el) => {
-      msgCard = document.getElementById(`exclamation-icon-${el.chat_id}`);
+function newMsgIcon(params) {
+  // console.log('newMsgs = ', params);
+  if (params) {
+    params.forEach((el) => {
+      console.log(el);
+      msgCard = document.getElementById(`${el.chat_id}`);
       msgCard.style.opacity = 1;
     });
   }
 }
-
-function removeExclamation() {}
 
 // 메세지읽음처리하기
 async function readMsg(chatId) {
@@ -310,25 +305,39 @@ async function chattingBox(getRoomId, email, recipientId, $event) {
   await readMsg(getRoomId);
   const userName = document.createElement('h6');
   userName.innerText = `${email} 님`;
-  chatBoxTitle.append(userName);
 
-  // icon변수에 i태그의 요소와  id를 추가
-  const icon = Object.assign(document.createElement('i'), {
-    id: 'close-chatting',
+  const iconBox = document.createElement('div');
+  iconBox.className = `chat-icon-box`;
+
+  const cameraIcon = Object.assign(document.createElement('i'), {
+    id: 'offer-interview',
   });
 
-  // icon에 className을 추가
-  icon.className = 'fa-solid fa-xmark close-message';
-  icon.onclick = leaveRoom;
+  cameraIcon.className = 'fa-solid fa-video offer-interview';
 
-  chatBoxTitle.append(icon);
+  // icon변수에 i태그의 요소와  id를 추가
+  const closeIcon = Object.assign(document.createElement('i'), {
+    id: 'close-chatting',
+  });
+  // closeIcon에 className을 추가
+  closeIcon.className = 'fa-solid fa-xmark close-message';
+  closeIcon.onclick = leaveRoom;
+
+  iconBox.prepend(cameraIcon);
+  iconBox.append(closeIcon);
+  chatBoxTitle.prepend(userName);
+  chatBoxTitle.append(iconBox);
   await getChatContents(getRoomId);
+
   // 소켓룸 조인하기
   socket.emit('join', getRoomId);
 
   roomId = getRoomId;
   chatContainer.style.display = 'flex';
   chattingContainer.scrollTop = chattingContainer.scrollHeight;
+  cameraIcon.onclick = function () {
+    startInterView(roomId, reciId);
+  };
 }
 
 const handleNewMsg = (senderId, message) => {
@@ -375,6 +384,7 @@ async function checkNewMsg() {
   }
   // 유저가 로그인 했을 때 새메세지가 왔음을 알 수 있게 한다.
   if (newMsgs.length && alarmIcon) alarmIcon.style.opacity = 1;
+  newMsgIcon(newMsgs);
 }
 
 // 채팅내용가져오기

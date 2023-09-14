@@ -242,6 +242,15 @@ body {
   overflow-y: scroll;
   /* overflow: auto; */
 }
+.chat-icon-box {
+  display: flex;
+  width: 50px;
+  justify-content: space-between;
+}
+.chat-icon-box > .offer-interview {
+  color: #279eff;
+  cursor: pointer;
+}
 
 .chatting-list {
   padding: 10px;

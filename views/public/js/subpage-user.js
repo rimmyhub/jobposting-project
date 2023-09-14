@@ -29,7 +29,7 @@ function init() {
 // 메세지보내기버튼 숨기기
 function hideBtn() {
   const type = window.localStorage.getItem('type');
-  if (type === 'user') {
+  if (type === 'user' || !type) {
     // console.log('버튼 숨기기', btnContainer);
     btnContainer.style.display = 'none';
   }

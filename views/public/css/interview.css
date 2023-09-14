@@ -1,0 +1,65 @@
+body {
+  margin: 0;
+}
+
+.interview-header {
+  display: flex;
+  justify-content: end;
+  padding: 20px;
+}
+.interview-container {
+  border: 1px solid black;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(255, 255, 255, 0.824);
+  /* display: block; */
+  display: none;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  left: 50%;
+  top: 50%;
+  z-index: 100;
+}
+
+.close-interview {
+  cursor: pointer;
+}
+
+.video-container {
+  max-width: 1200px;
+  width: 90%;
+  height: 60%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.peer-video-box {
+  border: 1px solid black;
+}
+
+.peer-video {
+  width: 100%;
+  border: 1px solid black;
+  background-color: black;
+}
+
+.my-video-box {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid black;
+}
+
+.my-video-box {
+  border: 1px solid black;
+}
+
+.btns > button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.my-video-box > video {
+  border: 1px solid black;
+  /* background-color: black; */
+}
