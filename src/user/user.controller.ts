@@ -12,7 +12,6 @@ import {
   ValidationPipe,
   Request,
   Put,
-  Patch,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { MailService } from '../mail/mail.service';
@@ -20,8 +19,11 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { VerifyCodeDto } from './dto/verify-code.dto';
 import { UserGuard } from '../auth/jwt/jwt.user.guard';
+import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { User } from 'src/domain/user.entity';
 
 @Controller('api/users')
+@ApiTags('유저 API')
 export class UserController {
   constructor(
     private readonly userService: UserService,
@@ -30,6 +32,11 @@ export class UserController {
 
   // email만 가져오기
   @Get('/get-email/:id')
+  @ApiOperation({
+    summary: '이메일 가져오는 API',
+    description: '유저 이메일',
+  })
+  @ApiCreatedResponse({ description: '유저 이메일' })
   async getEmail(@Param('id') id: string): Promise<any> {
     console.log('id', id);
     const result = await this.userService.getEmail(id);
@@ -40,6 +47,11 @@ export class UserController {
   // 회원가입
   @UsePipes(ValidationPipe)
   @Post('/signup')
+  @ApiOperation({
+    summary: '회원가입 API',
+    description: '유저 회원가입',
+  })
+  @ApiCreatedResponse({ description: '유저 회원가입', type: User })
   async create(@Body() createUserDto: CreateUserDto) {
     if (createUserDto.isVerified !== true) {
       throw new HttpException(
@@ -57,6 +69,14 @@ export class UserController {
   // 유저정보 상세조회
   @UseGuards(UserGuard)
   @Get('/user-page')
+  @ApiOperation({
+    summary: '(유저가드 적용) 유저정보 상세조회 API',
+    description: '(유저가드 적용) 유저정보 상세조회',
+  })
+  @ApiCreatedResponse({
+    description: '(유저가드 적용) 유저정보 상세조회',
+    type: User,
+  })
   findOne(@Request() req) {
     // if (id) {
     //   console.log('findOne = ', id);
@@ -67,6 +87,11 @@ export class UserController {
   }
   // 유저정보 조회
   @Get('/user/:id')
+  @ApiOperation({
+    summary: '유저정보 조회 API',
+    description: '유저 정보조회',
+  })
+  @ApiCreatedResponse({ description: '유저 정보조회', type: User })
   findUser(@Param('id') id: string) {
     return this.userService.findOne(id);
   }
@@ -74,6 +99,14 @@ export class UserController {
   // 유저정보 수정
   @UseGuards(UserGuard)
   @Put()
+  @ApiOperation({
+    summary: '(유저가드 적용)유저정보 수정 API',
+    description: '(유저가드 적용)유저 정보 수정',
+  })
+  @ApiCreatedResponse({
+    description: '(유저가드 적용)유저 정보 수정',
+    type: User,
+  })
   update(@Request() req, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(req.user.id, updateUserDto);
   }
@@ -81,21 +114,42 @@ export class UserController {
   // 유저 이미지 수정
   @UseGuards(UserGuard)
   @Put('/image')
+  @ApiOperation({
+    summary: '(유저가드 적용)유저 이미지 수정 API',
+    description: '(유저가드 적용)유저 이미지 수정',
+  })
+  @ApiCreatedResponse({
+    description: '(유저가드 적용)유저 이미지 수정',
+  })
   updateUserImage(@Request() req, @Body('image') image: string) {
     console.log(image);
     return this.userService.updateUserImage(req.user.id, image);
   }
 
   // 회원탈퇴 (softDelete)
-  // 유저정보 수정
   @UseGuards(UserGuard)
   @Delete()
+  @ApiOperation({
+    summary: '(유저가드 적용)유저정보 삭제 API',
+    description: '(유저가드 적용)유저정보 삭제',
+  })
+  @ApiCreatedResponse({
+    description: '(유저가드 적용)유저정보 삭제',
+    type: User,
+  })
   remove(@Request() req) {
     return this.userService.remove(req.user.id);
   }
 
   // 인증번호 전송
   @Post('/send-verification')
+  @ApiOperation({
+    summary: '(이메일 인증)인증번호 전송 API',
+    description: '(이메일 인증)인증번호 전송',
+  })
+  @ApiCreatedResponse({
+    description: '(이메일 인증)인증번호 전송',
+  })
   async sendVerification(@Body('email') email: string) {
     console.log('email = ', email);
     const existingUser = await this.userService.findEmail(email);
@@ -135,6 +189,13 @@ export class UserController {
   }
 
   @Post('/verify')
+  @ApiOperation({
+    summary: '(이메일 인증)인증 API',
+    description: '(이메일 인증)인증',
+  })
+  @ApiCreatedResponse({
+    description: '(이메일 인증)인증',
+  })
   async verifyCode(@Body() verifyCodeDto: VerifyCodeDto) {
     const { email, code } = verifyCodeDto;
     const isValid = await this.userService.verifyCode(email, code);

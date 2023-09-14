@@ -15,8 +15,10 @@ import { AuthService } from './auth.service';
 import { Response } from 'express';
 import { LocalGuard } from './login.strategies/auth.strategy';
 import { GenerateToken } from './jwt/generate.token';
+import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @Controller('api/auth')
+@ApiTags('로그인 인증 API')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
@@ -25,6 +27,11 @@ export class AuthController {
   // 유저로그인
   @UseGuards(LocalGuard)
   @Post('/user')
+  @ApiOperation({
+    summary: '(로컬가드 적용)유저로그인 API',
+    description: '유저로그인',
+  })
+  @ApiCreatedResponse({ description: '유저로그인' })
   async login(
     @Request() req,
     @Res({ passthrough: true }) res: Response,
@@ -55,6 +62,11 @@ export class AuthController {
   // 회사로그인
   @UseGuards(LocalGuard)
   @Post('/company')
+  @ApiOperation({
+    summary: '(로컬가드 적용)회사 로그인 API',
+    description: '회사 로그인',
+  })
+  @ApiCreatedResponse({ description: '회사 로그인' })
   async companyLogin(
     @Request() req,
     @Res({ passthrough: true }) res: Response,
@@ -83,6 +95,11 @@ export class AuthController {
 
   // refresh토큰 재발급하기
   @Post('refresh')
+  @ApiOperation({
+    summary: 'refresh token 재발급 API',
+    description: 'refresh token 재발급',
+  })
+  @ApiCreatedResponse({ description: 'refresh token 재발급' })
   async refresh(@Req() req, @Res({ passthrough: true }) res: Response) {
     try {
       console.log('refresh', req.cookies.refresh_token);
@@ -103,6 +120,11 @@ export class AuthController {
 
   // 로그아웃
   @Delete('/logout')
+  @ApiOperation({
+    summary: '로그아웃 API',
+    description: '로그아웃',
+  })
+  @ApiCreatedResponse({ description: '로그아웃' })
   async logout(@Request() req, @Res({ passthrough: true }) res: Response) {
     console.log(' 로그아웃authorization = ', req.cookies);
     // 먼저 로그아웃이 되어있는지 확인하기

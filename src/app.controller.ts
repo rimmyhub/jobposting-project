@@ -2,12 +2,16 @@ import { Controller, Get, Render, Param, Request, Res } from '@nestjs/common';
 import { AppService } from './app.service';
 import { Response } from 'express';
 import { get } from 'http';
+import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @Controller()
+@ApiTags('메인 API')
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
+  @ApiOperation({ summary: 'index render API', description: 'index render' })
+  @ApiCreatedResponse({ description: 'index render' })
   @Render('index')
   async getMain(@Request() req) {
     const cookie: string = await req.cookies['authorization'];
@@ -22,6 +26,8 @@ export class AppController {
 
   // 로그인경로
   @Get('signin/:type') // 경로뒤에 타입을 user company 중 어느것을 입력하는지에 따라 화면이 바뀜
+  @ApiOperation({ summary: 'signIn render API', description: 'signIn render' })
+  @ApiCreatedResponse({ description: 'signIn render' })
   // @Render('signin')
   async getSignin(
     @Request() req,
@@ -43,6 +49,8 @@ export class AppController {
 
   // 회원가입 경로
   @Get('signup/:type') // 경로뒤에 타입을 user company 중 어느것을 입력하는지에 따라 화면이 바뀜
+  @ApiOperation({ summary: 'signup render API', description: 'signup render' })
+  @ApiCreatedResponse({ description: 'signup render' })
   // @Render('signup')
   getSignup(@Request() req, @Param('type') type: string, @Res() res: Response) {
     const cookie: string = req.cookies['authorization'];
@@ -56,6 +64,11 @@ export class AppController {
 
   // 회사 정보
   @Get('company/:id')
+  @ApiOperation({
+    summary: 'subPage-company render API',
+    description: 'subPage-company render',
+  })
+  @ApiCreatedResponse({ description: 'subPage-company render' })
   @Render('subpage-company')
   async getSubpageCompany(@Request() req, @Param('id') id: string) {
     const cookie: string = await req.cookies['authorization'];
@@ -72,6 +85,11 @@ export class AppController {
 
   // 채용공고 추가
   @Get('jobposting/add')
+  @ApiOperation({
+    summary: 'jobposting-add render API',
+    description: 'jobposting-add render',
+  })
+  @ApiCreatedResponse({ description: 'jobposting-add render' })
   @Render('jobposting-add')
   async getJobpstingAdd(@Request() req) {
     const cookie: string = await req.cookies['authorization'];
@@ -85,6 +103,11 @@ export class AppController {
 
   // 채용공고 (로그인 없이 모든 공고 조회)
   @Get('jobposting/:jobpostingId')
+  @ApiOperation({
+    summary: 'jobposting render API',
+    description: 'jobposting render',
+  })
+  @ApiCreatedResponse({ description: 'jobposting render' })
   @Render('jobposting')
   async getJobpstingUser(
     @Request() req,
@@ -104,6 +127,11 @@ export class AppController {
 
   // 채용공고 수정
   @Get('jobposting/edit/:jobpostingId')
+  @ApiOperation({
+    summary: 'jobposting-edit render API',
+    description: 'jobposting-edit render',
+  })
+  @ApiCreatedResponse({ description: 'jobposting-edit render' })
   @Render('jobposting-edit')
   async getJobpstingEdit(
     @Request() req,
@@ -121,6 +149,11 @@ export class AppController {
 
   // 유저 - 서브 페이지
   @Get('subpage/:userId/:resumeId')
+  @ApiOperation({
+    summary: 'subPage-user render API',
+    description: 'subPage-user render',
+  })
+  @ApiCreatedResponse({ description: 'subPage-user render' })
   @Render('subpage-user')
   async getSubpageUser(
     @Request() req,
@@ -138,6 +171,11 @@ export class AppController {
 
   // 유저 - 마이페이지
   @Get('mypage')
+  @ApiOperation({
+    summary: 'myPage-user render API',
+    description: 'myPage-user render',
+  })
+  @ApiCreatedResponse({ description: 'myPage-user render' })
   getMypageUser(
     @Request() req,
     @Res() res: Response,
@@ -155,6 +193,11 @@ export class AppController {
 
   // 회사 - 마이페이지
   @Get('mypage/company')
+  @ApiOperation({
+    summary: 'myPage-company render API',
+    description: 'myPage-company render',
+  })
+  @ApiCreatedResponse({ description: 'myPage-company render' })
   getMypageComapny(
     @Request() req,
     @Res() res: Response,
@@ -172,6 +215,11 @@ export class AppController {
 
   // 회사 - 지원자 확인
   @Get('applyuser/:jobpostingId')
+  @ApiOperation({
+    summary: 'apply-user render API',
+    description: 'apply-user render',
+  })
+  @ApiCreatedResponse({ description: 'apply-user render' })
   getApplyUser(
     @Request() req,
     @Res() res: Response,
@@ -188,6 +236,11 @@ export class AppController {
 
   // 회사 로그인 시 - 채용 공고
   @Get('jobposting/company')
+  @ApiOperation({
+    summary: 'jobposting-company render API',
+    description: 'jobposting-company render',
+  })
+  @ApiCreatedResponse({ description: 'jobposting-company render' })
   // @Render('jobposting-company')
   getJobpstingCompany(
     @Request() req,
@@ -206,6 +259,8 @@ export class AppController {
 
   // 채용공고 지원 내역 보기
   @Get('apply/:type')
+  @ApiOperation({ summary: 'apply render API', description: 'apply render' })
+  @ApiCreatedResponse({ description: 'apply render' })
   async getApply(
     @Request() req,
     @Param('type') type: string,

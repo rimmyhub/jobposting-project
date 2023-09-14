@@ -11,16 +11,20 @@ import {
 import { User } from './user.entity';
 import { Company } from './company.entity';
 import { ChatContent } from './chatContent.entity';
+import { ApiProperty } from '@nestjs/swagger';
 
 @Entity()
 export class Chat {
   @PrimaryGeneratedColumn()
+  @ApiProperty({ description: 'chatId' })
   id: number;
 
   @Column({ name: 'user_id' })
+  @ApiProperty({ description: 'userId' })
   userId: string;
 
   @Column({ name: 'company_id' })
+  @ApiProperty({ description: 'companyId' })
   companyId: string;
 
   @CreateDateColumn({ name: 'create_at', comment: '생성일' })

@@ -25,6 +25,7 @@ import { MailModule } from './mail/mail.module';
 import { ChatContentModule } from './chat-content/chat-content.module';
 import { ChatgptModule } from './chatgpt/chatgpt.module';
 import { CacheModule } from '@nestjs/cache-manager';
+import { SwaggerModule } from '@nestjs/swagger';
 
 @Module({
   imports: [
@@ -52,6 +53,7 @@ import { CacheModule } from '@nestjs/cache-manager';
     JobPostingSearchModule,
     ChatContentModule,
     ChatgptModule,
+    SwaggerModule,
   ],
   controllers: [AppController],
   providers: [AppService, ChatGateway],

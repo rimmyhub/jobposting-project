@@ -55,6 +55,8 @@ async function getApplyUser() {
 
   applyUser.innerHTML = temp;
 
+  // console.log('test');
+
   //resumeId 가져오기
   async function getResumeId(event) {
     const userId = event.target.getAttribute('data-id');

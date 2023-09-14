@@ -52,37 +52,63 @@
 
           <% if (type === "user") { %>
           <!-- 이메일 입력 + 인증번호 전송 버튼 -->
+          <div class="box-label">
+            <label>이메일</label>
+          </div>
           <div class="email-input-box">
-            <input id="input-email" type="text" placeholder="email" />
+            <input id="input-email" type="text" placeholder="이메일" />
             <button id="send-verification-btn" class="btn btn-sm btn-primary">
               인증번호 전송
             </button>
           </div>
 
           <!-- 인증번호 입력 + 인증번호 확인 버튼 -->
+          <div class="box-label">
+            <label>인증코드 확인</label>
+          </div>
           <div class="email-input-box">
             <input
               id="input-verification-code"
               type="text"
-              placeholder="verification-code"
+              placeholder="인증코드확인"
             />
             <button id="verify-code-btn" class="btn btn-sm btn-primary">
               인증번호 확인
             </button>
           </div>
 
+          <div class="box-label">
+            <label>비밀번호</label>
+          </div>
           <div class="email-input-box expand">
-            <input id="input-password" type="text" placeholder="비밀번호" />
+            <input
+              id="input-password"
+              type="password"
+              placeholder="패스워드 (영소문자 숫자조합 5자 이상)"
+            />
           </div>
 
+          <div class="box-label">
+            <label>사용자명</label>
+          </div>
           <div class="email-input-box expand">
             <input id="input-username" type="text" placeholder="사용자명" />
           </div>
 
+          <div class="box-label">
+            <label>전화번호</label>
+          </div>
           <div class="email-input-box expand">
-            <input id="input-phone" type="text" placeholder="전화번호" />
+            <input
+              id="input-phone"
+              type="text"
+              placeholder="전화번호 '-'를 붙여주세요"
+            />
           </div>
 
+          <div class="box-label">
+            <label>성별</label>
+          </div>
           <div class="email-input-box expand">
             <select id="gender" class="gender-select" aria-placeholder="성별">
               <option value="M">남성</option>
@@ -90,16 +116,25 @@
             </select>
           </div>
 
+          <div class="box-label">
+            <label>주소</label>
+          </div>
           <div class="email-input-box expand">
             <input id="input-address" type="text" placeholder="주소" />
           </div>
 
+          <div class="box-label">
+            <label>생년월일</label>
+          </div>
           <div class="email-input-box expand">
             <input id="input-birth" type="date" placeholder="생년월일" />
           </div>
           <% } else if (type === 'company') { %>
+          <div class="box-label">
+            <label>이메일</label>
+          </div>
           <div class="email-input-box">
-            <input id="input-email" type="text" placeholder="email" />
+            <input id="input-email" type="text" placeholder="이메일" />
             <!-- '인증번호 전송' 버튼 -->
             <button id="send-verification-btn" class="btn btn-sm btn-primary">
               인증번호 전송
@@ -107,41 +142,76 @@
           </div>
 
           <!-- 인증번호 입력 필드 -->
+          <div class="box-label">
+            <label>인증코드 확인</label>
+          </div>
           <div class="email-input-box">
             <input
               id="input-verification-code"
               type="text"
-              placeholder="verification-code"
+              placeholder="인증코드확인"
             />
             <!-- '인증번호 확인' 버튼 -->
             <button id="verify-code-btn" class="btn btn-sm btn-primary">
               인증번호 확인
             </button>
           </div>
-          <div class="email-input-box expand">
-            <input id="input-password" type="text" placeholder="password" />
-          </div>
-          <div class="email-input-box expand">
-            <input id="input-title" type="text" placeholder="company title" />
+
+          <div class="box-label">
+            <label>비밀번호</label>
           </div>
           <div class="email-input-box expand">
             <input
-              id="input-introduction"
-              type="text"
-              placeholder="introduction"
+              id="input-password"
+              type="password"
+              placeholder="패스워드 (영소문자 숫자조합 5자 이상)"
             />
           </div>
-          <div class="email-input-box expand">
-            <input id="input-website" type="text" placeholder="website" />
+
+          <div class="box-label">
+            <label>상호명</label>
           </div>
           <div class="email-input-box expand">
-            <input id="input-address" type="text" placeholder="address" />
+            <input id="input-title" type="text" placeholder="상호명" />
+          </div>
+
+          <div class="box-label">
+            <label>회사소개</label>
           </div>
           <div class="email-input-box expand">
-            <input id="input-business" type="text" placeholder="business" />
+            <input id="input-introduction" type="text" placeholder="회사소개" />
+          </div>
+
+          <div class="box-label">
+            <label>회사 웹사이트 주소</label>
           </div>
           <div class="email-input-box expand">
-            <input id="input-employees" type="text" placeholder="employees" />
+            <input
+              id="input-website"
+              type="text"
+              placeholder="회사 웹사이트 주소 예)https://spartacodingclub.kr/"
+            />
+          </div>
+
+          <div class="box-label">
+            <label>주소</label>
+          </div>
+          <div class="email-input-box expand">
+            <input id="input-address" type="text" placeholder="주소" />
+          </div>
+
+          <div class="box-label">
+            <label>업종</label>
+          </div>
+          <div class="email-input-box expand">
+            <input id="input-business" type="text" placeholder="업종" />
+          </div>
+
+          <div class="box-label">
+            <label>사원수</label>
+          </div>
+          <div class="email-input-box expand">
+            <input id="input-employees" type="text" placeholder="사원수" />
           </div>
           <% } %>
           <div class="email-input-box expand">
