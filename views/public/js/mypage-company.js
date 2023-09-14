@@ -46,7 +46,7 @@ async function getCompanyImage() {
 
   // 기본 프로필 적용하기
   imageDeleteEl.addEventListener('click', () => {
-    imageUrl = '/img/userImg.jpg'; // 이미지 삭제 시 URL 업데이트
+    imageUrl = '/img/company.jpg'; // 이미지 삭제 시 URL 업데이트
     companyImage.src = imageUrl; // 이미지 보여주기
   });
 
