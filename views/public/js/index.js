@@ -1,3 +1,5 @@
+// const { error } = require('console');
+
 // 파라미터값 가져오기
 document.addEventListener('DOMContentLoaded', async () => {
   getResumes();
@@ -122,7 +124,6 @@ function goToJobpostingSubpage(jobpostingId) {
 const companiesBox = document.querySelector('#companies-list');
 
 function companiesAppendTemp(data) {
-  console.log(data);
   const temp = data
     .map((company) => {
       return `
@@ -146,7 +147,8 @@ function companiesAppendTemp(data) {
           `;
     })
     .join('');
-  console.log(company);
+
+  console.log(data);
   companiesBox.insertAdjacentHTML('beforeend', temp);
 }
 
@@ -154,6 +156,7 @@ async function getCompanies() {
   try {
     const companyData = await fetch(`/api/companies?page=1`);
     if (!companyData.ok) {
+      console.error(error);
       throw new Error('회사 데이터를 불러오는데 실패했습니다');
     }
     const companiesData = await companyData.json();
