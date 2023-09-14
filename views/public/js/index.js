@@ -146,29 +146,46 @@ function companiesAppendTemp(data) {
     .join('');
   companiesBox.insertAdjacentHTML('beforeend', temp);
 }
+
 async function getCompanies() {
   try {
     const companyData = await fetch(`/api/companies?page=1`);
+    if (!companyData.ok) {
+      throw new Error('회사 데이터를 불러오는데 실패했습니다');
+    }
     const companiesData = await companyData.json();
     companiesAppendTemp(companiesData);
   } catch (error) {
-    console.error(error);
+    console.error('회사 데이터를 불러오는 중 오류 발생:', error.message);
   }
 }
+
 getCompanies();
 const addCompaniesBtn = document.querySelector('#companies-add-btn');
 addCompaniesBtn.addEventListener('click', async function () {
-  const page = this.getAttribute('data-page');
-  if (!page) {
-    const res = await fetch(`/api/companies?page=2`);
-    const data = await res.json();
-    companiesAppendTemp(data);
-    this.setAttribute('data-page', 3);
-  } else {
-    const res = await fetch(`/api/companies?page=${page}`);
-    const data = await res.json();
-    companiesAppendTemp(data);
-    this.setAttribute('data-page', Number(page) + 1);
+  try {
+    const page = this.getAttribute('data-page');
+    if (!page) {
+      const res = await fetch(`/api/companies?page=2`);
+      if (!res.ok) {
+        throw new Error('페이지의 회사 데이터를 불러오는데 실패했습니다');
+      }
+      const data = await res.json();
+      companiesAppendTemp(data);
+      this.setAttribute('data-page', 3);
+    } else {
+      const res = await fetch(`/api/companies?page=${page}`);
+      if (!res.ok) {
+        throw new Error(
+          `페이지 ${page}의 회사 데이터를 불러오는데 실패했습니다`,
+        );
+      }
+      const data = await res.json();
+      companiesAppendTemp(data);
+      this.setAttribute('data-page', Number(page) + 1);
+    }
+  } catch (error) {
+    console.error('회사 데이터를 불러오는 중 오류 발생:', error.message);
   }
 });
 

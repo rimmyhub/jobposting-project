@@ -30,7 +30,7 @@ async function fetchCompanyData(companyId) {
     }
   } catch (error) {
     console.error('회사 데이터를 불러오는데 실패했습니다:', error.message);
-    throw error;
+    throw new Error('회사 데이터를 불러오는데 실패했습니다.');
   }
 }
 
@@ -140,7 +140,6 @@ async function createReview() {
 
     if (response.ok) {
       // 리뷰 작성 성공
-      // 페이지를 새로 고치거나 리뷰 목록을 업데이트하는 등의 작업을 수행할 수 있습니다.
       fetchReviews(companyId); // 리뷰 작성 후 리뷰 목록 업데이트
     } else {
       // 리뷰 작성 실패 처리
@@ -148,6 +147,7 @@ async function createReview() {
     }
   } catch (error) {
     console.error('리뷰 작성 중 오류가 발생했습니다:', error.message);
+    throw new Error('리뷰 작성에 실패했습니다.');
   }
 }
 
