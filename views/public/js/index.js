@@ -120,7 +120,9 @@ function goToJobpostingSubpage(jobpostingId) {
 
 // 회사 영역
 const companiesBox = document.querySelector('#companies-list');
+
 function companiesAppendTemp(data) {
+  console.log(data);
   const temp = data
     .map((company) => {
       return `
@@ -144,12 +146,14 @@ function companiesAppendTemp(data) {
           `;
     })
     .join('');
+  console.log(company);
   companiesBox.insertAdjacentHTML('beforeend', temp);
 }
 async function getCompanies() {
   try {
     const companyData = await fetch(`/api/companies?page=1`);
     const companiesData = await companyData.json();
+
     companiesAppendTemp(companiesData);
   } catch (error) {
     console.error(error);
