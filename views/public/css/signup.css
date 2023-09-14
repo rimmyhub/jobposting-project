@@ -4,7 +4,7 @@
 }
 
 .signup-box {
-  width: 659px;
+  width: 700px;
   border-radius: 10px;
   position: absolute;
   transform: translate(-50%, 0%);
@@ -91,7 +91,8 @@
 }
 
 .email-input-box button {
-  width: auto;
+  width: 150px;
+  padding: 10px;
 }
 
 .expand {
@@ -101,4 +102,11 @@
 
 .expand input {
   flex: 1;
+}
+
+/* 인풋 라벨 */
+.box-label {
+  text-align: left;
+  color: black;
+  size: 15px;
 }

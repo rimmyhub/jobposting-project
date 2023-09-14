@@ -120,7 +120,9 @@ function goToJobpostingSubpage(jobpostingId) {
 
 // 회사 영역
 const companiesBox = document.querySelector('#companies-list');
+
 function companiesAppendTemp(data) {
+  console.log(data);
   const temp = data
     .map((company) => {
       return `
@@ -144,6 +146,7 @@ function companiesAppendTemp(data) {
           `;
     })
     .join('');
+  console.log(company);
   companiesBox.insertAdjacentHTML('beforeend', temp);
 }
 
@@ -154,6 +157,7 @@ async function getCompanies() {
       throw new Error('회사 데이터를 불러오는데 실패했습니다');
     }
     const companiesData = await companyData.json();
+
     companiesAppendTemp(companiesData);
   } catch (error) {
     console.error('회사 데이터를 불러오는 중 오류 발생:', error.message);
