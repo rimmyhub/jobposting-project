@@ -183,4 +183,18 @@ export class ResumeService {
     // 반환값
     return deletedResume;
   }
+
+  // 유저의 이력서 ID 조회
+  async findResumeIdWithGuard(userId: string) {
+    // userId를 사용하여 해당 유저의 이력서를 조회합니다.
+    const resume = await this.resumeRepository.findOne({ where: { userId } });
+
+    // 이력서가 존재하지 않는 경우 null을 반환합니다.
+    if (!resume) {
+      return null;
+    }
+
+    // 이력서가 존재하는 경우 이력서의 ID를 반환합니다.
+    return resume.id;
+  }
 }

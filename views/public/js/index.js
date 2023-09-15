@@ -146,7 +146,7 @@ function companiesAppendTemp(data) {
           `;
     })
     .join('');
-  console.log(company);
+  console.log(data);
   companiesBox.insertAdjacentHTML('beforeend', temp);
 }
 

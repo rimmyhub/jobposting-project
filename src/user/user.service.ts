@@ -3,8 +3,9 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 // 데이터베이스와 레포지토리를 쓰려면
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Not, IsNull, And } from 'typeorm';
+import { Repository, Not, IsNull, And, LessThan } from 'typeorm';
 import { User } from '../domain/user.entity';
+import { Cron } from '@nestjs/schedule';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -257,6 +258,26 @@ export class UserService {
         '이메일 인증을 진행해주세요!',
         HttpStatus.BAD_REQUEST,
       );
+    }
+  }
+
+  @Cron('0 */3 * * * *') // 3분마다 실행
+  async cleanupTemporaryData() {
+    try {
+      const expirationTime = new Date(Date.now() - 5 * 60 * 1000); // 현재 시간으로부터 5분 이전의 시간
+      await this.userRepository
+        .createQueryBuilder()
+        .delete()
+        .from(User)
+        .where({
+          createdAt: LessThan(expirationTime), // 현재 시간으로부터 5분 이전의 데이터만 삭제
+          password: '', // 비밀번호가 없는 데이터만 삭제
+        })
+        .execute();
+
+      console.log('임시 데이터 정리가 완료되었습니다.');
+    } catch (error) {
+      console.error('임시 데이터 정리 중 오류가 발생했습니다.', error);
     }
   }
 }
