@@ -72,15 +72,25 @@ function jobpostingAppendTemp(data) {
   const temp = data
     .map((jobposting) => {
       return `
-              <div class="jobposting-card" id="jobposting-card" onclick="goToJobpostingSubpage(${jobposting.id})">
-                <div>
-                  <div class="jobposting-title" id="jobposting-title">
-                  ${jobposting.title}
-                  </div>
-                  <div class="jobposting-job" id="jobposting-job">${jobposting.dueDate}</div>
-                  <p>${jobposting.workArea}</p>
-                </div>
-              </div>
+               <div
+                 class="card jobposting-card"
+                 id="jobposting-card"
+                 onclick="goToJobpostingSubpage(${jobposting.id})"
+                 style="width: 20rem; cursor: pointer;"
+               >
+                 <div class="card-body">
+                   <h4 class="jobposting-title" id="jobposting-title">
+                     ${jobposting.title}
+                   </h4>
+                   <h6
+                     class="card-subtitle mb-2 text-body-secondary jobposting-job"
+                     id="jobposting-job"
+                   >
+                     마감일 : ${jobposting.dueDate}
+                   </h6>
+                   <p class="card-text">${jobposting.workArea}</p>
+                 </div>
+               </div>
               `;
     })
     .join('');
@@ -127,7 +137,12 @@ function companiesAppendTemp(data) {
   const temp = data
     .map((company) => {
       return `
-              <div class="jobposting-card" id="companies-card" onclick="goToCompanySubpage('${company.id}')">
+            <div
+              class="card jobposting-card"
+              id="companies-card"
+              onclick="goToCompanySubpage('${company.id}')"
+              style="width: 20rem; cursor: pointer;"
+            >
               <img
                 class="jobposting-img"
                 id="companies-img"
@@ -136,15 +151,17 @@ function companiesAppendTemp(data) {
                 srcset=""
                 onerror="this.src='/img/company.jpg';"
               />
-              <div>
-                <div class="jobposting-title" id="companies-title">
-                ${company.title}
+              <div class="card-body">
+                <h4 class="jobposting-title" id="companies-title">
+                  ${company.title}
+                </h4>
+                <div class="jobposting-job text-body-secondary mb-2" id="companies-job">
+                  ${company.business}
                 </div>
-                <div class="jobposting-job" id="companies-job">${company.business}</div>
                 <p>${company.employees}</p>
               </div>
             </div>
-          `;
+                `;
     })
     .join('');
 
