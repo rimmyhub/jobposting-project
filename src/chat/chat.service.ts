@@ -12,7 +12,6 @@ export class ChatService {
 
   // 해당유저가 받은 메세지 중에 isCkeck가 false인 chat-content가 있는지 확인하는 class
   async checkChat(id: string, type: string): Promise<any> {
-    console.log('checkChat', id, type);
     let result: any;
     try {
       if (type === 'user') {
