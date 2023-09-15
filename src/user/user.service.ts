@@ -261,7 +261,7 @@ export class UserService {
     }
   }
 
-  @Cron('0 */3 * * * *') // 3분마다 실행
+  @Cron('0 */5 * * * *') // 5분마다 실행
   async cleanupTemporaryData() {
     try {
       const expirationTime = new Date(Date.now() - 5 * 60 * 1000); // 현재 시간으로부터 5분 이전의 시간
