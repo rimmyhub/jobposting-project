@@ -17,7 +17,7 @@
     ></script>
     <style>
       /* 추가 수정버튼 마진값 */
-      .fa-solid {
+      .edit-icon {
         margin: 10px;
       }
       .text-start {
@@ -55,18 +55,18 @@
         cursor: pointer;
       }
     </style>
+    <link rel="stylesheet" href="/css/container.css" />
     <title>WINNER</title>
   </head>
   <body>
-    <%- include('includes/header', {isLogin: isLogin, type: "user"}) %>
     <!-- 전체 컨테이너 -->
-    <div class="container text-center">
+    <div class="main-container text-center">
+      <%- include('includes/header', {isLogin: isLogin, type: "user"}) %>
       <!-- 브레드크롬 -->
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="#">Home</a></li>
           <li class="breadcrumb-item active" aria-current="page">
-            mypage / company
+            Home / mypage / company
           </li>
         </ol>
       </nav>
@@ -74,12 +74,12 @@
         <!-- 프로필 수정 -->
         <div class="profile-box">
           <img
-            src="/img/userImg.jpg"
+            src="/img/company.jpg"
             id="image"
             class="company-img"
             alt=""
             srcset=""
-            onerror="this.src='/img/userImg.jpg';"
+            onerror="this.src='/img/company.jpg';"
           />
           <i class="fa-solid fa-pen edit-icon" style="color: #0d6efd">수정</i>
           <input

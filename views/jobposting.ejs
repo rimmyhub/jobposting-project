@@ -15,6 +15,7 @@
       crossorigin="anonymous"
     ></script>
 
+    <link rel="stylesheet" href="/css/container.css" />
     <link rel="stylesheet" href="/css/jobposting.css" />
     <title>WINNER</title>
     <style>
@@ -28,13 +29,14 @@
     <script src="/js/jobposting.js" defer></script>
   </head>
   <body>
-    <%- include('includes/header', {isLogin: isLogin, type: "user"}) %>
-    <div class="container">
+    <div class="main-container">
+      <%- include('includes/header', {isLogin: isLogin}) %>
       <!-- 브레드크롬 -->
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="/">Home</a></li>
-          <li class="breadcrumb-item active" aria-current="page">jobposting</li>
+          <li class="breadcrumb-item active" aria-current="page">
+            Home / jobposting
+          </li>
         </ol>
       </nav>
       <!-- 브레드크롬 -->
@@ -47,9 +49,6 @@
         <div class="col-12 text-start">
           <button type="button" class="btn btn-primary me-2 apply-btn">
             지원하기
-          </button>
-          <button type="button" class="btn btn-outline-primary me-2">
-            메세지 보내기
           </button>
           <button type="button" class="btn btn-outline-primary company-info">
             기업정보 보기

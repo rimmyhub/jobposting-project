@@ -23,6 +23,7 @@
   </head>
   <body>
     <div class="main-container">
+      <!-- <div class="container"> -->
       <%- include('includes/header', { isLogin: 0}) %>
       <div class="signup-box">
         <% if (type === "user") { %>
@@ -84,7 +85,7 @@
             <input
               id="input-password"
               type="password"
-              placeholder="패스워드 (영소문자 숫자조합)"
+              placeholder="패스워드 (영소문자 숫자조합 5자 이상)"
             />
           </div>
 
@@ -164,7 +165,7 @@
             <input
               id="input-password"
               type="password"
-              placeholder="패스워드 (영소문자 숫자조합)"
+              placeholder="패스워드 (영소문자 숫자조합 5자 이상)"
             />
           </div>
 
@@ -189,7 +190,7 @@
             <input
               id="input-website"
               type="text"
-              placeholder="회사 웹사이트 주소"
+              placeholder="회사 웹사이트 주소 예)https://spartacodingclub.kr/"
             />
           </div>
 

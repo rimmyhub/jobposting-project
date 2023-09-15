@@ -4,7 +4,6 @@ const sendVerificationBtn = document.getElementById('send-verification-btn');
 const verifyCodeBtn = document.getElementById('verify-code-btn');
 
 let path;
-// 인증을 false로 두고, 변수를 상위 스코프에 정의 추가
 let isVerified = false;
 document.addEventListener('DOMContentLoaded', async () => {
   path = document.location.pathname.split('/')[2];
@@ -100,9 +99,13 @@ signupBtn.addEventListener('click', async () => {
 // 이미지 업로드
 const userImage = document.getElementById('image');
 const imageUploadEl = document.getElementById('upload-image');
+
+const defaultImage = 'userImg.jpg';
+
 imageUploadEl.addEventListener('change', async (e) => {
   const selectedFile = e.target.files[0];
   // console.log(selectedFile);
+
   if (selectedFile.size > 1 * 1024 * 1024) {
     alert('파일용량은 최대 1MB입니다.');
     return;
@@ -148,6 +151,42 @@ const signup = async () => {
     const phone = document.getElementById('input-phone').value;
     const gender = document.getElementById('gender').value;
     const birth = document.getElementById('input-birth').value;
+
+    // 입력값이 비어있는지 확인
+    let imageUrl = ''; // imageUrl 변수를 정의
+
+    // 이미지가 업로드되었는지 확인
+    if (!imageUrl) {
+      imageUrl = '/img/userImg.jpg'; // 이미지가 없는 경우 기본 이미지 URL 설정
+    }
+
+    if (!password) {
+      alert('비밀번호를 입력해주세요.');
+      return;
+    }
+
+    if (!username) {
+      alert('사용자명을 입력해주세요.');
+      return;
+    }
+
+    if (!phone) {
+      alert('핸드폰 번호를 입력해주세요. 예)010-1234-1234');
+      return;
+    }
+    if (!gender) {
+      alert('성별을 입력해주세요.');
+      return;
+    }
+
+    if (!address) {
+      alert('생년월일을 입력해주세요.');
+      return;
+    }
+    if (!birth) {
+      alert('생년월일을 입력해주세요.');
+      return;
+    }
 
     await fetch(endpoint, {
       method: 'POST',
@@ -195,6 +234,46 @@ const signup = async () => {
       business,
       employees,
     );
+
+    // 입력값이 비어있는지 확인
+    let imageUrl = ''; // imageUrl 변수를 정의
+
+    // 이미지가 업로드되었는지 확인
+    if (!imageUrl) {
+      imageUrl = '/img/company.jpg'; // 이미지가 없는 경우 기본 이미지 URL 설정
+    }
+
+    if (!password) {
+      alert('비밀번호를 입력해주세요.');
+      return;
+    }
+
+    if (!title) {
+      alert('상호명을 입력해주세요.');
+      return;
+    }
+
+    if (!introduction) {
+      alert('회사소개를 입력해주세요.');
+      return;
+    }
+    if (!website) {
+      alert('웹사이트를 입력해주세요. 예)https://spartacodingclub.kr/');
+      return;
+    }
+
+    if (!address) {
+      alert('주소를 입력해주세요.');
+      return;
+    }
+    if (!business) {
+      alert('업종을 입력해주세요 예)IT, 웹 프로그래밍');
+      return;
+    }
+    if (!employees) {
+      alert('사원수를 입력해주세요.');
+      return;
+    }
 
     await fetch(endpoint, {
       method: 'POST',

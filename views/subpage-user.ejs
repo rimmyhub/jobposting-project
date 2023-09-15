@@ -16,18 +16,18 @@
         margin: 10px;
       }
     </style>
+    <link rel="stylesheet" href="/css/container.css" />
     <title>WINNER</title>
   </head>
   <body>
-    <%- include('includes/header', {isLogin: isLogin, type: "user"}) %>
     <!-- 전체 컨테이너 -->
-    <div class="container text-center">
+    <div class="main-container text-center">
+      <%- include('includes/header', {isLogin: isLogin, type: "user"}) %>
       <!-- 브레드크롬 -->
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="/">Home</a></li>
           <li class="breadcrumb-item active" aria-current="page">
-            subpage / user
+            Home / subpage / user
           </li>
         </ol>
       </nav>
