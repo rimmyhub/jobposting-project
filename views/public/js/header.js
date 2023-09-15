@@ -10,6 +10,7 @@ let alarmIcon;
 let msgCard;
 let offer;
 const myApplyList = document.getElementById('my-apply-list');
+const myProfile = document.getElementById('profile-image');
 const socket = io('localhost:8080');
 const ejs = (window.onload = function () {
   const params = new URLSearchParams(window.location.search);
@@ -60,6 +61,50 @@ const ejs = (window.onload = function () {
       }
       console.error('Invalid type:', type);
     });
+  }
+
+  // 이미지 화면에 표시하기
+  if (myProfile) {
+    async function getImage() {
+      try {
+        let type = window.localStorage.getItem('type');
+        let imageUrl;
+        if (type === 'user') {
+          const response = await fetch('/api/users/user-page', {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+          if (!response.ok) {
+            throw new Error('이미지 가져오기 실패');
+          }
+          const data = await response.json();
+
+          imageUrl = data.image; // 가져온 이미지 URL
+        } else if (type === 'company') {
+          const response = await fetch('/api/companies/company', {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+          if (!response.ok) {
+            throw new Error('이미지 가져오기 실패');
+          }
+          const data = await response.json();
+          imageUrl = data.image; // 가져온 이미지 URL
+        }
+
+        // 이미지 화면에 표시하기
+        myProfile.src = imageUrl; // 이미지 URL을 설정하여 이미지를 표시
+      } catch (error) {
+        console.error('이미지 가져오기 오류:', error);
+      }
+    }
+
+    // 이미지 가져오기 함수 호출
+    getImage();
   }
 
   if (message) {
@@ -430,6 +475,6 @@ async function sendMessage() {
 if (myApplyList) {
   myApplyList.addEventListener('click', () => {
     const type = window.localStorage.getItem('type');
-    location.href = `apply/${type}`;
+    location.href = `/apply/${type}`;
   });
 }

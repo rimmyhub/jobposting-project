@@ -15,11 +15,9 @@
       src="https://kit.fontawesome.com/9021aeec94.js"
       crossorigin="anonymous"
     ></script>
-
-    <title>WINNER</title>
     <style>
       /* 추가 수정버튼 마진값 */
-      .fa-solid {
+      .edit-icon {
         margin: 10px;
       }
 
@@ -59,17 +57,18 @@
         cursor: pointer;
       }
     </style>
+    <link rel="stylesheet" href="/css/container.css" />
+    <title>WINNER</title>
   </head>
   <body>
-    <%- include('includes/header', {isLogin: isLogin, type: "user"}) %>
     <!-- 전체 컨테이너 -->
-    <div class="container text-center">
+    <div class="main-container text-center">
+      <%- include('includes/header', {isLogin: isLogin, type: "user"}) %>
       <!-- 브레드크롬 -->
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="/">Home</a></li>
           <li class="breadcrumb-item active" aria-current="page">
-            mypage / user
+            Home / mypage / user
           </li>
         </ol>
       </nav>
