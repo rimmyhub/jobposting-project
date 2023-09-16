@@ -33,10 +33,14 @@ const ejs = (window.onload = function () {
   chatContainer = document.getElementById('chat-container');
   messageList = document.getElementById('message-list');
   chatContent = document.getElementById('chat-content');
-
+  const type = window.localStorage.getItem('type');
   const id = window.localStorage.getItem('id');
   if (id) {
-    socket.emit('saveClientId', id);
+    const payload = {
+      type,
+      userId: id,
+    };
+    socket.emit('saveClientId', payload);
   }
 
   if (logout) {
@@ -214,6 +218,7 @@ const ejs = (window.onload = function () {
   isLogin();
   async function isLogin() {
     const id = window.localStorage.getItem('id');
+
     if (id) {
       // 새로운 채팅이 있는지 확인하기
       await getChatRooms();
@@ -257,12 +262,12 @@ async function appendMsgList(datas, type) {
     if (type === 'company') {
       datas.forEach((el) => {
         const li = document.createElement('div');
-        li.innerHTML = `<div id="message-card-${el.id}" class="message-card" onclick="chattingBox('${el.id}', '${el.user.email}', '${el.userId}')">
+        li.innerHTML = `<div id="message-card-${el.id}" class="message-card" onclick="chattingBox('${el.id}', '${el.user.name}', '${el.userId}')">
                           <div class="user-profile">
                             <img src="/img/userImg.jpg" alt="" srcset="" />
                           </div>
                           <div class="message-info">
-                            <div class="user-name">${el.user.email}</div>
+                            <div class="user-name">${el.user.name}</div>
                             <div>메세지 확인</div>
                           </div>
                           <i
@@ -275,12 +280,12 @@ async function appendMsgList(datas, type) {
     } else {
       datas.forEach((el) => {
         const li = document.createElement('div');
-        li.innerHTML = `<div id="message-card-${el.id}" class="message-card" onclick="chattingBox('${el.id}', '${el.company.email}', '${el.companyId}')">
+        li.innerHTML = `<div id="message-card-${el.id}" class="message-card" onclick="chattingBox('${el.id}', '${el.company.title}', '${el.companyId}')">
                           <div class="user-profile">
                             <img src="/img/userImg.jpg" alt="" srcset="" />
                           </div>
                           <div class="message-info">
-                            <div class="user-name">${el.company.email}</div>
+                            <div class="user-name">${el.company.title}</div>
                             <div>메세지 확인</div>
                           </div>
                           <i
@@ -294,7 +299,7 @@ async function appendMsgList(datas, type) {
   }
 }
 
-socket.on('msg-notification', async (userId) => {
+socket.on('msg-notification', async () => {
   const exclamationIcon = document.getElementById('exclamation-icon');
   await checkNewMsg();
   exclamationIcon.style.opacity = 1;
@@ -340,6 +345,10 @@ let roomId;
 let reciId;
 // 채팅창 열기
 async function chattingBox(getRoomId, email, recipientId, $event) {
+  const cameraIcon = Object.assign(document.createElement('i'), {
+    id: 'offer-interview',
+  });
+  const type = localStorage.getItem('type');
   const messageCard = document.getElementById(
     `${event.target.parentElement.parentElement.id}`,
   );
@@ -354,12 +363,6 @@ async function chattingBox(getRoomId, email, recipientId, $event) {
   const iconBox = document.createElement('div');
   iconBox.className = `chat-icon-box`;
 
-  const cameraIcon = Object.assign(document.createElement('i'), {
-    id: 'offer-interview',
-  });
-
-  cameraIcon.className = 'fa-solid fa-video offer-interview';
-
   // icon변수에 i태그의 요소와  id를 추가
   const closeIcon = Object.assign(document.createElement('i'), {
     id: 'close-chatting',
@@ -368,8 +371,15 @@ async function chattingBox(getRoomId, email, recipientId, $event) {
   closeIcon.className = 'fa-solid fa-xmark close-message';
   closeIcon.onclick = leaveRoom;
 
-  iconBox.prepend(cameraIcon);
   iconBox.append(closeIcon);
+  if (type === 'company') {
+    iconBox.prepend(cameraIcon);
+    cameraIcon.className = 'fa-solid fa-video offer-interview';
+    // cameraIcon.onclick = startInterview(getRoomId, recipientId);
+    iconBox.style.justifyContent = 'space-between';
+  } else {
+    iconBox.style.justifyContent = 'end';
+  }
   chatBoxTitle.prepend(userName);
   chatBoxTitle.append(iconBox);
   await getChatContents(getRoomId);
@@ -381,7 +391,7 @@ async function chattingBox(getRoomId, email, recipientId, $event) {
   chatContainer.style.display = 'flex';
   chattingContainer.scrollTop = chattingContainer.scrollHeight;
   cameraIcon.onclick = function () {
-    startInterView(roomId, reciId);
+    startInterview(roomId, reciId);
   };
 }
 

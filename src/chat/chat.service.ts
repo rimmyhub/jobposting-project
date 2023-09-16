@@ -76,7 +76,7 @@ export class ChatService {
   async comGetAllChatRoom(id: string): Promise<Chat[]> {
     const chatRooms = await this.chatRepository
       .createQueryBuilder('chat')
-      .select(['chat.id', 'chat.companyId', 'chat.userId', 'user.email'])
+      .select(['chat.id', 'chat.companyId', 'chat.userId', 'user.name'])
       .leftJoin('chat.user', 'user')
       .where(`chat.company_id = :company_id`, { company_id: id })
       .getMany();
@@ -88,7 +88,7 @@ export class ChatService {
   async userGetAllChatRoom(id: string): Promise<Chat[]> {
     const chatRooms = await this.chatRepository
       .createQueryBuilder('chat')
-      .select(['chat.id', 'chat.companyId', 'chat.userId', 'company.email'])
+      .select(['chat.id', 'chat.companyId', 'chat.userId', 'company.title'])
       .leftJoin('chat.company', 'company')
       .where(`chat.user_id = :user_id`, { user_id: id })
       .getMany();

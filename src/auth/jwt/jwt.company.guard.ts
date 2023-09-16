@@ -33,6 +33,7 @@ export class CompanyGuard
   // 파라미터를 넘김
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
+
     const token = this.extractTokenFromHeader(request);
     if (!token) {
       throw new UnauthorizedException();
@@ -59,7 +60,9 @@ export class CompanyGuard
   }
 
   private extractTokenFromHeader(request: Request): string | undefined {
+    console.log('request = ', request);
     const authorization = request.cookies.authorization;
+    console.log('authorization = ', authorization);
     if (authorization) {
       const [type, token] = authorization.split(' ') ?? [];
       return type === 'Bearer' ? token : undefined;

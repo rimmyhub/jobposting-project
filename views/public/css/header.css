@@ -245,7 +245,7 @@ body {
 .chat-icon-box {
   display: flex;
   width: 50px;
-  justify-content: space-between;
+  /* justify-content: space-between; */
 }
 .chat-icon-box > .offer-interview {
   color: #279eff;

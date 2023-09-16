@@ -64,7 +64,6 @@ export class UserGuard
     const authorization = request.cookies.authorization;
     if (authorization) {
       const [type, token] = authorization.split(' ') ?? [];
-
       return type === 'Bearer' ? token : undefined;
     }
   }

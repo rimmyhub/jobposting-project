@@ -1,5 +1,12 @@
 <body>
   <nav>
+    <div id="notification-interview" class="notification-interview">
+      <h5 id="notification-title"></h5>
+      <div class="button-box">
+        <button id="accept-interview" class="accept-interview">응하기</button>
+        <button id="refuse-interview" class="refuse-interview">거절하기</button>
+      </div>
+    </div>
     <div id="interview-container" class="interview-container">
       <header class="interview-header">
         <i id="close-interview" class="fa-solid fa-x close-interview"></i>
@@ -18,7 +25,7 @@
               </div>
             </div>
           </div>
-          <video id="my-video" class="my-video">??</video>
+          <video id="my-video" class="my-video"></video>
         </div>
       </div>
     </div>
@@ -29,13 +36,6 @@
             <img class="header-logo" src="/img/winner.png" alt="" srcset="" />
           </a>
         </div>
-        <!-- <div class="search-box">
-          <i
-            class="fa-solid fa-magnifying-glass search-font"
-            id="searchBtn"
-          ></i>
-          <input class="search-input" type="text" />
-        </div> -->
         <% if(isLogin === 1) { %>
         <ul class="header-nav-list">
           <li>
@@ -64,12 +64,7 @@
             <div id="chat-container" class="chat-container">
               <div id="chat-box-title" class="chat-box-title"></div>
               <div id="chatting-container" class="chatting-container">
-                <ul id="chatting-list" class="chatting-list">
-                  <!-- 나의 메세지 -->
-                  <!-- <li id="sent" class="sent"></li> -->
-                  <!-- 상대방의 메세지 -->
-                  <!-- <li id="received" class="received"></li> -->
-                </ul>
+                <ul id="chatting-list" class="chatting-list"></ul>
               </div>
               <div class="chat-input">
                 <span>

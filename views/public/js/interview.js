@@ -1,52 +1,151 @@
-// 해당 유저의 디바이스에 접근
+// // 해당 유저의 디바이스에 접근
+let myPeerConnection;
+let setRoomId;
 let myStream;
-let myPeerConnetion;
-let muted = false;
-let cameraOff = false;
-
+let companyId;
 const videoSelect = document.getElementById('video-select');
 const closeInterviewBtn = document.getElementById('close-interview');
 const interview = document.getElementById('interview-container');
 const myVideo = document.getElementById('my-video');
-const peerVideo = document.getElementById('peer-video');
 const muteBtn = document.getElementById('mute-on-off');
 const cameraOnOff = document.getElementById('camera-on-off');
 
-// 1. 면접아이콘클릭시 실행 함수
-// 상대방의 id도 같이 보내서 redis에 저장된 socket id로 offer를 보낸다.
-async function startInterView(roomId, reciId) {
-  // 상대에게 인터뷰 신청을 알림
-  const payload = {
-    roomId,
-    reciId,
-  };
-  await getMedia(); // 유저의 카메라 가져오기
-  makeConnection(payload);
-  // makeConnection(roomId);
-  hideScroll(); // 4. html 스크롤 없애기
-  socket.emit('interview-call', payload);
-}
-
-// mediaDevices.enumerateDevices안에 있는 유저의 컴퓨터에 연결된 모든 미디어 장치들 불러오기
-async function getCamera() {
+// 1. 회사가 면접 신청
+const startInterview = (roomId, reciId) => {
   try {
-    const devices = await navigator.mediaDevices.enumerateDevices();
-    // 많은 디바이스 중에 videoinput(카메라디바이스)만 가지고 오기
-    const cameras = devices.filter((device) => device.kind === 'videoinput');
-    const crrCamera = myStream.getVideoTracks()[0];
-    //  카메라select박스에 넣기
-    cameras.forEach((camera) => {
-      const option = document.createElement('option');
-      option.value = camera.deviceId;
-      option.innerText = camera.label;
-      if (crrCamera.label == camera.label) {
-        option.selected = true;
-      }
-      videoSelect.appendChild(option);
-    });
+    closeInterviewBtn.setAttribute('data-set', reciId);
+    setRoomId = roomId;
+    // 먼저 상대방이 로그인을 했는지 않했는지 확인한다.
+    socket.emit('interview-call', roomId, reciId);
   } catch (error) {
     console.log(error);
   }
+};
+
+socket.on('interview-received', async (param) => {
+  if (param.status === false) {
+    alert(param.errorMsg);
+  } else {
+    // 2. 회사유저가 면접화면에 먼저 입장
+    await interViewScreen(param);
+    createConnection();
+    const id = localStorage.getItem('id');
+    param['companyId'] = id;
+    console.log('param[id] = ', param['id']);
+    // 상대방에게 면접신청 알림보내기
+    socket.emit('apply-interview', param);
+  }
+});
+
+// 화상면접신청을 받은 유저는 알림을 받는다.
+
+socket.on('apply-interview', notificationInterview);
+function notificationInterview(params) {
+  setRoomId = params['roomId'];
+  companyId = params['companyId'];
+  const notifiInterview = document.getElementById('notification-interview');
+  const notificationTitle = document.getElementById('notification-title');
+  notificationTitle.innerText = '';
+  notificationTitle.innerText = `${params['title']}님으로 부터 화상면접신청이 들어왔습니다.`;
+  notifiInterview.style.display = 'block';
+}
+
+// 화상면접 신청을 거절하는 버튼
+const refuseBtn = document.getElementById('refuse-interview');
+refuseBtn.addEventListener('click', refuseInterview);
+async function refuseInterview() {
+  const notifiInterview = document.getElementById('notification-interview');
+  await socket.emit('refuse-interview', companyId);
+  notifiInterview.style.display = 'none';
+  companyId = '';
+}
+
+// 인터뷰화면 닫기
+closeInterviewBtn.addEventListener('click', closeInterView);
+
+// 상대가 면접 신청을 거절할 경우 화상채팅방끄고 peerConnection초기화 socket leave하기
+socket.on('refuse-interview', () => {
+  alert('상대방이 거절했습니다.');
+  closeInterView();
+});
+
+// 화면을 갑자기 꺼버리면
+function closeInterView() {
+  const peerVideo = document.getElementById('peer-video');
+  const userId = closeInterviewBtn.getAttribute('data-set');
+  socket.emit('close-notification-interview', userId);
+  interview.style.display = 'none';
+  document.body.style.overflow = 'scroll';
+  const tracks = myStream.getTracks();
+  if (tracks) {
+    tracks.forEach((track) => {
+      track.stop();
+    });
+  }
+  peerVideo.srcObject = null;
+  myVideo.srcObject = null;
+  myPeerConnection = '';
+  socket.emit('leave', setRoomId);
+}
+
+// 화상면접을 신청한 사람이 갑자기 취소하면
+socket.on('close-notification-interview', async () => {
+  const notifiInterview = document.getElementById('notification-interview');
+  notifiInterview.style.display = 'none';
+  alert('상대방과 연결이 끊겼습니다.');
+});
+
+// 화상면접 신청을 수락하는 버튼
+const acceptBtn = document.getElementById('accept-interview');
+acceptBtn.addEventListener('click', acceptInterview);
+
+// 화상면접에 응하면
+async function acceptInterview() {
+  const notifiInterview = document.getElementById('notification-interview');
+  notifiInterview.style.display = 'none';
+  await interViewScreen();
+  createConnection();
+  // 받은 roomId로 join
+  socket.emit('interview-join', setRoomId);
+}
+
+// 면접을 신청받은 유저가 join을 했을 시
+socket.on('welcome', async (roomName) => {
+  // 면접을 신청한 유저는 offer를 만든다.
+  const offer = await myPeerConnection.createOffer();
+  myPeerConnection.setLocalDescription(offer);
+  const payload = {
+    offer,
+    roomId: roomName,
+  };
+  socket.emit('send-offer', payload);
+});
+
+// 면접을 신청한 유저가 보낸 offer를 신청 받은 유저가 받는다.
+socket.on('offer-received', async (params) => {
+  await myPeerConnection.setRemoteDescription(params['offer']);
+  // offer를 setRemoteDescription하면 answer를 만들어 신청한 유저에게 보낸다.
+  const answer = await myPeerConnection.createAnswer();
+  const payload = {
+    roomId: params['roomId'],
+    answer: answer,
+  };
+  // answer가 만들어 지면 우선 localDescription을 한다.
+  myPeerConnection.setLocalDescription(answer);
+
+  socket.emit('send-answer', payload);
+});
+
+// 면접을 신청한 유저는 answer를 받는다.
+socket.on('answer-received', async (params) => {
+  // 면접을 신청한 유저는 받은 answer를 remoteDescription을 한다.
+  await myPeerConnection.setRemoteDescription(params['answer']);
+});
+
+async function interViewScreen() {
+  interview.style.display = 'block';
+  document.body.style.overflow = 'hidden';
+  await getMedia();
 }
 
 // 2. 유저가 가지고 있는 미디어 장치 가지고 오기
@@ -76,189 +175,47 @@ async function getMedia(deviceId) {
   }
 }
 
-async function handleCameraChange() {
-  await getMedia(videoSelect.value);
-  if (myPeerConnetion) {
-    const videoTrack = myStream.getVideoTracks()[0];
-    console.log(myPeerConnetion.getSenders());
-    const videoSender = myPeerConnetion
-      .getSenders()
-      .find((sender) => sender.track.kind === 'video');
-    videoSender.replaceTrack(videoTrack);
+// mediaDevices.enumerateDevices안에 있는 유저의 컴퓨터에 연결된 모든 미디어 장치들 불러오기
+async function getCamera() {
+  try {
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    // 많은 디바이스 중에 videoinput(카메라디바이스)만 가지고 오기
+    const cameras = devices.filter((device) => device.kind === 'videoinput');
+    const crrCamera = myStream.getVideoTracks()[0];
+    //  카메라select박스에 넣기
+    cameras.forEach((camera) => {
+      const option = document.createElement('option');
+      option.value = camera.deviceId;
+      option.innerText = camera.label;
+      if (crrCamera.label == camera.label) {
+        option.selected = true;
+      }
+      videoSelect.appendChild(option);
+    });
+  } catch (error) {
+    console.log(error);
   }
 }
 
-function handleMute() {
-  myStream
-    .getAudioTracks()
-    .forEach((track) => (track.enabled = !track.enabled));
-  if (!muted) {
-    muteBtn.innerText = 'Mute off';
-    muted = true;
-  } else {
-    muteBtn.innerText = 'Mute on';
-    muted = false;
-  }
-}
-function handleCamera() {
-  // console.log(myStream.get);
-  myStream
-    .getVideoTracks()
-    .forEach((track) => (track.enabled = !track.enabled));
-  if (!cameraOff) {
-    cameraOnOff.innerText = 'Camera off';
-    cameraOff = true;
-  } else {
-    cameraOnOff.innerText = 'Camera on';
-    cameraOff = false;
-  }
+socket.on('ice-received', async (param) => {
+  myPeerConnection.addIceCandidate(param[0]);
+});
+
+async function createConnection() {
+  myPeerConnection = new RTCPeerConnection();
+  myPeerConnection.addEventListener('icecandidate', handleIce);
+  myPeerConnection.addEventListener('track', handleAddStream);
+  myStream.getTracks().forEach((track) => {
+    myPeerConnection.addTrack(track, myStream);
+  }); // 영상과 음성 트랙을 myPeerConnection에 추가해줌 -> Peer-to-Peer 연결!!
 }
 
-// 상대가 화상면접 신청을 받음
-async function receivedInterview(param) {
-  console.log(param.socketId);
-  // const peerConnect = myPeerConnetion.get(param.socketId);
-  // console.log('myPeerConnetion = ', myPeerConnetion.signalingState);
-  // console.log('receivedInterview = ', peerConnect.signalingState);
-
-  // 소켓으로 join하기
-  await getMedia(); // 유저의 카메라 가져오기
-  makeConnection(param);
-  await socket.emit('interview-join', param.roomId);
-  hideScroll();
+// icecandidate를 만들어서 보낸다.
+function handleIce(data) {
+  socket.emit('send-ice', data.candidate, setRoomId);
 }
 
-// 상대가 화상면접신청에 응하면
-async function createOffer(roomId) {
-  // 상대방에게 보낼 초대장(offer)을 만든다.
-  const offer = await myPeerConnetion.createOffer();
-  myPeerConnetion.setLocalDescription(offer); // 오퍼를 먼저 자신에게 저장
-  const payload = {
-    roomId,
-    offer,
-  };
-  socket.emit('send-offer', payload);
-}
-let roomNum;
-
-// RTC code
-function makeConnection(payload) {
-  roomNum = payload['roomId'];
-  // 각 브라우저에서 peer to peer연결
-  myPeerConnetion = new RTCPeerConnection({
-    iceServers: [
-      {
-        urls: [
-          'stun:stun.l.google.com:19302',
-          'stun:stun1.l.google.com:19302',
-          'stun:stun2.l.google.com:19302',
-          'stun:stun3.l.google.com:19302',
-          'stun:stun4.l.google.com:19302',
-        ],
-      },
-    ],
-  });
-  // myPeerConnection을 만든 후 icecadidate를 linsten한다.
-  // 카메라와 마이크의 데이터 Stream을 받아 myPeerConnection에 넣는다.
-  // myPeerConnetion.addEventListener('icecandidate', handleIce);
-  myPeerConnetion.onicecandidate = (data) => {
-    handleIce(data);
-  };
-  myStream
-    .getTracks()
-    .forEach((track) => myPeerConnetion.addTrack(track, myStream));
-  // socket.emit('interview-call', payload);
-  myPeerConnetion.addEventListener('track', handleAddStream);
-}
-
-async function handleIce(data) {
-  // console.log('handleIce = ', data);
-  // console.log('roomName = ', roomNum);
-  const payload = {
-    roomId: roomNum,
-    icecandidate: data,
-  };
-
-  await socket.emit('send-ice', payload);
-}
-
-async function handleAddStream(data) {
-  // console.log('myStream = ', myStream);
-  // console.log('peerStream = ', data);
-  // myPeerConnetion.addEventListener('icegatheringstatechange', (event) => {
-  //   switch (myPeerConnetion.iceGatheringState) {
-  //     case 'new':
-  //       /* gathering is either just starting or has been reset */
-  //       break;
-  //     case 'gathering':
-  //       /* gathering has begun or is ongoing */
-  //       break;
-  //     case 'complete':
-  //       /* gathering has ended */
-  //       break;
-  //   }
-  // });
-  console.log('peerConnect', myPeerConnetion);
+function handleAddStream(data) {
+  const peerVideo = document.getElementById('peer-video');
   peerVideo.srcObject = data.streams[0];
-  // peerVideo.srcObject = myStream;
-  peerVideo.play();
-}
-
-// 상대에게서 받은 offer를 setRemoteDescription로 세팅한다.
-async function setRemoteOffer(params) {
-  // 상대에게 받은 offer니까 remote로 저장
-  myPeerConnetion.setRemoteDescription(params.offer);
-  // offer에 응해서 answer를 만들어 준다.
-  const answer = await myPeerConnetion.createAnswer();
-  // answer는 자기가 만들었으므로 setLocalDescription을 해준다.
-  myPeerConnetion.setLocalDescription(answer);
-  const payload = {
-    roomId: params.roomId,
-    answer,
-  };
-  console.log('B peer = ', myPeerConnetion);
-  socket.emit('send-answer', payload);
-}
-
-async function setRemoteAnswer(params) {
-  // 화상면접 신청을 받은 상대가 보낸 answer를 setRemote에 저장
-  myPeerConnetion.setRemoteDescription(params.answer);
-}
-
-muteBtn.addEventListener('click', handleMute);
-cameraOnOff.addEventListener('click', handleCamera);
-videoSelect.addEventListener('input', handleCameraChange);
-
-// socket
-socket.on('inteview-received', (param) => {
-  receivedInterview(param);
-});
-
-socket.on('welcome', createOffer);
-
-// 상대에게서 받은 offer받기
-socket.on('offer-received', setRemoteOffer);
-
-// 화상면접신청을 받은 사람이 보낸 answer받기
-// socket.on('answer-received', (answer, socketId) => {
-//   const peerConnection = myPeerConnetion(socketId);
-// });
-socket.on('answer-received', setRemoteAnswer);
-
-socket.on('ice-received', (ice) => {
-  myPeerConnetion.addIceCandidate(ice);
-});
-
-// 인터뷰창 닫기
-closeInterviewBtn.addEventListener('click', closeInterview);
-
-function closeInterview() {
-  interview.style.display = 'none';
-  document.body.style.overflow = 'scroll';
-}
-
-// 면접화면 및 메인화면 스크롤 없애기
-function hideScroll() {
-  interview.style.display = 'block';
-  document.body.style.overflow = 'hidden';
 }
