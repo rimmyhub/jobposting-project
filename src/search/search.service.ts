@@ -7,8 +7,6 @@ import { Repository } from 'typeorm';
 import { Company } from 'src/domain/company.entity';
 // 채용공고 데이터 가져오기 위한 import
 import { Jobposting } from 'src/domain/jobposting.entity';
-// Cron
-import { Cron } from '@nestjs/schedule';
 
 const configService = new ConfigService();
 
@@ -42,12 +40,6 @@ export class SearchService {
         console.log('Elasticsearch cluster is up!');
       }
     });
-  }
-
-  // 새로운 데이터가 생길경우 스케줄러를 통해서 데이터를 저장할 수 있도록 짜보자
-  @Cron('*/30 * * * * *')
-  async newDataSave() {
-    console.log('hi');
   }
 
   // 인덱스 생성
@@ -238,7 +230,6 @@ export class SearchService {
     try {
       const indexName = 'winner_test';
       const data = await this.searchIndexFunction(indexName, keyword);
-      // console.log(data);
 
       if (data.length === 0) {
         throw new HttpException(`데이터가 없습니다.`, HttpStatus.BAD_REQUEST);
@@ -253,8 +244,6 @@ export class SearchService {
 
   // 데이터 검색함수
   async searchIndexFunction(indexName: string, keyword: string) {
-    console.log('keyword is : ', keyword);
-    console.log('indexName is : ', indexName);
     try {
       const { body } = await this.client.search({
         index: indexName,

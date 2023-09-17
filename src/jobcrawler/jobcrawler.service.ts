@@ -10,15 +10,30 @@ import axios from 'axios';
 import { v5 as uuidv5, NIL as NIL_UUID } from 'uuid';
 import { timeEnd } from 'console';
 import { Cron } from '@nestjs/schedule';
+import { Client } from '@elastic/elasticsearch';
+import { ConfigService } from '@nestjs/config';
+
+const configService = new ConfigService();
 
 @Injectable()
 export class JobcrawlerService {
+  private readonly client: Client;
+
   constructor(
     @InjectRepository(Jobposting)
     private readonly jobpostingRepository: Repository<Jobposting>,
     @InjectRepository(Company)
     private readonly companyRepository: Repository<Company>,
-  ) {}
+  ) {
+    this.client = new Client({
+      node: configService.get('AWS_OPEN_SEARCH_ENDPOINT'),
+      auth: {
+        username: configService.get('AWS_OPEN_SEARCH_USERNAME'),
+        password: configService.get('AWS_OPEN_SEARCH_PASSWORD'),
+      },
+      requestTimeout: 100000,
+    });
+  }
 
   private async getAxiosData(url: string): Promise<string> {
     try {
@@ -236,6 +251,13 @@ export class JobcrawlerService {
         });
         if (!isExist) {
           await this.companyRepository.insert(companyEntity);
+
+          // openSearch DB에 데이터 저장
+          const indexName = 'winner_test';
+          await this.client.index({
+            index: indexName,
+            body: companyEntity,
+          });
         }
       }
     }
@@ -256,6 +278,13 @@ export class JobcrawlerService {
           dueDate: job.dueDate,
         });
         this.jobpostingRepository.insert(jobEntity);
+
+        // openSearch DB에 데이터 저장
+        const indexName = 'winner_test';
+        await this.client.index({
+          index: indexName,
+          body: jobEntity,
+        });
       }
     }
 
