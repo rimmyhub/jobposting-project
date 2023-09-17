@@ -20,7 +20,7 @@ import { ChatGateway } from './chat/chat.geteway';
 import { UploadModule } from './upload/upload.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { JobcrawlerModule } from './jobcrawler/jobcrawler.module';
-import { JobPostingSearchModule } from './search/search.module';
+import { SearchModule } from './search/search.module';
 import { MailModule } from './mail/mail.module';
 import { ChatContentModule } from './chat-content/chat-content.module';
 import { ChatgptModule } from './chatgpt/chatgpt.module';
@@ -50,7 +50,7 @@ import { SwaggerModule } from '@nestjs/swagger';
     ChatModule,
     MailModule,
     JobcrawlerModule,
-    JobPostingSearchModule,
+    SearchModule,
     ChatContentModule,
     ChatgptModule,
     SwaggerModule,

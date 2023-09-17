@@ -57,6 +57,7 @@ export class CompanyController {
   @ApiOperation({ summary: '회사 전체조회 API', description: '회사 전체조회' })
   @ApiCreatedResponse({ description: '회사 전체조회' })
   findAllCompany(@Query('page') page: string) {
+    console.log('company page is : ', page);
     return this.companyService.findAllCompany({ page: Number(page) });
   }
 

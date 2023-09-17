@@ -171,12 +171,12 @@ function companiesAppendTemp(data) {
     })
     .join('');
 
-  console.log(data);
   companiesBox.insertAdjacentHTML('beforeend', temp);
 }
 
 async function getCompanies() {
   try {
+    // const companyData = await fetch(`/api/companies?page=1`);
     const companyData = await fetch(`/api/companies?page=1`);
     if (!companyData.ok) {
       console.error(error);

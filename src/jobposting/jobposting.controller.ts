@@ -118,6 +118,7 @@ export class JobpostingController {
   })
   @ApiCreatedResponse({ description: '채용공고 전체조회' })
   findAllJobposting(@Query('page') page: string) {
+    console.log('jobposting page is : ', page);
     return this.jobpostingService.findAllJobposting({ page: Number(page) });
   }
 
