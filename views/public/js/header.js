@@ -137,7 +137,7 @@ const ejs = (window.onload = function () {
     // 방 이름을 어떻게 할까?
     // 1. DB에 나와 상대방의 ID와 방의 ID를 임시로 만들어서 저장한다.
     // 내 아이디
-    const id = window.localStorage.getItem('id');
+
     let userEmail;
     let getUserId;
     // 2.
@@ -180,9 +180,12 @@ const ejs = (window.onload = function () {
   };
 
   async function deleteCookie() {
+    const id = window.localStorage.getItem('id');
+    console.log('id', id);
     let isSuccess;
     await fetch('/api/auth/logout', {
       method: 'DELETE',
+      body: id,
     })
       .then((el) => {
         isSuccess = el.ok;
@@ -391,6 +394,7 @@ async function chattingBox(getRoomId, email, recipientId, $event) {
   chatContainer.style.display = 'flex';
   chattingContainer.scrollTop = chattingContainer.scrollHeight;
   cameraIcon.onclick = function () {
+    console.log('startInterview = ', roomId, reciId);
     startInterview(roomId, reciId);
   };
 }

@@ -3,6 +3,8 @@ let myPeerConnection;
 let setRoomId;
 let myStream;
 let companyId;
+let muted = false;
+let cameraOff = false;
 const videoSelect = document.getElementById('video-select');
 const closeInterviewBtn = document.getElementById('close-interview');
 const interview = document.getElementById('interview-container');
@@ -31,7 +33,6 @@ socket.on('interview-received', async (param) => {
     createConnection();
     const id = localStorage.getItem('id');
     param['companyId'] = id;
-    console.log('param[id] = ', param['id']);
     // 상대방에게 면접신청 알림보내기
     socket.emit('apply-interview', param);
   }
@@ -85,14 +86,17 @@ function closeInterView() {
   peerVideo.srcObject = null;
   myVideo.srcObject = null;
   myPeerConnection = '';
+  videoSelect.options.length = 0;
   socket.emit('leave', setRoomId);
 }
 
 // 화상면접을 신청한 사람이 갑자기 취소하면
 socket.on('close-notification-interview', async () => {
   const notifiInterview = document.getElementById('notification-interview');
-  notifiInterview.style.display = 'none';
-  alert('상대방과 연결이 끊겼습니다.');
+  if (notifiInterview.style.display === 'block') {
+    alert('상대방과 연결이 끊겼습니다.');
+    notifiInterview.style.display = 'none';
+  }
 });
 
 // 화상면접 신청을 수락하는 버튼
@@ -164,6 +168,7 @@ async function getMedia(deviceId) {
     myStream = await navigator.mediaDevices.getUserMedia(
       deviceId ? cameraConstraints : initialConstrains,
     );
+    console.log(deviceId);
     if (!deviceId) {
       // 4. 카메라 정보가져오기
       await getCamera();
@@ -197,6 +202,40 @@ async function getCamera() {
   }
 }
 
+// 뮤트 on off
+function handleMuteClick() {
+  console.log('뮤트');
+  myStream
+    .getAudioTracks()
+    .forEach((track) => (track.enabled = !track.enabled));
+  if (!muted) {
+    muteBtn.innerText = 'Mute on';
+    muted = true;
+  } else {
+    muteBtn.innerText = 'Mute off';
+    muted = false;
+  }
+}
+
+// 카메라 바꾸기
+function handleCameraClick() {
+  // getVideoTracks의 enabled에 true false값을 넣어준다.
+  myStream
+    .getVideoTracks()
+    .forEach((track) => (track.enabled = !track.enabled));
+  if (cameraOff) {
+    cameraOnOff.innerText = 'Camera off';
+    cameraOff = false;
+  } else {
+    cameraOnOff.innerText = 'Camera on';
+    cameraOff = true;
+  }
+}
+// //
+// async function handleCameraChange(data) {
+//   await getMedia(camerasSelect.value);
+// }
+
 socket.on('ice-received', async (param) => {
   myPeerConnection.addIceCandidate(param[0]);
 });
@@ -219,3 +258,7 @@ function handleAddStream(data) {
   const peerVideo = document.getElementById('peer-video');
   peerVideo.srcObject = data.streams[0];
 }
+
+muteBtn.addEventListener('click', handleMuteClick);
+cameraOnOff.addEventListener('click', handleCameraClick);
+videoSelect.addEventListener('input', handleCameraChange);
