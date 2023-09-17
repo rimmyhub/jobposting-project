@@ -45,11 +45,11 @@ async function searchCompany() {
     // 회사 데이터 화면
     if (data[i]._source.address) {
       companiesBar.innerHTML += `
-                                  <div
-                                  class="card jobposting-card"
-                                  id="companies-card"
-                                  onclick="goToCompanySubpage('${data[i]._source.id}')"
-                                  style="width: 20rem; cursor: pointer;"
+                                <div
+                                class="card jobposting-card"
+                                id="companies-card"
+                                onclick="goToCompanySubpage('${data[i]._source.id}')"
+                                style="width: 20rem; cursor: pointer;"
                                 >
                                   <img
                                     class="jobposting-img"
@@ -69,7 +69,7 @@ async function searchCompany() {
                                     <p>${data[i]._source.employees}</p>
                                   </div>
                                 </div>
-                                  `;
+                                `;
     }
     // 채용공고 데이터 화면
     if (!data[i]._source.address) {
@@ -178,15 +178,27 @@ function searchOptionJP() {
     }
     jobPostingsBar.innerHTML = '';
     resJP.forEach((JP) => {
-      jobPostingsBar.innerHTML += `<div class="jobposting-card" id="jobposting-card" onclick="goToJobpostingSubpage(${JP.id})">
-                                    <div>
-                                        <div class="jobposting-title" id="jobposting-title">
+      jobPostingsBar.innerHTML += `
+                                  <div
+                                  class="card jobposting-card"
+                                  id="jobposting-card"
+                                  onclick="goToJobpostingSubpage(${JP.id})"
+                                  style="width: 20rem; cursor: pointer;"
+                                  >
+                                    <div class="card-body">
+                                      <h4 class="jobposting-title" id="jobposting-title">
                                         ${JP.title}
-                                        </div>
-                                        <div class="jobposting-job" id="jobposting-job">${JP.dueDate}</div>
-                                        <p>${JP.workArea}</p>
+                                      </h4>
+                                      <h6
+                                        class="card-subtitle mb-2 text-body-secondary jobposting-job"
+                                        id="jobposting-job"
+                                      >
+                                        마감일 : ${JP.dueDate}
+                                      </h6>
+                                      <p class="card-text">${JP.workArea}</p>
                                     </div>
-                                    </div>`;
+                                  </div>
+                                  `;
     });
   });
   // 지역
@@ -208,15 +220,27 @@ function searchOptionJP() {
     }
     jobPostingsBar.innerHTML = '';
     resJP.forEach((JP) => {
-      jobPostingsBar.innerHTML += `<div class="jobposting-card" id="jobposting-card" onclick="goToJobpostingSubpage(${JP.id})">
-                                    <div>
-                                        <div class="jobposting-title" id="jobposting-title">
+      jobPostingsBar.innerHTML += `
+                                  <div
+                                  class="card jobposting-card"
+                                  id="jobposting-card"
+                                  onclick="goToJobpostingSubpage(${JP.id})"
+                                  style="width: 20rem; cursor: pointer;"
+                                  >
+                                    <div class="card-body">
+                                      <h4 class="jobposting-title" id="jobposting-title">
                                         ${JP.title}
-                                        </div>
-                                        <div class="jobposting-job" id="jobposting-job">${JP.dueDate}</div>
-                                        <p>${JP.workArea}</p>
+                                      </h4>
+                                      <h6
+                                        class="card-subtitle mb-2 text-body-secondary jobposting-job"
+                                        id="jobposting-job"
+                                      >
+                                        마감일 : ${JP.dueDate}
+                                      </h6>
+                                      <p class="card-text">${JP.workArea}</p>
                                     </div>
-                                    </div>`;
+                                  </div>
+                                  `;
     });
   });
   // 경력
@@ -238,15 +262,27 @@ function searchOptionJP() {
     }
     jobPostingsBar.innerHTML = '';
     resJP.forEach((JP) => {
-      jobPostingsBar.innerHTML += `<div class="jobposting-card" id="jobposting-card" onclick="goToJobpostingSubpage(${JP.id})">
-                                    <div>
-                                        <div class="jobposting-title" id="jobposting-title">
+      jobPostingsBar.innerHTML += `
+                                  <div
+                                  class="card jobposting-card"
+                                  id="jobposting-card"
+                                  onclick="goToJobpostingSubpage(${JP.id})"
+                                  style="width: 20rem; cursor: pointer;"
+                                  >
+                                    <div class="card-body">
+                                      <h4 class="jobposting-title" id="jobposting-title">
                                         ${JP.title}
-                                        </div>
-                                        <div class="jobposting-job" id="jobposting-job">${JP.dueDate}</div>
-                                        <p>${JP.workArea}</p>
+                                      </h4>
+                                      <h6
+                                        class="card-subtitle mb-2 text-body-secondary jobposting-job"
+                                        id="jobposting-job"
+                                      >
+                                        마감일 : ${JP.dueDate}
+                                      </h6>
+                                      <p class="card-text">${JP.workArea}</p>
                                     </div>
-                                    </div>`;
+                                  </div>
+                                  `;
     });
   });
 }
@@ -271,23 +307,32 @@ function searchOptionCP() {
     }
     companiesBar.innerHTML = '';
     resCP.forEach((CP) => {
-      companiesBar.innerHTML += `<div class="jobposting-card" id="companies-card" onclick="goToCompanySubpage('${CP.id}')">
-                                <img
+      companiesBar.innerHTML += `
+                                <div
+                                class="card jobposting-card"
+                                id="companies-card"
+                                onclick="goToCompanySubpage('${CP.id}')"
+                                style="width: 20rem; cursor: pointer;"
+                                >
+                                  <img
                                     class="jobposting-img"
                                     id="companies-img"
                                     src="${CP.image}"
                                     alt=""
                                     srcset=""
                                     onerror="this.src='/img/company.jpg';"
-                                />
-                                <div>
-                                    <div class="jobposting-title" id="companies-title">
-                                    ${CP.title}
+                                  />
+                                  <div class="card-body">
+                                    <h4 class="jobposting-title" id="companies-title">
+                                      ${CP.title}
+                                    </h4>
+                                    <div class="jobposting-job text-body-secondary mb-2" id="companies-job">
+                                      ${CP.business}
                                     </div>
-                                    <div class="jobposting-job" id="companies-job">${CP.business}</div>
                                     <p>${CP.employees}</p>
+                                  </div>
                                 </div>
-                                </div>`;
+                                `;
     });
   });
   // 지역
@@ -308,23 +353,32 @@ function searchOptionCP() {
     }
     companiesBar.innerHTML = '';
     resCP.forEach((CP) => {
-      companiesBar.innerHTML += `<div class="jobposting-card" id="companies-card" onclick="goToCompanySubpage('${CP.id}')">
-                                <img
+      companiesBar.innerHTML += `
+                                <div
+                                class="card jobposting-card"
+                                id="companies-card"
+                                onclick="goToCompanySubpage('${CP.id}')"
+                                style="width: 20rem; cursor: pointer;"
+                                >
+                                  <img
                                     class="jobposting-img"
                                     id="companies-img"
                                     src="${CP.image}"
                                     alt=""
                                     srcset=""
                                     onerror="this.src='/img/company.jpg';"
-                                />
-                                <div>
-                                    <div class="jobposting-title" id="companies-title">
-                                    ${CP.title}
+                                  />
+                                  <div class="card-body">
+                                    <h4 class="jobposting-title" id="companies-title">
+                                      ${CP.title}
+                                    </h4>
+                                    <div class="jobposting-job text-body-secondary mb-2" id="companies-job">
+                                      ${CP.business}
                                     </div>
-                                    <div class="jobposting-job" id="companies-job">${CP.business}</div>
                                     <p>${CP.employees}</p>
+                                  </div>
                                 </div>
-                                </div>`;
+                                `;
     });
   });
 }
