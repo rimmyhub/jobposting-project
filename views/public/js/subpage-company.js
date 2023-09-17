@@ -1,3 +1,17 @@
+let btnContainer;
+document.addEventListener('DOMContentLoaded', (e) => {
+  btnContainer = document.getElementById('btn-container');
+  e.preventDefault();
+  hideBtn();
+});
+// 메세지보내기버튼 숨기기
+function hideBtn() {
+  const type = window.localStorage.getItem('type');
+  if (type === 'company' || !type) {
+    btnContainer.style.display = 'none';
+  }
+}
+
 // 회사 정보를 가져오는 함수
 async function fetchCompanyData(companyId) {
   try {
