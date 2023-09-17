@@ -12,7 +12,7 @@ let offer;
 const myApplyList = document.getElementById('my-apply-list');
 const myProfile = document.getElementById('profile-image');
 
-const socket = io('localhost:3030');
+const socket = io('https://w1nner.site:8080');
 const ejs = (window.onload = function () {
   const params = new URLSearchParams(window.location.search);
   const userId = params.get('id');
