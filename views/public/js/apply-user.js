@@ -5,7 +5,7 @@ async function getApplyUser() {
 
   const response = await fetch(`/api/applications/applyuser/${jobpostingId}`);
   const data = await response.json();
-
+  // console.log("test")
   console.log(data);
   const temp = data
     .map((data) => {
