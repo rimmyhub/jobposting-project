@@ -10,15 +10,30 @@ import axios from 'axios';
 import { v5 as uuidv5, NIL as NIL_UUID } from 'uuid';
 import { timeEnd } from 'console';
 import { Cron } from '@nestjs/schedule';
+import { Client } from '@elastic/elasticsearch';
+import { ConfigService } from '@nestjs/config';
+
+const configService = new ConfigService();
 
 @Injectable()
 export class JobcrawlerService {
+  private readonly client: Client;
+
   constructor(
     @InjectRepository(Jobposting)
     private readonly jobpostingRepository: Repository<Jobposting>,
     @InjectRepository(Company)
     private readonly companyRepository: Repository<Company>,
-  ) {}
+  ) {
+    this.client = new Client({
+      node: configService.get('AWS_OPEN_SEARCH_ENDPOINT'),
+      auth: {
+        username: configService.get('AWS_OPEN_SEARCH_USERNAME'),
+        password: configService.get('AWS_OPEN_SEARCH_PASSWORD'),
+      },
+      requestTimeout: 100000,
+    });
+  }
 
   private async getAxiosData(url: string): Promise<string> {
     try {
@@ -175,7 +190,7 @@ export class JobcrawlerService {
     return jobs;
   }
 
-  @Cron('0 0 * * *') // 매일 자정에 실행
+  @Cron('0 3 * * *') // 매일 새벽 3시에 실행
   async incruitCrawling() {
     console.time('코드 실행시간');
     // 코드 실행시간을 구해줌
@@ -208,7 +223,7 @@ export class JobcrawlerService {
         jobInfo.push(jobs);
         count++;
 
-        await this.delay(1000); // 각페이지 크롤링 후 1초 대기
+        await this.delay(10000); // 각페이지 크롤링 후 10초 대기
       }
     }
     // 코드 실행시간을 측정
@@ -236,6 +251,13 @@ export class JobcrawlerService {
         });
         if (!isExist) {
           await this.companyRepository.insert(companyEntity);
+
+          // openSearch DB에 데이터 저장
+          const indexName = 'winner_test';
+          await this.client.index({
+            index: indexName,
+            body: companyEntity,
+          });
         }
       }
     }
@@ -256,6 +278,13 @@ export class JobcrawlerService {
           dueDate: job.dueDate,
         });
         this.jobpostingRepository.insert(jobEntity);
+
+        // openSearch DB에 데이터 저장
+        const indexName = 'winner_test';
+        await this.client.index({
+          index: indexName,
+          body: jobEntity,
+        });
       }
     }
 

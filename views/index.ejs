@@ -25,6 +25,10 @@
 
     <link rel="stylesheet" href="/css/index.css" />
     <link rel="stylesheet" href="/css/container.css" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="upgrade-insecure-requests"
+    />
 
     <title>WINNER</title>
     <script src="/js/index.js" defer></script>
@@ -104,8 +108,13 @@
           <i
             class="fa-solid fa-magnifying-glass search-font"
             id="searchBtn"
+            onclick="searchCompany()"
           ></i>
-          <input class="search-input" type="text" />
+          <input
+            class="search-input"
+            type="text"
+            onkeyPress="if(window.event.keyCode==13){searchCompany()}"
+          />
         </div>
       </div>
       <div class="jobposting-box" id="jobposting-box">

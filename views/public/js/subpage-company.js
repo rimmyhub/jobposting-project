@@ -92,8 +92,6 @@ async function fetchJobPostingData(companyId) {
     if (response.ok) {
       const jobPostingData = await response.json();
 
-      console.log(response);
-
       // 채용공고 정보 업데이트
       const jobTitleElement = document.querySelector('.job-title');
       const jobCareerElement = document.querySelector('.job-career');

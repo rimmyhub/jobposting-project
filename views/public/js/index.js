@@ -136,6 +136,12 @@ const companiesBox = document.querySelector('#companies-list');
 function companiesAppendTemp(data) {
   const temp = data
     .map((company) => {
+      let companyImage;
+      if (company.image !== 'http:undefined') {
+        companyImage = company.image;
+      } else if (company.image === 'http:undefined') {
+        companyImage = '/img/company.jpg';
+      }
       return `
             <div
               class="card jobposting-card"
@@ -146,7 +152,7 @@ function companiesAppendTemp(data) {
               <img
                 class="jobposting-img"
                 id="companies-img"
-                src="${company.image}"
+                src="${companyImage}"
                 alt=""
                 srcset=""
                 onerror="this.src='/img/company.jpg';"
@@ -165,12 +171,12 @@ function companiesAppendTemp(data) {
     })
     .join('');
 
-  console.log(data);
   companiesBox.insertAdjacentHTML('beforeend', temp);
 }
 
 async function getCompanies() {
   try {
+    // const companyData = await fetch(`/api/companies?page=1`);
     const companyData = await fetch(`/api/companies?page=1`);
     if (!companyData.ok) {
       console.error(error);

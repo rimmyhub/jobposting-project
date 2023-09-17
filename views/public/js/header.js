@@ -8,6 +8,7 @@ let chattingList;
 let chattingContainer;
 let alarmIcon;
 let msgCard;
+let offer;
 const myApplyList = document.getElementById('my-apply-list');
 const myProfile = document.getElementById('profile-image');
 const socket = io('localhost:8080');
@@ -32,10 +33,14 @@ const ejs = (window.onload = function () {
   chatContainer = document.getElementById('chat-container');
   messageList = document.getElementById('message-list');
   chatContent = document.getElementById('chat-content');
-
+  const type = window.localStorage.getItem('type');
   const id = window.localStorage.getItem('id');
   if (id) {
-    socket.emit('saveClientId', id);
+    const payload = {
+      type,
+      userId: id,
+    };
+    socket.emit('saveClientId', payload);
   }
 
   if (logout) {
@@ -132,7 +137,7 @@ const ejs = (window.onload = function () {
     // 방 이름을 어떻게 할까?
     // 1. DB에 나와 상대방의 ID와 방의 ID를 임시로 만들어서 저장한다.
     // 내 아이디
-    const id = window.localStorage.getItem('id');
+
     let userEmail;
     let getUserId;
     // 2.
@@ -166,7 +171,6 @@ const ejs = (window.onload = function () {
         return res.json();
       }) //json으로 받을 것을 명시
       .then((res) => {
-        console.log('res = ', res);
         userEmail = res.email;
       })
       .catch((e) => {
@@ -176,9 +180,12 @@ const ejs = (window.onload = function () {
   };
 
   async function deleteCookie() {
+    const id = window.localStorage.getItem('id');
+    console.log('id', id);
     let isSuccess;
     await fetch('/api/auth/logout', {
       method: 'DELETE',
+      body: id,
     })
       .then((el) => {
         isSuccess = el.ok;
@@ -214,6 +221,7 @@ const ejs = (window.onload = function () {
   isLogin();
   async function isLogin() {
     const id = window.localStorage.getItem('id');
+
     if (id) {
       // 새로운 채팅이 있는지 확인하기
       await getChatRooms();
@@ -257,17 +265,16 @@ async function appendMsgList(datas, type) {
     if (type === 'company') {
       datas.forEach((el) => {
         const li = document.createElement('div');
-        // console.log(el.user);
-        li.innerHTML = `<div id="message-card-${el.id}" class="message-card" onclick="chattingBox('${el.id}', '${el.user.email}', '${el.userId}')">
+        li.innerHTML = `<div id="message-card-${el.id}" class="message-card" onclick="chattingBox('${el.id}', '${el.user.name}', '${el.userId}')">
                           <div class="user-profile">
                             <img src="/img/userImg.jpg" alt="" srcset="" />
                           </div>
                           <div class="message-info">
-                            <div class="user-name">${el.user.email}</div>
+                            <div class="user-name">${el.user.name}</div>
                             <div>메세지 확인</div>
                           </div>
                           <i
-                            id="${el.userId}"
+                            id="${el.id}"
                             class="fa-solid fa-exclamation new-msg-alram-icon"
                           ></i>
                         </div>`;
@@ -275,18 +282,17 @@ async function appendMsgList(datas, type) {
       });
     } else {
       datas.forEach((el) => {
-        console.log(el.companyId);
         const li = document.createElement('div');
-        li.innerHTML = `<div id="message-card-${el.id}" class="message-card" onclick="chattingBox('${el.id}', '${el.company.email}', '${el.companyId}')">
+        li.innerHTML = `<div id="message-card-${el.id}" class="message-card" onclick="chattingBox('${el.id}', '${el.company.title}', '${el.companyId}')">
                           <div class="user-profile">
                             <img src="/img/userImg.jpg" alt="" srcset="" />
                           </div>
                           <div class="message-info">
-                            <div class="user-name">${el.company.email}</div>
+                            <div class="user-name">${el.company.title}</div>
                             <div>메세지 확인</div>
                           </div>
                           <i
-                            id="${el.companyId}"
+                            id="${el.id}"
                             class="fa-solid fa-exclamation new-msg-alram-icon"
                           ></i>
                         </div>`;
@@ -296,26 +302,23 @@ async function appendMsgList(datas, type) {
   }
 }
 
-socket.on('msg-notification', async (userId) => {
-  console.log('msg-notification = ', userId);
-  const exclamationIcon = document.getElementById(`${userId}`);
-  // console.log('exclamationIcon = ', exclamationIcon);
+socket.on('msg-notification', async () => {
+  const exclamationIcon = document.getElementById('exclamation-icon');
   await checkNewMsg();
-  newMsgIcon();
   exclamationIcon.style.opacity = 1;
 });
 
 // 채팅리스트안의 새메시지알람표시하기
-function newMsgIcon() {
-  if (newMsgs) {
-    newMsgs.forEach((el) => {
-      msgCard = document.getElementById(`exclamation-icon-${el.chat_id}`);
+function newMsgIcon(params) {
+  // console.log('newMsgs = ', params);
+  if (params) {
+    params.forEach((el) => {
+      console.log(el);
+      msgCard = document.getElementById(`${el.chat_id}`);
       msgCard.style.opacity = 1;
     });
   }
 }
-
-function removeExclamation() {}
 
 // 메세지읽음처리하기
 async function readMsg(chatId) {
@@ -345,6 +348,10 @@ let roomId;
 let reciId;
 // 채팅창 열기
 async function chattingBox(getRoomId, email, recipientId, $event) {
+  const cameraIcon = Object.assign(document.createElement('i'), {
+    id: 'offer-interview',
+  });
+  const type = localStorage.getItem('type');
   const messageCard = document.getElementById(
     `${event.target.parentElement.parentElement.id}`,
   );
@@ -355,25 +362,41 @@ async function chattingBox(getRoomId, email, recipientId, $event) {
   await readMsg(getRoomId);
   const userName = document.createElement('h6');
   userName.innerText = `${email} 님`;
-  chatBoxTitle.append(userName);
+
+  const iconBox = document.createElement('div');
+  iconBox.className = `chat-icon-box`;
 
   // icon변수에 i태그의 요소와  id를 추가
-  const icon = Object.assign(document.createElement('i'), {
+  const closeIcon = Object.assign(document.createElement('i'), {
     id: 'close-chatting',
   });
+  // closeIcon에 className을 추가
+  closeIcon.className = 'fa-solid fa-xmark close-message';
+  closeIcon.onclick = leaveRoom;
 
-  // icon에 className을 추가
-  icon.className = 'fa-solid fa-xmark close-message';
-  icon.onclick = leaveRoom;
-
-  chatBoxTitle.append(icon);
+  iconBox.append(closeIcon);
+  if (type === 'company') {
+    iconBox.prepend(cameraIcon);
+    cameraIcon.className = 'fa-solid fa-video offer-interview';
+    // cameraIcon.onclick = startInterview(getRoomId, recipientId);
+    iconBox.style.justifyContent = 'space-between';
+  } else {
+    iconBox.style.justifyContent = 'end';
+  }
+  chatBoxTitle.prepend(userName);
+  chatBoxTitle.append(iconBox);
   await getChatContents(getRoomId);
+
   // 소켓룸 조인하기
   socket.emit('join', getRoomId);
 
   roomId = getRoomId;
   chatContainer.style.display = 'flex';
   chattingContainer.scrollTop = chattingContainer.scrollHeight;
+  cameraIcon.onclick = function () {
+    console.log('startInterview = ', roomId, reciId);
+    startInterview(roomId, reciId);
+  };
 }
 
 const handleNewMsg = (senderId, message) => {
@@ -420,6 +443,7 @@ async function checkNewMsg() {
   }
   // 유저가 로그인 했을 때 새메세지가 왔음을 알 수 있게 한다.
   if (newMsgs.length && alarmIcon) alarmIcon.style.opacity = 1;
+  newMsgIcon(newMsgs);
 }
 
 // 채팅내용가져오기

@@ -2,10 +2,8 @@ import {
   Injectable,
   HttpException,
   HttpStatus,
-  ConsoleLogger,
   UnauthorizedException,
 } from '@nestjs/common';
-import { LoginDto } from './dto/login.dto';
 import { UserService } from '../user/user.service';
 import { CompanyService } from '../company/company.service';
 import { GenerateToken } from './jwt/generate.token';

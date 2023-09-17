@@ -1,4 +1,5 @@
 import {
+  Inject,
   Controller,
   Post,
   Req,
@@ -11,16 +12,19 @@ import {
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { AuthService } from './auth.service';
 import { Response } from 'express';
 import { LocalGuard } from './login.strategies/auth.strategy';
 import { GenerateToken } from './jwt/generate.token';
 import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Cache } from 'cache-manager';
 
 @Controller('api/auth')
 @ApiTags('로그인 인증 API')
 export class AuthController {
   constructor(
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private readonly authService: AuthService,
     private generateToken: GenerateToken,
   ) {}
@@ -126,7 +130,9 @@ export class AuthController {
   })
   @ApiCreatedResponse({ description: '로그아웃' })
   async logout(@Request() req, @Res({ passthrough: true }) res: Response) {
-    console.log(' 로그아웃authorization = ', req.cookies);
+    console.log(' 로그아웃authorization = ', req.body);
+    // 로그아웃할 때 cachemanager의 해당유저정보도 삭제하기
+    // await this.cacheManager.delete(`${}`);
     // 먼저 로그아웃이 되어있는지 확인하기
     const authorization = await req.cookies['authorization'];
     if (!authorization) {

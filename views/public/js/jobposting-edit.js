@@ -12,8 +12,6 @@ const worktypeInfo = document.querySelector('#modify-worktype-info');
 const duedateInfo = document.querySelector('#modify-duedate-info');
 const contentInfo = document.querySelector('#modify-content-info');
 
-// 수정
-
 // 채용공고 정보 보여주기
 async function getJobposting() {
   try {
