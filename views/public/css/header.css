@@ -20,6 +20,12 @@ body {
   background: rgba(33, 122, 244, 0.1); /*스크롤바 뒷 배경 색상*/
 }
 
+.message-box {
+  min-height: 500px;
+  max-height: 500px;
+  overflow-y: scroll;
+}
+
 .container-header {
   border-bottom: 0.5px solid rgba(128, 128, 128, 0.92);
   color: black;
