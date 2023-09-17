@@ -264,7 +264,7 @@ export class SearchService {
             },
           },
         },
-        size: 10,
+        size: 50,
       });
       console.log('검색 결과:', body);
       return body.hits.hits;
