@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', (e) => {
   e.preventDefault;
-  searchInit();
   selectInit();
 });
 
@@ -18,92 +17,134 @@ const subOptionsDiv = document.getElementById('subOptions'); // 직군 세부옵
 const jobPostingsBar = document.querySelector('#jobposting-list'); // 채용공고 태그
 const companiesBar = document.querySelector('#companies-list'); // 회사 태그
 
-// 검색 함수모음
-function searchInit() {
-  enter();
-  searchCompany();
-  searchJobposting();
-}
-// 엔터이벤트리스너
-function enter() {
-  searchBar.addEventListener('keyup', (e) => {
-    if (e.key === 'Enter') {
-      searchBtn.click();
-    }
+// openSearch 검색결과
+async function searchCompany() {
+  // 검색어
+  const keyword = searchBar.value;
+  // 키워드 검색
+  const searchData = await fetch(`/api/search/data`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ keyword }),
   });
-}
-// 회사검색
-function searchCompany() {
-  // 이벤트 리스너
-  searchBtn.addEventListener('click', async () => {
-    // 검색어
-    const keyword = searchBar.value;
+  // 회사검색데이터 가공
+  const data = await searchData.json();
 
-    // 회사 검색
-    const searchCP = await fetch(`/api/companies/search`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ keyword }),
-    });
-    // 회사검색데이터 가공
-    const resCP = await searchCP.json();
-    if (resCP.message) {
-      return (companiesBar.innerHTML = `<ul>"${keyword}"에 해당하는 ${resCP.message}</ul>`);
-    }
-    companiesBar.innerHTML = '';
-    resCP.forEach((CP) => {
-      companiesBar.innerHTML += `<div class="jobposting-card" id="companies-card" onclick="goToCompanySubpage('${CP.id}')">
-                                <img
+  if (data.message) {
+    return (
+      (companiesBar.innerHTML = `<ul>"${keyword}"에 해당하는 검색결과가 존재하지 않습니다.</ul>`),
+      (jobPostingsBar.innerHTML = `<ul>"${keyword}"에 해당하는 검색결과가 존재하지 않습니다.</ul>`)
+    );
+  }
+
+  companiesBar.innerHTML = '';
+  jobPostingsBar.innerHTML = '';
+
+  // 데이터 순환
+  for (i = 0; i < data.length; i++) {
+    // 회사 데이터 화면
+    if (data[i]._source.address) {
+      companiesBar.innerHTML += `
+                                  <div
+                                  class="card jobposting-card"
+                                  id="companies-card"
+                                  onclick="goToCompanySubpage('${data[i]._source.id}')"
+                                  style="width: 20rem; cursor: pointer;"
+                                >
+                                  <img
                                     class="jobposting-img"
                                     id="companies-img"
-                                    src="${CP.image}"
+                                    src="${data[i]._source.image}"
                                     alt=""
                                     srcset=""
                                     onerror="this.src='/img/company.jpg';"
-                                />
-                                <div>
-                                    <div class="jobposting-title" id="companies-title">
-                                    ${CP.title}
+                                  />
+                                  <div class="card-body">
+                                    <h4 class="jobposting-title" id="companies-title">
+                                      ${data[i]._source.title}
+                                    </h4>
+                                    <div class="jobposting-job text-body-secondary mb-2" id="companies-job">
+                                      ${data[i]._source.business}
                                     </div>
-                                    <div class="jobposting-job" id="companies-job">${CP.business}</div>
-                                    <p>${CP.employees}</p>
+                                    <p>${data[i]._source.employees}</p>
+                                  </div>
                                 </div>
-                                </div>`;
-    });
-  });
-}
-// 채용공고검색
-function searchJobposting() {
-  // 이벤트 리스너
-  searchBtn.addEventListener('click', async () => {
-    // 검색어
-    const keyword = searchBar.value;
-
-    // 채용공고 검색
-    const searchJP = await fetch(`/api/jobpostings/search`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ keyword }),
-    });
-    // 채용공고데이터 가공
-    const resJP = await searchJP.json();
-    if (resJP.message) {
-      return (jobPostingsBar.innerHTML = `<ul>"${keyword}"에 해당하는 ${resJP.message}</ul>`);
+                                  `;
     }
-    jobPostingsBar.innerHTML = '';
-    resJP.forEach((JP) => {
-      jobPostingsBar.innerHTML += `<div class="jobposting-card" id="jobposting-card" onclick="goToJobpostingSubpage(${JP.id})">
-                                    <div>
-                                        <div class="jobposting-title" id="jobposting-title">
-                                        ${JP.title}
-                                        </div>
-                                        <div class="jobposting-job" id="jobposting-job">${JP.dueDate}</div>
-                                        <p>${JP.workArea}</p>
+    // 채용공고 데이터 화면
+    if (!data[i]._source.address) {
+      jobPostingsBar.innerHTML += `
+                                  <div
+                                  class="card jobposting-card"
+                                  id="jobposting-card"
+                                  onclick="goToJobpostingSubpage(${data[i]._source.id})"
+                                  style="width: 20rem; cursor: pointer;"
+                                  >
+                                    <div class="card-body">
+                                      <h4 class="jobposting-title" id="jobposting-title">
+                                        ${data[i]._source.title}
+                                      </h4>
+                                      <h6
+                                        class="card-subtitle mb-2 text-body-secondary jobposting-job"
+                                        id="jobposting-job"
+                                      >
+                                        마감일 : ${data[i]._source.dueDate}
+                                      </h6>
+                                      <p class="card-text">${data[i]._source.workArea}</p>
                                     </div>
-                                    </div>`;
-    });
-  });
+                                  </div>
+                                  `;
+    }
+  }
 }
+
+// 채용공고검색
+// function searchJobposting() {
+//   // 이벤트 리스너
+//   searchBtn.addEventListener('click', async () => {
+//     // 검색어
+//     const keyword = searchBar.value;
+
+//     // 채용공고 검색
+//     const searchJP = await fetch(`/api/search`, {
+//       method: 'POST',
+//       headers: { 'Content-Type': 'application/json' },
+//       body: JSON.stringify({ keyword }),
+//     });
+//     // 채용공고데이터 가공
+//     const resJP = await searchJP.json();
+//     console.log(resJP);
+//     return;
+
+//     if (resJP.message) {
+//       return (jobPostingsBar.innerHTML = `<ul>"${keyword}"에 해당하는 ${resJP.message}</ul>`);
+//     }
+//     jobPostingsBar.innerHTML = '';
+//     resJP.forEach((JP) => {
+//       jobPostingsBar.innerHTML += `
+//                                     <div
+//                                     class="card jobposting-card"
+//                                     id="jobposting-card"
+//                                     onclick="goToJobpostingSubpage(${JP.id})"
+//                                     style="width: 20rem; cursor: pointer;"
+//                                     >
+//                                       <div class="card-body">
+//                                         <h4 class="jobposting-title" id="jobposting-title">
+//                                           ${JP.title}
+//                                         </h4>
+//                                         <h6
+//                                           class="card-subtitle mb-2 text-body-secondary jobposting-job"
+//                                           id="jobposting-job"
+//                                         >
+//                                           마감일 : ${JP.dueDate}
+//                                         </h6>
+//                                         <p class="card-text">${JP.workArea}</p>
+//                                       </div>
+//                                     </div>
+//                                     `;
+//     });
+//   });
+// }
 
 // 조건검색 함수모음
 function selectInit() {

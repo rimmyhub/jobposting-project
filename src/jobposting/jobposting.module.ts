@@ -9,5 +9,6 @@ import { Company } from 'src/domain/company.entity';
   imports: [TypeOrmModule.forFeature([Jobposting, Company])],
   controllers: [JobpostingController],
   providers: [JobpostingService],
+  exports: [JobpostingService, TypeOrmModule],
 })
 export class JobpostingModule {}
