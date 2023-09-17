@@ -17,7 +17,7 @@ export class ChatService {
       if (type === 'user') {
         result = await this.chatRepository
           .createQueryBuilder('chat')
-          .select('chat.id') // 채팅의 아이디
+          .select('chat.id') // 아이디
           .leftJoin('chat.chatContent', 'chatContent')
           .addSelect('COUNT(chatContent.isCheck) as isCheckCount')
           .where(`chat.user_id = :user_id`, { user_id: id })
