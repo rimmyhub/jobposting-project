@@ -29,12 +29,14 @@ async function searchCompany() {
   });
   // 회사검색데이터 가공
   const data = await searchData.json();
-  console.log('data is : ', data);
-  // console.log('data is : ', data);
 
   if (data.message) {
-    return (companiesBar.innerHTML = `<ul>"${keyword}"에 해당하는 ${data.message}</ul>`);
+    return (
+      (companiesBar.innerHTML = `<ul>"${keyword}"에 해당하는 검색결과가 존재하지 않습니다.</ul>`),
+      (jobPostingsBar.innerHTML = `<ul>"${keyword}"에 해당하는 검색결과가 존재하지 않습니다.</ul>`)
+    );
   }
+
   companiesBar.innerHTML = '';
   jobPostingsBar.innerHTML = '';
 
