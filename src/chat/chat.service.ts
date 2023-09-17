@@ -12,7 +12,6 @@ export class ChatService {
 
   // 해당유저가 받은 메세지 중에 isCkeck가 false인 chat-content가 있는지 확인하는 class
   async checkChat(id: string, type: string): Promise<any> {
-    console.log('checkChat', id, type);
     let result: any;
     try {
       if (type === 'user') {
@@ -23,7 +22,7 @@ export class ChatService {
           .addSelect('COUNT(chatContent.isCheck) as isCheckCount')
           .where(`chat.user_id = :user_id`, { user_id: id })
           .andWhere('chatContent.is_check = 0')
-          .andWhere(`chatContent.sender_id = :sender_id`, { sender_id: id })
+          .andWhere(`chatContent.sender_id != :sender_id`, { sender_id: id })
           .groupBy('chat.id')
           .getRawMany();
       } else {
@@ -34,7 +33,7 @@ export class ChatService {
           .addSelect('COUNT(chatContent.isCheck) as isCheckCount')
           .where(`chat.company_id = :company_id`, { company_id: id })
           .andWhere('chatContent.is_check = 0')
-          .andWhere(`chatContent.sender_id = :sender_id`, { sender_id: id })
+          .andWhere(`chatContent.sender_id != :sender_id`, { sender_id: id })
           .groupBy('chat.id')
           .getRawMany();
       }
@@ -77,7 +76,7 @@ export class ChatService {
   async comGetAllChatRoom(id: string): Promise<Chat[]> {
     const chatRooms = await this.chatRepository
       .createQueryBuilder('chat')
-      .select(['chat.id', 'chat.companyId', 'chat.userId', 'user.email'])
+      .select(['chat.id', 'chat.companyId', 'chat.userId', 'user.name'])
       .leftJoin('chat.user', 'user')
       .where(`chat.company_id = :company_id`, { company_id: id })
       .getMany();
@@ -89,7 +88,7 @@ export class ChatService {
   async userGetAllChatRoom(id: string): Promise<Chat[]> {
     const chatRooms = await this.chatRepository
       .createQueryBuilder('chat')
-      .select(['chat.id', 'chat.companyId', 'chat.userId', 'company.email'])
+      .select(['chat.id', 'chat.companyId', 'chat.userId', 'company.title'])
       .leftJoin('chat.company', 'company')
       .where(`chat.user_id = :user_id`, { user_id: id })
       .getMany();
