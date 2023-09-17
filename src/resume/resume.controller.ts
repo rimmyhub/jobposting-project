@@ -96,4 +96,16 @@ export class ResumeController {
   removeResume(@Param('resumeId') resumeId: number) {
     return this.resumeService.removeResume(+resumeId);
   }
+
+  // 이력서 - 유저의 이력서 ID 조회 (UserGuard 적용)
+  @UseGuards(UserGuard)
+  @Get('user-guard/:userId') // 엔드포인트 경로를 구분
+  @ApiOperation({
+    summary: '유저의 이력서 ID 조회 (UserGuard 적용)',
+    description: '유저의 이력서 ID 조회 (UserGuard 적용)',
+  })
+  @ApiCreatedResponse({ description: '유저의 이력서 ID 조회 (UserGuard 적용)' })
+  async findResumeIdWithGuard(@Param('userId') userId: string) {
+    return await this.resumeService.findResumeIdWithGuard(userId);
+  }
 }

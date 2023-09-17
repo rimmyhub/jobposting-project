@@ -644,19 +644,31 @@ function educationEditbtn(id) {
   educationId = id;
 }
 
-// 학력 "추가" 버튼 클릭 후 "저장" 버튼 클릭 시 학력 "추가" 로직 실행 함수
-function educationAdd() {
+// 학력 "추가" 로직 실행 함수
+async function educationAdd() {
+  // 유저 이력서 아이디
+  const resumeId = await getResumeId();
   // 이벤트 리스너 등록
-  const addEducationBtn = document.querySelector('#educationSaveBtn');
+  const addEducationBtn = document.querySelector('#addEducationBtn');
+  const saveEducationBtn = document.querySelector('#saveEducationBtn');
+  // 추가 버튼 이벤트 리스너
   addEducationBtn.addEventListener('click', async () => {
-    // body값
+    // 다시 한번 resumeId를 확인하고, 이력서 ID가 없는 경우 얼럿을 띄움
+    const updatedResumeId = await getUserResume();
+    if (!updatedResumeId) {
+      alert('먼저 이력서를 작성해주세요.');
+      return; // 함수 실행 중단
+    }
+  });
+  // 저장 버튼 이벤트 리스너
+  saveEducationBtn.addEventListener('click', async () => {
+    // 이력서 ID가 있는 경우 아래 로직을 실행
     const schoolTitle = document.querySelector('#schoolNameTag').value;
     const major = document.querySelector('#majorTag').value;
     const admissionYear = document.querySelector('#admissionYearTag').value;
     const graduationYear = document.querySelector('#graduationYearTag').value;
     const education = aEducation;
-    // 유저 이력서 아이디
-    const resumeId = await getUserResume();
+
     // 데이터 보내기
     const addEducationData = await fetch(`/api/educations/${resumeId}`, {
       method: 'POST',
@@ -669,13 +681,16 @@ function educationAdd() {
         education,
       }),
     });
+
     // 받아온 데이터 가공
     const jsonAddEducationData = await addEducationData.json();
+
     // 예외처리
     if (jsonAddEducationData.message) {
       alert(jsonAddEducationData.message);
       return;
     }
+
     // 사용자에게 응답값 전달
     alert(`${jsonAddEducationData.education} 학력이 추가되었습니다.`);
     window.location.reload();
@@ -750,10 +765,24 @@ function sendCareerId(id) {
   getCareerId = id;
 }
 
-// 경력 "추가" 버튼 클릭 후 "저장" 버튼 클릭 시 경력 "생성" 하는 로직
-function careerAdd() {
+// 경력 "추가" 로직 실행 함수
+async function careerAdd() {
+  // 유저 이력서 아이디
+  const resumeId = await getResumeId();
+  // 이벤트 리스너 등록
   const addCareerBtn = document.querySelector('#addCareerBtn');
+  const saveCareerBtn = document.querySelector('#saveCareerBtn');
+  // 추가 버튼 이벤트 리스너
   addCareerBtn.addEventListener('click', async () => {
+    // 다시 한번 resumeId를 확인하고, 이력서 ID가 없는 경우 얼럿을 띄움
+    const updatedResumeId = await getUserResume();
+    if (!updatedResumeId) {
+      alert('먼저 이력서를 작성해주세요.');
+      return; // 함수 실행 중단
+    }
+  });
+  // 저장 버튼 이벤트 리스너
+  saveCareerBtn.addEventListener('click', async () => {
     // 각 value값 가져오기
     const companyTitle = document.querySelector('#addCompanyTitle').value;
     const job = document.querySelector('#addJob').value;
@@ -761,8 +790,6 @@ function careerAdd() {
     const resignationDate = document.querySelector('#addResignationDate').value;
     const position = document.querySelector('#addPosition').value;
 
-    // 유저 이력서 아이디
-    const resumeId = await getUserResume();
     // 메인로직
     const addCareerData = await fetch(`/api/careers/${resumeId}`, {
       method: 'POST',
@@ -855,15 +882,27 @@ function sendPortfolioId(id) {
   getPortfolioId = id;
 }
 
-// 포트폴리오 "추가" 버튼을 누른 후 "저장"버튼 클릭시 포트폴리오 "작성" 로직 실행
-function portfolioAdd() {
+// 포트폴리오 "추가" 로직 실행 함수
+async function portfolioAdd() {
+  // 유저 이력서 아이디
+  const resumeId = await getResumeId();
+  // 이벤트 리스너 등록
   const addPortfolioBtn = document.querySelector('#addPortfolioBtn');
+  const savePortfolioBtn = document.querySelector('#savePortfolioBtn');
+  // 추가 버튼 이벤트 리스너
   addPortfolioBtn.addEventListener('click', async () => {
+    // 다시 한번 resumeId를 확인하고, 이력서 ID가 없는 경우 얼럿을 띄움
+    const updatedResumeId = await getUserResume();
+    if (!updatedResumeId) {
+      alert('먼저 이력서를 작성해주세요.');
+      return; // 함수 실행 중단
+    }
+  });
+  // 저장 버튼 이벤트 리스너
+  savePortfolioBtn.addEventListener('click', async () => {
     // 바디 밸류값 가져오기
     const address = document.querySelector('#addURLTag').value;
     const file = document.querySelector('#formFile').value;
-    // 유저 이력서 아이디
-    const resumeId = await getUserResume();
     // 메인로직
     const portFolio = await fetch(`/api/portfolio/${resumeId}`, {
       method: 'POST',
@@ -954,17 +993,36 @@ function sendAboutMeId(id) {
   getAboutMeId = id;
 }
 
-// 자기소개서 "추가" 버튼 클릭 시 자기소개서 "작성" 로직 실행
-function aboutMeAdd() {
-  const addAboutMeBtn = document.querySelector('#addAboutMeBtn');
-  addAboutMeBtn.addEventListener('click', async () => {
+// 자기소개서 "추가" 로직 실행 함수
+async function aboutMeAdd() {
+  // 유저 이력서 아이디
+  const resumeId = await getResumeId();
+  // 이벤트 리스너 등록
+  const addAboutemeBtn = document.querySelector('#addAboutemeBtn');
+  const saveAboutMeBtn = document.querySelector('#saveAboutemeBtn');
+
+  // 추가 버튼 이벤트 리스너
+  addAboutemeBtn.addEventListener('click', async () => {
+    // 다시 한번 resumeId를 확인하고, 이력서 ID가 없는 경우 얼럿을 띄움
+    const updatedResumeId = await getUserResume();
+    if (!updatedResumeId) {
+      alert('먼저 이력서를 작성해주세요.');
+      return; // 함수 실행 중단
+    }
+  });
+  // 저장 버튼 이벤트 리스너
+  saveAboutMeBtn.addEventListener('click', async () => {
+    // 다시 한번 resumeId를 확인하고, 이력서 ID가 없는 경우 얼럿을 띄움
+    const updatedResumeId = await getUserResume();
+    if (!updatedResumeId) {
+      alert('먼저 이력서를 작성해주세요.');
+      return; // 함수 실행 중단
+    }
     // body값
     const title = document.querySelector('#addExampleFormControlInput1').value;
     const content = document.querySelector(
       '#addExampleFormControlTextarea1',
     ).value;
-    // 유저 이력서 아이디
-    const resumeId = await getUserResume();
     // 메인로직
     const aboutMe = await fetch(`/api/aboutmes/${resumeId}`, {
       method: 'POST',
