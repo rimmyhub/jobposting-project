@@ -231,10 +231,10 @@ function handleCameraClick() {
     cameraOff = true;
   }
 }
-// //
-// async function handleCameraChange(data) {
-//   await getMedia(camerasSelect.value);
-// }
+// 카메라 변경하기
+async function handleCameraChange() {
+  await getMedia(videoSelect.value);
+}
 
 socket.on('ice-received', async (param) => {
   myPeerConnection.addIceCandidate(param[0]);

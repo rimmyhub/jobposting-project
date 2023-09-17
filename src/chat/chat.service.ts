@@ -46,10 +46,26 @@ export class ChatService {
   // 유저 -> 회사에게 채팅 신청
   // 유효성 검사 필요없나?.. 생각하기
   async createUserChat(id: string, companyId: string): Promise<Chat> {
-    const chat = await this.chatRepository.save({
+    const isChatRoom = await this.chatRepository.find({
+      where: {
+        userId: id,
+        companyId: companyId,
+      },
+    });
+    if (isChatRoom.length !== 0) {
+      throw new HttpException('이미 대화상대입니다.', HttpStatus.BAD_REQUEST);
+    }
+    await this.chatRepository.save({
       user: { id }, // 외래키 가져오는 방법
       company: { id: companyId }, // 외래키 가져오는 방법
     });
+    const chat = await this.chatRepository
+      .createQueryBuilder('chat')
+      .select(['chat.id', 'chat.companyId', 'chat.userId', 'company.title'])
+      .leftJoin('chat.company', 'company')
+      .where(`company.id = :company_id`, { company_id: companyId })
+      .getOne();
+
     return chat;
   }
 
@@ -64,11 +80,19 @@ export class ChatService {
     if (isChatRoom.length !== 0) {
       throw new HttpException('이미 대화상대입니다.', HttpStatus.BAD_REQUEST);
     }
-    const chat = await this.chatRepository.save({
-      company: { id: id }, // company 가드로 회사 가져오기
+    await this.chatRepository.save({
+      company: { id }, // company 가드로 회사 가져오기
       user: { id: userId }, // userid 외래키 찾기
     });
-    console.log('chat = ', chat);
+    const chat = await this.chatRepository
+      .createQueryBuilder('chat')
+      .select(['chat.id', 'chat.companyId', 'chat.userId', 'user.name'])
+      .leftJoin('chat.user', 'user')
+      .where(`user.id = :user_id`, { user_id: userId })
+      .getOne();
+
+    console.log('chat.user_id = ', chat);
+
     return chat;
   }
 

@@ -26,11 +26,17 @@ export class ChatController {
     description: '유저가 회사에게 채팅신청',
   })
   @ApiCreatedResponse({ description: '유저가 회사에게 채팅신청' })
-  createUserChat(
+  async createUserChat(
     @Request() req,
     @Param('companyId') companyId: string,
   ): Promise<Chat> {
-    return this.chatService.createUserChat(req.user.id, companyId);
+    console.log('createUserChat = ', req.user.id, companyId);
+    const result = await this.chatService.createUserChat(
+      req.user.id,
+      companyId,
+    );
+    console.log('result = ', result);
+    return result;
   }
 
   // 회사 -> 유저 채팅 신청

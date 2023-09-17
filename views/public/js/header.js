@@ -20,7 +20,7 @@ const ejs = (window.onload = function () {
   const messageBox = document.getElementById('message-box');
   const closeMessage = document.getElementById('close-message');
   const closeChatting = document.getElementById('close-chatting');
-  const sendMsgUser = document.getElementById('user-msg');
+  const sendMsg = document.getElementById('send-msg');
   const sendBtn = document.getElementById('send-btn');
   const logout = document.getElementById('logout');
 
@@ -49,9 +49,9 @@ const ejs = (window.onload = function () {
     });
   }
   // 메인페이지에서는 얘가 없어서 오류남
-  if (sendMsgUser) {
+  if (sendMsg) {
     // 회사가 유저에게 메세지
-    sendMsgUser.addEventListener('click', async () => {
+    sendMsg.addEventListener('click', async () => {
       sendMessageUser(userId);
     });
   }
@@ -134,49 +134,74 @@ const ejs = (window.onload = function () {
 
   // 방 생성하기
   const sendMessageUser = async () => {
+    const companyId = document.location.href.split('/')[4];
+    console.log('companyId = ', companyId);
     // 방 이름을 어떻게 할까?
     // 1. DB에 나와 상대방의 ID와 방의 ID를 임시로 만들어서 저장한다.
     // 내 아이디
-
-    let userEmail;
+    let continueChat = true;
+    let roomId;
     let getUserId;
-    // 2.
-    await fetch(`/api/chats/company/${userId}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        id: id,
-      }),
-    })
-      .then((res) => {
-        return res.json();
-      }) //json으로 받을 것을 명시
-      .then((res) => {
-        if (res.message) {
-          alert(res.message);
-        } else {
-          getUserId = res.userId;
-        }
-      });
+    let name;
 
-    await fetch(`/api/users/get-email/${getUserId}`, {
-      headers: {
-        Accept: 'application / json',
-      },
-      method: 'GET',
-    })
-      .then((res) => {
-        return res.json();
-      }) //json으로 받을 것을 명시
-      .then((res) => {
-        userEmail = res.email;
+    const type = window.localStorage.getItem('type');
+
+    // 2.
+    if (type === 'company') {
+      await fetch(`/api/chats/company/${userId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: id,
+        }),
       })
-      .catch((e) => {
-        console.log(e);
-      });
-    chattingBox(getUserId, userEmail);
+        .then((res) => {
+          return res.json();
+        }) //json으로 받을 것을 명시
+        .then((res) => {
+          if (res.message) {
+            alert(res.message);
+
+            continueChat = false;
+          } else {
+            console.log('res =', res);
+            getUserId = res.userId;
+            roomId = res.id;
+            name = res.user.name;
+          }
+        });
+    } else {
+      await fetch(`/api/chats/user/${companyId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: id,
+        }),
+      })
+        .then((res) => {
+          return res.json();
+        }) //json으로 받을 것을 명시
+        .then((res) => {
+          if (res.message) {
+            alert(res.message);
+            continueChat = false;
+          } else {
+            console.log('res =', res);
+            getUserId = res.userId;
+            roomId = res.id;
+            name = res.company.title;
+          }
+        });
+    }
+
+    if (continueChat) {
+      await chattingBox(roomId, name, getUserId);
+      getChatRooms();
+    }
   };
 
   async function deleteCookie() {
@@ -347,21 +372,24 @@ async function readMsg(chatId) {
 let roomId;
 let reciId;
 // 채팅창 열기
-async function chattingBox(getRoomId, email, recipientId, $event) {
+//  chattingBox(getUserId, userEmail);
+async function chattingBox(getRoomId, name, recipientId, $event) {
   const cameraIcon = Object.assign(document.createElement('i'), {
     id: 'offer-interview',
   });
   const type = localStorage.getItem('type');
-  const messageCard = document.getElementById(
-    `${event.target.parentElement.parentElement.id}`,
-  );
-  const exclamationIcon = messageCard.children[2];
-  exclamationIcon.style.opacity = 0;
+  if (event) {
+    const messageCard = document.getElementById(
+      `${event.target.parentElement.parentElement.id}`,
+    );
+    const exclamationIcon = messageCard.children[2];
+    exclamationIcon.style.opacity = 0;
+  }
 
   reciId = recipientId;
   await readMsg(getRoomId);
   const userName = document.createElement('h6');
-  userName.innerText = `${email} 님`;
+  userName.innerText = `${name} 님`;
 
   const iconBox = document.createElement('div');
   iconBox.className = `chat-icon-box`;
@@ -394,7 +422,6 @@ async function chattingBox(getRoomId, email, recipientId, $event) {
   chatContainer.style.display = 'flex';
   chattingContainer.scrollTop = chattingContainer.scrollHeight;
   cameraIcon.onclick = function () {
-    console.log('startInterview = ', roomId, reciId);
     startInterview(roomId, reciId);
   };
 }
