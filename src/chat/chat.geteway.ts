@@ -14,16 +14,16 @@ import { Company } from '../domain/company.entity';
 import { User } from 'src/domain/user.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CompanyGuard } from '../auth/jwt/jwt.company.guard';
 
 // 소켓IO
-@WebSocketGateway(3030, {
+@WebSocketGateway({
   cors: {
-    origin: [
-      'http://localhost:3000',
-      'http://w1nner.site/',
-      'https://w1nner.site/',
-    ],
+    origin: '*',
+    // origin: [
+    //   'http://localhost:3000',
+    //   'http://w1nner.site/',
+    //   'https://w1nner.site/',
+    // ],
   },
 })
 export class ChatGateway {
