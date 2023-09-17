@@ -11,7 +11,7 @@ let msgCard;
 let offer;
 const myApplyList = document.getElementById('my-apply-list');
 const myProfile = document.getElementById('profile-image');
-const socket = io('localhost:8080');
+const socket = io();
 const ejs = (window.onload = function () {
   const params = new URLSearchParams(window.location.search);
   const userId = params.get('id');
