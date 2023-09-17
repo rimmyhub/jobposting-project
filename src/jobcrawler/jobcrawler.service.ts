@@ -190,7 +190,7 @@ export class JobcrawlerService {
     return jobs;
   }
 
-  @Cron('0 0 * * *') // 매일 자정에 실행
+  @Cron('0 3 * * *') // 매일 새벽 3시에 실행
   async incruitCrawling() {
     console.time('코드 실행시간');
     // 코드 실행시간을 구해줌
@@ -223,7 +223,7 @@ export class JobcrawlerService {
         jobInfo.push(jobs);
         count++;
 
-        await this.delay(1000); // 각페이지 크롤링 후 1초 대기
+        await this.delay(10000); // 각페이지 크롤링 후 10초 대기
       }
     }
     // 코드 실행시간을 측정
