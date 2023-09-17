@@ -17,7 +17,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CompanyGuard } from '../auth/jwt/jwt.company.guard';
 
 // 소켓IO
-@WebSocketGateway({
+@WebSocketGateway(3030, {
   cors: {
     origin: [
       'http://localhost:3000',
