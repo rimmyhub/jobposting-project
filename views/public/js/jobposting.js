@@ -59,7 +59,7 @@ applyBtn.addEventListener('click', async (event) => {
       const data = await response.json();
       alert(data.message);
     } else {
-      alert('오류가 발생했습니다.');
+      alert('구직자만 지원이 가능합니다.');
     }
   } catch (error) {
     console.error(error);

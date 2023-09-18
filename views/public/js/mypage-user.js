@@ -44,6 +44,7 @@ async function getUserData() {
   // 데이터 가공
   const jsonUserData = await userData.json();
   // 프사
+  console.log(jsonUserData);
   userImage.innerHTML = `<div class="profile-box">
                           <img
                             src="${jsonUserData.image}"
