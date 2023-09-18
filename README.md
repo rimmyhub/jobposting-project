@@ -1,106 +1,128 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# 🥇 WINNER
+![winner-notion](https://github.com/rimmyhub/jobposting-project/assets/131572117/caea054b-b286-4205-8f86-187c16bdf0dd)
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+🏠 배포 주소 : [WINNER 홈페이지 바로가기](https://w1nner.site/)
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+📹 소개 영상 : [![YouTube 소개 영상](영상 썸네일 이미지 링크)](YouTube 영상 링크)
 
-## Description
+📑 브로 슈어 : [브로셔 바로가기](https://outgoing-angora-d26.notion.site/WINNER-3a89e026e7894d5e92f38d2bb3029a6d?pvs=4)
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-## Installation
 
-```bash
-$ npm install
 
+# ⭐️ Intro
+- 주제 : 취업지원 플랫폼 (예: 사람인, 잡코리아, 링크드인)
+
+</div>
+- 프로젝트 기간 : 2023년 8월 16일(수) ~ 2023년 9월 18일(월)
+
+</div>
+- 주요 기능
+- WebRTC 영상
+- 구직자/기업 구분 (UserGuard / CompanyGuard)
+- Crawling 실시간 채용공고 및 회사 데이터 제공
+- OpenSearch 검색 및 필터 기능
+- ChatGPT 자기소개서 작성
+- 회사 지원하기
+- Kakao Map API 회사 찾기
+- Nodemailer 회원가입 시 이메일 인증
+- S3 이미지 등록
+
+
+# 🎥 주요 기능 영상
+
+
+https://github.com/backEndKwon/CodeBlue/assets/128948886/3db6882f-c55c-46fa-98df-2fecacc53cde
+
+
+</div>
+
+
+# 👷‍♂️ Architecture
+![아키텍쳐](https://github.com/rimmyhub/jobposting-project/assets/131572117/b1e61c82-441e-4ed7-8f93-93fccd4b7059)
+
+
+
+
+# 💥 Troubleshooting
+![01](https://github.com/rimmyhub/jobposting-project/assets/131572117/0f33745e-6027-4b2d-b094-01c226a8ea11)
+![02](https://github.com/rimmyhub/jobposting-project/assets/131572117/29af96fc-d62f-427d-bb23-65b29722d912)
+![03](https://github.com/rimmyhub/jobposting-project/assets/131572117/4d0a94b8-f214-42fa-8254-09073d8054f9)
+![04](https://github.com/rimmyhub/jobposting-project/assets/131572117/fa63bc13-abdf-492d-ad40-d52e96155eed)
+![05](https://github.com/rimmyhub/jobposting-project/assets/131572117/de12a9b1-9677-4ed0-a6f3-4892c36795a8)
+![06](https://github.com/rimmyhub/jobposting-project/assets/131572117/6ae7f8aa-707d-423e-a060-31d96ef0042e)
+![07](https://github.com/rimmyhub/jobposting-project/assets/131572117/0ae054d5-0acd-4ca6-a4b4-8aa03068fc28)
+![08](https://github.com/rimmyhub/jobposting-project/assets/131572117/6227ddd1-ded0-4194-8c41-47779eb3e89b)
+
+
+
+# 👨‍👩‍👧‍👦 Team
+
+| 이름      | 역할                                                                                      |    Github                                | 블로그                                        |
+|:---------|:----------------------------------------------------------------------------------------|:------------------------------------------|:--------------------------------------------|
+| 김혜림     | 채용공고/회사 Crawling, 자기소개서 ChatGPT, S3 이미지 등록, 지원하기 기능, CI/CD 배포                  | [Github](https://github.com/rimmyhub)   |[블로그](https://nuri-story.tistory.com/)      |
+| 민태영     | Web.RTC 영상, Soket.io 채팅, 로그인/회원가입, AccessToken/refreshToken, userGuard/companyGuard | [Github](https://github.com/taeyoungNew) |[블로그](https://velog.io/@ty_min12)           |
+| 권윤영     | 채용공고/회사 Open Search 검색 기능, 직군/지역/경력 필터 기능, Swagger                              | [Github](https://github.com/Yooonzero)   |[블로그](https://playlist808.tistory.com/)     |
+| 곽현규     | Nodemailer 이메일 인증 기능, 카카오 지도 API                                                   | [Github](https://github.com/kwakhyunkyu)  |[블로그](https://kwaq.tistory.com/)            |
+| 기다연     | 포트폴리오 API                                                                             | [Github](https://github.com/Dayeon-Ki)    |[블로그](https://developbyki.tistory.com/)     |
+
+
+
+
+# 😺 Git Convention
+- 제목은 최대 72글자이하로 작성: ex) feat: Add Key mapping
+- 본문은 아래에 작성
+- 꼬리말 선택
+```
+### 제목
+# 커밋 타입: 작업내용 (제목과 본문은 한 줄 띄워주세요)
+
+
+### 본문 - 한 줄에 최대 72 글자까지만 입력하기  
+# 무엇을, 왜, 어떻게 했는지
+
+
+# 꼬리말
+# (선택) 이슈번호 작성
+
+#   [커밋 타입]  리스트
+#   feat      : 기능 (새로운 기능)
+#   fix       : 버그 (버그 수정)
+#   design    : CSS 등 사용자 UI 디자인 변경
+#   refactor  : 리팩토링
+#   style     : 스타일 (코드 형식, 세미콜론 추가: 비즈니스 로직에 변경 없음)
+#   docs      : 문서 (문서 추가, 수정, 삭제)
+#   test      : 테스트 (테스트 코드 추가, 수정, 삭제: 비즈니스 로직에 변경 없음)
+#   chore     : 기타 변경사항 (빌드 스크립트 수정 등)
+#   post      : 블로그 포스트 추가 (신규 포스트 작성 및 수정)
+#   rename    : 파일 혹은 폴더명을 수정하거나 옮기는 작업만 하는 경우
+#   remove    : 파일을 삭제하는 작업만 수행한 경우
+# ------------------
+#   [체크리스트]
+#     제목 첫 글자는 대문자로 작성했나요?
+#     제목은 명령문으로 작성했나요?
+#     제목 끝에 마침표(.) 금지
+#     제목과 본문을 한 줄 띄워 분리하기
+#     본문에 여러줄의 메시지를 작성할 땐 "-"로 구분했나요?
+# ------------------
 ```
 
-## Dependencies
+
+
+
+
+
+
+# 🐣 Commit Convention
+- Prettier 적용
+
 ```
- "@fastify/cookie": "^9.0.4",
- "@nestjs/common": "^10.0.0",
- "@nestjs/config": "^3.0.0",
- "@nestjs/core": "^10.0.0",
- "@nestjs/jwt": "^10.1.0",
- "@nestjs/mapped-types": "*",
- "@nestjs/passport": "^10.0.0",
- "@nestjs/platform-express": "^10.0.0",
- "@nestjs/platform-fastify": "^10.1.3",
- "@nestjs/schedule": "^3.0.2",
- "@nestjs/swagger": "^7.1.8",
- "@nestjs/typeorm": "^10.0.0",
- "@types/bcrypt": "^5.0.0",
- "bcrypt": "^5.1.1",
- "bcryptjs": "^2.4.3",
- "class-transformer": "^0.5.1",
- "class-validator": "^0.14.0",
- "cookie-parser": "^1.4.6",
- "dotenv": "^16.3.1",
- "express": "^4.18.2",
- "mysql2": "^3.6.0",
- "passport": "^0.6.0",
- "passport-jwt": "^4.0.1",
- "passport-local": "^1.0.0",
- "reflect-metadata": "^0.1.13",
- "rxjs": "^7.8.1",
- "typeorm": "^0.3.17",
- "typeorm-naming-strategies": "^4.1.0"
+{
+  "singleQuote": true, // 작은 따옴표 사용
+  "trailingComma": "all", // 마지막 요소 뒤에 쉼표
+  "tabWidth": 2, // 들여쓰기 탭 너비 2
+  "semi" : true, // 세미콜론(;) 추가
+  "arrowParens" : "always", // 화살표 함수 매개변수에 괄호
+  "endOfLine" : "auto" // 자동으로 행종룔 문자 선택
+}
 ```
-
-## Running the app
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
