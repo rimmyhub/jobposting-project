@@ -39,9 +39,14 @@ socket.on('interview-received', async (param) => {
 });
 
 // 화상면접신청을 받은 유저는 알림을 받는다.
-
 socket.on('apply-interview', notificationInterview);
 function notificationInterview(params) {
+  const notificationSound = new Audio('../assets/sounds/knock.mp3');
+  if (notificationSound !== undefined) {
+    notificationSound.volume = 1;
+    notificationSound.play();
+  }
+
   setRoomId = params['roomId'];
   companyId = params['companyId'];
   const notifiInterview = document.getElementById('notification-interview');
@@ -156,19 +161,18 @@ async function interViewScreen() {
 async function getMedia(deviceId) {
   // 디바이스가 없을 때 실행
   const initialConstrains = {
-    audio: true,
+    audio: { echoCancellation: true },
     video: { facingMode: 'user' },
   };
   //
   const cameraConstraints = {
-    audio: true,
+    audio: { echoCancellation: true },
     video: { deviceId: { exact: deviceId } },
   };
   try {
     myStream = await navigator.mediaDevices.getUserMedia(
       deviceId ? cameraConstraints : initialConstrains,
     );
-    console.log(deviceId);
     if (!deviceId) {
       // 4. 카메라 정보가져오기
       await getCamera();
@@ -204,7 +208,6 @@ async function getCamera() {
 
 // 뮤트 on off
 function handleMuteClick() {
-  console.log('뮤트');
   myStream
     .getAudioTracks()
     .forEach((track) => (track.enabled = !track.enabled));
