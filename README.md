@@ -43,6 +43,7 @@
 
 
 # 💥 Troubleshooting
+![00](https://github.com/rimmyhub/jobposting-project/assets/131572117/be270009-c4c0-49ec-802e-53c28e0e29e4)
 ![01](https://github.com/rimmyhub/jobposting-project/assets/131572117/0f33745e-6027-4b2d-b094-01c226a8ea11)
 ![02](https://github.com/rimmyhub/jobposting-project/assets/131572117/29af96fc-d62f-427d-bb23-65b29722d912)
 ![03](https://github.com/rimmyhub/jobposting-project/assets/131572117/4d0a94b8-f214-42fa-8254-09073d8054f9)
