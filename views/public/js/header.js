@@ -12,6 +12,7 @@ let offer;
 
 const myApplyList = document.getElementById('my-apply-list');
 const myProfile = document.getElementById('profile-image');
+
 // const socket = io('localhost:3030');
 const socket = io('');
 const ejs = (window.onload = function () {
