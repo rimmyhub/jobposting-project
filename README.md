@@ -28,8 +28,7 @@
 
 
 # 🎥 주요 기능 영상
-
-
+[![YouTube 비디오](https://img.youtube.com/vi/sm6CR3QRmXI/0.jpg)](https://www.youtube.com/watch?v=sm6CR3QRmXI)
 <br>
 
 
