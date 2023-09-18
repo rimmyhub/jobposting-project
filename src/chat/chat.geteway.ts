@@ -170,7 +170,7 @@ export class ChatGateway {
       name: getName[0]['name'],
       socketId: socket.id,
     };
-    await this.cacheManager.store.set(`${payload['userId']}`, userInfo, 100000);
+    await this.cacheManager.store.set(`${payload['userId']}`, userInfo, 259200);
     // reflesh 토큰시간에 맞춰서 로그아웃이 될때까지 사용
   }
 

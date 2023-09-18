@@ -35,6 +35,7 @@ async function getUserData() {
   const userImage = document.querySelector('.profile-box');
   // 메인로직
   const userData = await fetch(`/api/users/user-page`);
+  console.log('userData = ', userData);
   // 데이터 가공
   const jsonUserData = await userData.json();
   // 프사
@@ -141,8 +142,8 @@ async function getUserImage() {
   });
 
   imageUploadEl.addEventListener('change', async (e) => {
+    console.log('이미지 수정', imageUploadEl);
     const selectedFile = e.target.files[0];
-    console.log(selectedFile);
     // 파일 유효성 검사
     if (selectedFile) {
       if (selectedFile.size > 1 * 1024 * 1024) {
