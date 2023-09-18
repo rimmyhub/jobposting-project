@@ -227,6 +227,7 @@ export class SearchService {
 
   // 데이터 조회
   async searchData(keyword: string) {
+    console.time('search');
     try {
       const indexName = 'winner_test';
       const data = await this.searchIndexFunction(indexName, keyword);
@@ -234,7 +235,7 @@ export class SearchService {
       if (data.length === 0) {
         throw new HttpException(`데이터가 없습니다.`, HttpStatus.BAD_REQUEST);
       }
-
+      console.timeEnd('search');
       return data;
     } catch (error) {
       console.error('Error fetching data:', error);

@@ -27,11 +27,17 @@ async function getResumeId() {
 
   const resumeId = await fetch(`/api/resumes/user/${userId}`);
   const res = await resumeId.json();
+
+  if (res.message) {
+    console.log(res.message);
+  }
+
   return res;
 }
 // 유저 정보를 불러오는 함수 로직
 async function getUserData() {
   const userInfoBox = document.querySelector('#userInfoBox');
+
   const userImage = document.querySelector('.profile-box');
   // 메인로직
   const userData = await fetch(`/api/users/user-page`);
@@ -52,7 +58,7 @@ async function getUserData() {
                             class="img-file"
                             type="file"
                             accept="image/jpeg, image/png"
-                            onerror="this.src='/img/userImg.jpg';"
+                            onerror="console.log(error)"
                           />
                         </div>
                         `;
@@ -127,6 +133,7 @@ async function getUserData() {
 
   return jsonUserData.id;
 }
+// 유저의 이미지를 불러오는 함수
 async function getUserImage() {
   const userImage = document.getElementById('image');
   const imageUploadEl = document.getElementById('user-image');
@@ -140,6 +147,7 @@ async function getUserImage() {
     userImage.src = imageUrl; // 이미지 보여주기
   });
 
+  // 이미지 변경하기
   imageUploadEl.addEventListener('change', async (e) => {
     const selectedFile = e.target.files[0];
     console.log(selectedFile);
@@ -182,6 +190,7 @@ async function getUserImage() {
     }
   });
 
+  // 이미지 저장
   saveBtnEl.addEventListener('click', async () => {
     if (imageUrl) {
       try {
@@ -197,6 +206,7 @@ async function getUserImage() {
     }
   });
 
+  // api 호출
   async function saveUserImage(imageUrl) {
     try {
       const response = await fetch('/api/users/image', {
@@ -221,6 +231,9 @@ async function getUserResume() {
   const resumeBox = document.querySelector('#resumeBox');
   // 이력서ID 가져오기
   const resumeId = await getResumeId();
+  if (resumeId.message === '이력서를 작성해주세요.') {
+    return;
+  }
   // 만들어둔 이력서 조회 API fetch 요청 보냄
   const userResumeData = await fetch(`/api/resumes/${resumeId}`);
   // 받아온 데이터 할당
@@ -251,6 +264,9 @@ async function getUserEducation() {
   const educationBox = document.querySelector('#educationBox');
   // 유저 이력서 아이디
   const resumeId = await getUserResume();
+  if (!resumeId) {
+    return;
+  }
   // 서버에게 데이터 요청
   const userEducationData = await fetch(`/api/educations/${resumeId}`);
   // 데이터 가공
@@ -324,6 +340,9 @@ async function getUserCareer() {
   const careerBox = document.querySelector('#careerBox');
   // 유저 이력서 아이디
   const resumeId = await getUserResume();
+  if (!resumeId) {
+    return;
+  }
   // 서버요청
   const userCareerData = await fetch(`/api/careers/${resumeId}`);
   // 데이터가공
@@ -408,6 +427,9 @@ async function getUserPortfolio() {
   const portfolioBox = document.querySelector('#portfolioBox');
   // 유저 이력서 아이디
   const resumeId = await getUserResume();
+  if (!resumeId) {
+    return;
+  }
   // 서버요청
   const userPortfolio = await fetch(`/api/portfolio/${resumeId}`);
   // 가공
@@ -459,6 +481,9 @@ async function getUserAboutMe() {
   const aboutMeBox = document.querySelector('#aboutMeBox');
   // 유저 이력서 아이디
   const resumeId = await getUserResume();
+  if (!resumeId) {
+    return;
+  }
   // 서버 요청
   const userAboutMe = await fetch(`/api/aboutmes/${resumeId}`);
   // 데이터 가공
@@ -521,7 +546,6 @@ async function init2() {
   aboutMeUpdate();
   aboutMeDelete();
 }
-
 // 개인정보 "수정" 버튼 클릭 후 "저장" 버튼 클릭 시 "수정" 로직 실행 함수
 function userUpdate() {
   const userUpdateBtn = document.querySelector('#userUpdateBtn');
@@ -549,7 +573,7 @@ function userUpdate() {
   });
 }
 
-// 이력서 "생성" 버튼 클릭 후 "저장" 누를 시 이력서 "수정" 로직 실행 함수
+// 이력서 "생성" 버튼 클릭 후 "저장" 누를 시 이력서 "생성" 로직 실행 함수
 function createResume() {
   const createResumeBtn = document.querySelector('#createResumeBtn');
   // 이벤트 리스너 설치
@@ -625,7 +649,7 @@ function resumeDelete() {
 // 학력정보 불러오기
 const dropdownItems = document.querySelectorAll('.item');
 const selectedValueElement = document.getElementById('selectedValue');
-console.log(selectedValueElement);
+
 const selectedValueElement2 = document.getElementById('selectedValue2');
 let aEducation = '추가';
 let bEducation = '수정';
@@ -646,11 +670,14 @@ function educationEditbtn(id) {
 
 // 학력 "추가" 로직 실행 함수
 async function educationAdd() {
-  // 유저 이력서 아이디
-  const resumeId = await getResumeId();
   // 이벤트 리스너 등록
   const addEducationBtn = document.querySelector('#addEducationBtn');
   const saveEducationBtn = document.querySelector('#saveEducationBtn');
+  // 유저 이력서 아이디
+  const resumeId = await getResumeId();
+  if (resumeId.message === '이력서를 작성해주세요.') {
+    return;
+  }
   // 추가 버튼 이벤트 리스너
   addEducationBtn.addEventListener('click', async () => {
     // 다시 한번 resumeId를 확인하고, 이력서 ID가 없는 경우 얼럿을 띄움
@@ -767,11 +794,14 @@ function sendCareerId(id) {
 
 // 경력 "추가" 로직 실행 함수
 async function careerAdd() {
-  // 유저 이력서 아이디
-  const resumeId = await getResumeId();
   // 이벤트 리스너 등록
   const addCareerBtn = document.querySelector('#addCareerBtn');
   const saveCareerBtn = document.querySelector('#saveCareerBtn');
+  // 유저 이력서 아이디
+  const resumeId = await getResumeId();
+  if (resumeId.message === '이력서를 작성해주세요.') {
+    return;
+  }
   // 추가 버튼 이벤트 리스너
   addCareerBtn.addEventListener('click', async () => {
     // 다시 한번 resumeId를 확인하고, 이력서 ID가 없는 경우 얼럿을 띄움
@@ -884,11 +914,14 @@ function sendPortfolioId(id) {
 
 // 포트폴리오 "추가" 로직 실행 함수
 async function portfolioAdd() {
-  // 유저 이력서 아이디
-  const resumeId = await getResumeId();
   // 이벤트 리스너 등록
   const addPortfolioBtn = document.querySelector('#addPortfolioBtn');
   const savePortfolioBtn = document.querySelector('#savePortfolioBtn');
+  // 유저 이력서 아이디
+  const resumeId = await getResumeId();
+  if (resumeId.message === '이력서를 작성해주세요.') {
+    return;
+  }
   // 추가 버튼 이벤트 리스너
   addPortfolioBtn.addEventListener('click', async () => {
     // 다시 한번 resumeId를 확인하고, 이력서 ID가 없는 경우 얼럿을 띄움
@@ -995,12 +1028,14 @@ function sendAboutMeId(id) {
 
 // 자기소개서 "추가" 로직 실행 함수
 async function aboutMeAdd() {
-  // 유저 이력서 아이디
-  const resumeId = await getResumeId();
   // 이벤트 리스너 등록
   const addAboutemeBtn = document.querySelector('#addAboutemeBtn');
   const saveAboutMeBtn = document.querySelector('#saveAboutemeBtn');
-
+  // 유저 이력서 아이디
+  const resumeId = await getResumeId();
+  if (resumeId.message === '이력서를 작성해주세요.') {
+    return;
+  }
   // 추가 버튼 이벤트 리스너
   addAboutemeBtn.addEventListener('click', async () => {
     // 다시 한번 resumeId를 확인하고, 이력서 ID가 없는 경우 얼럿을 띄움
@@ -1055,6 +1090,9 @@ async function aboutMeUpdate() {
     ).value;
     // 이력서ID 가져오기
     const resumeId = await getResumeId();
+    if (resumeId.message === '이력서를 작성해주세요.') {
+      return;
+    }
     // 자소서 아이디 가져오기
     const aboutMeId = getAboutMeId;
 
@@ -1085,6 +1123,9 @@ function aboutMeDelete() {
   deleteAboutMeBtn.addEventListener('click', async () => {
     // 이력서ID 가져오기
     const resumeId = await getResumeId();
+    if (resumeId.message === '이력서를 작성해주세요.') {
+      return;
+    }
     // 자소서 아이디 가져오기
     const aboutMeId = getAboutMeId;
     // 메인로직
