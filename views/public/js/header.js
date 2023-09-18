@@ -337,8 +337,8 @@ socket.on('msg-notification', async () => {
 
 // 채팅리스트안의 새메시지알람표시하기
 function newMsgIcon(params) {
-  // console.log('newMsgs = ', params);
-  if (params) {
+  console.log('newMsgs = ', params);
+  if (params.length) {
     params.forEach((el) => {
       console.log(el);
       msgCard = document.getElementById(`${el.chat_id}`);
