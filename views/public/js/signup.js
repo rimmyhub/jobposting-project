@@ -152,13 +152,13 @@ const signup = async () => {
     const gender = document.getElementById('gender').value;
     const birth = document.getElementById('input-birth').value;
 
-    // 입력값이 비어있는지 확인
-    let imageUrl = ''; // imageUrl 변수를 정의
+    // // 입력값이 비어있는지 확인
+    // let imageUrl = ''; // imageUrl 변수를 정의
 
-    // 이미지가 업로드되었는지 확인
-    if (!imageUrl) {
-      imageUrl = '/img/userImg.jpg'; // 이미지가 없는 경우 기본 이미지 URL 설정
-    }
+    // // 이미지가 업로드되었는지 확인
+    // if (!imageUrl) {
+    //   imageUrl = '/img/userImg.jpg'; // 이미지가 없는 경우 기본 이미지 URL 설정
+    // }
 
     if (!password) {
       alert('비밀번호를 입력해주세요.');
@@ -235,13 +235,13 @@ const signup = async () => {
       employees,
     );
 
-    // 입력값이 비어있는지 확인
-    let imageUrl = ''; // imageUrl 변수를 정의
+    // // 입력값이 비어있는지 확인
+    // let imageUrl = ''; // imageUrl 변수를 정의
 
-    // 이미지가 업로드되었는지 확인
-    if (!imageUrl) {
-      imageUrl = '/img/company.jpg'; // 이미지가 없는 경우 기본 이미지 URL 설정
-    }
+    // // 이미지가 업로드되었는지 확인
+    // if (!imageUrl) {
+    //   imageUrl = '/img/company.jpg'; // 이미지가 없는 경우 기본 이미지 URL 설정
+    // }
 
     if (!password) {
       alert('비밀번호를 입력해주세요.');
