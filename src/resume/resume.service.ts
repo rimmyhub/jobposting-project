@@ -105,7 +105,6 @@ export class ResumeService {
       where: { id: resumeId },
       select: ['id', 'userId', 'title', 'content'],
     });
-
     // 예외 처리
     if (!resume) {
       throw new HttpException(
@@ -120,7 +119,9 @@ export class ResumeService {
   // 이력서 - 유저의 이력서 ID조회
   async findResumeId(userId: string) {
     const resume = await this.resumeRepository.findOne({ where: { userId } });
-    if (!resume) resume.id = 0;
+    if (!resume) {
+      return { message: '이력서를 작성해주세요.' };
+    }
     return resume.id;
   }
 

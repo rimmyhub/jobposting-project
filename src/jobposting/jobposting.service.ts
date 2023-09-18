@@ -126,6 +126,7 @@ export class JobpostingService {
 
   // 윤영 : 검색시 해당 검색어를 포함하는 채용 공고글 전체 조회
   async searchKeyword(keyword: string) {
+    console.time('jobposting');
     const jobPostings = await this.jobpostingRepository
       .createQueryBuilder('jobposting')
       .select([
@@ -145,7 +146,7 @@ export class JobpostingService {
         HttpStatus.NOT_FOUND,
       );
     }
-
+    console.timeEnd('jobposting');
     return jobPostings;
   }
 
