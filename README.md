@@ -1,45 +1,43 @@
 # 🥇 WINNER
 ![winner-notion](https://github.com/rimmyhub/jobposting-project/assets/131572117/caea054b-b286-4205-8f86-187c16bdf0dd)
-
 🏠 배포 주소 : [WINNER 홈페이지 바로가기](https://w1nner.site/)
-
-📹 소개 영상 : [![YouTube 소개 영상](영상 썸네일 이미지 링크)](YouTube 영상 링크)
 
 📑 브로 슈어 : [브로셔 바로가기](https://outgoing-angora-d26.notion.site/WINNER-3a89e026e7894d5e92f38d2bb3029a6d?pvs=4)
 
+📝 발표 자료 : [PPT 바로가기](https://outgoing-angora-d26.notion.site/WINNER-3a89e026e7894d5e92f38d2bb3029a6d?pvs=4)
+<br>
 
 
 
 # ⭐️ Intro
 - 주제 : 취업지원 플랫폼 (예: 사람인, 잡코리아, 링크드인)
-
-</div>
 - 프로젝트 기간 : 2023년 8월 16일(수) ~ 2023년 9월 18일(월)
-
-</div>
 - 주요 기능
-- WebRTC 영상
-- 구직자/기업 구분 (UserGuard / CompanyGuard)
-- Crawling 실시간 채용공고 및 회사 데이터 제공
-- OpenSearch 검색 및 필터 기능
-- ChatGPT 자기소개서 작성
-- 회사 지원하기
-- Kakao Map API 회사 찾기
-- Nodemailer 회원가입 시 이메일 인증
-- S3 이미지 등록
+  - WebRTC 영상
+  - 구직자/기업 구분 (UserGuard / CompanyGuard)
+  - Crawling 실시간 채용공고 및 회사 데이터 제공
+  - OpenSearch 검색 및 필터 기능
+  - ChatGPT 자기소개서 작성
+  - 회사 지원하기
+  - Kakao Map API 회사 찾기
+  - Nodemailer 회원가입 시 이메일 인증
+  - S3 이미지 등록
+<br>
+
+
 
 
 # 🎥 주요 기능 영상
 
 
-https://github.com/backEndKwon/CodeBlue/assets/128948886/3db6882f-c55c-46fa-98df-2fecacc53cde
+<br>
 
 
-</div>
 
 
 # 👷‍♂️ Architecture
 ![아키텍쳐](https://github.com/rimmyhub/jobposting-project/assets/131572117/b1e61c82-441e-4ed7-8f93-93fccd4b7059)
+<br>
 
 
 
@@ -50,14 +48,15 @@ https://github.com/backEndKwon/CodeBlue/assets/128948886/3db6882f-c55c-46fa-98df
 ![03](https://github.com/rimmyhub/jobposting-project/assets/131572117/4d0a94b8-f214-42fa-8254-09073d8054f9)
 ![04](https://github.com/rimmyhub/jobposting-project/assets/131572117/fa63bc13-abdf-492d-ad40-d52e96155eed)
 ![05](https://github.com/rimmyhub/jobposting-project/assets/131572117/de12a9b1-9677-4ed0-a6f3-4892c36795a8)
-![06](https://github.com/rimmyhub/jobposting-project/assets/131572117/6ae7f8aa-707d-423e-a060-31d96ef0042e)
+![06](https://github.com/rimmyhub/jobposting-project/assets/131572117/067b3bb4-0fcb-478f-b164-f988ebd6be45)
 ![07](https://github.com/rimmyhub/jobposting-project/assets/131572117/0ae054d5-0acd-4ca6-a4b4-8aa03068fc28)
 ![08](https://github.com/rimmyhub/jobposting-project/assets/131572117/6227ddd1-ded0-4194-8c41-47779eb3e89b)
+<br>
+
 
 
 
 # 👨‍👩‍👧‍👦 Team
-
 | 이름      | 역할                                                                                      |    Github                                | 블로그                                        |
 |:---------|:----------------------------------------------------------------------------------------|:------------------------------------------|:--------------------------------------------|
 | 김혜림     | 채용공고/회사 Crawling, 자기소개서 ChatGPT, S3 이미지 등록, 지원하기 기능, CI/CD 배포                  | [Github](https://github.com/rimmyhub)   |[블로그](https://nuri-story.tistory.com/)      |
@@ -65,6 +64,7 @@ https://github.com/backEndKwon/CodeBlue/assets/128948886/3db6882f-c55c-46fa-98df
 | 권윤영     | 채용공고/회사 Open Search 검색 기능, 직군/지역/경력 필터 기능, Swagger                              | [Github](https://github.com/Yooonzero)   |[블로그](https://playlist808.tistory.com/)     |
 | 곽현규     | Nodemailer 이메일 인증 기능, 카카오 지도 API                                                   | [Github](https://github.com/kwakhyunkyu)  |[블로그](https://kwaq.tistory.com/)            |
 | 기다연     | 포트폴리오 API                                                                             | [Github](https://github.com/Dayeon-Ki)    |[블로그](https://developbyki.tistory.com/)     |
+<br>
 
 
 
@@ -106,9 +106,7 @@ https://github.com/backEndKwon/CodeBlue/assets/128948886/3db6882f-c55c-46fa-98df
 #     본문에 여러줄의 메시지를 작성할 땐 "-"로 구분했나요?
 # ------------------
 ```
-
-
-
+<br>
 
 
 
