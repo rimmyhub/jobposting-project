@@ -23,6 +23,14 @@ export class CareerService {
     const { companyTitle, job, joiningDate, resignationDate, position } =
       createCareerDto;
 
+    // 연도 예외 처리
+    if (joiningDate > resignationDate) {
+      throw new HttpException(
+        '작성연도가 올바르지 않습니다.',
+        HttpStatus.PRECONDITION_FAILED,
+      );
+    }
+
     const newCareer = await this.careerRepository.save({
       resumeId, // 전달받은 이력서 ID 사용
       companyTitle,
