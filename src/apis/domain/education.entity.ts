@@ -9,8 +9,8 @@ import {
 } from 'typeorm';
 import { User } from './user.entity';
 import { Resume } from './resume.entity';
-import { educationType } from 'commons/education.enums';
 import { ApiProperty } from '@nestjs/swagger';
+import { educationType } from 'src/commons/enum/education.enums';
 
 @Entity()
 export class Education {

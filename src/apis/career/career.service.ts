@@ -3,9 +3,10 @@
 import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Career } from 'src/domain/career.entity';
+
 import { CreateCareerDto } from './dto/create-career.dto';
 import { UpdateCareerDto } from './dto/update-career.dto';
+import { Career } from '../domain/career.entity';
 
 // CareerService 클래스는 실제 비즈니스 로직을 처리함과 동시에
 // DB와의 상호작용을 담당한다.

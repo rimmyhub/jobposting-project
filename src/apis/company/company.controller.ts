@@ -14,6 +14,7 @@ import {
   HttpException,
   Query,
   Put,
+  Inject,
 } from '@nestjs/common';
 import { CompanyService } from './company.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
@@ -24,6 +25,10 @@ import { VerifyCodeDto } from './dto/verify-code.dto';
 
 import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { MailService } from '../mail/mail.service';
+import { PageReqDto } from 'src/commons/dto/page-req.dto';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Company } from '../domain/company.entity';
+import { Cache } from 'cache-manager';
 
 @Controller('api/companies')
 @ApiTags('회사 API')
@@ -31,6 +36,7 @@ export class CompanyController {
   constructor(
     private readonly companyService: CompanyService,
     private readonly mailService: MailService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
   // 회사 회원가입
@@ -56,9 +62,21 @@ export class CompanyController {
   @Get()
   @ApiOperation({ summary: '회사 전체조회 API', description: '회사 전체조회' })
   @ApiCreatedResponse({ description: '회사 전체조회' })
-  findAllCompany(@Query('page') page: string) {
-    console.log('company page is : ', page);
-    return this.companyService.findAllCompany({ page: Number(page) });
+  async findAllCompany(@Query() pageReqDto: PageReqDto) {
+    const { page, size } = pageReqDto;
+
+    const cacheList: Company[] = await this.cacheManager.get(
+      `companyList${page}`,
+    );
+    if (cacheList) {
+      return cacheList;
+    } else {
+      const companies = await this.companyService.findAllCompany({
+        pageReqDto,
+      });
+      await this.cacheManager.set(`companyList${page}`, companies, 5);
+      return companies;
+    }
   }
 
   // 모든 회사의 주소 정보만 가져오기

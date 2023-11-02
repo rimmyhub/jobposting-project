@@ -2,7 +2,7 @@ import { PartialType } from '@nestjs/mapped-types';
 import { CreateEducationDto } from './create-education.dto';
 import { IsOptional, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { educationType } from 'commons/education.enums';
+import { educationType } from 'src/commons/enum/education.enums';
 
 export class UpdateEducationDto extends PartialType(CreateEducationDto) {
   @IsString()

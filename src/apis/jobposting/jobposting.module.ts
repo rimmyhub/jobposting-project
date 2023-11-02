@@ -9,7 +9,7 @@ import { Jobposting } from '../domain/jobposting.entity';
 
 @Module({
   imports: [
-    CacheModule.register({ ttl: 10, max: 10 }),
+    CacheModule.register(),
     TypeOrmModule.forFeature([Jobposting, Company]),
   ],
   controllers: [JobpostingController],

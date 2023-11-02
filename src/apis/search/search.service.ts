@@ -3,10 +3,8 @@ import { ConfigService } from '@nestjs/config';
 import { Client } from '@elastic/elasticsearch';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-// 회사 데이터 가져오기 위한 import
-import { Company } from 'src/domain/company.entity';
-// 채용공고 데이터 가져오기 위한 import
-import { Jobposting } from 'src/domain/jobposting.entity';
+import { Jobposting } from '../domain/jobposting.entity';
+import { Company } from '../domain/company.entity';
 
 const configService = new ConfigService();
 

@@ -10,11 +10,11 @@ import {
   Request,
 } from '@nestjs/common';
 import { ApplicantService } from './applicant.service';
-import { Applicant } from 'src/domain/applicant.entity';
 import { UserGuard } from '../auth/jwt/jwt.user.guard';
 import { CompanyGuard } from '../auth/jwt/jwt.company.guard';
-import { Jobposting } from 'src/domain/jobposting.entity';
 import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Jobposting } from '../domain/jobposting.entity';
+import { Applicant } from '../domain/applicant.entity';
 
 @Controller('api/applications')
 @ApiTags('지원공고 API')

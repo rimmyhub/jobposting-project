@@ -3,8 +3,8 @@ import { JobcrawlerService } from './jobcrawler.service';
 import { JobcrawlerController } from './jobcrawler.controller';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Jobposting } from 'src/domain/jobposting.entity';
-import { Company } from 'src/domain/company.entity';
+import { Jobposting } from '../domain/jobposting.entity';
+import { Company } from '../domain/company.entity';
 
 @Module({
   imports: [

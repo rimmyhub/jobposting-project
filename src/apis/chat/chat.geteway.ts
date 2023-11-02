@@ -7,13 +7,13 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Socket, Namespace } from 'socket.io';
-import { ChatContentService } from 'src/chat-content/chat-content.service';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 import { Company } from '../domain/company.entity';
-import { User } from 'src/domain/user.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { User } from '../domain/user.entity';
+import { ChatContentService } from '../chat-content/chat-content.service';
 
 // 소켓IO
 @WebSocketGateway({

@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { SearchController } from './search.controller';
 import { SearchService } from './search.service';
-import { CompanyService } from 'src/company/company.service';
-import { CompanyModule } from 'src/company/company.module';
-import { JobpostingService } from 'src/jobposting/jobposting.service';
-import { JobpostingModule } from 'src/jobposting/jobposting.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { JobpostingModule } from '../jobposting/jobposting.module';
+import { CompanyModule } from '../company/company.module';
+import { JobpostingService } from '../jobposting/jobposting.service';
+import { CompanyService } from '../company/company.service';
 
 @Module({
   imports: [CompanyModule, JobpostingModule, TypeOrmModule.forFeature([])],

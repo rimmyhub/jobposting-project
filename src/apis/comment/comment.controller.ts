@@ -12,9 +12,8 @@ import {
 import { CommentService } from './comment.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
-import { UserGuard } from 'src/auth/jwt/jwt.user.guard';
 import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { Comment } from 'src/domain/comment.entity';
+import { Comment } from '../domain/comment.entity';
 
 // CommentController 클래스는 각 API의 엔드포인트를 정의한다.
 // 즉, 경로를 설정한다고 보면 됨

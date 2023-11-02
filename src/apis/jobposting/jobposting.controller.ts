@@ -14,11 +14,12 @@ import {
 import { JobpostingService } from './jobposting.service';
 import { CreateJobpostingDto } from './dto/create-jobposting.dto';
 import { UpdateJobpostingDto } from './dto/update-jobposting.dto';
-import { Jobposting } from 'src/domain/jobposting.entity';
 import { CompanyGuard } from '../auth/jwt/jwt.company.guard';
-import { ParamDto } from 'src/utils/param.dto';
 import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Jobposting } from '../domain/jobposting.entity';
+import { PageReqDto } from 'src/commons/dto/page-req.dto';
+import { Cache } from 'cache-manager';
 
 @Controller('api/jobpostings')
 @ApiTags('채용공고 API')
@@ -95,15 +96,22 @@ export class JobpostingController {
     description: '채용공고 전체조회',
   })
   @ApiCreatedResponse({ description: '채용공고 전체조회' })
-  async findAllJobposting(@Query('page') page: string) {
-    const cachedList: Jobposting[] = await this.cacheManager.get(page);
+  async findAllJobposting(
+    @Query() pageReqDto: PageReqDto,
+  ): Promise<Jobposting[]> {
+    const { page, size } = pageReqDto;
+
+    const cachedList: Jobposting[] = await this.cacheManager.get(
+      `jobpostingList${page}`,
+    ); // 캐싱된 리스트가 있는지 조회
     if (cachedList) {
       return cachedList;
     } else {
       const jobposting = await this.jobpostingService.findAllJobposting({
-        page: Number(page),
+        pageReqDto,
       });
-      await this.cacheManager.set();
+      await this.cacheManager.set(`jobpostingList${page}`, jobposting, 5);
+      // 캐싱된 데이터가 없을 경우 페이지별로 캐시를 구분하고 5초 동안 데이터를 캐싱
       return jobposting;
     }
   }

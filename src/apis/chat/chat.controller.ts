@@ -8,10 +8,11 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ChatService } from './chat.service';
-import { Chat } from 'src/domain/chat.entity';
+
 import { UserGuard } from '../auth/jwt/jwt.user.guard';
 import { CompanyGuard } from '../auth/jwt/jwt.company.guard';
 import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Chat } from './entities/chat.entity';
 
 @Controller('api/chats')
 @ApiTags('채팅 API')

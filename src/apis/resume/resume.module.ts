@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ResumeService } from './resume.service';
 import { ResumeController } from './resume.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Resume } from 'src/domain/resume.entity';
+import { Resume } from '../domain/resume.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Resume])],

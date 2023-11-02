@@ -20,7 +20,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { VerifyCodeDto } from './dto/verify-code.dto';
 import { UserGuard } from '../auth/jwt/jwt.user.guard';
 import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { User } from 'src/domain/user.entity';
+import { User } from '../domain/user.entity';
 
 @Controller('api/users')
 @ApiTags('유저 API')

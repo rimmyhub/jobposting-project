@@ -12,8 +12,8 @@ import {
 import { EducationService } from './education.service';
 import { CreateEducationDto } from './dto/create-education.dto';
 import { UpdateEducationDto } from './dto/update-education.dto';
-import { UserGuard } from 'src/auth/jwt/jwt.user.guard';
 import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { UserGuard } from '../auth/jwt/jwt.user.guard';
 
 @Controller('api/educations')
 @ApiTags('학력 API')

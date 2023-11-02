@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ChatContentService } from './chat-content.service';
 import { ChatContentController } from './chat-content.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ChatContent } from 'src/domain/chatContent.entity';
+import { ChatContent } from '../domain/chatContent.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([ChatContent])],

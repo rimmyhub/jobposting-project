@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ChatContent } from 'src/domain/chatContent.entity';
+import { ChatContent } from '../domain/chatContent.entity';
 
 @Injectable()
 export class ChatContentService {

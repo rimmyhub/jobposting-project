@@ -2,9 +2,9 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateResumeDto } from './dto/create-resume.dto';
 import { UpdateResumeDto } from './dto/update-resume.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Resume } from 'src/domain/resume.entity';
 import { IsNull, LessThan, Not, Repository } from 'typeorm';
 import { Cron } from '@nestjs/schedule';
+import { Resume } from '../domain/resume.entity';
 
 @Injectable()
 // 해당 객체 export

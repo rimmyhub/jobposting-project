@@ -9,9 +9,9 @@ import {
 import { ChatContentService } from './chat-content.service';
 import { CreateChatContentDto } from './dto/create-chat-content.dto';
 import { UpdateChatContentDto } from './dto/update-chat-content.dto';
-import { UserGuard } from 'src/auth/jwt/jwt.user.guard';
-import { CompanyGuard } from 'src/auth/jwt/jwt.company.guard';
 import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { UserGuard } from '../auth/jwt/jwt.user.guard';
+import { CompanyGuard } from '../auth/jwt/jwt.company.guard';
 
 @Controller('api/chat-content')
 @ApiTags('채팅내용관리 API')

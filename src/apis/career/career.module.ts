@@ -4,7 +4,7 @@ import { CareerController } from './career.controller';
 
 // TypeOrmModule과 entity를 가져와서 등록하자
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Career } from 'src/domain/career.entity';
+import { Career } from '../domain/career.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Career])],

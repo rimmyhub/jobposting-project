@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString } from 'class-validator';
-import { educationType } from 'commons/education.enums';
+import { educationType } from 'src/commons/enum/education.enums';
 
 export class CreateEducationDto {
   @IsString()

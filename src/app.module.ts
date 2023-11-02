@@ -31,10 +31,11 @@ import { ChatGateway } from './apis/chat/chat.geteway';
 @Module({
   imports: [
     CacheModule.register({
-      isGlobal: true,
+      isGlobal: true, // 전역 설정
       store: redisStore,
       host: process.env.CACHE_REDIS_HOST,
       port: process.env.CACHE_REDIS_PORT,
+      ttl: 10, // 캐시된 데이터가 유지될 시간
     }),
     TypeOrmModule.forRootAsync({ useFactory: ormConfig }),
     UploadModule,
@@ -56,7 +57,7 @@ import { ChatGateway } from './apis/chat/chat.geteway';
     ChatModule,
     MailModule,
     JobcrawlerModule,
-    SearchModule,
+    // SearchModule,
     ChatContentModule,
     ChatgptModule,
     SwaggerModule,

@@ -2,10 +2,10 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateEducationDto } from './dto/create-education.dto';
 import { UpdateEducationDto } from './dto/update-education.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Education } from 'src/domain/education.entity';
 import { Repository } from 'typeorm';
-import { educationType } from 'commons/education.enums';
 import { ConfigService } from '@nestjs/config';
+import { Education } from '../domain/education.entity';
+import { educationType } from 'src/commons/enum/education.enums';
 
 @Injectable()
 export class EducationService {

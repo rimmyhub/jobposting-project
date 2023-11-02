@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Chat } from 'src/domain/chat.entity';
 import { Repository } from 'typeorm';
+import { Chat } from '../domain/chat.entity';
 
 @Injectable()
 export class ChatService {

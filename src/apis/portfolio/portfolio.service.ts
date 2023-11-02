@@ -1,10 +1,9 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UpdateAboutmeDto } from 'src/aboutme/dto/update-aboutme.dto';
-import { Portfolio } from 'src/domain/portfolio.entity';
 import { Repository } from 'typeorm';
 import { CreatePortfolioDto } from './dto/create-portfolio.dto';
 import { UpdatePortfolioDto } from './dto/update-portfolio.dto';
+import { Portfolio } from '../domain/portfolio.entity';
 
 @Injectable()
 export class PortfolioService {

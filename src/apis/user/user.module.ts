@@ -5,7 +5,7 @@ import { MailModule } from '../mail/mail.module';
 
 // TypeOrmModule과 entity를 가져와서 등록하자
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from 'src/domain/user.entity';
+import { User } from '../domain/user.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User]), MailModule],

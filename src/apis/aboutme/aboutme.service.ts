@@ -1,9 +1,10 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Aboutme } from 'src/domain/aboutme.entity';
+
 import { Repository } from 'typeorm';
 import { CreateAboutmeDto } from './dto/create-aboutme.dto';
 import { UpdateAboutmeDto } from './dto/update-aboutme.dto';
+import { Aboutme } from '../domain/aboutme.entity';
 
 @Injectable()
 export class AboutmeService {

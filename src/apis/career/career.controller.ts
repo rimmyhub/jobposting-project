@@ -13,9 +13,10 @@ import {
 import { CareerService } from './career.service';
 import { CreateCareerDto } from './dto/create-career.dto';
 import { UpdateCareerDto } from './dto/update-career.dto';
-import { UserGuard } from 'src/auth/jwt/jwt.user.guard';
+
 import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { Career } from 'src/domain/career.entity';
+import { UserGuard } from '../auth/jwt/jwt.user.guard';
+import { Career } from '../domain/career.entity';
 
 // CareerController 클래스는 각 API의 엔드포인트를 정의한다.
 // 즉, 경로를 설정한다고 보면 됨

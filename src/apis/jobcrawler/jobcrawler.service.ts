@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Jobposting } from 'src/domain/jobposting.entity';
+
 import { Repository } from 'typeorm';
 import cheerio from 'cheerio';
 import { faker } from '@faker-js/faker';
-import { Company } from 'src/domain/company.entity';
+
 import * as iconv from 'iconv-lite';
 import axios from 'axios';
 import { v5 as uuidv5, NIL as NIL_UUID } from 'uuid';
@@ -12,6 +12,8 @@ import { timeEnd } from 'console';
 import { Cron } from '@nestjs/schedule';
 import { Client } from '@elastic/elasticsearch';
 import { ConfigService } from '@nestjs/config';
+import { Jobposting } from '../domain/jobposting.entity';
+import { Company } from '../domain/company.entity';
 
 const configService = new ConfigService();
 

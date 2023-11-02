@@ -10,12 +10,14 @@ import {
   Delete,
   Put,
 } from '@nestjs/common';
-import { UserGuard } from 'src/auth/jwt/jwt.user.guard';
+
 import { AboutmeService } from './aboutme.service';
 import { CreateAboutmeDto } from './dto/create-aboutme.dto';
-import { Aboutme } from 'src/domain/aboutme.entity';
+
 import { UpdateAboutmeDto } from './dto/update-aboutme.dto';
 import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { UserGuard } from '../auth/jwt/jwt.user.guard';
+import { Aboutme } from '../domain/aboutme.entity';
 
 @Controller('/api/aboutmes')
 @ApiTags('자기소개서 API')

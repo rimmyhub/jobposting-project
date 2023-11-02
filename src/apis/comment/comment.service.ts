@@ -3,9 +3,9 @@
 import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Comment } from 'src/domain/comment.entity';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
+import { Comment } from '../domain/comment.entity';
 
 // CommentService 클래스는 실제 비즈니스 로직을 처리함과 동시에
 // DB와의 상호작용을 담당한다.

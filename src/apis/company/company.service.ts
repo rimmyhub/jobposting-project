@@ -93,12 +93,14 @@ export class CompanyService {
   }
 
   // 회사 전체 조회
-  async findAllCompany({ page }) {
-    return await this.companyRepository.find({
-      take: 20,
-      skip: (page - 1) * 20,
+  async findAllCompany({ pageReqDto }) {
+    const { page, size } = pageReqDto;
+    const companies = await this.companyRepository.findAndCount({
       order: { createdAt: 'DESC' },
+      take: size,
+      skip: (page - 1) * size,
     });
+    return companies;
   }
 
   // 모든 회사의 주소 정보만 가져오기
