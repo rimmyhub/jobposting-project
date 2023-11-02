@@ -6,7 +6,7 @@ async function ormConfig(): Promise<TypeOrmModuleOptions> {
   const configService = new ConfigService();
   const commonConf = {
     SYNCHRONIZE: true, // 엔티티에 있는대로 테이블을 생성을 할건지 정한다.
-    ENTITIES: [__dirname + '/domain/*{.ts,.js}'],
+    ENTITIES: [__dirname + '/apis/domain/*{.ts,.js}'],
     MIGRATIONS: [__dirname + '/migrations/**/*{.ts,.js}'],
     MIGRATIONS_RUN: false,
   };
