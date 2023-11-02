@@ -9,6 +9,7 @@ import {
   UseGuards,
   Request,
   Query,
+  Inject,
 } from '@nestjs/common';
 import { JobpostingService } from './jobposting.service';
 import { CreateJobpostingDto } from './dto/create-jobposting.dto';
@@ -17,11 +18,15 @@ import { Jobposting } from 'src/domain/jobposting.entity';
 import { CompanyGuard } from '../auth/jwt/jwt.company.guard';
 import { ParamDto } from 'src/utils/param.dto';
 import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 
 @Controller('api/jobpostings')
 @ApiTags('채용공고 API')
 export class JobpostingController {
-  constructor(private readonly jobpostingService: JobpostingService) {}
+  constructor(
+    private readonly jobpostingService: JobpostingService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+  ) {}
 
   // 윤영 : 검색시 해당 검색어를 포함하는 채용 공고글 전체 조회
   @Post('search')
@@ -52,33 +57,6 @@ export class JobpostingController {
       experience,
     );
   }
-
-  // // 윤영 : 직군 선택시 채용공고 직군과 일치한 채용공고 전체 조회
-  // @Post('job')
-  // searchOccupation(@Body('job') job: string) {
-  //   return this.jobpostingService.searchOccupation(job);
-  // }
-
-  // // 윤영 : 지역 + 경력 일치하는 채용 공고글 전체 조회
-  // @Post('selectJobposting')
-  // searchSelectJobposting(
-  //   @Body('career') career: string,
-  //   @Body('workArea') workArea: string,
-  // ) {
-  //   return this.jobpostingService.searchSelectJobposting(career, workArea);
-  // }
-
-  // // 윤영 : 지역검색시 해당지역과 일치하는 채용 공고글 전체 조회
-  // @Post('workArea')
-  // searchRegion(@Body('workArea') workArea: string) {
-  //   return this.jobpostingService.searchRegion(workArea);
-  // }
-
-  // // 윤영 : 경력검색시 해당경력과 일치하는 채용 공고글 전체 조회
-  // @Post('career')
-  // searchCareer(@Body('career') career: string) {
-  //   return this.jobpostingService.searchCareer(career);
-  // }
 
   // 채용공고 아이디 가져오기
   @Get('getId')
@@ -117,9 +95,17 @@ export class JobpostingController {
     description: '채용공고 전체조회',
   })
   @ApiCreatedResponse({ description: '채용공고 전체조회' })
-  findAllJobposting(@Query('page') page: string) {
-    console.log('jobposting page is : ', page);
-    return this.jobpostingService.findAllJobposting({ page: Number(page) });
+  async findAllJobposting(@Query('page') page: string) {
+    const cachedList: Jobposting[] = await this.cacheManager.get(page);
+    if (cachedList) {
+      return cachedList;
+    } else {
+      const jobposting = await this.jobpostingService.findAllJobposting({
+        page: Number(page),
+      });
+      await this.cacheManager.set();
+      return jobposting;
+    }
   }
 
   // 회사별 채용공고 전체 조회

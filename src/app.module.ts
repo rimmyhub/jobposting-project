@@ -4,32 +4,38 @@ import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { ormConfig } from './orm.config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserModule } from './user/user.module';
-import { CompanyModule } from './company/company.module';
-import { JobpostingModule } from './jobposting/jobposting.module';
-import { AboutmeModule } from './aboutme/aboutme.module';
-import { EducationModule } from './education/education.module';
-import { PortfolioModule } from './portfolio/portfolio.module';
-import { CareerModule } from './career/career.module';
-import { ResumeModule } from './resume/resume.module';
-import { ApplicantModule } from './applicant/applicant.module';
-import { AuthModule } from './auth/auth.module';
-import { CommentModule } from './comment/comment.module';
-import { ChatModule } from './chat/chat.module';
-import { ChatGateway } from './chat/chat.geteway';
-import { UploadModule } from './upload/upload.module';
 import { ScheduleModule } from '@nestjs/schedule';
-import { JobcrawlerModule } from './jobcrawler/jobcrawler.module';
-import { SearchModule } from './search/search.module';
-import { MailModule } from './mail/mail.module';
-import { ChatContentModule } from './chat-content/chat-content.module';
-import { ChatgptModule } from './chatgpt/chatgpt.module';
 import { CacheModule } from '@nestjs/cache-manager';
 import { SwaggerModule } from '@nestjs/swagger';
+import * as redisStore from 'cache-manager-redis-store';
+import { UploadModule } from './apis/upload/upload.module';
+import { UserModule } from './apis/user/user.module';
+import { JobpostingModule } from './apis/jobposting/jobposting.module';
+import { AboutmeModule } from './apis/aboutme/aboutme.module';
+import { EducationModule } from './apis/education/education.module';
+import { PortfolioModule } from './apis/portfolio/portfolio.module';
+import { CareerModule } from './apis/career/career.module';
+import { ResumeModule } from './apis/resume/resume.module';
+import { ApplicantModule } from './apis/applicant/applicant.module';
+import { AuthModule } from './apis/auth/auth.module';
+import { CommentModule } from './apis/comment/comment.module';
+import { ChatModule } from './apis/chat/chat.module';
+import { MailModule } from './apis/mail/mail.module';
+import { JobcrawlerModule } from './apis/jobcrawler/jobcrawler.module';
+import { SearchModule } from './apis/search/search.module';
+import { ChatContentModule } from './apis/chat-content/chat-content.module';
+import { ChatgptModule } from './apis/chatgpt/chatgpt.module';
+import { CompanyModule } from './apis/company/company.module';
+import { ChatGateway } from './apis/chat/chat.geteway';
 
 @Module({
   imports: [
-    CacheModule.register({ isGlobal: true }),
+    CacheModule.register({
+      isGlobal: true,
+      store: redisStore,
+      host: process.env.CACHE_REDIS_HOST,
+      port: process.env.CACHE_REDIS_PORT,
+    }),
     TypeOrmModule.forRootAsync({ useFactory: ormConfig }),
     UploadModule,
     ConfigModule.forRoot({

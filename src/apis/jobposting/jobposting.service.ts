@@ -1,11 +1,12 @@
 import { CreateJobpostingDto } from './dto/create-jobposting.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Jobposting } from 'src/domain/jobposting.entity';
 import { Brackets, In, IsNull, LessThan, Like, Not, Repository } from 'typeorm';
 import { UpdateJobpostingDto } from './dto/update-jobposting.dto';
 import { HttpException, HttpStatus } from '@nestjs/common';
-import { Company } from 'src/domain/company.entity';
+
 import { Cron } from '@nestjs/schedule';
+import { Jobposting } from '../domain/jobposting.entity';
+import { Company } from '../domain/company.entity';
 
 export class JobpostingService {
   constructor(
@@ -21,7 +22,6 @@ export class JobpostingService {
       where: { id },
     }); // 쿼리 조건을 추가하여 원하는 jobposting 가져옴
 
-    console.log(jobposting);
     if (!jobposting) {
       throw new Error('채용공고를 찾을 수 없습니다.');
     }
@@ -34,63 +34,22 @@ export class JobpostingService {
     companyId: string,
     createJobpostingDto: CreateJobpostingDto,
   ): Promise<Jobposting> {
-    // 회사에 아이디가 생성되있는지 찾기
-    try {
-      const existingCompany = await this.companyRepository.findOne({
-        where: { id: companyId },
-      });
-      console.log('existingCompany', existingCompany);
-      // 데이터베이스에 회사가 생성되어있는지 확인
-      if (!existingCompany) {
-        throw new HttpException(
-          '회사를 찾을 수 없습니다.',
-          HttpStatus.BAD_REQUEST,
-        );
-      }
+    const existingCompany = await this.companyRepository.findOne({
+      where: { id: companyId },
+    });
 
-      // // 로그인된 회사 ID와 채용공고의 회사 ID 비교
-      // if (companyId !== id) {
-      //   throw new HttpException('권한이 없습니다.', HttpStatus.FORBIDDEN);
-      // }
-
-      const {
-        title,
-        career,
-        salary,
-        education,
-        job,
-        workType,
-        workArea,
-        content,
-        dueDate,
-      } = createJobpostingDto;
-
-      console.log(companyId);
-
-      console.log('hi');
-
-      const jobposting = await this.jobpostingRepository.create({
-        companyId,
-        title,
-        career,
-        salary,
-        education,
-        job,
-        workType,
-        workArea,
-        content,
-        dueDate,
-      });
-
-      console.log(jobposting);
-
-      console.log('hi');
-
-      await this.jobpostingRepository.save(jobposting);
-      return jobposting;
-    } catch (error) {
-      console.error();
+    if (!existingCompany) {
+      throw new HttpException(
+        '회사를 찾을 수 없습니다.',
+        HttpStatus.BAD_REQUEST,
+      );
     }
+
+    const jobposting = await this.jobpostingRepository.save({
+      companyId,
+      ...createJobpostingDto,
+    });
+    return jobposting;
   }
 
   // 채용공고 전체 조회

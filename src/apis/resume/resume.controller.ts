@@ -13,9 +13,9 @@ import {
 import { ResumeService } from './resume.service';
 import { CreateResumeDto } from './dto/create-resume.dto';
 import { UpdateResumeDto } from './dto/update-resume.dto';
-import { UserGuard } from 'src/auth/jwt/jwt.user.guard';
-import { Resume } from 'src/domain/resume.entity';
 import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { UserGuard } from '../auth/jwt/jwt.user.guard';
+import { Resume } from '../domain/resume.entity';
 
 @Controller('/api/resumes')
 @ApiTags('이력서 API')

@@ -19,11 +19,11 @@ import { CompanyService } from './company.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 import { CompanyGuard } from '../auth/jwt/jwt.company.guard';
-import { ParamDto } from 'src/utils/param.dto';
-import { MailService } from '../mail/mail.service';
+
 import { VerifyCodeDto } from './dto/verify-code.dto';
-import { UserGuard } from 'src/auth/jwt/jwt.user.guard';
+
 import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { MailService } from '../mail/mail.service';
 
 @Controller('api/companies')
 @ApiTags('회사 API')
@@ -87,20 +87,6 @@ export class CompanyController {
   ) {
     return this.companyService.searchOption(occupation, workArea);
   }
-
-  // // 윤영 : 직군 선택시 회사 사업과 일치한 회사 전체 조회
-  // @Post('business')
-  // @ApiOperation({summary : "회사 회원가입 API", description : "회사 회원가입"})
-  // @ApiCreatedResponse({description : "회사 회원가입"})
-  // searchOccupation(@Body('business') business: string) {
-  //   return this.companyService.searchOccupation(business);
-  // }
-
-  // // 윤영 : 선택한 지역과 주소가 일치하는 회사 전체 조회
-  // @Post('selectCompany')
-  // searchSelectCompany(@Body('address') address: string) {
-  //   return this.companyService.searchSelectCompany(address);
-  // }
 
   // 회사 1개 조회 - 마이페이지용
   @UseGuards(CompanyGuard)
