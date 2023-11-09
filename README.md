@@ -6,7 +6,6 @@
 
 📝 발표 자료 : [winner-최종프로젝트-3조.pdf](https://github.com/rimmyhub/jobposting-project/files/12644873/winner-.-3.pdf)
 
-📌 Swagger : [winner-Swagger](http://localhost:3000/api-winner#/%EB%A9%94%EC%9D%B8%20API/AppController_getSignup)
 <br>
 
 
