@@ -77,13 +77,13 @@ export class UserController {
     description: '(유저가드 적용) 유저정보 상세조회',
     type: User,
   })
-  findOne(@Request() req) {
+  findOneUser(@Request() req) {
     // if (id) {
     //   console.log('findOne = ', id);
     //   return this.userService.findOne(id);
     // }
     // AuthGuard로 받은 req안에 user에 접근하면 현재 로그인한 유저(회사)의 정보에 접근할 수 있습니다.
-    return this.userService.findOne(req.user.id);
+    return this.userService.getUserById(req.user.id);
   }
   // 유저정보 조회
   @Get('/user/:id')
@@ -93,7 +93,7 @@ export class UserController {
   })
   @ApiCreatedResponse({ description: '유저 정보조회', type: User })
   findUser(@Param('id') id: string) {
-    return this.userService.findOne(id);
+    return this.userService.getUserById(id);
   }
 
   // 유저정보 수정
@@ -108,7 +108,7 @@ export class UserController {
     type: User,
   })
   update(@Request() req, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(req.user.id, updateUserDto);
+    return this.userService.updateUser(req.user.id, updateUserDto);
   }
 
   // 유저 이미지 수정
@@ -138,7 +138,7 @@ export class UserController {
     type: User,
   })
   remove(@Request() req) {
-    return this.userService.remove(req.user.id);
+    return this.userService.removeUser(req.user.id);
   }
 
   // 인증번호 전송

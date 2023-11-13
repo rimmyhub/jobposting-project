@@ -9,12 +9,12 @@ import {
   OneToOne,
   JoinColumn,
 } from 'typeorm';
-import { Education } from '../domain/education.entity';
 import { Chat } from './chat.entity';
 import { Applicant } from './applicant.entity';
 import { Resume } from './resume.entity';
 import { Comment } from './comment.entity';
 import { ApiProperty } from '@nestjs/swagger';
+import { Education } from './education.entity';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')

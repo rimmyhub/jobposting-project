@@ -11,6 +11,6 @@ import { User } from '../domain/user.entity';
   imports: [TypeOrmModule.forFeature([User]), MailModule],
   controllers: [UserController],
   providers: [UserService],
-  exports: [UserService, TypeOrmModule], // 다른 모듈에서 사용하려면 해당 모듈에서 export해야한다.
+  exports: [UserService], // 다른 모듈에서 사용하려면 해당 모듈에서 export해야한다.
 })
 export class UserModule {}

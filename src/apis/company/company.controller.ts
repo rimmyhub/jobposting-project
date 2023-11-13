@@ -24,11 +24,12 @@ import { CompanyGuard } from '../auth/jwt/jwt.company.guard';
 import { VerifyCodeDto } from './dto/verify-code.dto';
 
 import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { MailService } from '../mail/mail.service';
+
 import { PageReqDto } from 'src/commons/dto/page-req.dto';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Company } from '../domain/company.entity';
 import { Cache } from 'cache-manager';
+import { MailService } from '../mail/mail.service';
 
 @Controller('api/companies')
 @ApiTags('회사 API')

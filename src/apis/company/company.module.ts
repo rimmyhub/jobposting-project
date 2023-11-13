@@ -14,6 +14,6 @@ import { CacheModule } from '@nestjs/cache-manager';
   ],
   controllers: [CompanyController],
   providers: [CompanyService],
-  exports: [CompanyService, TypeOrmModule],
+  exports: [CompanyService],
 })
 export class CompanyModule {}

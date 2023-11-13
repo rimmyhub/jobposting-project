@@ -14,6 +14,6 @@ import { Jobposting } from '../domain/jobposting.entity';
   ],
   controllers: [JobpostingController],
   providers: [JobpostingService],
-  exports: [JobpostingService, TypeOrmModule],
+  exports: [JobpostingService],
 })
 export class JobpostingModule {}

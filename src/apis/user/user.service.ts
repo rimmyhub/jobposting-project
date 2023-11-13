@@ -4,9 +4,10 @@ import { UpdateUserDto } from './dto/update-user.dto';
 // 데이터베이스와 레포지토리를 쓰려면
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Not, IsNull, And, LessThan } from 'typeorm';
-import { User } from '../domain/user.entity';
+
 import { Cron } from '@nestjs/schedule';
 import * as bcrypt from 'bcrypt';
+import { User } from '../domain/user.entity';
 
 @Injectable()
 export class UserService {
@@ -29,7 +30,7 @@ export class UserService {
   }
 
   // 유저정보상세조회
-  async findOne(id: string) {
+  async getUserById(id: string) {
     const userInfo = await this.userRepository.findOne({
       select: {
         id: true,
@@ -54,7 +55,7 @@ export class UserService {
   }
 
   // 유저생성
-  async create(createUserDto: CreateUserDto) {
+  async createUser(createUserDto: CreateUserDto) {
     const {
       email,
       address,
@@ -92,9 +93,9 @@ export class UserService {
   }
 
   // 유저정보 수정
-  async update(id: string, updateUserDto: UpdateUserDto) {
+  async updateUser(id: string, updateUserDto: UpdateUserDto) {
     // 먼저 유저가 있는지 확인한다.
-    await this.findOne(id);
+    await this.getUserById(id);
     this.userRepository.update(id, updateUserDto);
     return { message: `수정이 완료되었습니다.` };
   }
@@ -115,7 +116,7 @@ export class UserService {
   }
 
   // 유저 탈퇴 deleteAt에 삭제시간 넣기
-  async remove(id: string) {
+  async removeUser(id: string) {
     // 유저가 있는지 확인
     const isUser = await this.userRepository.findOne({
       select: {
