@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { UploadController } from './upload.controller';
+import { UploadController } from './uploads.controller';
 import { UploadService } from './upload.service';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
